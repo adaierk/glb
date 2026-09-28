@@ -28,13 +28,12 @@ jobs:
           pyautogui.click(512,538); time.sleep(6)
           pyautogui.click(512,602); time.sleep(6)
           pyautogui.click(960,132); time.sleep(3)
-          pyautogui.write(os.path.join(w,'base.vroid'), interval=0.002); pyautogui.press('enter'); time.sleep(45)
+          pyautogui.click(300,443); pyautogui.hotkey('ctrl','a'); pyautogui.write('base.vroid', interval=0.02); pyautogui.press('enter'); time.sleep(45)
           pyautogui.screenshot(os.path.join(w,'00-editor.png'))
           for i,key in enumerate(['f1','f2','f3','f4','f5','f6'],1):
               pyautogui.press(key); time.sleep(6)
               pyautogui.screenshot(os.path.join(w,f'{i:02d}-{key}.png'))
-          try: p.terminate()
-          except: pass
+          subprocess.run(['taskkill','/F','/IM','VRoidStudio.exe'],capture_output=True)
           '@ | Set-Content "$env:USERPROFILE\vscan\scan.py"
           python "$env:USERPROFILE\vscan\scan.py"
       - uses: actions/upload-artifact@v4
