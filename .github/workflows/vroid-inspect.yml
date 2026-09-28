@@ -7,23 +7,24 @@ jobs:
   diag:
     runs-on: ubuntu-latest
     steps:
-      - name: Install steamcmd
+      - name: Install SteamCMD manually
         run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y steamcmd lib32gcc-s1
+          mkdir -p "$HOME/steamcmd"
+          curl -L --fail --retry 3 https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz -o /tmp/steamcmd.tar.gz
+          tar -xzf /tmp/steamcmd.tar.gz -C "$HOME/steamcmd"
+          "$HOME/steamcmd/steamcmd.sh" +quit
       - name: Try anonymous VRoid download
         continue-on-error: true
         run: |
           mkdir -p "$HOME/vroidapp"
-          /usr/games/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$HOME/vroidapp" +login anonymous +app_update 1486350 validate +quit 2>&1 | tee "$HOME/steamcmd-vroid.log"
+          "$HOME/steamcmd/steamcmd.sh" +@sSteamCmdForcePlatformType windows +force_install_dir "$HOME/vroidapp" +login anonymous +app_update 1486350 validate +quit 2>&1 | tee "$HOME/steamcmd-vroid.log"
       - name: Report
         run: |
-          find "$HOME/vroidapp" -maxdepth 3 -type f | head -100 > "$HOME/files.txt" || true
+          find "$HOME/vroidapp" -maxdepth 4 -type f | head -200 > "$HOME/files.txt" || true
           echo "--- files ---"
           cat "$HOME/files.txt"
           echo "--- steamcmd tail ---"
-          tail -200 "$HOME/steamcmd-vroid.log" || true
+          tail -250 "$HOME/steamcmd-vroid.log" || true
       - uses: actions/upload-artifact@v4
         with:
           name: steam-vroid-diagnostic
