@@ -1,45 +1,40 @@
-name: VRoid Build Host
+name: VRoid UI Probe
 on:
   push:
     branches:
       - chatgpt-vroid-build-20260928
 jobs:
-  host:
+  probe:
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
-      - name: Download
+      - name: Download and install
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\vroidwork" | Out-Null
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -o "$env:USERPROFILE\vroidwork\vroid-installer.exe"
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o "$env:USERPROFILE\vroidwork\base.vroid"
-          Get-Item "$env:USERPROFILE\vroidwork\*" | Select Name,Length | Format-Table -AutoSize
-      - name: Install and launch
+          Start-Process "$env:USERPROFILE\vroidwork\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
+      - name: Launch and probe
         shell: powershell
         run: |
-          Start-Process -FilePath "$env:USERPROFILE\vroidwork\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
-          $dir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'vroid\avatars'
-          New-Item -ItemType Directory -Force -Path $dir | Out-Null
-          Copy-Item "$env:USERPROFILE\vroidwork\base.vroid" (Join-Path $dir 'reference_base.vroid') -Force
-          $exe = (Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
-          if (-not $exe) { throw "VRoidStudio.exe not found" }
-          $exe | Out-File "$env:USERPROFILE\vroidwork\exe.txt"
-          Start-Process -FilePath $exe
-          Start-Sleep -Seconds 25
-          Add-Type -AssemblyName System.Windows.Forms
-          Add-Type -AssemblyName System.Drawing
-          $b=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-          $bmp=New-Object System.Drawing.Bitmap $b.Width,$b.Height
-          $g=[System.Drawing.Graphics]::FromImage($bmp)
-          $g.CopyFromScreen($b.Location,[System.Drawing.Point]::Empty,$b.Size)
-          $bmp.Save("$env:USERPROFILE\vroidwork\screen.png",[System.Drawing.Imaging.ImageFormat]::Png)
-          $g.Dispose(); $bmp.Dispose()
-          Get-Process | Where-Object {$_.ProcessName -match 'VRoid'} | Format-Table -AutoSize | Out-File "$env:USERPROFILE\vroidwork\processes.txt"
+          python -m pip install --quiet pillow pyautogui
+          @'
+          import os,time,glob,subprocess,pyautogui
+          from PIL import ImageGrab
+          work=os.path.expanduser('~/vroidwork')
+          exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
+          subprocess.Popen([exe])
+          time.sleep(30)
+          def shot(name):
+              ImageGrab.grab(all_screens=True).save(os.path.join(work,name))
+          shot('00-start.png')
+          pyautogui.click(512,613)
+          time.sleep(6)
+          shot('01-after-get-started.png')
+          '@ | Set-Content "$env:USERPROFILE\vroidwork\probe.py"
+          python "$env:USERPROFILE\vroidwork\probe.py"
       - uses: actions/upload-artifact@v4
         with:
-          name: vroid-build-host-diag
-          path: |
-            ~/vroidwork/screen.png
-            ~/vroidwork/exe.txt
-            ~/vroidwork/processes.txt
+          name: vroid-ui-probe
+          path: ~/vroidwork/*.png
