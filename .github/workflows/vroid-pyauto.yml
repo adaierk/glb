@@ -1,4 +1,4 @@
-name: VRoid Open Base PyAuto
+name: VRoid Open Base PyAuto2
 on:
   push:
     branches:
@@ -25,26 +25,22 @@ jobs:
           exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
           p=subprocess.Popen([exe])
           time.sleep(25)
-          pyautogui.click(512,613)
-          time.sleep(3)
-          pyautogui.click(512,538)
-          time.sleep(6)
-          pyautogui.click(512,602)
-          time.sleep(6)
-          pyautogui.screenshot(os.path.join(work,'00-models.png'))
-          pyautogui.hotkey('ctrl','o')
-          time.sleep(3)
-          pyautogui.screenshot(os.path.join(work,'01-open-dialog.png'))
+          pyautogui.click(512,613); time.sleep(3)
+          pyautogui.click(512,538); time.sleep(6)
+          pyautogui.click(512,602); time.sleep(6)
+          pyautogui.click(960,132); time.sleep(3)
+          pyautogui.screenshot(os.path.join(work,'00-open-dialog.png'))
           pyautogui.write(os.path.join(work,'base.vroid'), interval=0.002)
           pyautogui.press('enter')
-          time.sleep(40)
-          pyautogui.screenshot(os.path.join(work,'02-base-opened.png'))
-          p.terminate()
+          time.sleep(45)
+          pyautogui.screenshot(os.path.join(work,'01-editor.png'))
+          try: p.terminate()
+          except: pass
           '@ | Set-Content "$env:USERPROFILE\vroidwork2\drive.py"
           python "$env:USERPROFILE\vroidwork2\drive.py"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: vroid-open-base-pyauto
+          name: vroid-open-base-pyauto2
           path: ~/vroidwork2/*.png
           if-no-files-found: warn
