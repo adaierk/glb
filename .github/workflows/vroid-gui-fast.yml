@@ -1,0 +1,36 @@
+name: VRoid GUI Fast
+on:
+  push:
+    branches: [chatgpt-vroid-inspect-20260928]
+jobs:
+  gui:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force "$env:USERPROFILE\vw" | Out-Null
+          Start-BitsTransfer -Source "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -Destination "$env:USERPROFILE\vw\vroid.exe"
+          Start-BitsTransfer -Source "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -Destination "$env:USERPROFILE\vw\base.vroid"
+          Start-Process "$env:USERPROFILE\vw\vroid.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
+          $dir=Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'vroid\avatars'
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Copy-Item "$env:USERPROFILE\vw\base.vroid" (Join-Path $dir 'base.vroid') -Force
+          $exe=(Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
+          $exe | Out-File "$env:USERPROFILE\vw\exe.txt"
+          Start-Process $exe
+          Start-Sleep 25
+          Add-Type -AssemblyName System.Windows.Forms
+          Add-Type -AssemblyName System.Drawing
+          $b=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+          $bmp=New-Object System.Drawing.Bitmap $b.Width,$b.Height
+          $g=[System.Drawing.Graphics]::FromImage($bmp)
+          $g.CopyFromScreen($b.Location,[System.Drawing.Point]::Empty,$b.Size)
+          $bmp.Save("$env:USERPROFILE\vw\screen.png",[System.Drawing.Imaging.ImageFormat]::Png)
+          $g.Dispose(); $bmp.Dispose()
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vroid-fast-screen
+          path: |
+            ~/vw/screen.png
+            ~/vw/exe.txt
