@@ -1,0 +1,17 @@
+name: Fetch Nia VRoid
+on:
+  push:
+    branches:
+      - chatgpt-vroid-build-20260928
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          curl -L --fail --retry 3 "https://raw.githubusercontent.com/Vishwajeetsrk/JARVIS-AI-OS/main/Nia/source/Nia%20V1%20model.vroid" -o Nia_base.vroid
+          ls -lh Nia_base.vroid
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nia-vroid-source
+          path: Nia_base.vroid
