@@ -1,34 +1,53 @@
-name: VRoid Steam Diagnostic
+name: VRoid Windows GUI Diagnostic
 on:
   push:
     branches:
       - chatgpt-vroid-inspect-20260928
 jobs:
-  diag:
-    runs-on: ubuntu-latest
+  gui:
+    runs-on: windows-latest
+    timeout-minutes: 20
     steps:
-      - name: Install SteamCMD manually
+      - name: Download installer and base model
+        shell: powershell
         run: |
-          mkdir -p "$HOME/steamcmd"
-          curl -L --fail --retry 3 https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz -o /tmp/steamcmd.tar.gz
-          tar -xzf /tmp/steamcmd.tar.gz -C "$HOME/steamcmd"
-          "$HOME/steamcmd/steamcmd.sh" +quit
-      - name: Try anonymous VRoid download
-        continue-on-error: true
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\vroidwork" | Out-Null
+          Invoke-WebRequest -Uri "https://download.vroid.com/dist/dxy77TdlP1/VRoidStudio-v2.13.0-win.exe" -OutFile "$env:USERPROFILE\vroidwork\vroid-installer.exe"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -OutFile "$env:USERPROFILE\vroidwork\base.vroid"
+      - name: Install VRoid
+        shell: powershell
         run: |
-          mkdir -p "$HOME/vroidapp"
-          "$HOME/steamcmd/steamcmd.sh" +@sSteamCmdForcePlatformType windows +force_install_dir "$HOME/vroidapp" +login anonymous +app_update 1486350 validate +quit 2>&1 | tee "$HOME/steamcmd-vroid.log"
-      - name: Report
+          Start-Process -FilePath "$env:USERPROFILE\vroidwork\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
+          Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 10 FullName | Out-File "$env:USERPROFILE\vroidwork\found.txt"
+          Get-Content "$env:USERPROFILE\vroidwork\found.txt"
+      - name: Prepare project
+        shell: powershell
         run: |
-          find "$HOME/vroidapp" -maxdepth 4 -type f | head -200 > "$HOME/files.txt" || true
-          echo "--- files ---"
-          cat "$HOME/files.txt"
-          echo "--- steamcmd tail ---"
-          tail -250 "$HOME/steamcmd-vroid.log" || true
+          $dir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'vroid\avatars'
+          New-Item -ItemType Directory -Force -Path $dir | Out-Null
+          Copy-Item "$env:USERPROFILE\vroidwork\base.vroid" (Join-Path $dir 'reference_base.vroid') -Force
+      - name: Launch and screenshot
+        shell: powershell
+        run: |
+          $exe = (Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
+          if (-not $exe) { throw "VRoidStudio.exe not found" }
+          Start-Process -FilePath $exe
+          Start-Sleep -Seconds 25
+          python -m pip install pillow pyautogui
+          @'
+          from PIL import ImageGrab
+          import time, os
+          img=ImageGrab.grab(all_screens=True)
+          out=os.path.expanduser('~/vroidwork/screen.png')
+          img.save(out)
+          print(img.size, out)
+          '@ | Set-Content "$env:USERPROFILE\vroidwork\shot.py"
+          python "$env:USERPROFILE\vroidwork\shot.py"
+          Get-Process | Where-Object {$_.ProcessName -match 'VRoid'} | Format-Table -AutoSize | Out-File "$env:USERPROFILE\vroidwork\processes.txt"
       - uses: actions/upload-artifact@v4
         with:
-          name: steam-vroid-diagnostic
+          name: vroid-windows-gui-diag
           path: |
-            ~/steamcmd-vroid.log
-            ~/files.txt
-          if-no-files-found: warn
+            ~/vroidwork/screen.png
+            ~/vroidwork/found.txt
+            ~/vroidwork/processes.txt
