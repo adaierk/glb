@@ -1,4 +1,4 @@
-name: VRoid UI Probe 2
+name: VRoid UI Probe 3
 on:
   push:
     branches:
@@ -18,31 +18,44 @@ jobs:
       - name: Probe UI
         shell: powershell
         run: |
-          @'
-          import os,time,glob,subprocess,ctypes
-          from PIL import ImageGrab
-          work=os.path.expanduser('~/vroidwork')
-          user32=ctypes.windll.user32
-          def shot(name):
-              ImageGrab.grab(all_screens=True).save(os.path.join(work,name))
-          def click(x,y):
-              user32.SetCursorPos(x,y); time.sleep(.2)
-              user32.mouse_event(2,0,0,0,0); user32.mouse_event(4,0,0,0,0)
-          def hotkey(*keys):
-              vk={'ctrl':0x11,'o':0x4F}
-              for k in keys: user32.keybd_event(vk[k],0,0,0)
-              time.sleep(.2)
-              for k in reversed(keys): user32.keybd_event(vk[k],0,2,0)
-          exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
-          subprocess.Popen([exe])
-          time.sleep(25); shot('00-start.png')
-          click(512,613)
-          time.sleep(8); shot('01-after-start.png')
-          hotkey('ctrl','o')
-          time.sleep(4); shot('02-open-dialog.png')
-          '@ | Set-Content "$env:USERPROFILE\vroidwork\probe2.py"
-          python "$env:USERPROFILE\vroidwork\probe2.py"
+          Add-Type -AssemblyName System.Windows.Forms
+          Add-Type -AssemblyName System.Drawing
+          Add-Type @"
+          using System;
+          using System.Runtime.InteropServices;
+          public class NativeInput {
+            [DllImport("user32.dll")] public static extern bool SetCursorPos(int X, int Y);
+            [DllImport("user32.dll")] public static extern void mouse_event(uint flags,uint dx,uint dy,uint data,UIntPtr extra);
+            [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
+          }
+          "@
+          function Shot($name) {
+            $b=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+            $bmp=New-Object System.Drawing.Bitmap $b.Width,$b.Height
+            $g=[System.Drawing.Graphics]::FromImage($bmp)
+            $g.CopyFromScreen($b.Location,[System.Drawing.Point]::Empty,$b.Size)
+            $bmp.Save("$env:USERPROFILE\vroidwork\$name",[System.Drawing.Imaging.ImageFormat]::Png)
+            $g.Dispose(); $bmp.Dispose()
+          }
+          function ClickAt($x,$y) {
+            [NativeInput]::SetCursorPos($x,$y) | Out-Null
+            Start-Sleep -Milliseconds 200
+            [NativeInput]::mouse_event(2,0,0,0,[UIntPtr]::Zero)
+            [NativeInput]::mouse_event(4,0,0,0,[UIntPtr]::Zero)
+          }
+          function KeyDown($vk) { [NativeInput]::keybd_event([byte]$vk,0,0,[UIntPtr]::Zero) }
+          function KeyUp($vk) { [NativeInput]::keybd_event([byte]$vk,0,2,[UIntPtr]::Zero) }
+          $exe=(Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
+          Start-Process $exe
+          Start-Sleep 25
+          Shot "00-start.png"
+          ClickAt 512 613
+          Start-Sleep 8
+          Shot "01-after-start.png"
+          KeyDown 0x11; KeyDown 0x4F; KeyUp 0x4F; KeyUp 0x11
+          Start-Sleep 4
+          Shot "02-open-dialog.png"
       - uses: actions/upload-artifact@v4
         with:
-          name: vroid-ui-probe2
+          name: vroid-ui-probe3
           path: ~/vroidwork/*.png
