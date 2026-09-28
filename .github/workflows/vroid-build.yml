@@ -1,10 +1,10 @@
-name: VRoid UI Probe 3
+name: VRoid Open Base
 on:
   push:
     branches:
       - chatgpt-vroid-build-20260928
 jobs:
-  probe:
+  open:
     runs-on: windows-latest
     timeout-minutes: 12
     steps:
@@ -15,7 +15,7 @@ jobs:
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -o "$env:USERPROFILE\vroidwork\vroid-installer.exe"
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o "$env:USERPROFILE\vroidwork\base.vroid"
           Start-Process "$env:USERPROFILE\vroidwork\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
-      - name: Probe UI
+      - name: Open base project
         shell: powershell
         run: |
           Add-Type -AssemblyName System.Windows.Forms
@@ -26,7 +26,6 @@ jobs:
           public class NativeInput {
             [DllImport("user32.dll")] public static extern bool SetCursorPos(int X, int Y);
             [DllImport("user32.dll")] public static extern void mouse_event(uint flags,uint dx,uint dy,uint data,UIntPtr extra);
-            [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
           }
           "@
           function Shot($name) {
@@ -39,23 +38,27 @@ jobs:
           }
           function ClickAt($x,$y) {
             [NativeInput]::SetCursorPos($x,$y) | Out-Null
-            Start-Sleep -Milliseconds 200
+            Start-Sleep -Milliseconds 250
             [NativeInput]::mouse_event(2,0,0,0,[UIntPtr]::Zero)
             [NativeInput]::mouse_event(4,0,0,0,[UIntPtr]::Zero)
           }
-          function KeyDown($vk) { [NativeInput]::keybd_event([byte]$vk,0,0,[UIntPtr]::Zero) }
-          function KeyUp($vk) { [NativeInput]::keybd_event([byte]$vk,0,2,[UIntPtr]::Zero) }
           $exe=(Get-ChildItem "C:\Program Files","$env:LOCALAPPDATA" -Recurse -Filter VRoidStudio.exe -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
           Start-Process $exe
           Start-Sleep 25
-          Shot "00-start.png"
           ClickAt 512 613
-          Start-Sleep 8
-          Shot "01-after-start.png"
-          KeyDown 0x11; KeyDown 0x4F; KeyUp 0x4F; KeyUp 0x11
-          Start-Sleep 4
+          Start-Sleep 3
+          ClickAt 512 538
+          Start-Sleep 6
+          Shot "01-after-agree.png"
+          [System.Windows.Forms.SendKeys]::SendWait("^o")
+          Start-Sleep 3
           Shot "02-open-dialog.png"
+          [System.Windows.Forms.SendKeys]::SendWait("$env:USERPROFILE\vroidwork\base.vroid")
+          Start-Sleep -Milliseconds 500
+          [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+          Start-Sleep 35
+          Shot "03-base-opened.png"
       - uses: actions/upload-artifact@v4
         with:
-          name: vroid-ui-probe3
+          name: vroid-open-base
           path: ~/vroidwork/*.png
