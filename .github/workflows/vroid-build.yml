@@ -1,4 +1,4 @@
-name: VRoid UI Probe
+name: VRoid UI Probe 2
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 jobs:
   probe:
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 12
     steps:
       - name: Download and install
         shell: powershell
@@ -15,26 +15,34 @@ jobs:
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -o "$env:USERPROFILE\vroidwork\vroid-installer.exe"
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o "$env:USERPROFILE\vroidwork\base.vroid"
           Start-Process "$env:USERPROFILE\vroidwork\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
-      - name: Launch and probe
+      - name: Probe UI
         shell: powershell
         run: |
-          python -m pip install --quiet pillow pyautogui
           @'
-          import os,time,glob,subprocess,pyautogui
+          import os,time,glob,subprocess,ctypes
           from PIL import ImageGrab
           work=os.path.expanduser('~/vroidwork')
-          exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
-          subprocess.Popen([exe])
-          time.sleep(30)
+          user32=ctypes.windll.user32
           def shot(name):
               ImageGrab.grab(all_screens=True).save(os.path.join(work,name))
-          shot('00-start.png')
-          pyautogui.click(512,613)
-          time.sleep(6)
-          shot('01-after-get-started.png')
-          '@ | Set-Content "$env:USERPROFILE\vroidwork\probe.py"
-          python "$env:USERPROFILE\vroidwork\probe.py"
+          def click(x,y):
+              user32.SetCursorPos(x,y); time.sleep(.2)
+              user32.mouse_event(2,0,0,0,0); user32.mouse_event(4,0,0,0,0)
+          def hotkey(*keys):
+              vk={'ctrl':0x11,'o':0x4F}
+              for k in keys: user32.keybd_event(vk[k],0,0,0)
+              time.sleep(.2)
+              for k in reversed(keys): user32.keybd_event(vk[k],0,2,0)
+          exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
+          subprocess.Popen([exe])
+          time.sleep(25); shot('00-start.png')
+          click(512,613)
+          time.sleep(8); shot('01-after-start.png')
+          hotkey('ctrl','o')
+          time.sleep(4); shot('02-open-dialog.png')
+          '@ | Set-Content "$env:USERPROFILE\vroidwork\probe2.py"
+          python "$env:USERPROFILE\vroidwork\probe2.py"
       - uses: actions/upload-artifact@v4
         with:
-          name: vroid-ui-probe
+          name: vroid-ui-probe2
           path: ~/vroidwork/*.png
