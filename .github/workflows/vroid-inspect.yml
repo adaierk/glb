@@ -1,41 +1,33 @@
-name: VRoid Inspect Build
+name: VRoid Steam Diagnostic
 on:
   push:
     branches:
       - chatgpt-vroid-inspect-20260928
 jobs:
-  inspect:
+  diag:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch public VRoid
+      - name: Install steamcmd
         run: |
-          mkdir -p work/extracted
-          curl -L --fail --retry 3 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o work/base.vroid
-          file work/base.vroid
-          unzip -l work/base.vroid > work/zip_listing.txt
-          unzip -q work/base.vroid -d work/extracted
-          find work/extracted -maxdepth 4 -type f -printf "%p\t%s bytes\n" | sort > work/file_listing.txt
-          python3 - <<'PY'
-          import json, os, pathlib
-          root=pathlib.Path('work/extracted')
-          out={}
-          for p in root.rglob('*'):
-              if p.is_file():
-                  rel=str(p.relative_to(root))
-                  if p.suffix.lower() in {'.json','.txt'} and p.stat().st_size < 2_000_000:
-                      try:
-                          out[rel]=p.read_text(encoding='utf-8')
-                      except Exception:
-                          pass
-          pathlib.Path('work/text_files.json').write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
-          PY
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y steamcmd lib32gcc-s1
+      - name: Try anonymous VRoid download
+        continue-on-error: true
+        run: |
+          mkdir -p "$HOME/vroidapp"
+          /usr/games/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$HOME/vroidapp" +login anonymous +app_update 1486350 validate +quit 2>&1 | tee "$HOME/steamcmd-vroid.log"
+      - name: Report
+        run: |
+          find "$HOME/vroidapp" -maxdepth 3 -type f | head -100 > "$HOME/files.txt" || true
+          echo "--- files ---"
+          cat "$HOME/files.txt"
+          echo "--- steamcmd tail ---"
+          tail -200 "$HOME/steamcmd-vroid.log" || true
       - uses: actions/upload-artifact@v4
         with:
-          name: vroid-inspect
+          name: steam-vroid-diagnostic
           path: |
-            work/base.vroid
-            work/zip_listing.txt
-            work/file_listing.txt
-            work/text_files.json
-            work/extracted
-          compression-level: 6
+            ~/steamcmd-vroid.log
+            ~/files.txt
+          if-no-files-found: warn
