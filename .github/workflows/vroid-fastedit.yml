@@ -1,0 +1,45 @@
+name: VRoid Fast Editor Snapshot
+on:
+  push:
+    branches:
+      - chatgpt-vroid-build-20260928
+jobs:
+  snap:
+    runs-on: windows-latest
+    timeout-minutes: 8
+    steps:
+      - name: Prepare
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\vfast" | Out-Null
+          curl.exe -L --fail --retry 3 --connect-timeout 30 "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -o "$env:USERPROFILE\vfast\vroid-installer.exe"
+          curl.exe -L --fail --retry 3 --connect-timeout 30 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o "$env:USERPROFILE\vfast\base.vroid"
+          Start-Process "$env:USERPROFILE\vfast\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
+          python -m pip install --quiet pillow pyautogui
+      - name: Open editor
+        shell: powershell
+        run: |
+          @'
+          import os,time,glob,subprocess,pyautogui
+          w=os.path.expanduser('~/vfast')
+          exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
+          subprocess.Popen([exe])
+          try:
+              time.sleep(25)
+              pyautogui.click(512,613); time.sleep(2)
+              pyautogui.click(512,538); time.sleep(5)
+              pyautogui.click(512,602); time.sleep(5)
+              pyautogui.click(960,132); time.sleep(2)
+              pyautogui.write(os.path.join(w,'base.vroid'), interval=0.001); pyautogui.press('enter')
+              time.sleep(35)
+              pyautogui.screenshot(os.path.join(w,'editor.png'))
+          finally:
+              subprocess.run(['taskkill','/F','/IM','VRoidStudio.exe'],capture_output=True)
+          '@ | Set-Content "$env:USERPROFILE\vfast\go.py"
+          python "$env:USERPROFILE\vfast\go.py"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vroid-fast-editor
+          path: ~/vfast/editor.png
+          if-no-files-found: warn
