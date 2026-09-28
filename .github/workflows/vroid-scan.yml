@@ -14,6 +14,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\vscan" | Out-Null
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://download.vroid.com/dist/nyRtST8DUd/VRoidStudio-v1.26.0-win.exe" -o "$env:USERPROFILE\vscan\vroid-installer.exe"
           curl.exe -L --fail --retry 3 --connect-timeout 30 "https://raw.githubusercontent.com/kyoki-railway/fuseishi-character-3d/main/managura-nanako.vroid" -o "$env:USERPROFILE\vscan\base.vroid"
+          Copy-Item "$env:USERPROFILE\vscan\base.vroid" "$env:USERPROFILE\Documents\base.vroid" -Force
           Start-Process "$env:USERPROFILE\vscan\vroid-installer.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
           python -m pip install --quiet pillow pyautogui
       - name: Scan tabs
@@ -23,12 +24,12 @@ jobs:
           import os,time,glob,subprocess,pyautogui
           w=os.path.expanduser('~/vscan')
           exe=(glob.glob(r'C:\Program Files\**\VRoidStudio.exe',recursive=True)+glob.glob(os.path.expandvars(r'%LOCALAPPDATA%\**\VRoidStudio.exe'),recursive=True))[0]
-          p=subprocess.Popen([exe]); time.sleep(25)
+          subprocess.Popen([exe]); time.sleep(25)
           pyautogui.click(512,613); time.sleep(3)
           pyautogui.click(512,538); time.sleep(6)
           pyautogui.click(512,602); time.sleep(6)
           pyautogui.click(960,132); time.sleep(3)
-          pyautogui.click(300,443); pyautogui.hotkey('ctrl','a'); pyautogui.write('base.vroid', interval=0.02); pyautogui.press('enter'); time.sleep(45)
+          pyautogui.click(300,443); pyautogui.hotkey('ctrl','a'); pyautogui.write('base.vroid', interval=0.02); pyautogui.click(457,473); time.sleep(45)
           pyautogui.screenshot(os.path.join(w,'00-editor.png'))
           for i,key in enumerate(['f1','f2','f3','f4','f5','f6'],1):
               pyautogui.press(key); time.sleep(6)
