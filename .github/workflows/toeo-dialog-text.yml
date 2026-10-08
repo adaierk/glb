@@ -49,8 +49,8 @@ jobs:
             $cb=[W32+CB]{param([IntPtr]$h,[IntPtr]$z)
               $tt=[Text.StringBuilder]::new(2048);[void][W32]::GetWindowText($h,$tt,2048)
               $cc=[Text.StringBuilder]::new(200);[void][W32]::GetClassName($h,$cc,200)
-              $pid=[uint32]0;[void][W32]::GetWindowThreadProcessId($h,[ref]$pid)
-              $rows.Add([pscustomobject]@{HWND=$h.ToInt64();PID=$pid;Title=$tt.ToString();Class=$cc.ToString()})
+              $windowProcessId=[uint32]0;[void][W32]::GetWindowThreadProcessId($h,[ref]$windowProcessId)
+              $rows.Add([pscustomobject]@{HWND=$h.ToInt64();PID=$windowProcessId;Title=$tt.ToString();Class=$cc.ToString()})
               return $true
             }
             [void][W32]::EnumWindows($cb,[IntPtr]::Zero)
