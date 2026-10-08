@@ -1,4 +1,4 @@
-name: TOEO isolate login packet crash
+name: TOEO minimal original client packet isolation
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        greeting: [magic19_401, nf1_payload16, silence]
+        greeting: [silence, magic19_401]
     timeout-minutes: 12
     permissions:
       actions: read
@@ -66,13 +66,13 @@ jobs:
           Start-Sleep -Seconds 3
           $env:GAME=$exe
           $env:LOGROOT=$report
-          $test="import os,sys,subprocess; p=subprocess.run([sys.executable,'-u','toeo-tests/frida_runtime_probe.py',os.environ['GAME'],os.environ['LOGROOT']],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=195);print('EXIT',p.returncode);print(p.stdout[-14000:]);print(p.stderr[-2000:])"
+          $test="import os,sys,subprocess; p=subprocess.run([sys.executable,'-u','toeo-tests/minimal_login_probe.py',os.environ['GAME'],os.environ['LOGROOT']],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=195);print('EXIT',p.returncode);print(p.stdout[-14000:]);print(p.stderr[-2000:])"
           try{& python -c $test 2>&1 | Tee-Object -FilePath (Join-Path $report 'driver.txt')}catch{('WATCHDOG '+$_)|Out-File (Join-Path $report 'driver.txt')}
           if($listener -and !$listener.HasExited){Stop-Process -Id $listener.Id -Force -ErrorAction SilentlyContinue}
           Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: toeo-native-packet-${{ matrix.greeting }}
+          name: toeo-minimal-original-${{ matrix.greeting }}
           path: ${{ runner.temp }}/TOEO_FIXED/report
           if-no-files-found: warn
