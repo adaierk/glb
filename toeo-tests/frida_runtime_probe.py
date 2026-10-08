@@ -147,6 +147,34 @@ observeNativeVA(0x6befe0,'async_frame');
 observeNativeVA(0x6c0b30,'packet_dispatch');
 observeNativeVA(0x619a10,'raw_receive_method');
 
+
+function watchOpcodeVA(va,label) {
+  try {
+    const p=Process.mainModule.base.add(va-0x400000);
+    let seen=0;
+    Interceptor.attach(p,{onEnter(args){
+      if(++seen>8)return;
+      try{
+        const c=this.context;
+        const result={event:'OPCODE_'+label,va:va.toString(16),
+           edi:c.edi.toInt32(),esi:c.esi.toInt32(),
+           eax:c.eax.toString(),ebp:c.ebp.toString(),esp:c.esp.toString()};
+        if(va===0x6145e7 || va===0x61462d || va===0x614673) {
+          result.remaining=c.esp.add(0x18).readU32();
+          try{result.headerWord4=c.ebp.add(4).readU16()}catch(e){}
+        }
+        emit(result);
+      }catch(e){emit({event:'OPCODE_ERROR',label,error:String(e)})}
+    }});
+    emit({event:'OPCODE_HOOKED',label,addr:p.toString()});
+  }catch(e){emit({event:'OPCODE_ATTACH_ERROR',label,error:String(e)})}
+}
+observeNativeVA(0x60e1e0,'message_assembler');
+watchOpcodeVA(0x6145e7,'need18bytes');
+watchOpcodeVA(0x61462d,'header_word');
+watchOpcodeVA(0x614673,'packet_frame_length');
+watchOpcodeVA(0x614f14,'insufficient_frame');
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
