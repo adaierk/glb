@@ -1,0 +1,82 @@
+name: TOEO valid client executable launch
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-real-launch.yml]
+jobs:
+  launch:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    permissions: {contents: read}
+    steps:
+      - name: Extract authentic client and start it in isolated Windows
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'TOEO_REAL'
+          New-Item -ItemType Directory -Force $root | Out-Null
+          $report=Join-Path $root 'report.txt'
+          'TOEO authentic client start test - Windows' | Set-Content $report
+          ('OS: '+[Environment]::OSVersion.VersionString) | Add-Content $report
+          $iso=Join-Path $root 'toeonline.iso'
+          & curl.exe -fL --retry 5 --max-time 1000 -o $iso 'https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso' 2>&1 | Out-File (Join-Path $root 'curl.log')
+          if (!(Test-Path $iso)) { throw 'ISO download failure' }
+          ('ISO bytes: '+(Get-Item $iso).Length) | Add-Content $report
+          Mount-DiskImage -ImagePath $iso | Out-Null
+          $letter=(Get-DiskImage -ImagePath $iso | Get-Volume).DriveLetter
+          $hdr="${letter}:\setup\data1.hdr"
+          $tool=Join-Path $root 'unshield.exe'
+          & curl.exe -fL --retry 4 --max-time 150 -o $tool 'https://downloads.sourceforge.net/project/wdl/apps/unshield/unshield-3c8147f-win64.exe' 2>&1 | Out-File (Join-Path $root 'unshield-download.log')
+          if (!(Test-Path $tool)) { throw 'Unshield download failure' }
+          ('Unshield SHA256: '+(Get-FileHash $tool -Algorithm SHA256).Hash) | Add-Content $report
+          $client=Join-Path $root 'client'
+          New-Item -ItemType Directory -Force $client | Out-Null
+          & $tool -e CP932 -d $client x $hdr 2>&1 | Out-File (Join-Path $root 'extract-log.txt')
+          ('Unshield extraction code: '+$LASTEXITCODE) | Add-Content $report
+          $exe=Get-ChildItem $client -Recurse -Filter 'ToEOnline.exe' -File -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (!$exe) { 'EXE MISSING: Unshield Windows build cannot restore this archive' | Add-Content $report; throw 'Authentic client not extracted' }
+          ('Client candidate: '+$exe.FullName) | Add-Content $report
+          ('Client bytes: '+$exe.Length) | Add-Content $report
+          $stream=[IO.File]::OpenRead($exe.FullName)
+          $h=New-Object byte[] 32; [void]$stream.Read($h,0,32);$stream.Close()
+          ('First bytes: '+[BitConverter]::ToString($h)) | Add-Content $report
+          if($h[0] -ne 77 -or $h[1] -ne 90) { throw 'Client EXE not a valid MZ executable' }
+          ('Game file total: '+@(Get-ChildItem $client -Recurse -File).Count) | Add-Content $report
+          $rule='TOEO_Offline_'+[Guid]::NewGuid().ToString('N')
+          try { New-NetFirewallRule -DisplayName $rule -Program $exe.FullName -Direction Outbound -Action Block | Out-Null; 'Network: blocked' | Add-Content $report } catch {('Firewall error: '+$_)|Add-Content $report}
+          try {
+            $p=Start-Process -FilePath $exe.FullName -WorkingDirectory $exe.DirectoryName -PassThru -ErrorAction Stop
+            Start-Sleep -Seconds 10
+            $p.Refresh()
+            ('Process PID: '+$p.Id) | Add-Content $report
+            ('HasExited: '+$p.HasExited) | Add-Content $report
+            if($p.HasExited) {('ExitCode: '+$p.ExitCode) | Add-Content $report}
+            ('WindowHandle: '+$p.MainWindowHandle) | Add-Content $report
+            ('WindowTitle: '+$p.MainWindowTitle) | Add-Content $report
+            if(!$p.HasExited -and $p.MainWindowHandle -ne 0) {
+              try {
+                Add-Type -AssemblyName System.Windows.Forms
+                Add-Type -AssemblyName System.Drawing
+                $bounds=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+                $bmp=[Drawing.Bitmap]::new($bounds.Width,$bounds.Height)
+                $gfx=[Drawing.Graphics]::FromImage($bmp)
+                $gfx.CopyFromScreen($bounds.Location,[Drawing.Point]::Empty,$bounds.Size)
+                $shot=Join-Path $root 'TOEO_Actual_Runtime.png'
+                $bmp.Save($shot,[Drawing.Imaging.ImageFormat]::Png)
+                $gfx.Dispose();$bmp.Dispose()
+                ('Actual desktop screenshot saved: '+$shot) | Add-Content $report
+              } catch { ('Screenshot error: '+$_) | Add-Content $report }
+            }
+            if(!$p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
+          } catch {('StartProcess exception: '+$_) | Add-Content $report}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-actual-windows-start-results
+          path: |
+            ${{ runner.temp }}/TOEO_REAL/report.txt
+            ${{ runner.temp }}/TOEO_REAL/extract-log.txt
+            ${{ runner.temp }}/TOEO_REAL/TOEO_Actual_Runtime.png
+          if-no-files-found: warn
