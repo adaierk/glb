@@ -1,0 +1,54 @@
+name: TOEO bounded dynamic API trace
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-frida-bounded.yml]
+jobs:
+  inspect:
+    runs-on: windows-latest
+    timeout-minutes: 9
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: toeo-preservation-audit-20261008
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/TOEO_TRACE
+      - name: Inspect original Japanese game error and Direct3D initialization
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $env:PYTHONIOENCODING='utf-8'
+          $base=Join-Path $env:RUNNER_TEMP 'TOEO_TRACE'
+          $raw=Join-Path $base 'unpacked'
+          $game=Join-Path $base 'game'
+          $report=Join-Path $base 'trace-report'
+          New-Item -ItemType Directory -Force $raw,$game,$report | Out-Null
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $base 'client_pack.7z') 2>&1 | Out-Null
+          foreach($n in @('NewComponent1','DefaultComponent')){
+            if(Test-Path (Join-Path $raw $n)){Copy-Item (Join-Path $raw $n '*') -Destination $game -Recurse -Force}
+          }
+          & python -m pip install -q frida pillow 2>&1 | Out-File (Join-Path $report 'install.txt')
+          $exe=Join-Path $game 'ToEO_CL_trace.exe'
+          Copy-Item (Join-Path $game 'ToEO_CL.dat') $exe
+          $rule='TOEO_API_OFFLINE_'+[Guid]::NewGuid().ToString('N')
+          try{New-NetFirewallRule -DisplayName $rule -Direction Outbound -Program $exe -Action Block | Out-Null}catch{}
+          $env:TEST_GAME=$exe
+          $env:TEST_OUTPUT=$report
+          $test = "import os,subprocess,sys; p=subprocess.run([sys.executable,'-u','toeo-tests/frida_runtime_probe.py',os.environ['TEST_GAME'],os.environ['TEST_OUTPUT']],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=95);print('EXIT',p.returncode);print('STDOUT',p.stdout[-16000:]);print('STDERR',p.stderr[-4000:])"
+          try{& python -c $test 2>&1 | Tee-Object -FilePath (Join-Path $report 'driver.txt')}catch{('TIMEOUT OR EXCEPTION '+$_)|Out-File (Join-Path $report 'driver.txt')}
+          Get-ChildItem $report | Select-Object Name,Length
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-api-bounded-trace
+          path: ${{ runner.temp }}/TOEO_TRACE/trace-report
+          if-no-files-found: warn
