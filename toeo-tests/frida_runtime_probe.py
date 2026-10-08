@@ -116,8 +116,8 @@ hook('ws2_32.dll','connect',function(args){
     emit({event:'TCP_CONNECT',family:this.family,addr:this.ip,port:this.port,raw:this.dst});
   }catch(e){emit({event:'TCP_CONNECT_err',error:String(e)})}
 },function(ret){emit({event:'TCP_CONNECT_RESULT',host:this.ip,port:this.port,returnVal:ret.toInt32()})});
-hook('ws2_32.dll','send',function(args){if((sent.send=(sent.send||0)+1)<15)emit({event:'send',size:args[2].toInt32()})},null);
-hook('ws2_32.dll','recv',function(args){if((sent.recv=(sent.recv||0)+1)<15)emit({event:'recv',size:args[2].toInt32()})},null);
+hook('ws2_32.dll','send',function(args){const n=args[2].toInt32();const seq=(sent.send=(sent.send||0)+1);if(seq<50){let h='';try{h=Array.from(new Uint8Array(args[1].readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'send',size:n,hex:h})}},null);
+hook('ws2_32.dll','recv',function(args){this.buffer=args[1];this.reqLen=args[2].toInt32();this.seq=(sent.recv=(sent.recv||0)+1)},function(ret){const n=ret.toInt32();if(this.seq<50){let h='';try{if(n>0)h=Array.from(new Uint8Array(this.buffer.readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'recv',requestLen:this.reqLen,result:n,hex:h})}});
 hook('kernel32.dll','CreateProcessA',function(args){emit({event:'CreateProcessA',appHex:ascii(args[0]),cmdHex:ascii(args[1])})},function(ret){emit({event:'CreateProcessA_RESULT',success:ret.toInt32()})});
 hook('kernel32.dll','LoadLibraryW',function(args){this.name=args[0].isNull()?'':args[0].readUtf16String()},function(ret){if(ret.isNull())emit({event:'LoadLibraryW_FAILED',name:this.name})});
 hook('kernel32.dll','GetFileAttributesA',function(args){this.name=ascii(args[0])},function(ret){if(ret.toInt32()===-1&&((sent.attr=(sent.attr||0)+1)<40))emit({event:'GetFileAttributesA_FAIL',pathHex:this.name})});
