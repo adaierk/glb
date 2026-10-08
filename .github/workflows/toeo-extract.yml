@@ -1,0 +1,46 @@
+name: TOEO inspect original CAB
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-extract.yml]
+jobs:
+  inspect:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Extract archival game files
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Continue"
+          $dir = Join-Path $env:RUNNER_TEMP "toeoextract"
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          $iso = Join-Path $dir "toeonline.iso"
+          curl.exe -fL --retry 4 --max-time 900 -o $iso https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso
+          if (!(Test-Path $iso)) { throw "ISO download failed" }
+          Mount-DiskImage -ImagePath $iso
+          $drv = (Get-DiskImage -ImagePath $iso | Get-Volume).DriveLetter
+          $cab = "${drv}:\setup\data1.cab"
+          $unshield = Join-Path $dir "unshield.exe"
+          curl.exe -fL --retry 3 -o $unshield https://downloads.sourceforge.net/project/wdl/apps/unshield/unshield-3c8147f-win64.exe
+          if (!(Test-Path $unshield)) { throw "Unshield download failed" }
+          Write-Output "unshield SHA256: $((Get-FileHash $unshield -Algorithm SHA256).Hash)"
+          & $unshield l $cab 2>&1 | Out-File (Join-Path $dir "filelist.txt")
+          Write-Output "CAB list code: $LASTEXITCODE"
+          Get-Content (Join-Path $dir "filelist.txt") -TotalCount 100
+          $client = Join-Path $dir "client"
+          New-Item -ItemType Directory -Force $client | Out-Null
+          & $unshield -d $client x $cab 2>&1 | Out-File (Join-Path $dir "extract.txt")
+          Write-Output "CAB extract code: $LASTEXITCODE"
+          Get-Content (Join-Path $dir "extract.txt") -Tail 70
+          $files = @(Get-ChildItem $client -File -Recurse -ErrorAction SilentlyContinue)
+          Write-Output "Extracted file count: $($files.Count)"
+          Write-Output "Extracted bytes: $(($files|Measure-Object Length -Sum).Sum)"
+          $files | Where-Object { $_.Extension -in ".exe",".dll" } | Select-Object -First 65 FullName,Length | Format-Table -AutoSize
+          $files | Group-Object Extension | Sort-Object Count -Descending | Select-Object -First 40 Count,Name | Format-Table -AutoSize
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-cab-recovery-reports
+          path: |
+            ${{ runner.temp }}/toeoextract/filelist.txt
+            ${{ runner.temp }}/toeoextract/extract.txt
