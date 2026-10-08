@@ -6,7 +6,6 @@ on:
 jobs:
   correct-layout:
     runs-on: windows-latest
-    strategy:
     timeout-minutes: 12
     permissions:
       actions: read
