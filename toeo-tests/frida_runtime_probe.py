@@ -120,7 +120,17 @@ try:
                 u.mouse_event(0x0004,0,0,0,0)
                 print("CLICKED original スタート button at screen (408,447)",flush=True)
             except Exception as e: print("Click error",repr(e),flush=True)
-        if tick in [2,6,15,28,35,40,50,64,82]:
+        if tick == 45:
+            try:
+                import ctypes
+                u=ctypes.windll.user32
+                u.SetCursorPos(218,534)
+                u.mouse_event(0x0002,0,0,0,0)
+                time.sleep(0.12)
+                u.mouse_event(0x0004,0,0,0,0)
+                print("CLICKED original 同意します agreement button at screen (218,534)",flush=True)
+            except Exception as e: print("Agreement click error",repr(e),flush=True)
+        if tick in [2,6,15,28,35,40,46,51,61,73,82]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
