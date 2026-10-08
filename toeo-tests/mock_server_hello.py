@@ -38,6 +38,12 @@ def downstream_listener(port):
         if port==11100:
             preset = os.environ.get('TOEO_MAIN_GREETING','silence')
             packets = {
+                'magic19_401':bytes.fromhex('12345678010001041300ffff00000000000000'),
+                'magic22_401':bytes.fromhex('12345678040001041600ffff00000000000000000000'),
+                'magic19_405':bytes.fromhex('12345678010005041300ffff00000000000000'),
+                'magic19_seq0':bytes.fromhex('12345678010001041300000000000000000000'),
+                'magic22_405':bytes.fromhex('12345678040005041600ffff00000000000000000000'),
+                'magic19_len18':bytes.fromhex('12345678010001041200ffff00000000000000'),
                 'silence':b'',
                 'zero4':bytes(4),
                 'zero8':bytes(8),
