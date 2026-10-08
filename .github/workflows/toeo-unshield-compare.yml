@@ -1,0 +1,57 @@
+name: TOEO independent Unshield comparison
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-unshield-compare.yml]
+jobs:
+  unshield-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 27
+    permissions: {contents: read}
+    steps:
+      - name: Recover and validate files with independent reference parser
+        shell: bash
+        run: |
+          set +e
+          root="$RUNNER_TEMP/toeo_compare"
+          mkdir -p "$root/disc" "$root/client"
+          cd "$root"
+          echo 'Independent Unshield reference implementation' > report.txt
+          sudo apt-get update -qq > apt.log 2>&1
+          sudo apt-get install -y -qq unshield p7zip-full file >> apt.log 2>&1
+          unshield -V >> report.txt 2>&1
+          curl -fL --retry 5 --retry-delay 6 --max-time 1050 -sS -o toeonline.iso 'https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso' > download.log 2>&1
+          echo "Download exit=$? bytes=$(stat -c%s toeonline.iso 2>/dev/null)" >> report.txt
+          7z x -y -odisc toeonline.iso > disc.log 2>&1
+          echo "ISO extract exit=$?" >> report.txt
+          ls -l disc/setup/{data1.cab,data1.hdr,data2.cab} >> report.txt 2>&1
+          unshield -D 2 -e CP932 l disc/setup/data1.hdr > list.txt 2>list_stderr.txt
+          echo "Reference list exit=$?" >> report.txt
+          head -n 90 list.txt >> report.txt
+          head -n 60 list_stderr.txt >> report.txt
+          unshield -D 2 -e CP932 -d client x disc/setup/data1.hdr > extract.log 2>extract_stderr.txt
+          echo "Reference extract exit=$?" >> report.txt
+          echo "Extracted files=$(find client -type f | wc -l)" >> report.txt
+          echo "Extracted bytes=$(du -sb client | cut -f1)" >> report.txt
+          find client -type f -iname '*.exe' -print0 | while IFS= read -r -d '' f; do echo "FILE: $f"; file "$f"; head -c 24 "$f" | od -A n -t x1; done >> report.txt
+          find client -type f | head -n 80 >> report.txt
+          echo 'Last extraction errors:' >> report.txt
+          tail -n 45 extract_stderr.txt >> report.txt
+          echo 'Most common extensions:' >> report.txt
+          python3 - <<'PY' >> report.txt
+          from pathlib import Path
+          from collections import Counter
+          paths=[p for p in Path('client').rglob('*') if p.is_file()]
+          for k,v in Counter(p.suffix.lower() for p in paths).most_common(50): print(k or 'NO_EXT',v)
+          PY
+          cat report.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-reference-extraction-report
+          path: |
+            ${{ runner.temp }}/toeo_compare/report.txt
+            ${{ runner.temp }}/toeo_compare/list.txt
+            ${{ runner.temp }}/toeo_compare/list_stderr.txt
+            ${{ runner.temp }}/toeo_compare/extract_stderr.txt
+          if-no-files-found: warn
