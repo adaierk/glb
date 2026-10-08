@@ -1,0 +1,113 @@
+name: TOEO client reconstruction and startup test
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-stage4.yml]
+jobs:
+  reconstruct:
+    runs-on: windows-latest
+    timeout-minutes: 27
+    permissions: {contents: read}
+    steps:
+      - name: Restore Japanese filenames and test original game binary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'toeo_stage4'
+          $client=Join-Path $root 'client'
+          New-Item -ItemType Directory -Force $root,$client | Out-Null
+          $report=Join-Path $root 'REPORT.txt'
+          'Tales of Eternia Online 2006 / client reconstruction and actual launch' | Set-Content $report
+          'UTC: '+(Get-Date -Format 'u') | Add-Content $report
+          'Downloading original ISO from Internet Archive...' | Add-Content $report
+          $iso=Join-Path $root 'toeonline.iso'
+          & curl.exe -fLsS --retry 5 --retry-delay 4 --max-time 1000 -o $iso 'https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso' 2>&1 | Out-File (Join-Path $root 'download.txt')
+          if (!(Test-Path $iso)) { throw 'ISO not downloaded' }
+          ('ISO size bytes: '+(Get-Item $iso).Length) | Add-Content $report
+          ('ISO SHA256: '+(Get-FileHash $iso -Algorithm SHA256).Hash) | Add-Content $report
+          Mount-DiskImage -ImagePath $iso | Out-Null
+          $drive=(Get-DiskImage -ImagePath $iso | Get-Volume).DriveLetter
+          $setup="${drive}:\setup"
+          ('Mounted at '+$setup) | Add-Content $report
+          'Obtaining InstallShield-aware extraction source...' | Add-Content $report
+          $repo=Join-Path $root 'Unpacker'
+          & git clone -q --depth 1 --branch v1.1.1 'https://github.com/pawstas80/Unpacker.git' $repo 2>&1 | Out-File (Join-Path $root 'clone.txt')
+          if (!(Test-Path (Join-Path $repo 'Unpacker\InstallShieldCabinetPackage.cs'))) { throw 'Extractor source missing' }
+          $src=Join-Path $repo 'Unpacker\InstallShieldCabinetPackage.cs'
+          $code=[System.IO.File]::ReadAllText($src)
+          $old='private static readonly Encoding LegacyEncoding = Encoding.Default;'
+          $new='private static readonly Encoding LegacyEncoding = Encoding.GetEncoding(932);'
+          if (!$code.Contains($old)) { throw 'Source code changed unexpectedly; no patch made' }
+          [System.IO.File]::WriteAllText($src,$code.Replace($old,$new),[System.Text.UTF8Encoding]::new($false))
+          'Forced archive filename decoding: Shift-JIS / Windows-932' | Add-Content $report
+          $vswhere='C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'
+          $msbuild=(& $vswhere -latest -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1)
+          if (!$msbuild) { throw 'MSBuild not found' }
+          & $msbuild (Join-Path $repo 'Unpacker.sln') '/p:Configuration=Release' '/verbosity:minimal' '/nologo' 2>&1 | Out-File (Join-Path $root 'build.txt')
+          if ($LASTEXITCODE -ne 0) { Get-Content (Join-Path $root 'build.txt') -Tail 50; throw 'Patched extractor compilation failed' }
+          $unpacker=Join-Path $repo 'Unpacker\bin\Release\Unpacker.exe'
+          if (!(Test-Path $unpacker)) { throw 'Compiled extractor missing' }
+          'Custom CP932 extractor built successfully.' | Add-Content $report
+          $hdr=Join-Path $setup 'data1.hdr'
+          & $unpacker --list $hdr 2>&1 | Out-File (Join-Path $root 'CP932_FILELIST.txt') -Encoding utf8
+          ('CAB listed exit code: '+$LASTEXITCODE) | Add-Content $report
+          & $unpacker $hdr $client 2>&1 | Out-File (Join-Path $root 'EXTRACT_LOG.txt') -Encoding utf8
+          ('CAB extraction exit code: '+$LASTEXITCODE) | Add-Content $report
+          $files=@(Get-ChildItem -LiteralPath $client -Recurse -File -ErrorAction SilentlyContinue)
+          ('Recovered files: '+$files.Count) | Add-Content $report
+          ('Recovered bytes: '+($files | Measure-Object Length -Sum).Sum) | Add-Content $report
+          $files | Group-Object Extension | Sort-Object Count -Descending | Select-Object -First 60 Count,Name | Format-Table | Out-String -Width 200 | Add-Content $report
+          $files | ForEach-Object { [PSCustomObject]@{RelativePath=$_.FullName.Substring($client.Length).TrimStart('\');Bytes=$_.Length} } | Export-Csv -Path (Join-Path $root 'FILE_MANIFEST.csv') -Encoding utf8 -NoTypeInformation
+          $exe=@($files | Where-Object { $_.Extension -ieq '.exe' })
+          'Recovered EXE signatures and version metadata:' | Add-Content $report
+          foreach ($f in $exe) {
+            $fh=[IO.File]::OpenRead($f.FullName); $buffer=New-Object byte[] 2; [void]$fh.Read($buffer,0,2);$fh.Dispose()
+            $vi=[Diagnostics.FileVersionInfo]::GetVersionInfo($f.FullName)
+            $rel=$f.FullName.Substring($client.Length).TrimStart('\')
+            ('EXE: '+$rel+' bytes='+$f.Length+' MZ='+([Text.Encoding]::ASCII.GetString($buffer))+' FileDescription='+$vi.FileDescription+' ProductName='+$vi.ProductName+' Company='+$vi.CompanyName) | Add-Content $report
+          }
+          $candidates=@($exe | Where-Object { $_.Name -match 'toeo|eternia|online' -and $_.Length -ge 30000 } | Sort-Object Length -Descending)
+          if ($candidates.Count -eq 0) {
+            $candidates=@($exe | Where-Object { ( [Diagnostics.FileVersionInfo]::GetVersionInfo($_.FullName).ProductName -match 'Eternia|TOEO' ) } | Sort-Object Length -Descending)
+          }
+          if ($candidates.Count -eq 0) { 'No confidently identified game EXE to launch.' | Add-Content $report }
+          else {
+            $candidate=$candidates[0]
+            ('Attempting actual game EXE: '+$candidate.FullName) | Add-Content $report
+            $ruleName='TOEO_archival_isolation_'+[Guid]::NewGuid().ToString('N')
+            try { New-NetFirewallRule -DisplayName $ruleName -Direction Outbound -Action Block -Program $candidate.FullName -Profile Any -ErrorAction Stop | Out-Null; 'Outbound network blocked for tested binary' | Add-Content $report } catch { ('Network rule exception: '+$_) | Add-Content $report }
+            try {
+              $p=Start-Process -FilePath $candidate.FullName -WorkingDirectory $candidate.DirectoryName -PassThru -ErrorAction Stop
+              Start-Sleep -Seconds 8
+              $p.Refresh()
+              ('Client process: ID='+$p.Id+' HasExited='+$p.HasExited+' ExitCode='+(if($p.HasExited){$p.ExitCode}else{'running'})+' MainWindowHandle='+$p.MainWindowHandle+' MainWindowTitle='+$p.MainWindowTitle) | Add-Content $report
+              if (!$p.HasExited -and $p.MainWindowHandle -ne 0) {
+                try {
+                  Add-Type -AssemblyName System.Drawing
+                  Add-Type -AssemblyName System.Windows.Forms
+                  $b=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+                  $bmp=[Drawing.Bitmap]::new($b.Width,$b.Height)
+                  $g=[Drawing.Graphics]::FromImage($bmp)
+                  $g.CopyFromScreen($b.Location,[Drawing.Point]::Empty,$b.Size)
+                  $shot=Join-Path $root 'TOEO_Real_Runtime.png'
+                  $bmp.Save($shot,[Drawing.Imaging.ImageFormat]::Png)
+                  $g.Dispose();$bmp.Dispose()
+                  ('Screenshot captured from actual Windows desktop: '+$shot) | Add-Content $report
+                } catch { ('Screenshot failure: '+$_) | Add-Content $report }
+              }
+              if (!$p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
+            } catch { ('Client launch exception: '+$_) | Add-Content $report }
+            Remove-NetFirewallRule -DisplayName $ruleName -ErrorAction SilentlyContinue
+          }
+          Get-Content $report | Select-Object -Last 120
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-japanese-file-recovery-and-runtime
+          path: |
+            ${{ runner.temp }}/toeo_stage4/REPORT.txt
+            ${{ runner.temp }}/toeo_stage4/CP932_FILELIST.txt
+            ${{ runner.temp }}/toeo_stage4/FILE_MANIFEST.csv
+            ${{ runner.temp }}/toeo_stage4/TOEO_Real_Runtime.png
+            ${{ runner.temp }}/toeo_stage4/build.txt
+          if-no-files-found: warn
