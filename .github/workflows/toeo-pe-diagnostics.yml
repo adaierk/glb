@@ -1,0 +1,87 @@
+name: TOEO hidden executable diagnosis
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-pe-diagnostics.yml]
+jobs:
+  inspect:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/pe_test
+      - name: Check hidden executable content and test launch
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'pe_test'
+          $raw=Join-Path $root 'raw'
+          $app=Join-Path $root 'game'
+          New-Item -ItemType Directory -Force $raw,$app | Out-Null
+          $report=Join-Path $root 'report.txt'
+          'TOEO original internal Windows PE diagnosis' | Set-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $root 'client_pack.7z') | Out-Null
+          foreach($name in @('NewComponent1','DefaultComponent')){
+            if(Test-Path (Join-Path $raw $name)){Copy-Item (Join-Path $raw $name '*') -Destination $app -Recurse -Force}
+          }
+          $dump=Get-Command dumpbin.exe -ErrorAction SilentlyContinue
+          $objs=@('ToEOnline.exe','ToEO_CL.dat','downloader.dat','Checker.exe','ToEO_Option.exe')
+          foreach($n in $objs){
+            $p=Join-Path $app $n
+            if(!(Test-Path $p)){continue}
+            $v=[Diagnostics.FileVersionInfo]::GetVersionInfo($p)
+            ('FILE '+$n+' size='+((Get-Item $p).Length)+' Description='+$v.FileDescription+' Product='+$v.ProductName+' Company='+$v.CompanyName) | Add-Content $report
+            $b=[IO.File]::ReadAllBytes($p)
+            $pe=[BitConverter]::ToInt32($b,60)
+            ('PE_OFFSET='+$pe+' MAGIC='+[BitConverter]::ToString($b,$pe,4)+' MACHINE='+[BitConverter]::ToString($b,$pe+4,2)+' SUBSYSTEM='+[BitConverter]::ToString($b,$pe+92,2)) | Add-Content $report
+            $ascii=[Text.Encoding]::ASCII.GetString($b)
+            $tags=[regex]::Matches($ascii,'[ -~]{6,160}') | ForEach-Object Value | Where-Object {$_ -match 'ToEO|TOEO|Eternia|www\.|http|GameGuard|Direct3D|DirectX|Login|Update|CL.dat|downloader|WinMain|error'} | Select-Object -Unique -First 65
+            ('Notable strings: '+($tags -join ' | ')) | Add-Content $report
+          }
+          foreach($name in @('ToEO_CL.dat','downloader.dat')){
+            $candidate=Join-Path $app $name
+            if(!(Test-Path $candidate)){continue}
+            $exe=Join-Path $app ($name+'.exe')
+            Copy-Item $candidate $exe
+            $rule='TOEO_PE_TEST_'+[Guid]::NewGuid().ToString('N')
+            try{New-NetFirewallRule -DisplayName $rule -Program $exe -Direction Outbound -Action Block | Out-Null}catch{}
+            try{
+              $p=Start-Process -FilePath $exe -WorkingDirectory $app -PassThru -ErrorAction Stop
+              Start-Sleep -Seconds 6
+              $p.Refresh()
+              ('RUN '+$name+' PID='+$p.Id+' EXITED='+$p.HasExited+' WINDOW='+$p.MainWindowHandle+' TITLE='+$p.MainWindowTitle) | Add-Content $report
+              if($p.HasExited){('EXIT_CODE='+$p.ExitCode)|Add-Content $report}
+              if(!$p.HasExited -and $p.MainWindowHandle -ne 0){
+                try{
+                  Add-Type -AssemblyName System.Drawing
+                  Add-Type -AssemblyName System.Windows.Forms
+                  $bb=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+                  $img=[Drawing.Bitmap]::new($bb.Width,$bb.Height)
+                  $g=[Drawing.Graphics]::FromImage($img)
+                  $g.CopyFromScreen($bb.Location,[Drawing.Point]::Empty,$bb.Size)
+                  $img.Save((Join-Path $root ('REAL_'+$name+'.png')),[Drawing.Imaging.ImageFormat]::Png)
+                  $g.Dispose();$img.Dispose()
+                  ('SCREENSHOT: '+$name) | Add-Content $report
+                }catch{('SCREENSHOT_FAIL '+$_)|Add-Content $report}
+              }
+              if(!$p.HasExited){Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue}
+            }catch{('RUN_ERROR '+$name+' '+$_)|Add-Content $report}
+            Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          }
+          Get-Content $report | Select-Object -Last 110
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-hidden-client-executable-report
+          path: |
+            ${{ runner.temp }}/pe_test/report.txt
+            ${{ runner.temp }}/pe_test/REAL_*.png
+          if-no-files-found: warn
