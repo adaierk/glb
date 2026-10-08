@@ -108,9 +108,9 @@ try:
     script.on('message',on_message)
     script.load()
     device.resume(pid)
-    for tick in range(14):
+    for tick in range(88):
         time.sleep(1)
-        if tick in [2,6]:
+        if tick in [2,6,15,28,45,65,82]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
