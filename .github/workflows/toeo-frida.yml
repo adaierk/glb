@@ -1,0 +1,50 @@
+name: TOEO dynamic startup forensics
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-frida.yml]
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 16
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: toeo-preservation-audit-20261008
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_probe
+      - name: Trace original startup errors and graphics calls
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $base=Join-Path $env:RUNNER_TEMP 'toeo_probe'
+          $raw=Join-Path $base 'raw'
+          $game=Join-Path $base 'game'
+          $out=Join-Path $base 'report'
+          New-Item -ItemType Directory -Force $raw,$game,$out | Out-Null
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $base 'client_pack.7z') | Out-Null
+          foreach($name in @('NewComponent1','DefaultComponent')){
+            $dir=Join-Path $raw $name
+            if(Test-Path $dir){Copy-Item (Join-Path $dir '*') -Destination $game -Recurse -Force}
+          }
+          & python -m pip install --quiet frida pillow
+          $exe=Join-Path $game 'ToEO_CL_trace.exe'
+          Copy-Item (Join-Path $game 'ToEO_CL.dat') $exe
+          $rule='TOEO_FRIDA_'+[Guid]::NewGuid().ToString('N')
+          try{New-NetFirewallRule -DisplayName $rule -Direction Outbound -Action Block -Program $exe | Out-Null}catch{}
+          & python "toeo-tests/frida_runtime_probe.py" $exe $out 2>&1 | Tee-Object -FilePath (Join-Path $out 'console.txt')
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-dynamic-startup-trace
+          path: ${{ runner.temp }}/toeo_probe/report
+          if-no-files-found: warn
