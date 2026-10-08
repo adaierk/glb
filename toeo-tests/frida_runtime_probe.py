@@ -81,6 +81,47 @@ hook('d3d9.dll','Direct3DCreate9',function(args){this.sdk=args[0].toInt32()},
       emit({event:'hooked_CreateDevice',ptr:method.toString()});
     }catch(e){emit({event:'CreateDeviceHookErr',error:String(e)})}
   });
+
+function sampleAnsi(ptr,maxN=280){return ascii(ptr)}
+function hookProfile(name, bufferIndex, pathIndex, valType){
+  hook('kernel32.dll',name,function(args) {
+      const f=raw(args[pathIndex],180);
+      const path=f.map(x=>String.fromCharCode(x)).join('');
+      if(path.toLowerCase().indexOf('server.ini')===-1&&path.toLowerCase().indexOf('deb.ini')===-1) return;
+      this.show=true;
+      this.section=ascii(args[0]);this.key=ascii(args[1]);this.file=ascii(args[pathIndex]);
+      if(bufferIndex!==null)this.buffer=args[bufferIndex];
+      this.def=(bufferIndex!==null?ascii(args[2]):null);
+  },function(ret) {
+      if(!this.show)return;
+      emit({event:name+'_RESULT',sectionHex:this.section,keyHex:this.key,fileHex:this.file,
+        defaultHex:this.def,returnedLength:ret.toInt32(),
+        valueHex:this.buffer?ascii(this.buffer):null});
+  });
+}
+hookProfile('GetPrivateProfileStringA',4,5,0);
+hookProfile('GetPrivateProfileIntA',null,3,1);
+hook('user32.dll','PostQuitMessage',function(args){emit({event:'PostQuitMessage',code:args[0].toInt32()})},null);
+hook('user32.dll','DestroyWindow',function(args){this.hwnd=args[0].toString()},function(ret){emit({event:'DestroyWindow',hwnd:this.hwnd,result:ret.toInt32()})});
+hook('ws2_32.dll','gethostbyname',function(args){this.name=ascii(args[0]);emit({event:'DNS_gethostbyname',nameHex:this.name})},function(ret){emit({event:'DNS_RESULT',nameHex:this.name,ptr:ret.toString()})});
+hook('ws2_32.dll','getaddrinfo',function(args){this.name=ascii(args[0]);this.service=ascii(args[1]);emit({event:'DNS_getaddrinfo',hostHex:this.name,serviceHex:this.service})},function(ret){emit({event:'DNS_ADDRINFO_RESULT',hostHex:this.name,code:ret.toInt32()})});
+hook('ws2_32.dll','connect',function(args){
+  try {
+    this.family=args[1].readU16();
+    const dat=[];
+    for(let i=0;i<16;i++)dat.push(args[1].add(i).readU8());
+    this.dst=hex(dat);
+    this.port=dat[2]*256+dat[3];
+    this.ip=dat.slice(4,8).join('.');
+    emit({event:'TCP_CONNECT',family:this.family,addr:this.ip,port:this.port,raw:this.dst});
+  }catch(e){emit({event:'TCP_CONNECT_err',error:String(e)})}
+},function(ret){emit({event:'TCP_CONNECT_RESULT',host:this.ip,port:this.port,returnVal:ret.toInt32()})});
+hook('ws2_32.dll','send',function(args){if((sent.send=(sent.send||0)+1)<15)emit({event:'send',size:args[2].toInt32()})},null);
+hook('ws2_32.dll','recv',function(args){if((sent.recv=(sent.recv||0)+1)<15)emit({event:'recv',size:args[2].toInt32()})},null);
+hook('kernel32.dll','CreateProcessA',function(args){emit({event:'CreateProcessA',appHex:ascii(args[0]),cmdHex:ascii(args[1])})},function(ret){emit({event:'CreateProcessA_RESULT',success:ret.toInt32()})});
+hook('kernel32.dll','LoadLibraryW',function(args){this.name=args[0].isNull()?'':args[0].readUtf16String()},function(ret){if(ret.isNull())emit({event:'LoadLibraryW_FAILED',name:this.name})});
+hook('kernel32.dll','GetFileAttributesA',function(args){this.name=ascii(args[0])},function(ret){if(ret.toInt32()===-1&&((sent.attr=(sent.attr||0)+1)<40))emit({event:'GetFileAttributesA_FAIL',pathHex:this.name})});
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
@@ -130,7 +171,7 @@ try:
                 u.mouse_event(0x0004,0,0,0,0)
                 print("CLICKED original 同意します agreement button at screen (218,534)",flush=True)
             except Exception as e: print("Agreement click error",repr(e),flush=True)
-        if tick in [2,6,15,28,35,40,46,51,61,73,82]:
+        if tick in [2,6,15,28,35,40,45,46,48,51,61,73,82]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
