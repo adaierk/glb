@@ -40,6 +40,22 @@ def framed_native(opcode, length, sequence=0xffff, inner_offset=0):
     struct.pack_into('>H',buf,18,0)
     return bytes(buf)
 
+def authentic_native_frame(opcode,total_len,sequence=0xffff):
+    """Packet envelope derived from original client at 0x60B110 and 0x611CFB.
+    Uses network-byte-order fields; 0x12345678 is also appended as a tail marker.
+    These are test candidates, not verified server login messages.
+    """
+    if total_len < 24:
+        raise ValueError('invalid TOEO frame size')
+    packet=bytearray(total_len)
+    packet[:4]=bytes.fromhex('12345678')
+    struct.pack_into('>H',packet,4,total_len)
+    struct.pack_into('>H',packet,6,opcode)
+    struct.pack_into('>H',packet,8,total_len-4)
+    struct.pack_into('>H',packet,10,sequence)
+    packet[-4:]=bytes.fromhex('12345678')
+    return bytes(packet)
+
 def downstream_listener(port):
     downstream=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     downstream.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
@@ -63,6 +79,10 @@ def downstream_listener(port):
                 'magic19_len18':bytes.fromhex('12345678010001041200ffff00000000000000'),
                 'silence':b'',
                 'proper_401_36':framed_native(0x401,36),
+                'authentic_401_44':authentic_native_frame(0x401,44),
+                'authentic_401_44_seq0':authentic_native_frame(0x401,44,0),
+                'authentic_403_28':authentic_native_frame(0x403,28),
+                'authentic_402_44':authentic_native_frame(0x402,44),
                 'proper_401_36_seq0':framed_native(0x401,36,0),
                 'proper_403_24':framed_native(0x403,24),
                 'proper_402_48':framed_native(0x402,48),
