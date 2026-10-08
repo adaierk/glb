@@ -45,21 +45,21 @@ hook('user32.dll','MessageBoxW',function(args){
   emit({event:'MessageBoxW',caption:args[2].isNull()?'':args[2].readUtf16String(),message:args[1].isNull()?'':args[1].readUtf16String(),flags:args[3].toString()});
 },null);
 hook('user32.dll','CreateWindowExA',function(args){
-  if((sent.windows||0)++ < 40){emit({event:'CreateWindowExA',classHex:ascii(args[1]),titleHex:ascii(args[2])})}
+  sent.windows=(sent.windows||0)+1;if(sent.windows < 40){emit({event:'CreateWindowExA',classHex:ascii(args[1]),titleHex:ascii(args[2])})}
 },null);
 hook('kernel32.dll','OutputDebugStringA',function(args){
   emit({event:'OutputDebugStringA',textHex:ascii(args[0])});
 },null);
 hook('kernel32.dll','GetPrivateProfileStringA',function(args){
-  if((sent.profiles||0)++ < 65){emit({event:'GetPrivateProfileStringA',sectionHex:ascii(args[0]),keyHex:ascii(args[1]),fileHex:ascii(args[5])})}
+  sent.profiles=(sent.profiles||0)+1;if(sent.profiles < 65){emit({event:'GetPrivateProfileStringA',sectionHex:ascii(args[0]),keyHex:ascii(args[1]),fileHex:ascii(args[5])})}
 },null);
 hook('kernel32.dll','GetPrivateProfileIntA',function(args){
-  if((sent.profileint||0)++ < 35){emit({event:'GetPrivateProfileIntA',sectionHex:ascii(args[0]),keyHex:ascii(args[1]),fileHex:ascii(args[3])})}
+  sent.profileint=(sent.profileint||0)+1;if(sent.profileint < 35){emit({event:'GetPrivateProfileIntA',sectionHex:ascii(args[0]),keyHex:ascii(args[1]),fileHex:ascii(args[3])})}
 },null);
 hook('kernel32.dll','CreateFileA',function(args){this.pathHex=ascii(args[0])},
-  function(ret){if(ret.toInt32()===-1 && (sent.missing||0)++ < 100){emit({event:'CreateFileA_FAIL',pathHex:this.pathHex})}});
+  function(ret){sent.missing=(sent.missing||0)+1;if(ret.toInt32()===-1 && sent.missing < 100){emit({event:'CreateFileA_FAIL',pathHex:this.pathHex})}});
 hook('kernel32.dll','LoadLibraryA',function(args){this.pathHex=ascii(args[0])},
-  function(ret){if(ret.isNull() && (sent.loadfail||0)++ < 80){emit({event:'LoadLibraryA_FAIL',pathHex:this.pathHex})}});
+  function(ret){sent.loadfail=(sent.loadfail||0)+1;if(ret.isNull() && sent.loadfail < 80){emit({event:'LoadLibraryA_FAIL',pathHex:this.pathHex})}});
 hook('kernel32.dll','ExitProcess',function(args){emit({event:'ExitProcess',exitCode:args[0].toInt32()})},null);
 hook('d3d9.dll','Direct3DCreate9',function(args){this.sdk=args[0].toInt32()},
   function(ret) {
