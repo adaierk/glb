@@ -175,6 +175,38 @@ watchOpcodeVA(0x61462d,'header_word');
 watchOpcodeVA(0x614673,'packet_frame_length');
 watchOpcodeVA(0x614f14,'insufficient_frame');
 
+
+function inspectMachine(va,label){
+  try{
+    const target=Process.mainModule.base.add(va-0x400000);
+    let hits=0;
+    Interceptor.attach(target,{onEnter(args){
+      ++hits;
+      if(hits>7)return;
+      try{
+        const r=this.context;
+        emit({event:'BRANCH_TRACE',label,va:va.toString(16),hit:hits,
+          eip:r.eip.toString(),eax:r.eax.toString(),ecx:r.ecx.toString(),
+          edx:r.edx.toString(),esi:r.esi.toString(),edi:r.edi.toString(),
+          ebp:r.ebp.toString(),esp:r.esp.toString(),ret:this.returnAddress.toString()});
+      }catch(e){emit({event:'BRANCH_TRACE_ERROR',label,error:String(e)})}
+    }});
+    emit({event:'BRANCH_ATTACH_OK',label});
+  }catch(e){emit({event:'BRANCH_ATTACH_ERR',label,error:String(e)})}
+}
+inspectMachine(0x6143d0,'state_dispatch_enter');
+inspectMachine(0x614524,'pre_receive');
+inspectMachine(0x61452f,'post_receive');
+inspectMachine(0x614537,'rx_has_bytes');
+inspectMachine(0x6145d8,'pre_assemble');
+inspectMachine(0x6145df,'post_assemble');
+inspectMachine(0x6145e7,'rx_enough_data');
+inspectMachine(0x614f14,'rx_need_more');
+inspectMachine(0x614f8d,'rx_zero_return');
+inspectMachine(0x61500c,'rx_error_return');
+inspectMachine(0x60e1e0,'assembler_enter');
+inspectMachine(0x6bee00,'frame_decode_enter');
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
