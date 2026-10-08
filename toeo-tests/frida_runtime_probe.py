@@ -171,7 +171,18 @@ try:
                 u.mouse_event(0x0004,0,0,0,0)
                 print("CLICKED original 同意します agreement button at screen (218,534)",flush=True)
             except Exception as e: print("Agreement click error",repr(e),flush=True)
-        if tick in [2,6,15,28,35,40,45,46,48,51,61,73,82]:
+        if tick in [54,58]:
+            try:
+                import ctypes
+                u=ctypes.windll.user32
+                x,y=((360,299) if tick==54 else (340,391))
+                u.SetCursorPos(x,y)
+                u.mouse_event(0x0002,0,0,0,0)
+                time.sleep(0.13)
+                u.mouse_event(0x0004,0,0,0,0)
+                print(f"CLICK world list or select button: tick={tick}, coords=({x},{y})",flush=True)
+            except Exception as e: print("World select error",repr(e),flush=True)
+        if tick in [2,6,15,28,35,40,45,46,48,51,55,59,61,65,73,82]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
