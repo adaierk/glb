@@ -1,4 +1,4 @@
-name: TOEO recovered genuine 12345678 handshake trial
+name: TOEO isolate login packet crash
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        greeting: [magic19_401, magic22_401, magic19_seq0, magic19_len18]
+        greeting: [magic19_401, nf1_payload16, silence]
     timeout-minutes: 12
     permissions:
       actions: read
