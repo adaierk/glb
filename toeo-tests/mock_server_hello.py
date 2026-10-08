@@ -46,6 +46,11 @@ def downstream_listener(port):
                 'zero16':bytes(16),
                 'marker16':struct.pack('<IIII',16,1,0,0),
                 'lenbe8':struct.pack('!II',8,0),
+                'nf1_header1':struct.pack('<IHH',0xE01B74F2,1,0),
+                'nf1_header3':struct.pack('<IHH',0xE01B74F2,3,0),
+                'nf1_payload1':struct.pack('<IHHB',0xE01B74F2,1,1,0),
+                'nf1_payload4':struct.pack('<IHHI',0xE01B74F2,1,4,0),
+                'nf1_payload8':struct.pack('<IHHII',0xE01B74F2,1,8,0,0),
             }
             greeting=packets.get(preset,b'')
             log('MAIN_GREETING mode='+preset+' length='+str(len(greeting))+' hex='+greeting.hex())
