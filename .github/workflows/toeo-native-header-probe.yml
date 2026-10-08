@@ -1,4 +1,4 @@
-name: TOEO native main protocol header probe
+name: TOEO recovered genuine 12345678 handshake trial
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        greeting: [nf1_header1, nf1_payload1, nf1_payload4, nf1_payload8]
+        greeting: [magic19_401, magic22_401, magic19_seq0, magic19_len18]
     timeout-minutes: 12
     permissions:
       actions: read
