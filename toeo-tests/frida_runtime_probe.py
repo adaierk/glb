@@ -129,6 +129,7 @@ hook('kernel32.dll','LoadLibraryW',function(args){this.name=args[0].isNull()?'':
 hook('kernel32.dll','GetFileAttributesA',function(args){this.name=ascii(args[0])},function(ret){if(ret.toInt32()===-1&&((sent.attr=(sent.attr||0)+1)<40))emit({event:'GetFileAttributesA_FAIL',pathHex:this.name})});
 
 
+if(false) { // Disable native instruction probes while diagnosing packet-related crash
 const counters={};
 function observeNativeVA(va,label){
   try{
@@ -207,6 +208,19 @@ inspectMachine(0x61500c,'rx_error_return');
 inspectMachine(0x60e1e0,'assembler_enter');
 inspectMachine(0x6bee00,'frame_decode_enter');
 
+}
+
+
+Process.setExceptionHandler(function(details){
+  try {
+    const c=details.context || {};
+    emit({event:'NATIVE_EXCEPTION',kind:details.type,address:String(details.address),
+      eip:String(c.eip),esp:String(c.esp),eax:String(c.eax),
+      ebx:String(c.ebx),ecx:String(c.ecx),edx:String(c.edx),esi:String(c.esi),edi:String(c.edi)});
+  } catch(e) {emit({event:'NATIVE_EXCEPTION_LOGGING_ERROR',error:String(e)});}
+  return false;
+});
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
@@ -230,6 +244,10 @@ try:
     pid=device.spawn([str(game)])
     print("Spawned PID:",pid,flush=True)
     session=device.attach(pid)
+    def on_detached(reason, crash):
+        print('SESSION_DETACHED reason='+str(reason)+' crash='+str(crash),flush=True)
+        log.write(json.dumps({'event':'SESSION_DETACHED','reason':str(reason),'crash':str(crash)},ensure_ascii=False)+'\n')
+    session.on('detached',on_detached)
     script=session.create_script(agent)
     script.on('message',on_message)
     script.load()
