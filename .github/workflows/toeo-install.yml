@@ -1,0 +1,33 @@
+name: Audit original TOEO installer
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-install.yml]
+jobs:
+  verify:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Install client on disposable Windows
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Continue"
+          $out = Join-Path $env:RUNNER_TEMP "toeo"
+          New-Item -ItemType Directory -Force $out | Out-Null
+          $iso = Join-Path $out "toeonline.iso"
+          curl.exe -fL --retry 4 --max-time 1000 -o $iso https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso
+          if (!(Test-Path $iso)) { throw "Original ISO download failed" }
+          Write-Output "ISO Size: $((Get-Item $iso).Length)"
+          Mount-DiskImage -ImagePath $iso
+          $drive = (Get-DiskImage -ImagePath $iso | Get-Volume).DriveLetter
+          $exe = "${drive}:\setup\setup.exe"
+          Write-Output "Installer: $exe"
+          $log = Join-Path $out "install.log"
+          $p = Start-Process $exe -WorkingDirectory "${drive}:\setup" -ArgumentList @("-s", "-f2$log") -PassThru
+          $ok = $p.WaitForExit(120000)
+          if (!$ok) { Stop-Process -Id $p.Id -Force }
+          Write-Output "Exited: $ok ExitCode: $($p.ExitCode)"
+          if (Test-Path $log) { Get-Content $log }
+          Get-ChildItem "C:\Program Files*" -Directory | Where-Object Name -Match "namco|Eternia|TOEO" | ForEach-Object { Get-ChildItem $_.FullName -Recurse | Select-Object -First 40 FullName,Length }
