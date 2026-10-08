@@ -110,7 +110,17 @@ try:
     device.resume(pid)
     for tick in range(88):
         time.sleep(1)
-        if tick in [2,6,15,28,45,65,82]:
+        if tick == 34:
+            try:
+                import ctypes
+                u=ctypes.windll.user32
+                u.SetCursorPos(408,447)
+                u.mouse_event(0x0002,0,0,0,0)
+                time.sleep(0.12)
+                u.mouse_event(0x0004,0,0,0,0)
+                print("CLICKED original スタート button at screen (408,447)",flush=True)
+            except Exception as e: print("Click error",repr(e),flush=True)
+        if tick in [2,6,15,28,35,40,50,64,82]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
