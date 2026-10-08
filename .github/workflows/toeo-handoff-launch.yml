@@ -1,0 +1,111 @@
+name: TOEO extracted client handoff and launch
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-handoff-launch.yml]
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions: {contents: read}
+    steps:
+      - name: Extract verified client from original optical disc
+        shell: bash
+        run: |
+          set -e
+          root="$RUNNER_TEMP/toeo_client"
+          mkdir -p "$root/disc" "$root/output"
+          cd "$root"
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq unshield p7zip-full >/dev/null
+          curl -fLsS --retry 5 --max-time 980 -o toeonline.iso 'https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso'
+          7z x -y -odisc toeonline.iso >/dev/null
+          unshield -e CP932 -d output x disc/setup/data1.hdr > extract-log.txt
+          test -s output/DefaultComponent/ToEOnline.exe
+          file output/DefaultComponent/ToEOnline.exe
+          echo 'Client file count:'
+          find output -type f | wc -l
+          echo 'Client content size:'
+          du -sh output
+          echo 'Bundling original client directory for disposable Windows verification'
+          cd output
+          7z a -t7z -mx=5 "$root/client_pack.7z" DefaultComponent NewComponent1 >/dev/null
+          ls -lh "$root/client_pack.7z"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_client/client_pack.7z
+          retention-days: 1
+  windows-launch:
+    needs: prepare
+    runs-on: windows-latest
+    timeout-minutes: 20
+    permissions: {contents: read}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_run
+      - name: Launch authentic 2006 client and capture actual screen if visible
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'toeo_run'
+          $client=Join-Path $root 'client'
+          New-Item -ItemType Directory -Force $client | Out-Null
+          $report=Join-Path $root 'Windows_RealClient_Result.txt'
+          'TOEO real extracted 2006 client startup in disposable Windows' | Set-Content $report
+          ('Windows: '+[Environment]::OSVersion.VersionString) | Add-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          if (!(Test-Path $seven)) { $seven='7z.exe' }
+          & $seven x '-y' "-o$client" (Join-Path $root 'client_pack.7z') 2>&1 | Out-File (Join-Path $root 'unpack.log')
+          ('7z result: '+$LASTEXITCODE) | Add-Content $report
+          $exe=Join-Path $client 'DefaultComponent\ToEOnline.exe'
+          if (!(Test-Path $exe)) { throw 'Main TOEO executable absent after transfer' }
+          $stream=[IO.File]::OpenRead($exe); $h=New-Object byte[] 32; [void]$stream.Read($h,0,32);$stream.Close()
+          ('EXE File bytes: '+(Get-Item $exe).Length) | Add-Content $report
+          ('EXE first bytes: '+[BitConverter]::ToString($h)) | Add-Content $report
+          if($h[0] -ne 77 -or $h[1] -ne 90) { throw 'Main EXE was corrupted in transfer' }
+          $fc=@(Get-ChildItem $client -Recurse -File).Count
+          ('Total extracted files: '+$fc) | Add-Content $report
+          $vi=[Diagnostics.FileVersionInfo]::GetVersionInfo($exe)
+          ('ProductName: '+$vi.ProductName+' FileDescription: '+$vi.FileDescription) | Add-Content $report
+          $rule='TOEO_NO_NETWORK_'+[Guid]::NewGuid().ToString('N')
+          try { New-NetFirewallRule -DisplayName $rule -Direction Outbound -Action Block -Program $exe -Profile Any | Out-Null; 'Network: blocked for game executable' | Add-Content $report } catch { ('Firewall setup: '+$_) | Add-Content $report }
+          try {
+            $p=Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -PassThru -ErrorAction Stop
+            Start-Sleep -Seconds 12
+            $p.Refresh()
+            ('ProcessId: '+$p.Id) | Add-Content $report
+            ('HasExited: '+$p.HasExited) | Add-Content $report
+            if ($p.HasExited) { ('ExitCode: '+$p.ExitCode) | Add-Content $report }
+            ('MainWindowHandle: '+$p.MainWindowHandle) | Add-Content $report
+            ('MainWindowTitle: '+$p.MainWindowTitle) | Add-Content $report
+            $others=Get-Process | Where-Object { $_.MainWindowTitle -match 'Eternia|TOEO|Tales' }
+            ('Other related windows: '+(($others | Select-Object Name,MainWindowTitle | Out-String -Width 250))) | Add-Content $report
+            if (!$p.HasExited -and $p.MainWindowHandle -ne 0) {
+              try {
+                Add-Type -AssemblyName System.Drawing
+                Add-Type -AssemblyName System.Windows.Forms
+                $screen=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+                $bmp=[Drawing.Bitmap]::new($screen.Width,$screen.Height)
+                $g=[Drawing.Graphics]::FromImage($bmp)
+                $g.CopyFromScreen($screen.Location,[Drawing.Point]::Empty,$screen.Size)
+                $dst=Join-Path $root 'TOEO_REAL_SCREEN.png'
+                $bmp.Save($dst,[Drawing.Imaging.ImageFormat]::Png)
+                $g.Dispose();$bmp.Dispose()
+                ('ACTUAL_SCREENSHOT_FILE: '+$dst) | Add-Content $report
+              } catch { ('Screenshot capture failure: '+$_) | Add-Content $report }
+            }
+            if (!$p.HasExited) {Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue}
+          } catch { ('LAUNCH_ERROR: '+$_) | Add-Content $report }
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-real-client-startup-report
+          path: |
+            ${{ runner.temp }}/toeo_run/Windows_RealClient_Result.txt
+            ${{ runner.temp }}/toeo_run/TOEO_REAL_SCREEN.png
+          if-no-files-found: warn
