@@ -14,7 +14,7 @@ def read_exact(sock,n):
 def world_work():
  b=bytearray(56)
  struct.pack_into('!I',b,0,0)
- b[4:8]=socket.inet_aton('127.0.0.1')
+ b[4:8]=socket.inet_aton('127.0.0.1')[::-1]
  struct.pack_into('!I',b,8,45001)
  struct.pack_into('!I',b,16,1)
  try:label='エターニア復元実験'.encode('cp932')
@@ -49,7 +49,7 @@ def downstream_listener(port):
                 except Exception as ex:
                     log('DOWNSTREAM_REPLY_ERROR '+repr(ex));break
     downstream.close()
-for port in (45001,45002):
+for port in (11100,11101,45001,45002):
     threading.Thread(target=downstream_listener,args=(port,),daemon=True).start()
 sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
