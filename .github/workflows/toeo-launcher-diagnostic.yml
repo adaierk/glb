@@ -1,4 +1,4 @@
-name: TOEO client process and launcher diagnostic
+name: TOEO game launcher process probe
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -6,7 +6,7 @@ on:
 jobs:
   inspect:
     runs-on: windows-latest
-    timeout-minutes: 18
+    timeout-minutes: 15
     permissions:
       actions: read
       contents: read
@@ -17,106 +17,65 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           name: toeo-extracted-original-client-temporary
           path: ${{ runner.temp }}/toeo_diag
-      - name: Validate game data and trace original launcher startup
+      - name: Inspect original game launcher
         shell: pwsh
         run: |
           $ErrorActionPreference='Continue'
           $root=Join-Path $env:RUNNER_TEMP 'toeo_diag'
-          $src=Join-Path $root 'src'
+          $raw=Join-Path $root 'raw'
           $app=Join-Path $root 'game'
-          New-Item -ItemType Directory -Path $src,$app -Force | Out-Null
+          New-Item -ItemType Directory -Force $raw,$app | Out-Null
           $report=Join-Path $root 'diagnostic.txt'
-          'TOEO original game executable, resources, and window diagnosis' | Set-Content -Path $report
-          $sz=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
-          & $sz x '-y' "-o$src" (Join-Path $root 'client_pack.7z') 2>&1 | Out-Null
-          ('7z extract result='+$LASTEXITCODE) | Add-Content $report
+          'TOEO executable and process diagnostics' | Set-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $root 'client_pack.7z') | Out-Null
           foreach($name in @('NewComponent1','DefaultComponent')) {
-            if(Test-Path (Join-Path $src $name)){ Copy-Item (Join-Path $src $name '*') -Destination $app -Recurse -Force }
+            $group=Join-Path $raw $name
+            if(Test-Path $group){Copy-Item (Join-Path $group '*') -Destination $app -Recurse -Force}
           }
-          ('Restored files: '+@(Get-ChildItem $app -Recurse -File).Count) | Add-Content $report
-          'Top-level app files, header signatures, version info:' | Add-Content $report
+          ('Files='+@(Get-ChildItem $app -Recurse -File).Count) | Add-Content $report
           foreach($f in (Get-ChildItem $app -File | Sort-Object Name)) {
-            $buf=New-Object byte[] 24
-            $fs=[IO.File]::OpenRead($f.FullName);$n=$fs.Read($buf,0,24);$fs.Close()
-            $v=[Diagnostics.FileVersionInfo]::GetVersionInfo($f.FullName)
-            ('FILE '+$f.Name+' size='+$f.Length+' signature='+([BitConverter]::ToString($buf,0,$n))+' Product='+$v.ProductName+' Desc='+$v.FileDescription+' Org='+$v.CompanyName) | Add-Content $report
-          }
-          'All large executables and DLL files:' | Add-Content $report
-          Get-ChildItem $app -Recurse -File | Where-Object {$_.Extension -in @('.exe','.dll','.icd')} | Sort-Object Length -Descending | Select-Object -First 70 Name,Length,FullName | Format-Table | Out-String -Width 320 | Add-Content $report
-          $interop=@'
-          using System;
-          using System.Text;
-          using System.Runtime.InteropServices;
-          public class TOEOWindows {
-            public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
-            [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowsProc cb, IntPtr arg);
-            [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr handle, StringBuilder text, int size);
-            [DllImport("user32.dll")] public static extern int GetClassName(IntPtr handle, StringBuilder text, int size);
-            [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr handle, out uint pid);
-            [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr handle);
-            [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
-            [StructLayout(LayoutKind.Sequential)] public struct RECT {public int Left,Top,Right,Bottom;}
-          }
-'@
-          Add-Type -TypeDefinition $interop
-          Add-Type -AssemblyName System.Windows.Forms
-          Add-Type -AssemblyName System.Drawing
-          function CaptureWindows([string]$label) {
-            $windows=New-Object 'System.Collections.Generic.List[object]'
-            $cb=[TOEOWindows+EnumWindowsProc]{param([IntPtr]$h,[IntPtr]$l)
-              if([TOEOWindows]::IsWindowVisible($h)){
-                $title=[Text.StringBuilder]::new(1024);[void][TOEOWindows]::GetWindowText($h,$title,1024)
-                $cls=[Text.StringBuilder]::new(256);[void][TOEOWindows]::GetClassName($h,$cls,256)
-                $pidnum=[uint32]0;[void][TOEOWindows]::GetWindowThreadProcessId($h,[ref]$pidnum)
-                $rect=[TOEOWindows+RECT]::new();[void][TOEOWindows]::GetWindowRect($h,[ref]$rect)
-                $windows.Add([PSCustomObject]@{Handle=$h;PID=$pidnum;Title=$title.ToString();Class=$cls.ToString();L=$rect.Left;T=$rect.Top;R=$rect.Right;B=$rect.Bottom})
-              };return $true
-            }
-            [void][TOEOWindows]::EnumWindows($cb,[IntPtr]::Zero)
-            ('WINDOWS '+$label+' '+($windows|ConvertTo-Json -Compress -Depth 3)) | Add-Content $report
-            $targets=$windows | Where-Object {$_.Title -match 'Tales|Eternia|TOEO|テイルズ|????' -or $_.Class -match 'IEFrame'}
-            foreach($w in $targets){
-              $wide=$w.R-$w.L; $high=$w.B-$w.T
-              if($wide -gt 200 -and $high -gt 160 -and $wide -lt 3200 -and $high -lt 2500) {
-                try {
-                  $img=[Drawing.Bitmap]::new($wide,$high)
-                  $g=[Drawing.Graphics]::FromImage($img)
-                  $g.CopyFromScreen([Drawing.Point]::new($w.L,$w.T),[Drawing.Point]::Empty,[Drawing.Size]::new($wide,$high))
-                  $name='CAPTURE_'+$label+'_'+$w.PID+'_'+[Math]::Abs($w.Handle.ToInt64())+'.png'
-                  $img.Save((Join-Path $root $name),[Drawing.Imaging.ImageFormat]::Png)
-                  $g.Dispose();$img.Dispose()
-                  ('CAPTURED '+$label+' '+$name+' title='+$w.Title) | Add-Content $report
-                }catch{ ('Capture error: '+$_) | Add-Content $report }
-              }
-            }
-            ('PROCESSES '+$label) | Add-Content $report
-            Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'ToE|Checker|Launcher|iexplore|mshta|werfault' -or $_.CommandLine -match 'TOEO|Eternia|ToEO' } | Select-Object Name,ProcessId,ParentProcessId,CommandLine | Format-List | Out-String -Width 420 | Add-Content $report
+            $b=New-Object byte[] 20; $s=[IO.File]::OpenRead($f.FullName);$n=$s.Read($b,0,20);$s.Close()
+            ('FILE '+$f.Name+' bytes='+$f.Length+' header='+[BitConverter]::ToString($b,0,$n)) | Add-Content $report
           }
           $exe=Join-Path $app 'ToEOnline.exe'
-          ('LAUNCH '+$exe) | Add-Content $report
-          $ruleName='TOEO_STUDY_'+[Guid]::NewGuid().ToString('N')
-          try { New-NetFirewallRule -DisplayName $ruleName -Direction Outbound -Action Block -Program $exe | Out-Null } catch {}
-          CaptureWindows 'before'
+          $rule='TOEO_OFFLINE_'+[Guid]::NewGuid().ToString('N')
+          try {New-NetFirewallRule -DisplayName $rule -Program $exe -Direction Outbound -Action Block | Out-Null} catch {}
+          $before=@(Get-CimInstance Win32_Process | Select-Object ProcessId,Name,ParentProcessId,CommandLine)
           try {
             $p=Start-Process -FilePath $exe -WorkingDirectory $app -PassThru -ErrorAction Stop
-            Start-Sleep -Milliseconds 1600
+            Start-Sleep -Seconds 2
             $p.Refresh()
-            ('At_1_6s: PID='+$p.Id+' exited='+$p.HasExited) | Add-Content $report
-            CaptureWindows 'after2sec'
-            Start-Sleep -Seconds 7
+            ('After2s PID='+$p.Id+' exited='+$p.HasExited+' window='+$p.MainWindowHandle+' title='+$p.MainWindowTitle) | Add-Content $report
+            $after=@(Get-CimInstance Win32_Process | Select-Object ProcessId,Name,ParentProcessId,CommandLine)
+            $new=@($after | Where-Object { $_.ProcessId -notin $before.ProcessId })
+            ('New process list: '+($new | Format-List | Out-String -Width 240)) | Add-Content $report
+            Start-Sleep -Seconds 6
             $p.Refresh()
-            ('At_9s: PID='+$p.Id+' exited='+$p.HasExited) | Add-Content $report
-            CaptureWindows 'after9sec'
+            ('After8s PID='+$p.Id+' exited='+$p.HasExited+' window='+$p.MainWindowHandle+' title='+$p.MainWindowTitle) | Add-Content $report
+            if($p.HasExited){('ExitCode='+$p.ExitCode)|Add-Content $report}
+            $windows=Get-Process | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object Name,MainWindowTitle,MainWindowHandle
+            ('VisibleWindows '+($windows | Format-Table | Out-String -Width 250)) | Add-Content $report
+            if (!$p.HasExited -and $p.MainWindowHandle -ne 0) {
+              Add-Type -AssemblyName System.Windows.Forms
+              Add-Type -AssemblyName System.Drawing
+              $b=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+              $bmp=[Drawing.Bitmap]::new($b.Width,$b.Height)
+              $g=[Drawing.Graphics]::FromImage($bmp)
+              $g.CopyFromScreen($b.Location,[Drawing.Point]::Empty,$b.Size)
+              $bmp.Save((Join-Path $root 'REAL_ToEOnline.png'),[Drawing.Imaging.ImageFormat]::Png)
+              $g.Dispose();$bmp.Dispose()
+              'Real screenshot saved' | Add-Content $report
+            }
             if(!$p.HasExited){Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue}
-          }catch{ ('Game launch exception: '+$_) | Add-Content $report }
-          Remove-NetFirewallRule -DisplayName $ruleName -ErrorAction SilentlyContinue
-          Get-Content $report | Select-Object -Last 75
+          }catch{('Launch exception '+$_)|Add-Content $report}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report | Select-Object -Last 45
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: toeo-launcher-process-diagnostics
           path: |
             ${{ runner.temp }}/toeo_diag/diagnostic.txt
-            ${{ runner.temp }}/toeo_diag/CAPTURE_*.png
+            ${{ runner.temp }}/toeo_diag/REAL_ToEOnline.png
           if-no-files-found: warn
-          retention-days: 7
