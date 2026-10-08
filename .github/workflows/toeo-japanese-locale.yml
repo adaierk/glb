@@ -1,0 +1,123 @@
+name: TOEO Japanese locale and error diagnosis
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-japanese-locale.yml]
+jobs:
+  run:
+    runs-on: windows-latest
+    timeout-minutes: 19
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_jp
+      - name: Reconstruct game and launch through Japanese locale emulator
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'toeo_jp'
+          $raw=Join-Path $root 'raw'
+          $game=Join-Path $root 'game'
+          $le=Join-Path $root 'LE'
+          New-Item -ItemType Directory -Force $raw,$game,$le | Out-Null
+          $report=Join-Path $root 'report.txt'
+          'TOEO main module Japanese CP932 diagnostic' | Set-Content $report -Encoding utf8
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $root 'client_pack.7z') | Out-Null
+          foreach($n in @('NewComponent1','DefaultComponent')) {
+            $dir=Join-Path $raw $n
+            if(Test-Path $dir){Copy-Item (Join-Path $dir '*') -Destination $game -Recurse -Force}
+          }
+          ('Recovered file count: '+@(Get-ChildItem $game -Recurse -File).Count)|Add-Content $report
+          ('System ACP via GetACP(): '+(Add-Type -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint GetACP();' -Name ACP -Namespace Native -PassThru | ForEach-Object { $_::GetACP() })) | Add-Content $report
+          $z=Join-Path $root 'LocaleEmulator.zip'
+          & curl.exe -fLsS --retry 4 --max-time 90 -o $z 'https://github.com/xupefei/Locale-Emulator/releases/download/v2.5.0.1/Locale.Emulator.2.5.0.1.zip' 2>&1 | Out-File (Join-Path $root 'locale_download.log')
+          ('LocaleEmulator ZIP bytes: '+(Get-Item $z).Length) | Add-Content $report
+          & $seven x -y "-o$le" $z | Out-Null
+          $proc=Get-ChildItem $le -File -Recurse -Filter LEProc.exe | Select-Object -First 1
+          if(!$proc){throw 'LEProc.exe not found in downloaded archive'}
+          ('LEProc path: '+$proc.FullName) | Add-Content $report
+          $importsTool=Get-ChildItem 'C:\Program Files\Microsoft Visual Studio' -Recurse -Filter dumpbin.exe -File -ErrorAction SilentlyContinue | Select-Object -First 1
+          if($importsTool){
+            & $importsTool.FullName '/dependents' (Join-Path $game 'ToEO_CL.dat') 2>&1 | Out-File (Join-Path $root 'PE_IMPORTS.txt')
+            'PE dependencies reported' | Add-Content $report
+          }
+          $inter=@'
+          using System;
+          using System.Text;
+          using System.Collections.Generic;
+          using System.Runtime.InteropServices;
+          public class TOEOInterop {
+            public delegate bool EnumCB(IntPtr h,IntPtr p);
+            [DllImport("user32.dll")] public static extern bool EnumWindows(EnumCB cb,IntPtr p);
+            [DllImport("user32.dll")] public static extern bool EnumChildWindows(IntPtr parent,EnumCB cb,IntPtr p);
+            [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern int GetWindowText(IntPtr h,StringBuilder b,int n);
+            [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern int GetClassName(IntPtr h,StringBuilder b,int n);
+            [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h,out uint id);
+            [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+          }
+'@
+          Add-Type -TypeDefinition $inter
+          Add-Type -AssemblyName System.Windows.Forms
+          Add-Type -AssemblyName System.Drawing
+          function Inspect-Desktop([string]$tag) {
+            $rows=New-Object 'System.Collections.Generic.List[object]'
+            $cb=[TOEOInterop+EnumCB]{param([IntPtr]$handle,[IntPtr]$unused)
+              $name=[Text.StringBuilder]::new(600);[void][TOEOInterop]::GetWindowText($handle,$name,600)
+              $cls=[Text.StringBuilder]::new(250);[void][TOEOInterop]::GetClassName($handle,$cls,250)
+              $pidnum=[uint32]0;[void][TOEOInterop]::GetWindowThreadProcessId($handle,[ref]$pidnum)
+              $rows.Add([PSCustomObject]@{H=$handle.ToInt64();Pid=$pidnum;Title=$name.ToString();Class=$cls.ToString();Visible=[TOEOInterop]::IsWindowVisible($handle)})
+              return $true
+            }
+            [void][TOEOInterop]::EnumWindows($cb,[IntPtr]::Zero)
+            ('All windows '+$tag+': '+($rows | Where-Object Visible | ConvertTo-Json -Compress -Depth 3)) | Add-Content $report
+            foreach($w in $rows | Where-Object { $_.Visible -and ($_.Title -ne '' -or $_.Class -eq '#32770') }) {
+              $texts=New-Object 'System.Collections.Generic.List[string]'
+              $childCb=[TOEOInterop+EnumCB]{param([IntPtr]$h,[IntPtr]$zero)
+                $txt=[Text.StringBuilder]::new(800);[void][TOEOInterop]::GetWindowText($h,$txt,800)
+                $class=[Text.StringBuilder]::new(150);[void][TOEOInterop]::GetClassName($h,$class,150)
+                if($txt.Length -gt 0){$texts.Add(($class.ToString()+'='+$txt.ToString()))}
+                return $true
+              }
+              [void][TOEOInterop]::EnumChildWindows([IntPtr]::new($w.H),$childCb,[IntPtr]::Zero)
+              if($texts.Count){('Children hwnd='+$w.H+' title='+$w.Title+' : '+($texts -join ' / ')) | Add-Content $report}
+            }
+            $bmp=[Drawing.Bitmap]::new([Windows.Forms.Screen]::PrimaryScreen.Bounds.Width,[Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
+            $gr=[Drawing.Graphics]::FromImage($bmp)
+            $gr.CopyFromScreen([Drawing.Point]::Empty,[Drawing.Point]::Empty,$bmp.Size)
+            $bmp.Save((Join-Path $root ('REAL_JP_'+$tag+'.png')),[Drawing.Imaging.ImageFormat]::Png)
+            $gr.Dispose();$bmp.Dispose()
+            ('Captured actual Windows desktop '+$tag) | Add-Content $report
+          }
+          $main=Join-Path $game 'ToEO_CL.dat'
+          $copy=Join-Path $game 'ToEO_CL.exe'
+          Copy-Item $main $copy -Force
+          $rule='TOEO_OFFLINE_'+[Guid]::NewGuid().ToString('N')
+          try{New-NetFirewallRule -DisplayName $rule -Program $copy -Direction Outbound -Action Block | Out-Null}catch{}
+          try{
+            $launcher=Start-Process -FilePath $proc.FullName -ArgumentList ('"'+$copy+'"') -WorkingDirectory $game -PassThru -ErrorAction Stop
+            ('Locale Emulator launcher PID: '+$launcher.Id) | Add-Content $report
+            Start-Sleep -Seconds 8
+            $related=Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'ToEO|LEProc|LocaleEmulator|WerFault' } | Select-Object Name,ProcessId,ParentProcessId,CommandLine
+            ('Processes: '+($related | ConvertTo-Json -Compress)) | Add-Content $report
+            Inspect-Desktop 'after8'
+            Start-Sleep -Seconds 7
+            Inspect-Desktop 'after15'
+          }catch{('Locale launch failed: '+$_) | Add-Content $report}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report | Select-Object -Last 28
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-japanese-locale-dialog-and-screens
+          path: |
+            ${{ runner.temp }}/toeo_jp/report.txt
+            ${{ runner.temp }}/toeo_jp/PE_IMPORTS.txt
+            ${{ runner.temp }}/toeo_jp/REAL_JP_*.png
+          if-no-files-found: warn
