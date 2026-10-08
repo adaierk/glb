@@ -1,0 +1,64 @@
+name: TOEO offline unpacker test
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-unpacker-test.yml]
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    permissions: {contents: read}
+    steps:
+      - name: Download ISO and recover client with InstallShield-aware unpacker
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Continue"
+          $root = Join-Path $env:RUNNER_TEMP "toeo_probe"
+          New-Item -ItemType Directory -Force $root | Out-Null
+          $iso = Join-Path $root "toeonline.iso"
+          curl.exe -fLsS --retry 5 --max-time 900 -o $iso https://archive.org/download/tales-of-eternia-online-dvd/toeonline.iso
+          if (!(Test-Path $iso)) { throw "Original ISO download failed" }
+          "ISO bytes: $((Get-Item $iso).Length)"
+          "ISO hash: $((Get-FileHash $iso -Algorithm SHA256).Hash)"
+          Mount-DiskImage -ImagePath $iso
+          $drive = (Get-DiskImage -ImagePath $iso | Get-Volume).DriveLetter
+          $setupdir = "${drive}:\setup"
+          Get-ChildItem $setupdir | Select-Object Name,Length
+          $zip = Join-Path $root "Unpacker.zip"
+          curl.exe -fLsS --retry 4 --max-time 80 -o $zip https://github.com/pawstas80/Unpacker/releases/download/v1.1.1/Unpacker-v1.1.1-win-x64.zip
+          "Unpacker zip bytes: $((Get-Item $zip).Length)"
+          Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $root "unpacker") -Force
+          $u = @(Get-ChildItem (Join-Path $root "unpacker") -Recurse -File -Filter "Unpacker.exe" | Select-Object -First 1)[0].FullName
+          "Unpacker binary: $u"
+          & $u --help 2>&1 | Select-Object -First 60
+          $hdr = Join-Path $setupdir "data1.hdr"
+          $cab = Join-Path $setupdir "data1.cab"
+          & $u --list $hdr 2>&1 | Out-File -FilePath (Join-Path $root "header_list.txt") -Encoding utf8
+          "Header list code: $LASTEXITCODE"
+          Get-Content (Join-Path $root "header_list.txt") -TotalCount 90
+          & $u --list $cab 2>&1 | Out-File -FilePath (Join-Path $root "cab_list.txt") -Encoding utf8
+          "CAB list code: $LASTEXITCODE"
+          Get-Content (Join-Path $root "cab_list.txt") -TotalCount 90
+          $out = Join-Path $root "client"
+          New-Item -ItemType Directory -Force $out | Out-Null
+          & $u --verbose $hdr $out 2>&1 | Out-File -FilePath (Join-Path $root "extract_log.txt") -Encoding utf8
+          "Extraction exit code: $LASTEXITCODE"
+          Get-Content (Join-Path $root "extract_log.txt") -Tail 85
+          $files = @(Get-ChildItem $out -Recurse -File -ErrorAction SilentlyContinue)
+          "ACTUAL client files count: $($files.Count)"
+          "ACTUAL client bytes: $(($files | Measure-Object Length -Sum).Sum)"
+          "Client executables:"
+          $files | Where-Object {$_.Extension -in ".exe",".dll"} | Select-Object -First 50 FullName,Length | Format-Table
+          "Client formats:"
+          $files | Group-Object Extension | Sort-Object Count -Descending | Select-Object -First 45 Count,Name | Format-Table
+          $files | Select-Object -ExpandProperty FullName | Out-File -FilePath (Join-Path $root "client_manifest.txt") -Encoding utf8
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-unpacker-audit
+          path: |
+            ${{ runner.temp }}/toeo_probe/header_list.txt
+            ${{ runner.temp }}/toeo_probe/cab_list.txt
+            ${{ runner.temp }}/toeo_probe/extract_log.txt
+            ${{ runner.temp }}/toeo_probe/client_manifest.txt
+          if-no-files-found: warn
