@@ -1,0 +1,90 @@
+name: TOEO merged installation layout
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-merged-launch.yml]
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 16
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/TOEO_MERGED
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Reconstruct installed files from component groups and launch
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'TOEO_MERGED'
+          $source=Join-Path $root 'raw'
+          $merged=Join-Path $root 'installed'
+          $report=Join-Path $root 'Result.txt'
+          New-Item -ItemType Directory -Force $source,$merged | Out-Null
+          'TOEO actual reconstructed install tree and launch test' | Set-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$source" (Join-Path $root 'client_pack.7z') | Out-File (Join-Path $root 'unpack.log')
+          ('Archive extraction exit code: '+$LASTEXITCODE) | Add-Content $report
+          'Original component directory examples:' | Add-Content $report
+          Get-ChildItem $source -Recurse -File | Select-Object -First 25 -ExpandProperty FullName | Add-Content $report
+          foreach ($group in @('NewComponent1','DefaultComponent')) {
+            $p=Join-Path $source $group
+            if (Test-Path $p) { Copy-Item -Path (Join-Path $p '*') -Destination $merged -Recurse -Force -ErrorAction Continue }
+          }
+          $files=@(Get-ChildItem $merged -Recurse -File)
+          ('Merged files: '+$files.Count) | Add-Content $report
+          ('Merged bytes: '+($files | Measure-Object Length -Sum).Sum) | Add-Content $report
+          ('Main program at: '+(Join-Path $merged 'ToEOnline.exe')) | Add-Content $report
+          ('Top-level files: '+((Get-ChildItem $merged -File | Select-Object -ExpandProperty Name) -join ', ')) | Add-Content $report
+          ('Top-level directories: '+((Get-ChildItem $merged -Directory | Select-Object -ExpandProperty Name) -join ', ')) | Add-Content $report
+          $exes=Get-ChildItem $merged -Recurse -Filter *.exe -File
+          foreach ($f in $exes) {
+            ('EXE '+$f.FullName+' bytes '+$f.Length) | Add-Content $report
+          }
+          $testExes=@('ToEOnline.exe','ToEO_Option.exe','Checker.exe')
+          foreach ($name in $testExes) {
+            $exe=Join-Path $merged $name
+            if (!(Test-Path $exe)) { ('Missing '+$name) | Add-Content $report; continue }
+            $rule='TOEO_OFFLINE_'+[Guid]::NewGuid().ToString('N')
+            try { New-NetFirewallRule -DisplayName $rule -Program $exe -Direction Outbound -Action Block | Out-Null } catch {}
+            try {
+              ('RUNNING '+$name) | Add-Content $report
+              $p=Start-Process -FilePath $exe -WorkingDirectory $merged -PassThru -ErrorAction Stop
+              Start-Sleep -Seconds 8
+              $p.Refresh()
+              ('PROC '+$name+' id='+$p.Id+' exited='+$p.HasExited+' window='+$p.MainWindowHandle+' title='+$p.MainWindowTitle) | Add-Content $report
+              if ($p.HasExited) {('EXIT '+$name+' code='+$p.ExitCode) | Add-Content $report}
+              $gui=Get-Process | Where-Object { $_.MainWindowHandle -ne 0 -and $_.Name -match 'ToE|Tales|Option|Checker' }
+              ('Visible related Windows: '+($gui | Select-Object Name,MainWindowTitle | Out-String -Width 200)) | Add-Content $report
+              if (!$p.HasExited -and $p.MainWindowHandle -ne 0) {
+                try {
+                  Add-Type -AssemblyName System.Windows.Forms
+                  Add-Type -AssemblyName System.Drawing
+                  $bounds=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+                  $bmp=[Drawing.Bitmap]::new($bounds.Width,$bounds.Height)
+                  $gfx=[Drawing.Graphics]::FromImage($bmp)
+                  $gfx.CopyFromScreen($bounds.Location,[Drawing.Point]::Empty,$bounds.Size)
+                  $shot=Join-Path $root ('REAL_'+$name+'.png')
+                  $bmp.Save($shot,[Drawing.Imaging.ImageFormat]::Png)
+                  $gfx.Dispose();$bmp.Dispose()
+                  ('Screenshot: '+$shot) | Add-Content $report
+                }catch {('Capture error: '+$_) | Add-Content $report}
+              }
+              if(!$p.HasExited){Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue}
+            } catch {('Launch error for '+$name+': '+$_) | Add-Content $report}
+            Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          }
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-merged-client-launch-results
+          path: |
+            ${{ runner.temp }}/TOEO_MERGED/Result.txt
+            ${{ runner.temp }}/TOEO_MERGED/REAL_*.png
+          if-no-files-found: warn
