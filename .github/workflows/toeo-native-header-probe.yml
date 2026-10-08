@@ -1,0 +1,78 @@
+name: TOEO native main protocol header probe
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-native-header-probe.yml]
+jobs:
+  correct-layout:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        greeting: [nf1_header1, nf1_payload1, nf1_payload4, nf1_payload8]
+    timeout-minutes: 12
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: toeo-preservation-audit-20261008
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/TOEO_FIXED
+      - name: Correct InstallShield data directory and launch original game
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $env:PYTHONIOENCODING='utf-8'
+          $base=Join-Path $env:RUNNER_TEMP 'TOEO_FIXED'
+          $raw=Join-Path $base 'raw'
+          $game=Join-Path $base 'game'
+          $report=Join-Path $base 'report'
+          New-Item -ItemType Directory -Force $raw,$game,$report | Out-Null
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $base 'client_pack.7z') | Out-Null
+          foreach($n in @('NewComponent1','DefaultComponent')){
+            if(Test-Path (Join-Path $raw $n)){Copy-Item (Join-Path $raw $n '*') -Destination $game -Recurse -Force}
+          }
+          $datadir=Join-Path $game 'data'
+          $logdir=Join-Path $game 'log'
+          New-Item -ItemType Directory -Force $datadir,$logdir,(Join-Path $game 'userdata') | Out-Null
+          foreach($dirName in @('resource','map','ui','help')){
+            $source=Join-Path $game $dirName
+            if(Test-Path $source){Move-Item -Path $source -Destination $datadir -Force}
+          }
+          'TOEO corrected folder layout' | Out-File (Join-Path $report 'layout.txt')
+          Get-ChildItem $game -Directory | Select-Object Name | Out-String | Add-Content (Join-Path $report 'layout.txt')
+          Get-ChildItem $datadir -Directory | Select-Object Name | Out-String | Add-Content (Join-Path $report 'layout.txt')
+          foreach($fileName in @('icon_item.icd','cid0.idt')){
+            $path=Join-Path $datadir ('resource\'+$fileName)
+            ('REQUIRED '+$fileName+' EXISTS='+(Test-Path $path)+' BYTES='+(if(Test-Path $path){(Get-Item $path).Length}else{0})) | Add-Content (Join-Path $report 'layout.txt')
+          }
+          & python -m pip install -q frida pillow
+          $exe=Join-Path $game 'ToEO_CL_trace.exe'
+          Copy-Item (Join-Path $game 'ToEO_CL.dat') $exe
+          $rule='TOEO_OFFLINE_'+[Guid]::NewGuid().ToString('N')
+          try{New-NetFirewallRule -DisplayName $rule -Direction Outbound -Program $exe -Action Block | Out-Null}catch{}
+          Add-Content -LiteralPath (Join-Path $env:windir 'System32\drivers\etc\hosts') -Value '127.0.0.1 alive001.toeo.jp'
+          Write-Output '127.0.0.1 alive001.toeo.jp' | Out-File (Join-Path $report 'dns_override.txt')
+          $env:TOEO_MAIN_GREETING='${{ matrix.greeting }}'
+          $listener=Start-Process -FilePath python -ArgumentList @('toeo-tests/mock_server_hello.py',(Join-Path $report 'world_protocol.txt')) -PassThru -WindowStyle Hidden
+          Start-Sleep -Seconds 3
+          $env:GAME=$exe
+          $env:LOGROOT=$report
+          $test="import os,sys,subprocess; p=subprocess.run([sys.executable,'-u','toeo-tests/frida_runtime_probe.py',os.environ['GAME'],os.environ['LOGROOT']],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=195);print('EXIT',p.returncode);print(p.stdout[-14000:]);print(p.stderr[-2000:])"
+          try{& python -c $test 2>&1 | Tee-Object -FilePath (Join-Path $report 'driver.txt')}catch{('WATCHDOG '+$_)|Out-File (Join-Path $report 'driver.txt')}
+          if($listener -and !$listener.HasExited){Stop-Process -Id $listener.Id -Force -ErrorAction SilentlyContinue}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-native-packet-${{ matrix.greeting }}
+          path: ${{ runner.temp }}/TOEO_FIXED/report
+          if-no-files-found: warn
