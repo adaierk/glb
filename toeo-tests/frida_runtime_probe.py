@@ -143,7 +143,7 @@ function observeNativeVA(va,label){
   }catch(e){emit({event:'native_hook_error',function:label,error:String(e)})}
 }
 observeNativeVA(0x6bee00,'frame_decode');
-observeNativeVA(0x6bf000,'async_frame');
+observeNativeVA(0x6befe0,'async_frame');
 observeNativeVA(0x6c0b30,'packet_dispatch');
 observeNativeVA(0x619a10,'raw_receive_method');
 
@@ -174,7 +174,7 @@ try:
     script.on('message',on_message)
     script.load()
     device.resume(pid)
-    for tick in range(150):
+    for tick in range(123):
         time.sleep(1)
         if tick == 34:
             try:
