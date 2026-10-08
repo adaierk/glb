@@ -23,6 +23,23 @@ def world_work():
  struct.pack_into('!I',b,48,1)
  struct.pack_into('!I',b,52,1)
  return b
+def framed_native(opcode, length, sequence=0xffff, inner_offset=0):
+    """Original packet header based on client swap routine at 0x60B030.
+    The *wire* header uses network-endian 16/32-bit fields.
+    """
+    if length < 20:
+        raise ValueError('full native frame needs >=20 bytes')
+    buf=bytearray(length)
+    buf[0:4]=bytes.fromhex('12345678')
+    struct.pack_into('>H',buf,4,length)
+    struct.pack_into('>H',buf,6,opcode)
+    struct.pack_into('>H',buf,8,inner_offset)
+    struct.pack_into('>H',buf,10,sequence)
+    struct.pack_into('>H',buf,12,0)
+    struct.pack_into('>I',buf,14,0)
+    struct.pack_into('>H',buf,18,0)
+    return bytes(buf)
+
 def downstream_listener(port):
     downstream=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     downstream.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
@@ -45,6 +62,11 @@ def downstream_listener(port):
                 'magic22_405':bytes.fromhex('12345678040005041600ffff00000000000000000000'),
                 'magic19_len18':bytes.fromhex('12345678010001041200ffff00000000000000'),
                 'silence':b'',
+                'proper_401_36':framed_native(0x401,36),
+                'proper_401_36_seq0':framed_native(0x401,36,0),
+                'proper_403_24':framed_native(0x403,24),
+                'proper_402_48':framed_native(0x402,48),
+                'proper_400_20':framed_native(0x400,20),
                 'zero4':bytes(4),
                 'zero8':bytes(8),
                 'status8':struct.pack('!II',3,1),
