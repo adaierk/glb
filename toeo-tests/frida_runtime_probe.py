@@ -149,7 +149,7 @@ try:
     script.on('message',on_message)
     script.load()
     device.resume(pid)
-    for tick in range(120):
+    for tick in range(150):
         time.sleep(1)
         if tick == 34:
             try:
@@ -182,7 +182,34 @@ try:
                 u.mouse_event(0x0004,0,0,0,0)
                 print(f"CLICK world list or select button: tick={tick}, coords=({x},{y})",flush=True)
             except Exception as e: print("World select error",repr(e),flush=True)
-        if tick in [2,6,15,28,35,40,45,46,48,51,59,68,75,79,83,88,95,105,116]:
+        if tick in [92,96,100]:
+            try:
+                import ctypes
+                u=ctypes.windll.user32
+                def click(x,y):
+                    u.SetCursorPos(x,y)
+                    u.mouse_event(0x0002,0,0,0,0)
+                    time.sleep(0.11)
+                    u.mouse_event(0x0004,0,0,0,0)
+                def type_text(value):
+                    for letter in value:
+                        vk=ord(letter.upper())
+                        u.keybd_event(vk,0,0,0)
+                        u.keybd_event(vk,0,0x0002,0)
+                        time.sleep(0.055)
+                if tick==92:
+                    click(380,290)
+                    type_text('archive001')
+                    print("Entered fictitious offline research ID",flush=True)
+                elif tick==96:
+                    click(380,336)
+                    type_text('local123')
+                    print("Entered fictitious offline-only test password",flush=True)
+                else:
+                    click(315,405)
+                    print("Clicked original game's ログイン button with NONREAL test credentials",flush=True)
+            except Exception as e: print("Login test UI error",repr(e),flush=True)
+        if tick in [2,6,15,28,35,40,45,46,48,51,59,68,75,79,83,88,93,97,101,107,115,127,143]:
             try:
                 shot=out/f'real_screen_at_{tick+1}s.png'
                 ImageGrab.grab().save(str(shot))
