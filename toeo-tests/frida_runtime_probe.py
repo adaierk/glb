@@ -114,6 +114,12 @@ hook('ws2_32.dll','connect',function(args){
     this.port=dat[2]*256+dat[3];
     this.ip=dat.slice(4,8).join('.');
     emit({event:'TCP_CONNECT',family:this.family,addr:this.ip,port:this.port,raw:this.dst});
+    if(this.family===2 && this.port===11100){
+      try{
+        args[1].add(4).writeByteArray([127,0,0,1]);
+        emit({event:'TOEO_OFFLINE_LOGIN_REDIRECT',original:this.ip,port:this.port,destination:'127.0.0.1'});
+      }catch(e){emit({event:'TOEO_REDIRECT_ERROR',error:String(e)})}
+    }
   }catch(e){emit({event:'TCP_CONNECT_err',error:String(e)})}
 },function(ret){emit({event:'TCP_CONNECT_RESULT',host:this.ip,port:this.port,returnVal:ret.toInt32()})});
 hook('ws2_32.dll','send',function(args){const n=args[2].toInt32();const seq=(sent.send=(sent.send||0)+1);if(seq<50){let h='';try{h=Array.from(new Uint8Array(args[1].readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'send',size:n,hex:h})}},null);
