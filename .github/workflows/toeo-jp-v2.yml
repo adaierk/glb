@@ -1,0 +1,75 @@
+name: TOEO Japanese mode screenshot
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-jp-v2.yml]
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 14
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_jp2
+      - name: Run true game executable using Japanese locale and capture
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'toeo_jp2'
+          $raw=Join-Path $root 'raw'
+          $game=Join-Path $root 'game'
+          $le=Join-Path $root 'locale'
+          New-Item -ItemType Directory -Force $raw,$game,$le | Out-Null
+          $report=Join-Path $root 'report.txt'
+          'TOEO Japanese locale test' | Set-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $root 'client_pack.7z') | Out-Null
+          foreach($n in @('NewComponent1','DefaultComponent')){
+            $p=Join-Path $raw $n
+            if(Test-Path $p){Copy-Item (Join-Path $p '*') -Destination $game -Recurse -Force}
+          }
+          ('Files: '+@(Get-ChildItem $game -Recurse -File).Count) | Add-Content $report
+          $zip=Join-Path $root 'locale.zip'
+          & curl.exe -fLsS --retry 3 --max-time 100 -o $zip 'https://github.com/xupefei/Locale-Emulator/releases/download/v2.5.0.1/Locale.Emulator.2.5.0.1.zip' 2>&1 | Out-File (Join-Path $root 'curl.txt')
+          & $seven x -y "-o$le" $zip | Out-Null
+          $tool=Get-ChildItem $le -Recurse -File -Filter LEProc.exe | Select-Object -First 1
+          ('Locale emulator: '+$tool.FullName) | Add-Content $report
+          if(!$tool){throw 'Locale emulator absent'}
+          Add-Type -AssemblyName System.Windows.Forms
+          Add-Type -AssemblyName System.Drawing
+          $exe=Join-Path $game 'ToEO_CL.exe'
+          Copy-Item (Join-Path $game 'ToEO_CL.dat') $exe
+          $rule='TOEO_BLOCK_'+[Guid]::NewGuid().ToString('N')
+          try{New-NetFirewallRule -DisplayName $rule -Program $exe -Direction Outbound -Action Block | Out-Null}catch{}
+          try{
+            $p=Start-Process $tool.FullName -ArgumentList ('"'+$exe+'"') -WorkingDirectory $game -PassThru -ErrorAction Stop
+            ('Launcher PID '+$p.Id) | Add-Content $report
+            Start-Sleep -Seconds 9
+            $plist=Get-CimInstance Win32_Process | Where-Object {$_.Name -match 'TOEO|LEProc|WerFault'}
+            ('Related processes '+($plist | Select-Object Name,ProcessId,ParentProcessId,CommandLine | Out-String -Width 300)) | Add-Content $report
+            $wins=Get-Process | Where-Object {$_.MainWindowHandle -ne 0}
+            ('Visible windows '+($wins | Select-Object Name,MainWindowTitle,MainWindowHandle | Out-String -Width 300)) | Add-Content $report
+            $bounds=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+            $bmp=[Drawing.Bitmap]::new($bounds.Width,$bounds.Height)
+            $g=[Drawing.Graphics]::FromImage($bmp)
+            $g.CopyFromScreen($bounds.Location,[Drawing.Point]::Empty,$bounds.Size)
+            $bmp.Save((Join-Path $root 'TOEO_JP_SCREEN.png'),[Drawing.Imaging.ImageFormat]::Png)
+            $g.Dispose();$bmp.Dispose()
+            'Screen capture written' | Add-Content $report
+          }catch{('Launch error '+$_)|Add-Content $report}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-jp2-report-and-screenshot
+          path: |
+            ${{ runner.temp }}/toeo_jp2/report.txt
+            ${{ runner.temp }}/toeo_jp2/TOEO_JP_SCREEN.png
+          if-no-files-found: warn
