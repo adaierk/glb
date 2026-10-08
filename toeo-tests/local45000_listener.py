@@ -21,5 +21,9 @@ while time.time()<end:
    except Exception as e:log('read error '+repr(e));break
    if not b:log('peer closed');break
    log('RECV bytes='+str(len(b))+' hex='+b[:512].hex())
+   try:
+    c.sendall(b)
+    log('ECHO bytes='+str(len(b))+' hex='+b[:512].hex())
+   except Exception as e: log('echo failure '+repr(e))
  log('session ended')
 s.close()
