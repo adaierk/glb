@@ -1,0 +1,36 @@
+name: TOEO core binary forensic copy
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-core-forensic.yml]
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/TOEO_SRC
+      - name: Export exact 2006 game binaries to forensic workspace
+        shell: bash
+        run: |
+          set -eu
+          root="$RUNNER_TEMP/TOEO_SRC"
+          mkdir -p "$root/research"
+          7z x -y -o"$root/extracted" "$root/client_pack.7z" > /dev/null
+          cp "$root/extracted/DefaultComponent/ToEO_CL.dat" "$root/research/ToEO_CL.dat"
+          cp "$root/extracted/DefaultComponent/ToEOnline.exe" "$root/research/ToEOnline.exe"
+          cp "$root/extracted/DefaultComponent/downloader.dat" "$root/research/downloader.dat"
+          sha256sum "$root/research/"* > "$root/research/CHECKSUM.txt"
+          file "$root/research/"* | head -n 12
+      - uses: actions/upload-artifact@v4
+        with:
+          name: toeo-core-binary-forensics
+          path: ${{ runner.temp }}/TOEO_SRC/research
+          retention-days: 1
