@@ -1,0 +1,88 @@
+name: TOEO exact runtime dialog diagnostic
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-dialog-text.yml]
+jobs:
+  inspect:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/toeo_dialog
+      - name: Capture main game error dialog child-control text
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $root=Join-Path $env:RUNNER_TEMP 'toeo_dialog'
+          $raw=Join-Path $root 'raw'
+          $game=Join-Path $root 'game'
+          New-Item -ItemType Directory -Force $raw,$game | Out-Null
+          $report=Join-Path $root 'dialog_text.txt'
+          'Original TOEO main client dialog extraction' | Set-Content $report
+          $seven=Join-Path ${env:ProgramFiles} '7-Zip\7z.exe'
+          & $seven x -y "-o$raw" (Join-Path $root 'client_pack.7z') | Out-Null
+          foreach($n in @('NewComponent1','DefaultComponent')){
+            $g=Join-Path $raw $n
+            if(Test-Path $g){Copy-Item (Join-Path $g '*') -Destination $game -Recurse -Force}
+          }
+          $win32='using System; using System.Text; using System.Runtime.InteropServices; public class W32 { public delegate bool CB(IntPtr h,IntPtr l); [DllImport("user32.dll")] public static extern bool EnumWindows(CB c,IntPtr p); [DllImport("user32.dll")] public static extern bool EnumChildWindows(IntPtr h,CB c,IntPtr p); [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern int GetWindowText(IntPtr h,StringBuilder b,int n); [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern int GetClassName(IntPtr h,StringBuilder b,int n); [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h,out uint pid); }'
+          Add-Type -TypeDefinition $win32
+          Add-Type -AssemblyName System.Drawing
+          Add-Type -AssemblyName System.Windows.Forms
+          $exe=Join-Path $game 'ToEO_CL_test.exe'
+          Copy-Item (Join-Path $game 'ToEO_CL.dat') $exe
+          $rule='TOEO_OFF_'+[Guid]::NewGuid().ToString('N')
+          try {New-NetFirewallRule -DisplayName $rule -Direction Outbound -Action Block -Program $exe | Out-Null}catch{}
+          try {
+            $p=Start-Process -FilePath $exe -WorkingDirectory $game -PassThru -ErrorAction Stop
+            Start-Sleep -Seconds 3
+            ('Launched PID='+$p.Id+' HasExited='+$p.HasExited) | Add-Content $report
+            $rows=New-Object 'System.Collections.Generic.List[object]'
+            $cb=[W32+CB]{param([IntPtr]$h,[IntPtr]$z)
+              $tt=[Text.StringBuilder]::new(2048);[void][W32]::GetWindowText($h,$tt,2048)
+              $cc=[Text.StringBuilder]::new(200);[void][W32]::GetClassName($h,$cc,200)
+              $pid=[uint32]0;[void][W32]::GetWindowThreadProcessId($h,[ref]$pid)
+              $rows.Add([pscustomobject]@{HWND=$h.ToInt64();PID=$pid;Title=$tt.ToString();Class=$cc.ToString()})
+              return $true
+            }
+            [void][W32]::EnumWindows($cb,[IntPtr]::Zero)
+            'Visible and hidden windows:' | Add-Content $report
+            $rows | Format-Table -AutoSize | Out-String -Width 260 | Add-Content $report
+            foreach($w in $rows | Where-Object {$_.PID -eq $p.Id -or $_.Class -eq '#32770'}){
+              ('WINDOW '+($w|ConvertTo-Json -Compress)) | Add-Content $report
+              $parts=New-Object 'System.Collections.Generic.List[string]'
+              $inner=[W32+CB]{param([IntPtr]$h,[IntPtr]$z)
+                $t=[Text.StringBuilder]::new(2048);[void][W32]::GetWindowText($h,$t,2048)
+                $c=[Text.StringBuilder]::new(200);[void][W32]::GetClassName($h,$c,200)
+                $parts.Add(($c.ToString()+':'+$t.ToString()))
+                return $true
+              }
+              [void][W32]::EnumChildWindows([IntPtr]::new($w.HWND),$inner,[IntPtr]::Zero)
+              ('DIALOG CONTROLS: '+($parts -join ' || ')) | Add-Content $report
+            }
+            $bounds=[Windows.Forms.Screen]::PrimaryScreen.Bounds
+            $bmp=[Drawing.Bitmap]::new($bounds.Width,$bounds.Height)
+            $g=[Drawing.Graphics]::FromImage($bmp)
+            $g.CopyFromScreen($bounds.Location,[Drawing.Point]::Empty,$bounds.Size)
+            $bmp.Save((Join-Path $root 'REAL_DIALOG.png'),[Drawing.Imaging.ImageFormat]::Png)
+            $g.Dispose();$bmp.Dispose()
+            if(!$p.HasExited){Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue}
+          }catch{('TEST ERROR '+$_)|Add-Content $report}
+          Remove-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue
+          Get-Content $report | Select-Object -Last 45
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-dialog-raw-text-and-image
+          path: |
+            ${{ runner.temp }}/toeo_dialog/dialog_text.txt
+            ${{ runner.temp }}/toeo_dialog/REAL_DIALOG.png
+          if-no-files-found: warn
