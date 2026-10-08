@@ -1,4 +1,4 @@
-import socket,struct,time,datetime,sys,traceback,os
+import socket,struct,time,datetime,sys,traceback,os,threading
 from pathlib import Path
 out=Path(sys.argv[1]);out.parent.mkdir(parents=True,exist_ok=True)
 MODE=os.environ.get('TOEO_WORLD_MODE','normal')
@@ -23,6 +23,34 @@ def world_work():
  struct.pack_into('!I',b,48,1)
  struct.pack_into('!I',b,52,1)
  return b
+def downstream_listener(port):
+    downstream=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    downstream.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    try: downstream.bind(('127.0.0.1',port))
+    except Exception as ex: log('DOWNSTREAM_BIND_FAILED port='+str(port)+' '+repr(ex));return
+    downstream.listen(4);downstream.settimeout(3)
+    log('DOWNSTREAM_LISTEN port='+str(port))
+    end=time.monotonic()+155
+    while time.monotonic()<end:
+        try:c,addr=downstream.accept()
+        except socket.timeout:continue
+        log('DOWNSTREAM_ACCEPT port='+str(port)+' peer='+repr(addr))
+        c.settimeout(6)
+        with c:
+            for i in range(15):
+                try:b=c.recv(8192)
+                except socket.timeout:log('DOWNSTREAM_TIMEOUT port='+str(port));break
+                except Exception as ex:log('DOWNSTREAM_ERROR '+repr(ex));break
+                if not b:break
+                log('DOWNSTREAM_RECV port='+str(port)+' size='+str(len(b))+' hex='+b[:256].hex())
+                try:
+                    c.sendall(b)
+                    log('DOWNSTREAM_ECHO port='+str(port)+' size='+str(len(b)))
+                except Exception as ex:
+                    log('DOWNSTREAM_REPLY_ERROR '+repr(ex));break
+    downstream.close()
+for port in (45001,45002):
+    threading.Thread(target=downstream_listener,args=(port,),daemon=True).start()
 sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 sock.bind(('127.0.0.1',45000));sock.listen(5);sock.settimeout(2)
