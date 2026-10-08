@@ -182,7 +182,7 @@ function inspectMachine(va,label){
     let hits=0;
     Interceptor.attach(target,{onEnter(args){
       ++hits;
-      if(hits>7)return;
+      if(hits>23)return;
       try{
         const r=this.context;
         emit({event:'BRANCH_TRACE',label,va:va.toString(16),hit:hits,
