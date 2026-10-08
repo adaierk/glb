@@ -123,10 +123,29 @@ hook('ws2_32.dll','connect',function(args){
   }catch(e){emit({event:'TCP_CONNECT_err',error:String(e)})}
 },function(ret){emit({event:'TCP_CONNECT_RESULT',host:this.ip,port:this.port,returnVal:ret.toInt32()})});
 hook('ws2_32.dll','send',function(args){const n=args[2].toInt32();const seq=(sent.send=(sent.send||0)+1);const caller=this.returnAddress.toString();if(seq<50){let h='';try{h=Array.from(new Uint8Array(args[1].readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'send',size:n,hex:h,caller})}},null);
-hook('ws2_32.dll','recv',function(args){this.buffer=args[1];this.reqLen=args[2].toInt32();this.seq=(sent.recv=(sent.recv||0)+1);this.caller=this.returnAddress.toString()},function(ret){const n=ret.toInt32();if(this.seq<50){let h='';try{if(n>0)h=Array.from(new Uint8Array(this.buffer.readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'recv',requestLen:this.reqLen,result:n,hex:h,caller:this.caller})}});
+hook('ws2_32.dll','recv',function(args){this.buffer=args[1];this.reqLen=args[2].toInt32();this.seq=(sent.recv=(sent.recv||0)+1);this.caller=this.returnAddress.toString()},function(ret){const n=ret.toInt32();if(n>0 || this.seq<7){let h='';try{if(n>0)h=Array.from(new Uint8Array(this.buffer.readByteArray(Math.min(500,n)))).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){}emit({event:'recv',requestLen:this.reqLen,result:n,hex:h,caller:this.caller})}});
 hook('kernel32.dll','CreateProcessA',function(args){emit({event:'CreateProcessA',appHex:ascii(args[0]),cmdHex:ascii(args[1])})},function(ret){emit({event:'CreateProcessA_RESULT',success:ret.toInt32()})});
 hook('kernel32.dll','LoadLibraryW',function(args){this.name=args[0].isNull()?'':args[0].readUtf16String()},function(ret){if(ret.isNull())emit({event:'LoadLibraryW_FAILED',name:this.name})});
 hook('kernel32.dll','GetFileAttributesA',function(args){this.name=ascii(args[0])},function(ret){if(ret.toInt32()===-1&&((sent.attr=(sent.attr||0)+1)<40))emit({event:'GetFileAttributesA_FAIL',pathHex:this.name})});
+
+
+const counters={};
+function observeNativeVA(va,label){
+  try{
+    const m=Process.mainModule;
+    const p=m.base.add(va-0x400000);
+    Interceptor.attach(p,{
+      onEnter(args){this.ecx=this.context.ecx.toString();this.first=args[0].toString();this.callsite=this.returnAddress.toString();},
+      onLeave(ret){const n=(counters[label]||0)+1;counters[label]=n;
+        if(n<=15)emit({event:'NATIVE_'+label,entryVA:va.toString(16),count:n,ecx:this.ecx,argument0:this.first,caller:this.callsite,result:ret.toInt32()});}
+    });
+    emit({event:'native_hook_success',function:label,actual:p.toString()});
+  }catch(e){emit({event:'native_hook_error',function:label,error:String(e)})}
+}
+observeNativeVA(0x6bee00,'frame_decode');
+observeNativeVA(0x6bf000,'async_frame');
+observeNativeVA(0x6c0b30,'packet_dispatch');
+observeNativeVA(0x619a10,'raw_receive_method');
 
 emit({event:'hook_setup_complete'});
 """
