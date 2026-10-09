@@ -25,7 +25,7 @@ from world_auth_packets import parse_world_admission,world_admission_ack,parse_w
 from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
 from world_map_packets import LOCAL_MAP_ID,world_initialization_reply,world_map_ready_reply
-from world_movement_packets import parse_move_request,move_reply
+from world_movement_packets import parse_move_request,move_reply,move_rejection_reply
 from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_npc_request,
                                npc_selection_reply,npc_action_reply,shop_open_notice)
 from world_position_store import WorldPositionStore,walkable_grid
@@ -316,13 +316,20 @@ class LocalAccountServer(BootstrapServer):
                     self.log('world_move_rejected',connection=conn_id,reason=str(error));continue
                 if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=self.map_id:
                     self.log('world_move_rejected',connection=conn_id,reason='Character or ready map mismatch');continue
-                if not self.profile.walkable(move['target']):
-                    self.log('world_move_rejected',connection=conn_id,reason='Destination blocked by local navigation');continue
                 cache=state.setdefault('movement_answers',{})
                 previous=cache.get(req)
                 if previous:
                     if previous[0]==payload:self.send_answer(c,previous[1],state)
                     else:self.log('world_move_rejected',connection=conn_id,reason='Conflicting movement request id')
+                    continue
+                if not self.profile.walkable(move['target']):
+                    grid=self.positions.load(control['account_id'],move['identity'])['grid']
+                    answer=move_rejection_reply(move,grid)
+                    if len(cache)>=128:cache.pop(next(iter(cache)))
+                    cache[req]=(payload,answer)
+                    self.send_answer(c,answer,state)
+                    self.log('world_move_rejected_and_restored',connection=conn_id,reason='Destination blocked by local navigation',
+                             rejected_grid=move['target'],restored_grid=grid,request_id=req,status=-93)
                     continue
                 answer=move_reply(move)
                 try:self.positions.save(control['account_id'],move['identity'],move['map_id'],move['target'])

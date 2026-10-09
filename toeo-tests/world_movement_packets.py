@@ -30,3 +30,14 @@ def move_reply(move):
     struct.pack_into('<bb',b,36,-1,move['mode'])
     struct.pack_into('<f',b,44,move['speed'])
     return bytes(b)
+
+def move_rejection_reply(move,authoritative_grid):
+    """Native -93 branch (52B0CE) stops prediction and restores source grid.
+
+The original semantic name of this status is unknown. Its stop/restore behavior
+is executed by emulate_movement_rejection.py; no native state is injected.
+"""
+    b=bytearray(move_reply(move))
+    struct.pack_into('<h',b,10,-93)
+    struct.pack_into('<hh',b,28,*authoritative_grid)
+    return bytes(b)

@@ -42,6 +42,9 @@ class WorldProfileTests(unittest.TestCase):
                     river.save(1, identity, FOREST.map_id, (143, 313))
                 with self.assertRaises(ValueError):
                     river.save(2, identity, RASHUAN.map_id, (143, 313))
+                CharacterStore(accounts).delete(1, identity)
+                self.assertEqual(accounts.db.execute('SELECT COUNT(*) FROM world_positions').fetchone()[0], 0)
+                self.assertEqual(accounts.db.execute('SELECT COUNT(*) FROM world_profile_positions').fetchone()[0], 0)
             finally:
                 accounts.close()
 

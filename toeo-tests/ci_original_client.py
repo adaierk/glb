@@ -69,17 +69,17 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(472,341),145:lambda:click(472,341),148:lambda:click(493,107),
+                      141:lambda:click(472,341),145:lambda:click(472,341),147:lambda:[click(271,411,hold=.15) for _ in range(6)],148:lambda:click(493,107),
                       150:lambda:click(360,410,hold=2.0),160:lambda:click(480,380,hold=2.0),170:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
-                for t in (141,145,148,150,160,170):schedule.pop(t,None)
+                for t in (141,145,147,148,150,160,170):schedule.pop(t,None)
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
                 if t in schedule and not (t in (125,130,135) and entered):schedule[t]()
-                if t%10==0 or t in (101,107,121,126,136,142,146,149):shot(t);print('PHASE screenshot '+str(t),flush=True)
+                if t%10==0 or t in (101,107,121,126,136,142,146,147,149):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
             failure=traceback.format_exc()
             (out/'python_error.txt').write_text(failure,encoding='utf-8');traceback.print_exc()

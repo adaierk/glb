@@ -179,7 +179,12 @@ class LocalAccountTests(unittest.TestCase):
             struct.pack_into('<I',move,5,87)
             struct.pack_into('<hh',move,60,31,7)  # Preserved forest classification.
             world.sendall(data405(move,1,3,route=0xffef))
-            with self.assertRaises(socket.timeout):world.recv(1)
+            rejected=parse405(recv_frame(world))
+            self.assertEqual((rejected['opcode'],rejected['request_id']),(0x43,87))
+            self.assertEqual(struct.unpack_from('<h',rejected['payload'],10)[0],-93)
+            self.assertEqual(struct.unpack_from('<hh',rejected['payload'],28),(10,8))
+            world.sendall(data405(move,1,3,route=0xffef))
+            self.assertEqual(parse405(recv_frame(world))['payload'],rejected['payload'])
             self.assertEqual(self.server.positions.load(1,identity)['grid'],(10,8))
             self.assertEqual(len(self.server.characters.list(1)),1)
 

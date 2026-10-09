@@ -314,15 +314,19 @@
       emit(safely(()=>({event:'native_shop_row_render',row:args[0].toInt32(),name:args[4].readUtf16String(),
         template_pointer:args[2].toString(),catalog_display_value:args[6].toUInt32()})));
   }});
-  let activePriceWidget=null,priceAssignments=0;
+  let activePriceWidget=null,priceAssignments=0;const observedPriceTexts=new Set();
   Interceptor.attach(address(0x596eb0),{onEnter(args){
     if(observedShopFrame!==null && !args[0].isNull() && priceAssignments<60){
       this.previous=activePriceWidget;activePriceWidget=this.context.ecx.add(0x44c);this.keep=true;
     }
   },onLeave(){if(this.keep)activePriceWidget=this.previous;}});
   Interceptor.attach(address(0x5c12f0),{onEnter(args){
-    if(activePriceWidget!==null && this.context.ecx.equals(activePriceWidget) && ++priceAssignments<=60)
-      emit(safely(()=>({event:'native_shop_display_price_text',text:args[0].readUtf16String()})));
+    if(activePriceWidget!==null && this.context.ecx.equals(activePriceWidget)){
+      const value=safely(()=>args[0].readUtf16String());
+      if(!observedPriceTexts.has(value) && ++priceAssignments<=60){
+        observedPriceTexts.add(value);emit({event:'native_shop_display_price_text',text:value});
+      }
+    }
   }});
   Interceptor.attach(address(0x59a640),{onEnter(args){
     this.shop=this.context.ecx;this.size=args[1].toUInt32();
