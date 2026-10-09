@@ -1,4 +1,4 @@
-name: TOEO offline restoration source v3 archive
+name: TOEO offline restoration source v4 archive
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -44,7 +44,19 @@ jobs:
           and assignment 0x617BF1, but original game then displays a Send Failed error.
           This is research evidence, not proof of successful remote login.
           Mere connect() return override -1 -> 0 does not fix that missing owner.
-          Deferred state switch and genuine WinSock blocking connect are being tested.
+          Deferred state switch, blocking TCP connect, and forced connect() return do NOT
+          complete login. The 0x8002 value is an original transport protocol state.
+          Original controller start at 0x61BA51 provides controller+0xD8 and mode 0x8002.
+          Original callback 0x61BE40 sets controller[+0x40]=1.
+          Original controller poll 0x61BBA0 requires controller[+0x40]==1 before
+          delegating to network driver 0x615DD0. No callback or native poll observed
+          in normal original-client login, stage remains 0 with a non-null connection.
+          A request-driven local server waited for client first login send; the
+          client still issued no native login packet after world discovery.
+          Synthetic Windows connect() -1 and WSAGetLastError 10035 was observed
+          by the original process, but alone did not cause callback or native send.
+          Current A/B: isolated controller stage1 and original native poll.
+          Test runs: 37879253101, 37879387782, 37879616795.
           Registry method 0x617AD0 may assign session owner at 0x617BF1; precisely
           when the original client triggers this registration is under investigation.
           Various other standalone 0x0403..0x0407 greeting probes caused native
@@ -63,7 +75,7 @@ jobs:
           EOF
       - uses: actions/upload-artifact@v4
         with:
-          name: TOEO_Offline_Login_Research_20261009_v3
+          name: TOEO_Offline_Login_Research_20261009_v4
           path: |
             TOEO_RESTORATION_CURRENT_STATE.txt
             toeo-tests/*.py
