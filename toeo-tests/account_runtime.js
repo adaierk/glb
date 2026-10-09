@@ -1,0 +1,109 @@
+'use strict';
+// Additional read-only observations; bootstrap_runtime.js supplies loopback routing.
+(function () {
+  const emit = x => send(x);
+  const address = va => Process.mainModule.base.add(va - 0x400000);
+  function safely(f) { try { return f(); } catch (e) { return {error:String(e)}; } }
+  function bytes(p,n) {
+    return Array.from(new Uint8Array(p.readByteArray(Math.min(n,4096))))
+      .map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  function header(p,n) {
+    return safely(()=>({flags:p.readU8(),opcode:p.add(1).readU16(),
+      bytes:n,declared_bytes:p.add(3).readU16(),request_id:p.add(5).readU32(),
+      hex:bytes(p,n)}));
+  }
+  function wrapper(p) {
+    return safely(()=>({wrapper:p.toString(),cipher_object:p.add(0x14).readPointer().toString(),
+      send_compressor:p.add(0x44).readPointer().toString(),
+      compression_option:p.add(0x48).readU32(),
+      receive_decompressor:p.add(0x4c).readPointer().toString(),
+      transport_mode:address(0x80b758).readU8()}));
+  }
+  let sent=0,received=0;
+  Interceptor.attach(address(0x61f920), {
+    onEnter(args) {
+      this.p=args[3];this.keep=++sent<=250;
+      if(this.keep)emit({event:'native_plain_request_before_serialization',
+        ...wrapper(this.context.ecx),...header(this.p,this.p.add(3).readU16())});
+    },
+    onLeave(ret) {
+      if(this.keep)emit({event:'native_request_serialized',result_bytes:ret.toInt32(),
+        ...header(this.p,this.p.add(3).readU16())});
+    }
+  });
+  Interceptor.attach(address(0x6095d0), {
+    onEnter(args) {
+      if(++received<=250)emit({event:'native_response_correlated',request_id:args[0].toUInt32(),
+        ...header(args[1],args[2].toInt32())});
+    }
+  });
+  Interceptor.attach(address(0x61d9e0), {
+    onEnter() { this.p=this.context.ecx;this.before=this.p.add(0x18).readS32(); },
+    onLeave() {
+      const after=this.p.add(0x18).readS32();
+      if(after!==this.before)emit({event:'native_account_state_changed',before:this.before,after});
+      if(this.before===2 && after===1) {
+        const result=this.p.add(0x20).readPointer();
+        if(!result.isNull()) {
+          const sid=result.add(0x4c).readU32();
+          if(sid!==0)emit({event:'ACCOUNT_AUTHENTICATED_NATIVE',
+            account_id:result.add(0x48).readU32(),login_sid:sid});
+        }
+      }
+    }
+  });
+  Interceptor.attach(address(0x4493d2), {
+    onEnter() { emit({event:'GAME_PRELOGIN_ACCEPTED_NATIVE',
+      note:'Original identity/UID checks and UI continuation reached'}); }
+  });
+  Interceptor.attach(address(0x43894d), {
+    onEnter() {
+      const fields=this.context.edi.add(0x14).readPointer();
+      const begin=fields.add(0x48).readPointer(),end=fields.add(0x4c).readPointer();
+      emit({event:'CHARACTER_LIST_ACCEPTED_NATIVE',
+        count:end.sub(begin).toUInt32()/0x118,available_slots:fields.add(0x58).readU32()});
+    }
+  });
+  for(const [va,event] of [[0x438ce2,'CHARACTER_CREATED_NATIVE'],
+                         [0x438e3c,'CHARACTER_DELETED_NATIVE'],
+                         [0x43809a,'CHARACTER_SELECTION_ACCEPTED_NATIVE']]) {
+    Interceptor.attach(address(va), {onEnter() {emit({event});}});
+  }
+  Interceptor.attach(address(0x5308e0), {
+    onEnter(args) {
+      emit(safely(()=>({event:'WORLD_ROUTE_CONVERSION_ENTERED_NATIVE',count:args[1].toUInt32(),
+        identity:[args[2].toUInt32(),args[3].toUInt32()],
+        link_hex:bytes(args[0],Math.min(args[1].toUInt32(),5)*12)})));
+    }
+  });
+  Interceptor.attach(address(0x43d2c0), {
+    onEnter(args) {
+      const p=args[1];
+      if(p.add(1).readU16()===4 && p.add(3).readU16()===13)
+        emit({event:'WORLD_ACCOUNT_ID_REQUEST_OBSERVED_NATIVE',account_id:p.add(9).readU32(),
+          note:'Request observed before broadcast send; no acceptance or map success inferred'});
+    }
+  });
+  Interceptor.attach(address(0x620760), {
+    onEnter() {this.controller=this.context.ecx;this.stage=this.controller.add(0x2c).readU32();},
+    onLeave() {
+      const after=this.controller.add(0x2c).readU32();
+      if(this.stage===6 && after===7)emit({event:'WORLD_ADMISSION_ACK_ACCEPTED_NATIVE',
+        before:6,after:7,note:'Original world admission wait completed; map state is not inferred'});
+      if(this.stage===8 && after===9 && this.controller.add(0x30).readU32()===2)
+        emit({event:'WORLD_CONTROLLER_COMPLETED_NATIVE',before:8,after:9,result:2,
+          note:'Original account-control wait completed; socket startup and map must be verified separately'});
+    }
+  });
+  for(const va of [0x530600,0x52a580]) {
+    Interceptor.attach(address(va), {
+      onEnter(args) {
+        if(received<250)emit({event:'native_game_incoming',handler:'0x'+va.toString(16),
+          ...header(args[1],args[2].toInt32())});
+      }
+    });
+  }
+  emit({event:'runtime_account_probe_ready',
+    note:'Observes original account/character mutation and route paths; never writes game state'});
+})();
