@@ -36,8 +36,6 @@ def main():
     def type_text(s):
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
-    def escape():
-        u.keybd_event(0x1b,0,0,0);time.sleep(.25);u.keybd_event(0x1b,0,2,0)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
@@ -71,17 +69,17 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(424,145),145:lambda:click(424,145),147:escape,
+                      141:lambda:click(424,145),145:lambda:click(424,145),148:lambda:click(493,107),
                       150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
-                for t in (141,145,147,150,160,170):schedule.pop(t,None)
+                for t in (141,145,148,150,160,170):schedule.pop(t,None)
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
                 if t in schedule and not (t in (125,130,135) and entered):schedule[t]()
-                if t%10==0 or t in (101,107,121,126,136,142,146):shot(t);print('PHASE screenshot '+str(t),flush=True)
+                if t%10==0 or t in (101,107,121,126,136,142,146,149):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
             failure=traceback.format_exc()
             (out/'python_error.txt').write_text(failure,encoding='utf-8');traceback.print_exc()
@@ -102,8 +100,13 @@ def main():
             result['npc_selected_native']=any(e.get('event')=='native_npc_actions' and e.get('identity')==[0x70000001,1] for e in events)
             result['shop_catalog_parsed_native']=any(e.get('event')=='native_shop_catalog_parse_result' and e.get('result')==1 and e.get('target')==[0x70000001,1] for e in events)
             result['shop_frame_shown_native']=any(e.get('event')=='native_shop_frame_show' and e.get('result')==1 for e in events)
+            closes=[e for e in events if e.get('event')=='native_shop_frame_closed' and e.get('result')==1 and e.get('target')==[0,0]]
+            result['shop_closed_native']=bool(closes)
+            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and positions[-1]==[640,128] and any(e.get('event')=='native_move_path_request' and e.get('target_grid')==[19,7] and e.get('host_time',0)>closes[-1]['host_time'] for e in events)
             if not args.reenter_check and (not result['map_entered'] or not result['npc_selected_native'] or not result['shop_catalog_parsed_native'] or not result['shop_frame_shown_native']):
                 failure=failure or 'Original map/NPC selection/shop data/open checks did not all pass'
+            if not args.reenter_check and (not result['shop_closed_native'] or not result['movement_after_shop_close_native']):
+                failure=failure or 'Original shop close and subsequent map walking did not both pass'
             if args.reenter_check:
                 result['position_restored_without_movement']=bool(positions) and all(tuple(x)==expected_position for x in positions)
                 if not result['map_entered'] or not result['position_restored_without_movement']:

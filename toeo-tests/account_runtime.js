@@ -304,6 +304,10 @@
     target:[this.shop.add(0x100).readU32(),this.shop.add(0x104).readU32()],items:this.shop.add(0x11c).readU32()})));}});
   Interceptor.attach(address(0x59a5d0),{onEnter(args){this.argument=args[0].toInt32();},
     onLeave(ret){emit({event:'native_shop_frame_show',argument:this.argument,result:ret.toInt32()&255});}});
+  Interceptor.attach(address(0x599bd0),{onEnter(){this.shop=this.context.ecx;
+    this.keep=safely(()=>this.shop.add(0x100).readU32()===0x70000001 && this.shop.add(0x104).readU32()===1);
+  },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_shop_frame_closed',result:ret.toInt32()&255,
+    target:[this.shop.add(0x100).readU32(),this.shop.add(0x104).readU32()]})));}});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();
