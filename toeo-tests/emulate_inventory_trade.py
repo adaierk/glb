@@ -8,7 +8,7 @@ import argparse,json,struct
 from pathlib import Path
 from unicorn.x86_const import UC_X86_REG_ESP,UC_X86_REG_ECX,UC_X86_REG_EIP
 from emulate_shop_catalog import CatalogFixture
-from world_inventory_packets import inventory_records,parse_trade_request
+from world_inventory_packets import inventory_records,parse_trade_request,inventory_notice,transaction_reply
 from world_npc_packets import SHOP_IDENTITY
 
 
@@ -61,6 +61,29 @@ class InventoryFixture(CatalogFixture):
         else:super().on_code(uc,va,size,context)
 
 
+class WorldFixture(InventoryFixture):
+    def __init__(self,binary):
+        super().__init__(binary)
+        self.write32(self.player+0x80,1);self.write32(self.player+0x1dc,0x10e6000)
+        self.write32(0x10db008,0x10e7000) # startup transport pending-query registry
+
+    def on_code(self,uc,va,size,context):
+        sp=uc.reg_read(UC_X86_REG_ESP);obj=uc.reg_read(UC_X86_REG_ECX)
+        if va in (0x4fed50,0x4fedd0,0x4fee60):self.ret() # already initialized actor components
+        elif va in (0x51ef90,0x51edf0):
+            other=self.read32(sp+4)
+            if va==0x51ef90:
+                self.collections[obj]=self.collections[other][:]
+                self.write32(obj+8,len(self.collections[obj]));self.write32(obj+12,self.read32(other+12))
+            self.ret(obj,4) # collection move; decoded items are untouched
+        elif va in (0x51f860,0x51efc0,0x4b0080):self.ret() # temporary collection lifetime
+        elif va==0x5ba530:self.ret(0,8) # Windows graphical refresh only
+        elif va==0x5b52d0:self.ret(0) # graphical inventory absent in this fixture
+        elif va==0x609c50:
+            p=self.read32(sp+4);self.write32(p,0);self.write32(p+8,0);self.ret(1,4) # pending queue lifetime
+        else:super().on_code(uc,va,size,context)
+
+
 def run(binary):
     f=InventoryFixture(binary);lines=0x10e3000
     f.uc.mem_write(lines,struct.pack('<II',0,3))
@@ -86,12 +109,31 @@ def run(binary):
     f.invoke(0x51d740,(4100,),this=f.wallet);f.invoke(0x51d8a0,this=f.wallet)
     from unicorn.x86_const import UC_X86_REG_EAX
     assert f.uc.reg_read(UC_X86_REG_EAX)==4100 and not f.assertions
+    from world_map_packets import world_initialization_reply
+    from character_store import native_character_fields
+    initialized=InventoryFixture(binary)
+    initialized.invoke(0x4db8f0,this=initialized.data+0x488) # real empty equipment constructor
+    p=0x109a000
+    initial=world_initialization_reply((1,1),'Archive',native_character_fields((1,1),'Archive',(1,1,0,0,0,0,0,0,0,0)),1,inventory=snapshot)
+    initialized.uc.mem_write(p,initial);initialized.invoke(0x43f090,(p,p+40),this=initialized.ui)
+    assert initialized.read32(initialized.data+0x470)==4100
+    assert initialized.read32(initialized.data+0x478+12)==32
+    assert len(initialized.collections[initialized.data+0x478])==1 and not initialized.assertions
+    notice=WorldFixture(binary);notice.receive(0x52b8ef,inventory_notice((1,1),0x1120108,snapshot))
+    assert notice.read32(notice.wallet)==4100 and len(notice.collections[notice.inventory])==1
+    notice.write32(notice.command+0x10,1)
+    notice.receive(0x52b86b,transaction_reply(1,3920))
+    assert notice.read32(notice.wallet)==3920 and notice.read32(notice.command+4)==1
+    assert notice.read32(notice.command+0x10)==0 and not notice.assertions
     return {'passed':True,'native_buy':buy,'native_buy_hex':f.trade_packets[0].hex(),
         'native_sell':sell,'native_sell_hex':f.trade_packets[1].hex(),
         'native_inventory_name':f.item_strings[item+0x34],'native_quantity':2,
         'native_stack_capacity':20,'native_bag_capacity':32,'native_wallet_crc_read':4100,
+        'native_world_initial_inventory_restored':True,'native_full_inventory_notice_applied':True,
+        'native_transaction_wallet_applied':3920,'native_pending_command_released':True,
         'substitutions':['C++ string and CRT wide string boundaries','Container insertion/lookup/clear',
-                         'Resource lookup returns NULL for unresolved template','Network queue and buffer getter'],
+                         'Resource lookup returns NULL for unresolved template','Network queue and buffer getter',
+                         'Initialized actor components, collection moves and temporary lifetimes','Windows graphical refresh','Pending command lifetime'],
         'limitations':['Does not establish native Windows UI buy/sell or official stack/resale rules','Original item templates/icons unresolved']}
 
 

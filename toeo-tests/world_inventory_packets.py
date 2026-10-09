@@ -40,7 +40,9 @@ def inventory_records(snapshot):
 
 def inventory_notice(identity,map_id,snapshot):
     money=record(0x6b,8);struct.pack_into('<I',money,4,snapshot['money'])
-    tail=bytes(money)+inventory_records(snapshot)+bytes(4)
+    # 52B9BF passes the initial record pointer to 51F030. Inventory must
+    # lead the notice; its 3D marker hands continuation to the wallet record.
+    tail=inventory_records(snapshot)+bytes(money)+bytes(4)
     b=bytearray(message(0x6b,bytes(23+len(tail)),0xffffffff))
     struct.pack_into('<IIIII',b,12,len(b),map_id,*identity,0)
     b[32:]=tail

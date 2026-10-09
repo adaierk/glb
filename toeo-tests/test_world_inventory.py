@@ -86,6 +86,7 @@ class InventoryTests(unittest.TestCase):
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)
             self.assertEqual([struct.unpack_from('<H',p,1)[0] for p in c.answers],[0x67,0x6b])
             self.assertEqual(struct.unpack_from('<IIhh',c.answers[0],12),(1,52,0,0))
+            self.assertEqual(struct.unpack_from('<H',c.answers[1],32)[0],0x36)
             self.assertEqual(server.inventory.load(1,self.identity)['money'],3920)
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)
             self.assertEqual(server.inventory.load(1,self.identity)['money'],3920)
