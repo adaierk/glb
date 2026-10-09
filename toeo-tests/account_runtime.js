@@ -293,6 +293,10 @@
   Interceptor.attach(address(0x5b9a90),{onEnter(args){
     emit({event:'native_npc_actions',identity:[args[0].toUInt32(),args[1].toUInt32()],permissions:args[2].toUInt32(),extra:args[3].toUInt32()});
   }});
+  Interceptor.attach(address(0x4feb70),{onEnter(args){
+    emit(safely(()=>({event:'native_actor_target_set',actor:[this.context.ecx.add(0x68).readU32(),this.context.ecx.add(0x6c).readU32()],
+      target:[args[0].toUInt32(),args[1].toUInt32()]})));
+  }});
   Interceptor.attach(address(0x59a640),{onEnter(args){
     this.shop=this.context.ecx;this.size=args[1].toUInt32();
     emit(safely(()=>({event:'native_shop_catalog_parse_enter',bytes:this.size,opcode:args[0].add(1).readU16()})));

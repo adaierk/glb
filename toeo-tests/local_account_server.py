@@ -253,6 +253,18 @@ class LocalAccountServer(BootstrapServer):
                     self.log('local_shop_actor_announced',connection=conn_id,identity=SHOP_IDENTITY,
                              grid=SHOP_GRID,map_id=LOCAL_MAP_ID,bytes=len(notice))
                 continue
+            if op==0x4e and port==11101:
+                from world_npc_packets import actor_target_reply
+                control=state.get('world_account_control')
+                try:target=parse_npc_request(payload)
+                except ValueError as error:
+                    self.log('actor_target_rejected',connection=conn_id,reason=str(error));continue
+                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=LOCAL_MAP_ID or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])):
+                    self.log('actor_target_rejected',connection=conn_id,reason='Character, ready map, group or target mismatch');continue
+                answer=actor_target_reply(target)
+                self.send_answer(c,answer,state)
+                self.log('actor_target_answer',connection=conn_id,request_hex=payload.hex(),answer_hex=answer.hex(),**target)
+                continue
             if op in (0xc6,0xc8) and port==11101:
                 control=state.get('world_account_control')
                 try:npc=parse_npc_request(payload)

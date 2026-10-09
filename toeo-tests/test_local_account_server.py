@@ -123,6 +123,15 @@ class LocalAccountTests(unittest.TestCase):
             with self.assertRaises(socket.timeout):world.recv(1)
             # Use the C6/C8 layouts independently confirmed by original builders.
             from world_npc_packets import SHOP_IDENTITY,SHOP_GRID
+            target=bytearray(message(0x4e,bytes(39),90))
+            struct.pack_into('<IIIIIII',target,16,*identity,0x1110101,0,0,*SHOP_IDENTITY)
+            foreign_target=bytearray(target);struct.pack_into('<I',foreign_target,16,99)
+            world.sendall(data405(foreign_target,1,3,route=0xffef))
+            with self.assertRaises(socket.timeout):world.recv(1)
+            world.sendall(data405(target,1,3,route=0xffef))
+            target_answer=parse405(recv_frame(world))
+            self.assertEqual((target_answer['opcode'],target_answer['request_id']),(0x4f,90))
+            self.assertEqual(struct.unpack_from('<IIIIIIII',target_answer['payload'],12),(*identity,0x1110101,0,0,*SHOP_IDENTITY,0))
             select=bytearray(message(0xc6,bytes(39),91))
             struct.pack_into('<IIIIIii',select,12,*identity,0x1110101,*SHOP_IDENTITY,*SHOP_GRID)
             select[45]=1

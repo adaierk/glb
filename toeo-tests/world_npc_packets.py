@@ -44,6 +44,11 @@ def parse_npc_request(payload):
     if len(payload)<9:raise ValueError('Short NPC request')
     op,size,req=struct.unpack_from('<HHI',payload,1)
     if size!=len(payload):raise ValueError('NPC request size mismatch')
+    if op==0x4e and size==48:
+        return dict(opcode=op,request_id=req,identity=struct.unpack_from('<II',payload,16),
+                    map_id=struct.unpack_from('<I',payload,24)[0],
+                    group=struct.unpack_from('<II',payload,28),
+                    target=struct.unpack_from('<II',payload,36),option=payload[44])
     if op==0xc6 and size==48:
         return dict(opcode=op,request_id=req,identity=struct.unpack_from('<II',payload,12),
                     map_id=struct.unpack_from('<I',payload,20)[0],
@@ -57,6 +62,15 @@ def parse_npc_request(payload):
                     target=struct.unpack_from('<II',payload,28),
                     extra=struct.unpack_from('<I',payload,12)[0],option=struct.unpack_from('<I',payload,40)[0])
     raise ValueError('Unsupported NPC request')
+
+def actor_target_reply(request):
+    # Native 5228A0 -> 430510 builds 4E; original 4F -> 52B5AA
+    # -> 4FEB70 assigns controlled actor+D8/DC before C6 can be issued.
+    b=bytearray(message(0x4f,bytes(39),request['request_id']))
+    struct.pack_into('<IIIIIIII',b,12,*request['identity'],LOCAL_MAP_ID,
+                     *request['group'],*request['target'],0)
+    b[44]=request['option']
+    return bytes(b)
 
 def npc_selection_reply(request):
     # Original 52CC40: type 4 opens native NPC actions, exact mask 2
