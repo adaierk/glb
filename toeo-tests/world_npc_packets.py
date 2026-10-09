@@ -67,8 +67,11 @@ def actor_target_reply(request):
     # Native 5228A0 -> 430510 builds 4E; original 4F -> 52B5AA
     # -> 4FEB70 assigns controlled actor+D8/DC before C6 can be issued.
     b=bytearray(message(0x4f,bytes(39),request['request_id']))
+    # The controlled actor's owner comes from player record+0C (43F416),
+    # whereas the merchant's local owner is zero. Preserve it on self-target.
+    owner=request['identity'][0] if request['target']==request['identity'] else 0
     struct.pack_into('<IIIIIIII',b,12,*request['identity'],LOCAL_MAP_ID,
-                     *request['group'],*request['target'],0)
+                     *request['group'],*request['target'],owner)
     b[44]=request['option']
     return bytes(b)
 

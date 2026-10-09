@@ -64,6 +64,10 @@ def run(binary):
     target=parse_npc_request(bytes.fromhex('004e003000160000000e0292300000000100000001000000010111010000000000000000010000700100000000ffffff'))
     f.receive(0x52b5aa,actor_target_reply(target))
     assert [f.read32(f.player+0xd8),f.read32(f.player+0xdc)]==list(SHOP_IDENTITY)
+    own=InteractionFixture(binary);own.write32(own.player+0x84,1)
+    own.receive(0x52b5aa,actor_target_reply(dict(target, target=(1,1))))
+    assert [own.read32(own.player+0xd8),own.read32(own.player+0xdc)]==[1,1]
+    assert own.read32(own.player+0x84)==1
     f.uc.mem_write(grid,struct.pack('<ii',*SHOP_GRID))
     # Initialized pending-command container and native actor identity are input fixtures.
     f.invoke(0x522bd0,(*SHOP_IDENTITY,grid,f.world_state+0xa0,0,0,1),this=0x10d8000)
@@ -83,7 +87,7 @@ def run(binary):
     assert struct.unpack_from('<IIIII',ack,12)==(1,1,LOCAL_MAP_ID,*SHOP_IDENTITY)
     assert struct.unpack_from('<I',ack,32)[0]==1
     assert not f.assertions
-    return {'passed':True,'native_target_selection':target,'native_actor_target':list(SHOP_IDENTITY),'native_c6':c6,'native_c8':c8,'native_empty_shop_parse_result':f.shop_parse_result,
+    return {'passed':True,'native_target_selection':target,'native_actor_target':list(SHOP_IDENTITY),'native_self_target_owner_preserved':True,'native_c6':c6,'native_c8':c8,'native_empty_shop_parse_result':f.shop_parse_result,
             'native_shop_identity':[f.read32(f.shop+0x100),f.read32(f.shop+0x104)],'native_d7_hex':ack.hex(),
             'limitations':['Collection lookups, pending-query transport/lifetime and graphical menu/control boundaries substituted',
                            'Original packet field reads, action switches, C8 and D7 construction execute unchanged',

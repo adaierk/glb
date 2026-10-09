@@ -37,7 +37,7 @@ def main():
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
     def escape():
-        u.keybd_event(0x1b,0,0,0);u.keybd_event(0x1b,0,2,0)
+        u.keybd_event(0x1b,0,0,0);time.sleep(.25);u.keybd_event(0x1b,0,2,0)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}

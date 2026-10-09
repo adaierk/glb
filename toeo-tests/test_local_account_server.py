@@ -128,6 +128,10 @@ class LocalAccountTests(unittest.TestCase):
             foreign_target=bytearray(target);struct.pack_into('<I',foreign_target,16,99)
             world.sendall(data405(foreign_target,1,3,route=0xffef))
             with self.assertRaises(socket.timeout):world.recv(1)
+            own_target=bytearray(target);struct.pack_into('<II',own_target,36,*identity)
+            world.sendall(data405(own_target,1,3,route=0xffef))
+            own_answer=parse405(recv_frame(world))['payload']
+            self.assertEqual(struct.unpack_from('<III',own_answer,32),(*identity,identity[0]))
             world.sendall(data405(target,1,3,route=0xffef))
             target_answer=parse405(recv_frame(world))
             self.assertEqual((target_answer['opcode'],target_answer['request_id']),(0x4f,90))
