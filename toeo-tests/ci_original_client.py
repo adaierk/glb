@@ -3,7 +3,7 @@
 UI input uses actual mouse/keyboard controls. Captures are the Windows desktop;
 native observations and screenshots are preserved without inferred map success.
 """
-import argparse,ctypes,hashlib,json,os,shutil,time,traceback
+import argparse,ctypes,faulthandler,hashlib,json,os,shutil,time,traceback
 from pathlib import Path
 from local_account_server import LocalAccountServer
 from character_mutation_packets import create_character_request
@@ -18,6 +18,7 @@ def main():
     import frida
     from PIL import ImageGrab
     game=Path(args.game).resolve();out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=True)
+    diagnostic=(out/'python_threads.txt').open('w',encoding='utf-8');faulthandler.enable(diagnostic);faulthandler.dump_traceback_later(45,repeat=True,file=diagnostic)
     original=game/'ToEO_CL.dat'
     if hashlib.sha256(original.read_bytes()).hexdigest()!=SHA:raise SystemExit('Original SHA mismatch')
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
@@ -41,16 +42,21 @@ def main():
             path=out/f'original_desktop_{t:03d}s.png';ImageGrab.grab().save(path)
             shots.append({'file':path.name,'elapsed':t,'scope':'actual Windows desktop'})
         try:
-            server.start();pid=device.spawn([str(exe)],cwd=str(game));session=device.attach(pid)
+            print('PHASE server_start',flush=True);server.start()
+            print('PHASE original_spawn',flush=True);pid=device.spawn([str(exe)],cwd=str(game))
+            print('PHASE original_attach pid='+str(pid),flush=True);session=device.attach(pid)
             session.on('detached',lambda reason,crash: receive({'type':'send','payload':{'event':'detached','reason':reason,'crash':str(crash)}},None))
             source='\n'.join(Path(__file__).with_name(n).read_text(encoding='utf-8') for n in
                              ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js'))
             if args.pump:source+='\n'+Path(__file__).with_name('native_gui_pump.js').read_text(encoding='utf-8')
+            print('PHASE native_hooks_load',flush=True)
             script=session.create_script(source);script.on('message',receive);script.load()
+            print('PHASE hooks_loaded',flush=True)
             deadline=time.monotonic()+5
             while not any(e.get('event')=='offline_socket_compat_ready' for e in events) and time.monotonic()<deadline:time.sleep(.05)
             if not any(e.get('event')=='offline_socket_compat_ready' for e in events):raise RuntimeError('Hook readiness failed')
-            device.resume(pid)
+            print('PHASE original_resume',flush=True);device.resume(pid)
+            print('PHASE original_gui_running',flush=True)
             schedule={34:lambda:click(408,447),45:lambda:click(218,534),
                       78:lambda:click(360,299),82:lambda:click(340,391),
                       92:lambda:(click(380,290),type_text('archive001')),
@@ -59,7 +65,7 @@ def main():
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()
-                if t%10==0 or t in (101,107,121,136):shot(t)
+                if t%10==0 or t in (101,107,121,136):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
             (out/'python_error.txt').write_text(traceback.format_exc(),encoding='utf-8');traceback.print_exc()
         finally:
@@ -80,7 +86,7 @@ def main():
             if session is not None:
                 try:session.detach()
                 except Exception:pass
-            server.close()
+            server.close();faulthandler.cancel_dump_traceback_later();diagnostic.close()
             for retry in range(30):
                 try:exe.unlink(missing_ok=True);break
                 except PermissionError:time.sleep(.1)

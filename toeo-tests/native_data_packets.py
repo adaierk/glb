@@ -21,15 +21,15 @@ def data405(payload, sender_index, sender_uid, target_index=1, target_uid=1, rou
 
 
 def parse405(frame):
-    if len(frame)<40 or frame[:4]!=MAGIC or frame[-4:]!=MAGIC:
+    if len(frame)<40 or frame[:4]!=MAGIC:
         raise ValueError('Malformed data frame')
     length,op,tail=struct.unpack_from('<HHH',frame,4)
-    if length!=len(frame) or op!=0x405 or tail!=length-4:
+    if length!=len(frame) or op!=0x405 or tail<36 or not 0<=length-tail-4<=3 or frame[tail:tail+4]!=MAGIC:
         raise ValueError('Malformed data header')
     index,n,uid=struct.unpack_from('<HHI',frame,28)
-    if n!=length-40:
+    if n!=tail-36:
         raise ValueError('Payload length mismatch')
-    payload=frame[36:-4]
+    payload=frame[36:tail]
     if len(payload)<9 or struct.unpack_from('<H',payload,3)[0]!=len(payload):
         raise ValueError('Not a plain application message (compression/encryption unsupported)')
     if payload[0]&0x80:
@@ -56,7 +56,8 @@ class FrameStream:
                 raise ValueError('Invalid NNet length')
             if len(self.pending)<n:break
             frame=bytes(self.pending[:n]);del self.pending[:n]
-            if frame[-4:]!=MAGIC or struct.unpack_from('<H',frame,8)[0]!=n-4:
+            tail=struct.unpack_from('<H',frame,8)[0]
+            if tail<20 or not 0<=n-tail-4<=3 or frame[tail:tail+4]!=MAGIC:
                 raise ValueError('Invalid NNet tail')
             result.append(frame)
         return result

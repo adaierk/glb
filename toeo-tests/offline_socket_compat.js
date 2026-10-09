@@ -5,6 +5,21 @@
 (function () {
   const a = va => Process.mainModule.base.add(va - 0x400000);
   const ws = Process.getModuleByName('ws2_32.dll');
+  const lastError=new NativeFunction(ws.getExportByName('WSAGetLastError'),'int',[]);
+  for(const name of ['bind','connect','socket','WSAEventSelect']) {
+    Interceptor.attach(ws.getExportByName(name), {
+      onEnter(args){
+        this.name=name;this.first=args[0].toString();this.caller=this.returnAddress.toString();
+        this.endpoint=null;
+        if(name==='bind'||name==='connect') {
+          const p=args[1];this.endpoint={family:p.readU16(),port:p.add(2).readU8()*256+p.add(3).readU8(),
+            ip:[4,5,6,7].map(i=>p.add(i).readU8()).join('.')};
+        }
+        send({event:'os_socket_enter',name,first:this.first,caller:this.caller,endpoint:this.endpoint});
+      },
+      onLeave(ret){send({event:'os_socket_return',name,result:ret.toInt32(),last_error:ret.toInt32()<0?lastError():0});}
+    });
+  }
   Interceptor.attach(ws.getExportByName('WSAGetLastError'), {
     onEnter() {this.legacy = this.returnAddress.equals(a(0x60873b));},
     onLeave(ret) {
