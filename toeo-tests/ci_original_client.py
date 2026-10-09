@@ -67,9 +67,12 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
+                      145:lambda:click(360,288,True),
                       150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
             if args.reenter_check:
-                for t in (125,130,135,150,160,170):schedule.pop(t,None)
+                # The client recreates its tutorial confirmation on each launch.
+                # Retain that real UI flow; only omit movement in this run.
+                for t in (145,150,160,170):schedule.pop(t,None)
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()

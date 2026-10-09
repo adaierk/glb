@@ -270,6 +270,18 @@
         stage:this.p.add(0x2c).readU32(),status:this.p.add(0x34).readS32()});}
     });
   }
+  Interceptor.attach(address(0x51c1e0),{onEnter(args){
+    this.keep=args[1].toUInt32()===0x70000001;
+    if(this.keep)emit({event:'native_local_shop_create_enter',map:args[0].toUInt32(),identity:[args[1].toUInt32(),args[2].toUInt32()]});
+  },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_local_shop_create_result',actor:ret.toString(),
+    category:ret.isNull()?null:ret.add(0x70).readU32(),
+    position:ret.isNull()?null:[ret.add(0xc).readFloat(),ret.add(0x10).readFloat()],
+    extension:ret.isNull()?null:ret.add(0x84).readPointer().toString()})));}});
+  Interceptor.attach(address(0x4fe510),{onEnter(args){
+    if(args[0].isNull())return;
+    if(safely(()=>args[0].readPointer().equals(address(0x6eeca8))))
+      emit({event:'native_shop_extension_attached',actor:this.context.ecx.toString(),extension:args[0].toString()});
+  }});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();

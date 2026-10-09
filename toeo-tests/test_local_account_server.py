@@ -114,6 +114,13 @@ class LocalAccountTests(unittest.TestCase):
             self.assertEqual(struct.unpack_from('<HH',answer,40),(0xa9,1314))
             self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,0x1110101))
             self.assertEqual(answer[18],1)  # Original movement permission consumer.
+            npc=parse405(recv_frame(world))
+            self.assertEqual((npc['opcode'],npc['request_id']),(0x3b,0xffff))
+            self.assertEqual(struct.unpack_from('<III',npc['payload'],20),(0x70000001,1,0x1110101))
+            # Repeated readiness must not recreate the same merchant.
+            world.sendall(data405(ready,1,3,route=0xffef))
+            self.assertEqual(parse405(recv_frame(world))['opcode'],0x3a)
+            with self.assertRaises(socket.timeout):world.recv(1)
             move=bytearray(message(0x42,bytes(59),86))
             struct.pack_into('<I',move,12,1)
             struct.pack_into('<III',move,28,99,1,0x1110101)
