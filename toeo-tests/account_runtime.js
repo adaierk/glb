@@ -316,10 +316,11 @@
     }
   }});
   Interceptor.attach(address(0x5998f0),{onEnter(args){
-    if(observedShopFrame!==null && this.context.ecx.equals(observedShopFrame.add(0x680)))
+    if(observedShopFrame!==null && (this.context.ecx.equals(observedShopFrame.add(0x680)) ||
+        this.context.ecx.equals(observedShopFrame.add(0x1c0c))))
       emit(safely(()=>({event:'native_shop_row_render',row:args[0].toInt32(),name:args[4].readUtf16String(),
         template_pointer:args[2].toString(),catalog_display_value:args[6].toUInt32(),
-        quantity:args[5].toInt32(),mode:observedShopFrame.add(0xee8).readU32()})));
+        quantity:args[5].toInt32(),mode:observedShopFrame.add(0x110).readU32()})));
   }});
   let activePriceWidget=null,priceAssignments=0;const observedPriceTexts=new Set();
   Interceptor.attach(address(0x596eb0),{onEnter(args){
