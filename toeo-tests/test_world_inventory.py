@@ -15,7 +15,7 @@ from native_data_packets import data405,parse405
 
 def request(op,sequence,identity,lines):
     stride=8 if op==0xde else 24
-    packet=bytearray(message(op,bytes(31+len(lines)*stride),0xffffffff))
+    packet=bytearray(message(op,bytes(31+len(lines)*stride),31))
     struct.pack_into('<IIIIIII',packet,12,sequence,*identity,RASHUAN.map_id,*SHOP_IDENTITY,len(lines))
     for n,line in enumerate(lines):struct.pack_into('<'+'I'*(stride//4),packet,40+stride*n,*line)
     return bytes(packet)
@@ -86,6 +86,7 @@ class InventoryTests(unittest.TestCase):
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)
             self.assertEqual([struct.unpack_from('<H',p,1)[0] for p in c.answers],[0x67,0x6b])
             self.assertEqual(struct.unpack_from('<IIhh',c.answers[0],12),(1,52,0,0))
+            self.assertEqual(struct.unpack_from('<I',c.answers[0],5)[0],31)
             self.assertEqual(struct.unpack_from('<H',c.answers[1],32)[0],0x36)
             self.assertEqual(server.inventory.load(1,self.identity)['money'],3920)
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)

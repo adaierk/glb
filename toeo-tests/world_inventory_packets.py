@@ -49,7 +49,7 @@ def inventory_notice(identity,map_id,snapshot):
     return bytes(b)
 
 
-def transaction_reply(sequence,money,status=0):
+def transaction_reply(sequence,money,status=0,request_id=0xffffffff):
     # 52B86B -> 4FAB30 -> 4F9720 releases the original pending command.
     # Record 50 location 2 updates the checksum-protected player wallet.
     tail=bytearray()
@@ -57,7 +57,7 @@ def transaction_reply(sequence,money,status=0):
         wallet=record(0x50,12);struct.pack_into('<II',wallet,4,2,money)
         tail.extend(wallet)
     tail.extend(bytes(4))
-    b=bytearray(message(0x67,bytes(27+len(tail)),0xffffffff))
+    b=bytearray(message(0x67,bytes(27+len(tail)),request_id))
     struct.pack_into('<IIhh',b,12,sequence,len(b),status,0)
     b[36:]=tail
     return bytes(b)
@@ -66,7 +66,9 @@ def transaction_reply(sequence,money,status=0):
 def parse_trade_request(payload):
     if len(payload)<40:raise ValueError('Short trade request')
     op,size,req=struct.unpack_from('<HHI',payload,1)
-    if op not in (0xde,0xdf) or size!=len(payload) or req!=0xffffffff:
+    # Builders use FFFFFFFF; the original transport replaces it with a queue
+    # request ID before sending. Preserve that real wire ID in the reply.
+    if op not in (0xde,0xdf) or size!=len(payload) or req==0:
         raise ValueError('Unsupported trade header')
     seq,first,second,map_id,npc1,npc2,count=struct.unpack_from('<IIIIIII',payload,12)
     stride=8 if op==0xde else 24
@@ -83,5 +85,5 @@ def parse_trade_request(payload):
             if location!=2:raise ValueError('Unsupported inventory location')
             lines.append({'identity':tuple(identity),'quantity':quantity})
         if not 1<=quantity<=LOCAL_STACK_LIMIT:raise ValueError('Local quantity limit')
-    return {'opcode':op,'sequence':seq,'identity':(first,second),'map_id':map_id,
+    return {'opcode':op,'request_id':req,'sequence':seq,'identity':(first,second),'map_id':map_id,
             'merchant':(npc1,npc2),'lines':lines}
