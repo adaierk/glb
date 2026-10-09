@@ -115,7 +115,7 @@
   });
   for(const [va,event] of [[0x440180,'native_world_task_construct'],[0x43ef50,'native_map_init_request'],
                           [0x43f090,'native_map_init_parse'],[0x442270,'native_map_load_construct']]) {
-    Interceptor.attach(address(va),{onEnter(args){emit({event,object:this.context.ecx.toString()});}});
+    Interceptor.attach(address(va),{onEnter(args){this.args=args;emit({event,object:this.context.ecx.toString()});},onLeave(ret){emit({event:event+'_returned',result:ret.toInt32()});}});
   }
   let worldTaskPhase=-1;
   Interceptor.attach(address(0x43eb50), {

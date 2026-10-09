@@ -24,6 +24,7 @@ from character_store import CharacterStore,CharacterRejected
 from world_auth_packets import parse_world_admission,world_admission_ack,parse_world_account,world_account_ack
 from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
+from world_map_packets import world_initialization_reply
 
 
 class AccountStore:
@@ -209,6 +210,22 @@ class LocalAccountServer(BootstrapServer):
                 self.send_answer(c,world_admission_ack(req),state)
                 self.log('world_admission_ack',connection=conn_id,network_parameter=network_parameter,
                          ticket=ticket,request_id=req,**claimed)
+                continue
+            if op==0x33 and len(payload)==56 and self.world_route_probe:
+                control=state.get('world_account_control')
+                if not control or port!=11101:
+                    self.log('map_query_without_world_control',connection=conn_id);continue
+                if struct.unpack_from('<I',payload,12)[0]!=native_crc(payload[16:]):
+                    raise ValueError('World initialization query CRC mismatch')
+                roles=self.characters.list(control['account_id'])
+                role=next((r for r in roles if r['identity']==tuple(control['character_id'])),None)
+                if role is None:
+                    self.log('map_query_character_missing',connection=conn_id);continue
+                answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req)
+                self.send_answer(c,answer,state)
+                self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
+                         map_id=1110101,character_id=role['identity'],bytes=len(answer),
+                         request_hex=payload.hex(),note='Original record parser verified; real map rendering still requires GUI evidence')
                 continue
             if op==0x35 and len(payload)==9:
                 if not state.get('game_account_id'):
