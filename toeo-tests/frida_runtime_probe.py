@@ -221,6 +221,30 @@ Process.setExceptionHandler(function(details){
   return false;
 });
 
+
+// Trace native header parsing at the original 2006 executable virtual address.
+try {
+  const executable=Process.getModuleByName('ToEO_CL_trace.exe');
+  const addr=executable.base.add(0x20b030);
+  Interceptor.attach(addr,{
+    onEnter(args){
+      this.ptr=args[0];
+      this.no=(sent.nativeHeader=(sent.nativeHeader||0)+1);
+      if(this.no<=90){
+        try {emit({event:'TOEO_HEADER_SWAP_BEFORE',i:this.no,bytes:hex(Array.from(new Uint8Array(this.ptr.readByteArray(24))))})}
+        catch(e){emit({event:'TOEO_HEADER_READ_ERROR',error:String(e)})}
+      }
+    },
+    onLeave(ret){
+      if(this.no<=90){
+        try {emit({event:'TOEO_HEADER_SWAP_AFTER',i:this.no,bytes:hex(Array.from(new Uint8Array(this.ptr.readByteArray(24))))})}
+        catch(e){}
+      }
+    }
+  });
+  emit({event:'TOEO_HEADER_HOOK_READY',addr:addr.toString()});
+}catch(e){emit({event:'TOEO_HEADER_HOOK_ERROR',error:String(e)})}
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
