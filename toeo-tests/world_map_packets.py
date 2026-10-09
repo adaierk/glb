@@ -69,5 +69,8 @@ def world_map_ready_reply(request_id,map_id=LOCAL_MAP_ID):
     # signed status at +16, and 52a260 looks up the loaded map at +36.
     b=bytearray(message(0x3a,bytes(31),request_id))
     struct.pack_into('<I',b,12,len(b))
+    # 52A3A8 reads +18 and calls 4FE6C0 to set actor+144. 505BAD
+    # requires this permission before requesting a path from ground clicks.
+    b[18]=1
     struct.pack_into('<I',b,36,map_id)
     return bytes(b)

@@ -156,6 +156,10 @@
         world_gate:world.add(0x258).readU32(),world_flags:bytes(world.add(0x1c4),48),
         player:player.toString(),position:[player.add(0xc).readFloat(),player.add(0x10).readFloat()],
         player_instance:player.add(0x14).readU32(),player_controlled:player.add(0x80).readU8(),
+        movement_permitted:player.add(0x144).readU8(),
+        path_state:safely(()=>{const p=player.add(0x12c).readPointer();return {object:p.toString(),
+          index:p.add(0x14).readS32(),point:[p.add(4).readFloat(),p.add(8).readFloat()],
+          target:[p.add(0x54).readFloat(),p.add(0x58).readFloat()],hex:bytes(p,0x68)};}),
         world_viewport:[world.readS32(),world.add(4).readS32(),world.add(8).readS32(),world.add(12).readS32()],
         world_mouse:[world.add(0x2c).readFloat(),world.add(0x30).readFloat()],
         world_input_flags:bytes(world.add(0x78),0x70),profile:bytes(player.add(0x114).readPointer(),48)};
@@ -178,7 +182,8 @@
   }
   let pickCalls=0;
   Interceptor.attach(address(0x50a3e0),{onEnter(args){
-    this.keep=drew && ++pickCalls<=40;this.list=args[0];this.caller=this.returnAddress.toString();
+    this.keep=drew && (this.returnAddress.equals(address(0x5059d4)) || this.returnAddress.equals(address(0x50585e))) && ++pickCalls<=40;
+    this.list=args[0];this.caller=this.returnAddress.toString();
     if(this.keep)emit(safely(()=>({event:'native_player_pick_enter',caller:this.caller,
       point:[args[1].readFloat(),args[1].add(4).readFloat()],options:[args[4].toInt32(),args[5].toInt32(),args[6].toInt32()]})));
   },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_player_pick_result',caller:this.caller,result:ret.toInt32()&255,count:this.list.add(8).readU32()})));}});
@@ -212,6 +217,10 @@
       actor_flags:bytes(args[0].add(0x70),40),actor_modes:bytes(args[0].add(0x134),32)})));
   }});
   let moveCalls=0;
+  Interceptor.attach(address(0x4fe6c0),{onEnter(args){
+    emit({event:'native_actor_movement_permission',actor:this.context.ecx.toString(),enabled:args[0].toInt32()&255,
+      caller:this.returnAddress.toString()});
+  }});
   Interceptor.attach(address(0x502250),{onEnter(args){
     this.keep=++moveCalls<=40;
     if(this.keep)emit(safely(()=>({event:'native_move_path_request',
