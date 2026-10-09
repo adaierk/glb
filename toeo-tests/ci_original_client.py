@@ -33,8 +33,11 @@ def main():
     expected_position=grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid'])
     expected_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
     if args.use_check and not args.reenter_check:
+        # CharacterStore.list takes the same non-reentrant database lock.
+        # Resolve the identity before opening this isolated test transaction.
+        test_identity=server.characters.list(1)[0]['identity']
         with server.accounts.lock,server.accounts.db:
-            server.accounts.db.execute('UPDATE world_vitals SET hp=40,tp=10 WHERE character_id=? AND account_id=?',server.characters.list(1)[0]['identity'])
+            server.accounts.db.execute('UPDATE world_vitals SET hp=40,tp=10 WHERE character_id=? AND account_id=?',test_identity)
     expected_vitals=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
     u=ctypes.windll.user32
     def click(x,y,right=False,hold=.90):
