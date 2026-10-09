@@ -1,0 +1,29 @@
+{
+  "version": "v11",
+  "created_at": "2026-10-09T11:13:00Z",
+  "tested_code_commit": "fef88798e184f77ee0368acc6c7393175b7fc9be",
+  "checkpoint_commit": "e29f4e4b6cfdbf9df3adace0a7afe9762e838731",
+  "windows_run_id": 37920423786,
+  "artifact_id": 11611394062,
+  "release_sha256": "4293f0b064e9f255f2f28db179435cbc4b850169dcd845c599a30a4b3bfdf93c",
+  "release_bytes": 4388608,
+  "files": [
+    {
+      "name": "TOEO_Local_World_Recovery_20261009_v11.zip",
+      "library_file_id": "libfile_ac86304cb85c8191879023361b9b50aa",
+      "file_id": "file_000000005b6081f983fd97a5440880f7"
+    },
+    {
+      "name": "TOEO_Local_World_20261009_v11.png",
+      "library_file_id": "libfile_20d840d1a1508191a4da554bc7d4d37b",
+      "file_id": "file_000000002a1c81f9beb06853a8fe54a0"
+    },
+    {
+      "name": "TOEO_Local_NPC_20261009_v11.png",
+      "library_file_id": "libfile_07ed31dcfaac8191b458cde698ef0856",
+      "file_id": "file_000000007e4481f98c34cb9a99d4b6b4"
+    }
+  ],
+  "complete_gameplay": false,
+  "next_step": "Original NPC hit detection and C6/C7 interaction; shop/battle/quest flows remain incomplete"
+}
