@@ -87,6 +87,7 @@ def downstream_listener(port):
                 'silence':b'',
                 'dual_magic_401_24':complete_native_frame(0x401,24),
                 'dual_magic_401_36':complete_native_frame(0x401,36),
+                'dual_magic_401_44':complete_native_frame(0x401,44),
                 'dual_magic_403_36':complete_native_frame(0x403,36),
                 'dual_magic_405_36':complete_native_frame(0x405,36),
                 'endmagic_401_36':b'\x00\x00\x00\x00'+framed_native(0x401,36)[4:32]+bytes.fromhex('12345678'),
