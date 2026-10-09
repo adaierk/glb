@@ -112,6 +112,23 @@ class LocalAccountTests(unittest.TestCase):
             answer=parse405(recv_frame(world))['payload']
             self.assertEqual((len(answer),struct.unpack_from('<I',answer,12)[0]),(40,40))
             self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,0x1110101))
+            self.assertEqual(answer[18],1)  # Original movement permission consumer.
+            move=bytearray(message(0x42,bytes(59),86))
+            struct.pack_into('<I',move,12,1)
+            struct.pack_into('<III',move,28,99,1,0x1110101)
+            struct.pack_into('<ffhh',move,52,224.,80.,10,8);move[65]=2
+            world.sendall(data405(move,1,3,route=0xffef))
+            with self.assertRaises(socket.timeout):world.recv(1)
+            struct.pack_into('<II',move,28,*identity)
+            world.sendall(data405(move,1,3,route=0xffef))
+            reply=parse405(recv_frame(world))
+            self.assertEqual((reply['opcode'],reply['request_id']),(0x43,86))
+            movement_answer=reply['payload']
+            self.assertEqual(struct.unpack_from('<hhhh',movement_answer,28),(6,4,10,8))
+            self.assertEqual(struct.unpack_from('<f',movement_answer,44)[0],1.5)
+            # A retransmission retains the exact correlated response.
+            world.sendall(data405(move,1,3,route=0xffef))
+            self.assertEqual(parse405(recv_frame(world))['payload'],movement_answer)
             self.assertEqual(len(self.server.characters.list(1)),1)
 
     def open_admitted_world(self,ticket):

@@ -216,17 +216,29 @@
       actor:args[0].toString(),controlled:args[0].add(0x80).readU8(),
       actor_flags:bytes(args[0].add(0x70),40),actor_modes:bytes(args[0].add(0x134),32)})));
   }});
-  let moveCalls=0;
+  let moveCalls=0,lastMoveKey='';
+  for(const va of [0x4205b0,0x422d70,0x423900]){
+    let calls=0;
+    Interceptor.attach(address(va),{onEnter(args){
+      this.keep=++calls<=60;this.p=this.context.ecx;
+      if(this.keep)emit(safely(()=>({event:'native_path_internal_enter',function:'0x'+va.toString(16),caller:this.returnAddress.toString(),
+        object:this.p.toString(),map_binding:this.p.add(0x34).readPointer().toString(),
+        args:[args[0].toString(),args[1].toString(),args[2].toString()],hex:bytes(this.p,0x64)})));
+    },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_path_internal_result',function:'0x'+va.toString(16),
+      result:ret.toInt32(),map_binding:this.p.add(0x34).readPointer().toString()})));}});
+  }
   Interceptor.attach(address(0x4fe6c0),{onEnter(args){
     emit({event:'native_actor_movement_permission',actor:this.context.ecx.toString(),enabled:args[0].toInt32()&255,
       caller:this.returnAddress.toString()});
   }});
   Interceptor.attach(address(0x502250),{onEnter(args){
-    this.keep=++moveCalls<=40;
+    const key=safely(()=>args[0].readS32()+','+args[0].add(4).readS32()+','+args[1]+','+args[2]+','+args[3]);
+    this.keep=++moveCalls<=4 || key!==lastMoveKey;lastMoveKey=key;
     if(this.keep)emit(safely(()=>({event:'native_move_path_request',
       player:this.context.ecx.toString(),target_grid:[args[0].readS32(),args[0].add(4).readS32()],
       options:[args[1].toInt32(),args[2].toInt32(),args[3].toInt32()],
-      position:[this.context.ecx.add(0xc).readFloat(),this.context.ecx.add(0x10).readFloat()]})));
+      position:[this.context.ecx.add(0xc).readFloat(),this.context.ecx.add(0x10).readFloat()],
+      planner:safely(()=>{const p=this.context.ecx.add(0x124).readPointer();return {object:p.toString(),hex:bytes(p,0x64),map:p.add(0x34).readPointer().toString()};})}))); 
   },onLeave(ret){if(this.keep)emit({event:'native_move_path_result',result:ret.toInt32()});}});
   Interceptor.attach(address(0x454090),{onEnter(){
     if(!drew){drew=true;emit({event:'native_map_draw_context',object:this.context.ecx.toString()});}

@@ -25,6 +25,7 @@ from world_auth_packets import parse_world_admission,world_admission_ack,parse_w
 from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
 from world_map_packets import LOCAL_MAP_ID,world_initialization_reply,world_map_ready_reply
+from world_movement_packets import parse_move_request,move_reply
 
 
 class AccountStore:
@@ -236,6 +237,26 @@ class LocalAccountServer(BootstrapServer):
                 state['world_map_ready']=True
                 self.log('world_map_ready_answer',connection=conn_id,request_id=req,
                          map_id=LOCAL_MAP_ID,identity=identity,bytes=40)
+                continue
+            if op==0x42 and port==11101:
+                control=state.get('world_account_control')
+                try:move=parse_move_request(payload)
+                except ValueError as error:
+                    self.log('world_move_rejected',connection=conn_id,reason=str(error));continue
+                if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=LOCAL_MAP_ID:
+                    self.log('world_move_rejected',connection=conn_id,reason='Character or ready map mismatch');continue
+                cache=state.setdefault('movement_answers',{})
+                previous=cache.get(req)
+                if previous:
+                    if previous[0]==payload:self.send_answer(c,previous[1],state)
+                    else:self.log('world_move_rejected',connection=conn_id,reason='Conflicting movement request id')
+                    continue
+                answer=move_reply(move)
+                if len(cache)>=128:cache.pop(next(iter(cache)))
+                cache[req]=(payload,answer)
+                self.send_answer(c,answer,state)
+                state['world_grid']=move['target']
+                self.log('world_move_ack',connection=conn_id,**move)
                 continue
             if op==0x35 and len(payload)==9:
                 if not state.get('game_account_id'):
