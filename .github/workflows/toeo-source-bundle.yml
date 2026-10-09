@@ -1,4 +1,4 @@
-name: TOEO offline restoration source v4 archive
+name: TOEO offline restoration source v5 archive
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -56,6 +56,16 @@ jobs:
           Synthetic Windows connect() -1 and WSAGetLastError 10035 was observed
           by the original process, but alone did not cause callback or native send.
           Current A/B: isolated controller stage1 and original native poll.
+          NOW CONFIRMED WITH ORIGINAL GAME:
+          Controller stage1 plus original poll function 0x61BBA0 runs, but returns 0.
+          Sending zero-row 0x0402 and valid 0x0401 in either order does not unstick it.
+          Native original transport construction 0x60E6A0 returned 0 and
+          left transport object state 0, transportError -1. Its nested 0x618820
+          and 0x619130 socket initialization also returned 0. Original success
+          returns 1. New Windows test TOEO native socket root, run 37880472073,
+          is investigating the exact WinSock error and lower-level cause.
+          Request-driven server, native controller stage A/B, nonblocking
+          connect return 10035 emulation, and transport-init probes are all included.
           Test runs: 37879253101, 37879387782, 37879616795.
           Registry method 0x617AD0 may assign session owner at 0x617BF1; precisely
           when the original client triggers this registration is under investigation.
@@ -75,7 +85,7 @@ jobs:
           EOF
       - uses: actions/upload-artifact@v4
         with:
-          name: TOEO_Offline_Login_Research_20261009_v4
+          name: TOEO_Offline_Login_Research_20261009_v5
           path: |
             TOEO_RESTORATION_CURRENT_STATE.txt
             toeo-tests/*.py
