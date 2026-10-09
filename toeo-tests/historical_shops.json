@@ -1,0 +1,1485 @@
+{
+  "schema_version": 1,
+  "source": {
+    "url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9",
+    "sha256": "9ea1777b6af9a68e5741e4619fb954a9d124b1be780d078e2360907912648596",
+    "encoding": "EUC-JP",
+    "recorded_at": "2026-10-09",
+    "version_note": "Historical community record; beta/final server version consistency unverified"
+  },
+  "shops": [
+    {
+      "key": "wikihouse-u392bcdb",
+      "region": "ミンツ",
+      "area": "ラシュアン河の河口",
+      "merchant": "行商人＜道具屋＞(X:0141,Y;0313)",
+      "source_xy": [
+        141,
+        313
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb",
+      "stock": [
+        {
+          "name": "レモングミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミックスグミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "パイングミ",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセージ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセボリー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドベルベーヌ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドラベンダー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "マグログミ",
+          "price_gald": 600,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライフボトル",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "リキュールボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "フレアボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-u5acc5ac",
+      "region": "ミンツ",
+      "area": "ラサラス丘陵",
+      "merchant": "行商人＜武器(剣・魔)＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u5acc5ac",
+      "stock": [
+        {
+          "name": "ダオ・ブレード",
+          "price_gald": 318000,
+          "category": "片手剣",
+          "jobs": "戦剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ニンブルレイピア",
+          "price_gald": 451000,
+          "category": "片手剣",
+          "jobs": "戦剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ハンプティダンプティ",
+          "price_gald": 414000,
+          "category": "両手剣",
+          "jobs": "剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ダマスカスソード",
+          "price_gald": 587000,
+          "category": "両手剣",
+          "jobs": "剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "カルド",
+          "price_gald": 239000,
+          "category": "短剣",
+          "jobs": "戦剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "スティング",
+          "price_gald": 339000,
+          "category": "短剣",
+          "jobs": "戦剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ボアスピア",
+          "price_gald": 382000,
+          "category": "槍",
+          "jobs": "戦剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アールシェピース",
+          "price_gald": 542000,
+          "category": "槍",
+          "jobs": "戦剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "スレッジハンマー",
+          "price_gald": 350000,
+          "category": "ポールウェポン",
+          "jobs": "戦剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ルツェルンハンマー",
+          "price_gald": 497000,
+          "category": "ポールウェポン",
+          "jobs": "戦剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ルーンスタッフ",
+          "price_gald": 191000,
+          "category": "杖",
+          "jobs": "魔",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "セラノフラグメン",
+          "price_gald": 191000,
+          "category": "杖",
+          "jobs": "魔",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ベネディクション",
+          "price_gald": 271000,
+          "category": "杖",
+          "jobs": "魔",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-e384fif6",
+      "region": "ミンツ",
+      "area": "セヌギス海岸",
+      "merchant": "行商人＜武器（戦・剣・魔）等＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#e384fif6",
+      "stock": [
+        {
+          "name": "セイントレイピア",
+          "price_gald": 216000,
+          "category": "片手剣",
+          "jobs": "戦剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "フィランギ",
+          "price_gald": 281000,
+          "category": "両手剣",
+          "jobs": "剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アサルトダガー",
+          "price_gald": 162000,
+          "category": "短剣",
+          "jobs": "戦剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "リングダガー",
+          "price_gald": 162000,
+          "category": "短剣",
+          "jobs": "戦剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ゲイボルグ",
+          "price_gald": 259000,
+          "category": "槍",
+          "jobs": "戦剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ヴォウジェ",
+          "price_gald": 238000,
+          "category": "ポールウェポン",
+          "jobs": "戦剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "プリズムロッド",
+          "price_gald": 130000,
+          "category": "杖",
+          "jobs": "魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウィザードロッド",
+          "price_gald": 130000,
+          "category": "杖",
+          "jobs": "魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-c5783450",
+      "region": "ミンツ",
+      "area": "ラシュアンの森・西部",
+      "merchant": "行商人＜防具(剣・魔)＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#c5783450",
+      "stock": [
+        {
+          "name": "スクーワマータ♂・♀",
+          "price_gald": 306000,
+          "category": "身体",
+          "jobs": "剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "マーシフルアクトン♂・♀",
+          "price_gald": 433000,
+          "category": "身体",
+          "jobs": "剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ネザーチュニック♂・♀",
+          "price_gald": 204000,
+          "category": "身体",
+          "jobs": "魔",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ジュストコール♂・♀",
+          "price_gald": 289000,
+          "category": "身体",
+          "jobs": "魔",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アジャン",
+          "price_gald": 287000,
+          "category": "頭",
+          "jobs": "戦剣",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "コオルス",
+          "price_gald": 406000,
+          "category": "頭",
+          "jobs": "戦剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "クレリックキャップ",
+          "price_gald": 191000,
+          "category": "頭",
+          "jobs": "聖",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "コルセアハット",
+          "price_gald": 191000,
+          "category": "頭",
+          "jobs": "魔",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "スイートウィリアム",
+          "price_gald": 143000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レインリリー",
+          "price_gald": 144000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ジンジャー",
+          "price_gald": 203000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アフェランドラ",
+          "price_gald": 205000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウォータートルク",
+          "price_gald": 191000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ゴールドバングル",
+          "price_gald": 193900,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ルーンバングル",
+          "price_gald": 195000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ドレッドリスト",
+          "price_gald": 278000,
+          "category": "腕",
+          "jobs": "剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レリックブレス",
+          "price_gald": 271000,
+          "category": "腕",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ハノンカフス",
+          "price_gald": 272400,
+          "category": "腕",
+          "jobs": "魔",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-gba8223f",
+      "region": "ミンツ",
+      "area": "ムフリッド原野",
+      "merchant": null,
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#gba8223f",
+      "stock": [
+        {
+          "name": "ハーディガンビスン",
+          "price_gald": 208000,
+          "category": "身体",
+          "jobs": "剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ラディーローブ",
+          "price_gald": 138000,
+          "category": "身体",
+          "jobs": "魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "グレイトヘルム",
+          "price_gald": 203000,
+          "category": "頭",
+          "jobs": "戦",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ターンヘルム",
+          "price_gald": 195000,
+          "category": "頭",
+          "jobs": "剣",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "カーネーション",
+          "price_gald": 97300,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アーチェのリボン",
+          "price_gald": 98300,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "チャペルカフス",
+          "price_gald": 133000,
+          "category": "腕",
+          "jobs": "魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ファイアトルク",
+          "price_gald": 130000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウィンドトルク",
+          "price_gald": 130000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "鯰(なまず)籠手",
+          "price_gald": 84300,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミスリルガントレット",
+          "price_gald": 88500,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "筒籠手",
+          "price_gald": 86400,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "キャッツクレイドル",
+          "price_gald": 64900,
+          "category": "ミトン",
+          "jobs": "聖･魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "メイジミトン",
+          "price_gald": 66800,
+          "category": "ミトン",
+          "jobs": "聖･魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "トムボーイ",
+          "price_gald": 66500,
+          "category": "ミトン",
+          "jobs": "聖･魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライトプレートブーツ",
+          "price_gald": 66500,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウォーブーツ",
+          "price_gald": 66200,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ホプロンレギンス",
+          "price_gald": 64900,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-fddec84b",
+      "region": "バロール",
+      "area": "キタルファ高原・西部",
+      "merchant": "行商人＜道具屋＞(X:0443,Y:0509)",
+      "source_xy": [
+        443,
+        509
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#fddec84b",
+      "stock": [
+        {
+          "name": "レモングミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミックスグミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "パイングミ",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセージ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセボリー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドベルベーヌ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドラベンダー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "マグログミ",
+          "price_gald": 600,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライフボトル",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "リキュールボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "フレアボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-x218d15d",
+      "region": "バロール",
+      "area": "キタルファ高原・東部",
+      "merchant": "行商人＜防具屋＞(X:0278,Y:0158)",
+      "source_xy": [
+        278,
+        158
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#x218d15d",
+      "stock": [
+        {
+          "name": "達人着♂・♀",
+          "price_gald": 190000,
+          "category": "身体",
+          "jobs": "格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "夜叉",
+          "price_gald": 170000,
+          "category": "頭",
+          "jobs": "格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ファイアクレスト",
+          "price_gald": 162000,
+          "category": "頭",
+          "jobs": "聖魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "カーネーション♀",
+          "price_gald": 97300,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アーチェのリボン♀",
+          "price_gald": 98300,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "チャペルカフス",
+          "price_gald": 133000,
+          "category": "腕",
+          "jobs": "魔",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ファイアトルク",
+          "price_gald": 130000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウィンドトルク",
+          "price_gald": 130000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "鯰(なまず)籠手",
+          "price_gald": 84300,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミスリルガントレット",
+          "price_gald": 88500,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "筒籠手",
+          "price_gald": 86400,
+          "category": "手",
+          "jobs": "戦･剣･格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライトプレートブーツ",
+          "price_gald": 66500,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウォーブーツ",
+          "price_gald": 66200,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ホプロンレギンス",
+          "price_gald": 64900,
+          "category": "足",
+          "jobs": "ALL",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-m73123a9",
+      "region": "バロール",
+      "area": "サイド半島・東部",
+      "merchant": "行商人＜道具屋＞(X:0205,Y:0259)",
+      "source_xy": [
+        205,
+        259
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#m73123a9",
+      "stock": [
+        {
+          "name": "レモングミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミックスグミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "パイングミ",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセージ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセボリー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドベルベーヌ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドラベンダー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "マグログミ",
+          "price_gald": 600,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライフボトル",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "リキュールボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "フレアボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-qd67e46f",
+      "region": "バロール",
+      "area": "サダルスウド海岸",
+      "merchant": "行商人＜武器屋＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#qd67e46f",
+      "stock": [
+        {
+          "name": "バンダースナッチ",
+          "price_gald": 173000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ジュル",
+          "price_gald": 173000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "メイリカイ",
+          "price_gald": 173000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 60,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-occ9a83c",
+      "region": "バロール",
+      "area": "シェダル半島･西部",
+      "merchant": "行商人＜武器屋＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#occ9a83c",
+      "stock": [
+        {
+          "name": "ヴェノム",
+          "price_gald": 255000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "クロー",
+          "price_gald": 361000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ドラゴンクロー",
+          "price_gald": 361000,
+          "category": "拳",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-wf62e2f7",
+      "region": "バロール",
+      "area": "ルクバー半島・南部",
+      "merchant": "行商人＜防具屋＞(X:0228,Y:0534)",
+      "source_xy": [
+        228,
+        534
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#wf62e2f7",
+      "stock": [
+        {
+          "name": "皆伝♂・♀",
+          "price_gald": 280000,
+          "category": "身体",
+          "jobs": "格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "右近♂・♀",
+          "price_gald": 397000,
+          "category": "身体",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "甲賀陣鉢",
+          "price_gald": 251000,
+          "category": "頭",
+          "jobs": "格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "スターサークレット",
+          "price_gald": 239000,
+          "category": "頭",
+          "jobs": "聖魔",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "炎威",
+          "price_gald": 356000,
+          "category": "頭",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ガーランド",
+          "price_gald": 339000,
+          "category": "頭",
+          "jobs": "聖魔",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "スイートウィリアム",
+          "price_gald": 143000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レインリリー",
+          "price_gald": 144000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ジンジャー",
+          "price_gald": 203000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "アフェランドラ",
+          "price_gald": 205000,
+          "category": "リボン",
+          "jobs": "ALL",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ウォータートルク",
+          "price_gald": 191000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ゴールドバングル",
+          "price_gald": 193900,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ルーンバングル",
+          "price_gald": 195000,
+          "category": "腕",
+          "jobs": "剣･魔･格",
+          "level": 70,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ドレッドリスト",
+          "price_gald": 278000,
+          "category": "腕",
+          "jobs": "剣",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レリックブレス",
+          "price_gald": 271000,
+          "category": "腕",
+          "jobs": "格",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ハノンカフス",
+          "price_gald": 272400,
+          "category": "腕",
+          "jobs": "魔",
+          "level": 80,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-ife59b29",
+      "region": "バロール",
+      "area": "ミラクの孤島",
+      "merchant": "行商人＜道具屋＞",
+      "source_xy": null,
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#ife59b29",
+      "stock": [
+        {
+          "name": "レモングミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミックスグミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "パイングミ",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセージ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドセボリー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドベルベーヌ",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "レッドラベンダー",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "マグログミ",
+          "price_gald": 600,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ライフボトル",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "リキュールボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "フレアボトル",
+          "price_gald": 1000,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    },
+    {
+      "key": "wikihouse-l6633b53",
+      "region": "モルル",
+      "area": "エダシク大森林",
+      "merchant": "行商人＜高級品＞(X:0277,Y:0129)",
+      "source_xy": [
+        277,
+        129
+      ],
+      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
+      "native_map_id": null,
+      "native_entity_id": null,
+      "appearance": null,
+      "deployment": "pending_map_and_coordinate_verification",
+      "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#l6633b53",
+      "stock": [
+        {
+          "name": "レモングミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "ミックスグミ",
+          "price_gald": 360,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        },
+        {
+          "name": "パイングミ",
+          "price_gald": 1500,
+          "category": "消耗品",
+          "jobs": null,
+          "level": null,
+          "native_template_id": null,
+          "native_icon_id": null
+        }
+      ]
+    }
+  ]
+}

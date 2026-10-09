@@ -298,6 +298,19 @@
       target:[args[0].toUInt32(),args[1].toUInt32()]})));
   }});
   let observedShopFrame=null;
+  Interceptor.attach(address(0x51ea20),{onEnter(args){
+    if(observedShopFrame!==null && this.context.ecx.equals(observedShopFrame.add(0x114))) {
+      const item=args[1];
+      emit(safely(()=>({event:'native_shop_item_insert',item:item.toString(),
+        price_gald:item.add(0x11c).readU32(),template_pointer:item.add(0x30).readPointer().toString(),
+        icon_id:item.add(0xa4).readU32(),local_catalog_row:item.add(0x10).readU32()})));
+    }
+  }});
+  Interceptor.attach(address(0x5998f0),{onEnter(args){
+    if(observedShopFrame!==null && this.context.ecx.equals(observedShopFrame.add(0x680)))
+      emit(safely(()=>({event:'native_shop_row_render',row:args[0].toInt32(),name:args[4].readUtf16String(),
+        template_pointer:args[2].toString(),icon_id:args[6].toUInt32()})));
+  }});
   Interceptor.attach(address(0x59a640),{onEnter(args){
     this.shop=this.context.ecx;this.size=args[1].toUInt32();
     observedShopFrame=this.shop;

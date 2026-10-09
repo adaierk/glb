@@ -91,10 +91,15 @@ def npc_action_reply(request):
     struct.pack_into('<IIIIII',b,20,*request['identity'],LOCAL_MAP_ID,*SHOP_IDENTITY,request['action'])
     return bytes(b)
 
-def shop_open_notice(identity,request_id):
-    """Original D6 shop header and empty chunk terminator; no invented goods."""
-    b=bytearray(message(0xd6,bytes(43),request_id))
+def shop_open_notice(identity,request_id,stock=None):
+    """Original D6 header; optional explicitly scoped historical catalog preview."""
+    if stock is None:
+        tail=bytes(record(0x9a,4))+bytes(4)
+    else:
+        from world_shop_catalog import catalog_records
+        tail=catalog_records(stock)
+    b=bytearray(message(0xd6,bytes(35+len(tail)),request_id))
     struct.pack_into('<IIIII',b,12,*identity,LOCAL_MAP_ID,*SHOP_IDENTITY)
     struct.pack_into('<II',b,36,0,0)
-    b[44:48]=record(0x9a,4) # required start-group chunk before the terminator
+    b[44:]=tail
     return bytes(b)

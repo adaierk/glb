@@ -24,7 +24,7 @@ def main():
     original=game/'ToEO_CL.dat'
     if hashlib.sha256(original.read_bytes()).hexdigest()!=SHA:raise SystemExit('Original SHA mismatch')
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
-    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database)
+    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True)
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
     from native_map_geometry import grid_to_point
@@ -100,6 +100,17 @@ def main():
             result['npc_selected_native']=any(e.get('event')=='native_npc_actions' and e.get('identity')==[0x70000001,1] for e in events)
             result['shop_catalog_parsed_native']=any(e.get('event')=='native_shop_catalog_parse_result' and e.get('result')==1 and e.get('target')==[0x70000001,1] for e in events)
             result['shop_frame_shown_native']=any(e.get('event')=='native_shop_frame_show' and e.get('result')==1 for e in events)
+            from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
+            expected_stock=historical_stock(PREVIEW_SOURCE_KEY)['stock']
+            rendered_names=[e.get('name') for e in events if e.get('event')=='native_shop_row_render']
+            built_prices=[e.get('price_gald') for e in events if e.get('event')=='native_shop_item_insert']
+            result['shop_historical_names_native']=all(x['name'] in rendered_names for x in expected_stock)
+            result['shop_historical_prices_native']=built_prices[:len(expected_stock)]==[x['price_gald'] for x in expected_stock]
+            result['shop_historical_item_count_native']=any(e.get('event')=='native_shop_catalog_parse_result' and e.get('result')==1 and e.get('items')==len(expected_stock) for e in events)
+            result['historical_placement_verified']=False
+            result['original_item_templates_icons_verified']=False
+            if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native')):
+                failure=failure or 'Historical name/price/count were not all observed in original shop controls'
             shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
             visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]
             closes=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is False and visible and e.get('host_time',0)>visible[0]['host_time']]

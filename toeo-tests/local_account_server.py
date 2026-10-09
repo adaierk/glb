@@ -73,9 +73,10 @@ class AccountStore:
 
 
 class LocalAccountServer(BootstrapServer):
-    def __init__(self,out,world_route_probe=False,account_database=None,**kwargs):
+    def __init__(self,out,world_route_probe=False,account_database=None,shop_preview=False,**kwargs):
         super().__init__(out,**kwargs)
         self.world_route_probe=world_route_probe
+        self.shop_preview=shop_preview
         self.accounts=AccountStore(Path(account_database) if account_database else self.out/'local_accounts.sqlite')
         self.characters=CharacterStore(self.accounts)
         self.positions=WorldPositionStore(self.accounts)
@@ -283,10 +284,17 @@ class LocalAccountServer(BootstrapServer):
                 elif npc['action']==2 and state.get('npc_selected')==SHOP_IDENTITY:
                     self.send_answer(c,npc_action_reply(npc),state)
                     notice_id=state.get('shop_notice_sequence',0)+1;state['shop_notice_sequence']=notice_id
-                    notice=shop_open_notice(npc['identity'],0x70000000+notice_id)
+                    if self.shop_preview:
+                        from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
+                        source=historical_stock(PREVIEW_SOURCE_KEY)
+                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id,stock=source['stock'])
+                    else:
+                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id)
                     self.send_answer(c,notice,state)
                     state['shop_open_notice_id']=0x70000000+notice_id
-                    self.log('shop_empty_catalog_sent',connection=conn_id,request_id=state['shop_open_notice_id'],notice_hex=notice.hex())
+                    self.log('shop_historical_preview_sent' if self.shop_preview else 'shop_empty_catalog_sent',connection=conn_id,request_id=state['shop_open_notice_id'],notice_hex=notice.hex(),
+                             **({'source_url':source['source_url'],'historical_area':source['area'],'historical_xy':source['source_xy'],'stock_count':len(source['stock']),
+                                 'official_placement_verified':False,'native_templates_and_icons_verified':False} if self.shop_preview else {}))
                 else:self.log('npc_request_rejected',connection=conn_id,reason='Unsupported or unselected NPC action')
                 continue
             if op==0xd7 and port==11101:
@@ -404,7 +412,8 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--out',default='local_login_report')
     p.add_argument('--duration',type=int,default=600)
     p.add_argument('--world-route-probe',action='store_true',help='Experimental partial selection route; no map or UDP implementation')
-    a=p.parse_args();server=LocalAccountServer(a.out,world_route_probe=a.world_route_probe)
+    p.add_argument('--shop-preview',action='store_true',help='Display sourced historical stock on the explicitly local diagnostic merchant; placement/templates/icons not recovered')
+    a=p.parse_args();server=LocalAccountServer(a.out,world_route_probe=a.world_route_probe,shop_preview=a.shop_preview)
     try:
         server.start()
         print('Local account server: archive001 / local123. Persistent characters enabled; map/world pending.',flush=True)
