@@ -76,6 +76,33 @@ class LocalAccountTests(unittest.TestCase):
         self.sock.sendall(data405(select_character_request(),1,1,route=0xffef))
         with self.assertRaises(socket.timeout):self.sock.recv(1)
 
+    def test_real_endpoint_channel_binds_selected_account_before_world_control(self):
+        self.sock.close();self.server.close()
+        self.server=LocalAccountServer(self.temp.name,main_port=0,world_port=0,bind_extra=True,world_route_probe=True)
+        self.server.start()
+        self.sock=socket.create_connection(('127.0.0.1',self.server.main_port));self.sock.settimeout(.5)
+        recv_frame(self.sock);self.authorize()
+        identity=self.server.characters.create(1,create_character_request('EndpointHero'))
+        selected=self.exchange(select_character_request(identity,options=12))
+        ticket=struct.unpack_from('<I',selected,12)[0]
+        answer=self.exchange(message(0x0d,b'ABCDEF'+struct.pack('<H',ticket),80))
+        self.assertEqual(struct.unpack_from('<H',answer,1)[0],0x0e)
+        descriptor=parse405(recv_frame(self.sock))['payload']
+        self.assertEqual(struct.unpack_from('<I',descriptor,21)[0],3)
+        with socket.create_connection(('127.0.0.1',11101)) as world:
+            world.settimeout(.5);greeting=recv_frame(world)
+            self.assertEqual(struct.unpack_from('<I',greeting,64)[0],3)
+            wrong=message(0x10,struct.pack('<BHII',0,11101,1,99),81)
+            world.sendall(data405(wrong,1,3,route=0xffef))
+            with self.assertRaises(socket.timeout):world.recv(1)
+            attach=message(0x10,struct.pack('<BHII',0,11101,1,3),82)
+            world.sendall(data405(attach,1,3,route=0xffef))
+            self.assertEqual(parse405(recv_frame(world))['opcode'],0x11)
+            self.assertEqual(struct.unpack_from('<H',self.exchange(world_admission_request(11101,ticket,83)),1)[0],0x19)
+            world.sendall(data405(world_account_request(1,84),1,3,route=0xffef))
+            reply=parse405(recv_frame(world))
+            self.assertEqual((reply['opcode'],reply['request_id']),(0x11,84))
+
     def open_admitted_world(self,ticket):
         world=socket.create_connection(('127.0.0.1',self.server.main_port));world.settimeout(.5)
         recv_frame(world);world.sendall(data405(world_admission_request(11100,ticket,101),1,1,route=0xffef))

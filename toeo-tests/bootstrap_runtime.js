@@ -88,7 +88,7 @@ for(const name of ['send','recv']) {
   });
 }
 Process.setExceptionHandler(details=>{
-  emit({event:'native_exception',type:details.type,address:String(details.address),stack:Thread.backtrace(details.context,Backtracer.ACCURATE).map(String)});
+  emit({event:'native_exception',type:details.type,address:String(details.address),registers:Object.fromEntries(['eax','ebx','ecx','edx','esi','edi','ebp','esp','eip'].map(r=>[r,String(details.context[r])])),memory:details.memory?{operation:details.memory.operation,address:String(details.memory.address)}:null,stack:Thread.backtrace(details.context,Backtracer.ACCURATE).map(String)});
   return false;
 });
 emit({event:'runtime_probe_ready',image_base:base.toString()});

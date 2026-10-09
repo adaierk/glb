@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "original_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "answer_hex": "000f0025000100000001414243444546005d2b5d2b0300000001000000bc3a12007f000001",
+  "native_descriptor_hex": "01000000010000005d2b0000030000005d2b0000010000007f000001",
+  "endpoint_calls": [
+    {
+      "mode": 1,
+      "ip": 16777343,
+      "tcp_port": 11101,
+      "peer_port": 12101,
+      "endpoint": "414243444546",
+      "nonce": 1194684
+    }
+  ],
+  "level": "original 61ec50 field extraction, reset and 61ae30 descriptor copy",
+  "limitations": [
+    "Inherited transport/CRT fixture",
+    "61be40 socket lifecycle substituted at call boundary",
+    "No real socket startup, Windows world connection or map success inferred"
+  ]
+}

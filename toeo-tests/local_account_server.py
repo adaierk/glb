@@ -10,6 +10,7 @@ import secrets
 import sqlite3
 import struct
 import threading
+import time
 from pathlib import Path
 from session_bootstrap_server import BootstrapServer
 from native_handshake_packets import bootstrap402,user_record
@@ -22,6 +23,7 @@ from character_mutation_packets import mutation_reply
 from character_store import CharacterStore,CharacterRejected
 from world_auth_packets import parse_world_admission,world_admission_ack,parse_world_account,world_account_ack
 from world_ticket_store import WorldTicketStore
+from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
 
 
 class AccountStore:
@@ -72,10 +74,13 @@ class LocalAccountServer(BootstrapServer):
         self.characters=CharacterStore(self.accounts)
         self.world_tickets=WorldTicketStore(self.accounts)
         self.accounts_closed=False
+        self.endpoint_lock=threading.Lock()
+        self.endpoint_routes={}
 
     def greeting(self,port):
         # Client sender 610e4d requires registry[0] to be the server user.
-        return bootstrap402(port=port,records=[user_record(2,2,1),user_record(1,1,2)])
+        server_uid,client_uid=(4,3) if port==11101 else (2,1)
+        return bootstrap402(port=port,records=[user_record(2,server_uid,1),user_record(1,client_uid,2)])
 
     def should_greet(self,port):
         return port!=self.world_port
@@ -89,9 +94,12 @@ class LocalAccountServer(BootstrapServer):
         self.world_tickets.disconnect(str(conn_id))
 
     def send_answer(self,c,payload,state):
-        c.sendall(data405(encrypt(payload) if state.get('encrypted') else payload,0,2,1,1))
+        c.sendall(data405(encrypt(payload) if state.get('encrypted') else payload,0,
+                         state.get('server_uid',2),1,state.get('client_uid',1)))
 
     def process_game_bytes(self,c,port,conn_id,data,state):
+        state.setdefault('server_uid',4 if port==11101 else 2)
+        state.setdefault('client_uid',3 if port==11101 else 1)
         stream=state.setdefault('stream',FrameStream())
         for frame in stream.feed(data):
             outer=struct.unpack_from('<H',frame,6)[0]
@@ -99,8 +107,8 @@ class LocalAccountServer(BootstrapServer):
                 notification=bytearray(36)
                 notification[:4]=frame[:4]
                 struct.pack_into('<HHHH',notification,4,36,0x406,31,0)
-                struct.pack_into('<I',notification,14,2)
-                struct.pack_into('<IHB',notification,24,2,0,1)
+                struct.pack_into('<I',notification,14,state['server_uid'])
+                struct.pack_into('<IHB',notification,24,state['server_uid'],0,1)
                 notification[31:35]=frame[:4]
                 c.sendall(notification)
                 self.log('server_receive_ready406',connection=conn_id,hex=notification.hex())
@@ -112,6 +120,35 @@ class LocalAccountServer(BootstrapServer):
             state['encrypted']=parsed['encrypted']
             op,payload,req=parsed['opcode'],parsed['payload'],parsed['request_id']
             self.log('application_request',connection=conn_id,opcode=hex(op),request_id=req,encrypted=state['encrypted'])
+            if op==0x0d and self.world_route_probe:
+                endpoint,ticket=parse_endpoint_request(payload)
+                account_id=state.get('game_account_id')
+                with self.accounts.lock:
+                    row=self.accounts.db.execute('''SELECT t.account_id,t.character_id FROM world_tickets t
+                        JOIN characters c ON c.id=t.character_id AND c.account_id=t.account_id
+                        WHERE ticket=? AND expires>?''',(ticket,time.time())).fetchone()
+                if not row or row[0]!=account_id:
+                    self.log('world_endpoint_ticket_rejected',connection=conn_id,ticket=ticket);continue
+                with self.endpoint_lock:
+                    self.endpoint_routes[3]=dict(account_id=account_id,ticket=ticket,
+                                                network_parameter=11101,version=1)
+                self.send_answer(c,message(0x0e,b'',req),state)
+                answer=endpoint_reply(endpoint,11101,11101,3,1,0x123abc,0x0100007f,req)
+                self.send_answer(c,answer,state)
+                self.log('world_endpoint_assigned',connection=conn_id,ticket=ticket,uid=3,
+                         endpoint_hex=endpoint.hex(),answer_hex=answer.hex(),tcp_port=11101)
+                continue
+            if op==0x10 and self.world_route_probe:
+                status,parameter,version,uid=parse_endpoint_attachment(payload)
+                with self.endpoint_lock:route=self.endpoint_routes.get(uid)
+                if port!=11101 or not route or uid!=state['client_uid'] or status!=0 or \
+                        (parameter,version)!=(route['network_parameter'],route['version']):
+                    self.log('world_endpoint_attachment_rejected',connection=conn_id,uid=uid,status=status);continue
+                state['game_account_id']=route['account_id']
+                state['world_endpoint_ticket']=route['ticket']
+                self.send_answer(c,message(0x11,b'',req),state)
+                self.log('world_endpoint_attachment_ack',connection=conn_id,uid=uid,**route)
+                continue
             if op==0x14 and len(payload)==9:
                 if not state.get('game_account_id'):
                     self.log('world_relogin_without_game_login',connection=conn_id);continue

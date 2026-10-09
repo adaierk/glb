@@ -65,8 +65,7 @@
         count:end.sub(begin).toUInt32()/0x118,available_slots:fields.add(0x58).readU32()});
     }
   });
-  for(const [va,event] of [[0x438ce2,'CHARACTER_CREATED_NATIVE'],
-                         [0x43809a,'CHARACTER_SELECTION_ACCEPTED_NATIVE']]) {
+  for(const [va,event] of [[0x438ce2,'CHARACTER_CREATED_NATIVE']]) {
     try {Interceptor.attach(address(va), {onEnter() {emit({event});}});}
     catch(e) {emit({event:'optional_native_hook_unavailable',native_event:event,error:String(e)});}
   }
@@ -103,6 +102,20 @@
           ...header(args[1],args[2].toInt32())});
       }
     });
+  }
+  Interceptor.attach(address(0x6897f0), {
+    onEnter(args) {
+      const id=args[0].toUInt32();
+      if(id===7 || id===8 || id===17) {
+        emit({event:'native_task_transition_requested',id,manager:this.context.ecx.toString(),
+          manager_hex:bytes(this.context.ecx,64),factory:args[1].toString(),cleanup:args[2].toString()});
+        if(id===7 && args[1].equals(address(0x440180)))emit({event:'CHARACTER_SELECTION_ACCEPTED_NATIVE'});
+      }
+    }
+  });
+  for(const [va,event] of [[0x440180,'native_world_task_construct'],[0x43ef50,'native_map_init_request'],
+                          [0x43f090,'native_map_init_parse'],[0x442270,'native_map_load_construct']]) {
+    Interceptor.attach(address(va),{onEnter(args){emit({event,object:this.context.ecx.toString()});}});
   }
   let worldTaskPhase=-1;
   Interceptor.attach(address(0x43eb50), {
