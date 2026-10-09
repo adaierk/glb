@@ -155,11 +155,19 @@
         current_map_id:selected.add(0x20).readU32(),
         world_gate:world.add(0x258).readU32(),world_flags:bytes(world.add(0x1c4),48),
         player:player.toString(),position:[player.add(0xc).readFloat(),player.add(0x10).readFloat()],
-        player_instance:player.add(0x14).readU32(),profile:bytes(player.add(0x114).readPointer(),48)};
+        player_instance:player.add(0x14).readU32(),player_controlled:player.add(0x80).readU8(),
+        world_input_flags:bytes(world.add(0x78),0x70),profile:bytes(player.add(0x114).readPointer(),48)};
     });
     const key=JSON.stringify(state);if(key!==lastRenderState){lastRenderState=key;emit(state);}
   }});
   let drew=false;
+  let inputTicks=0;
+  Interceptor.attach(address(0x505200),{onEnter(args){
+    if(++inputTicks%120!==1)return;
+    emit(safely(()=>({event:'native_player_input_tick',
+      actor:args[0].toString(),controlled:args[0].add(0x80).readU8(),
+      actor_flags:bytes(args[0].add(0x70),40),actor_modes:bytes(args[0].add(0x134),32)})));
+  }});
   let moveCalls=0;
   Interceptor.attach(address(0x502250),{onEnter(args){
     this.keep=++moveCalls<=40;

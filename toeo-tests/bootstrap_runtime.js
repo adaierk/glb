@@ -87,8 +87,14 @@ for(const name of ['send','recv']) {
     }
   });
 }
+const exceptionCounts=new Map();
 Process.setExceptionHandler(details=>{
-  emit({event:'native_exception',type:details.type,address:String(details.address),registers:Object.fromEntries(['eax','ebx','ecx','edx','esi','edi','ebp','esp','eip'].map(r=>[r,String(details.context[r])])),memory:details.memory?{operation:details.memory.operation,address:String(details.memory.address)}:null,stack:Thread.backtrace(details.context,Backtracer.ACCURATE).map(String)});
+  const key=details.type+String(details.address),count=(exceptionCounts.get(key)||0)+1;
+  exceptionCounts.set(key,count);
+  // Preserve the first occurrences and periodic totals of handled legacy
+  // exceptions without emitting one full stack on every render frame.
+  if(count<=8 || (count&(count-1))===0)
+    emit({event:'native_exception',count,type:details.type,address:String(details.address),registers:Object.fromEntries(['eax','ebx','ecx','edx','esi','edi','ebp','esp','eip'].map(r=>[r,String(details.context[r])])),memory:details.memory?{operation:details.memory.operation,address:String(details.memory.address)}:null,stack:Thread.backtrace(details.context,Backtracer.ACCURATE).map(String)});
   return false;
 });
 emit({event:'runtime_probe_ready',image_base:base.toString()});

@@ -1,6 +1,7 @@
 """Local world initialization candidate from original 43F090 record readers."""
 import struct
 from account_packets import message
+from native_map_geometry import point_to_grid
 
 # Resource names and original minimap %x formatter use hexadecimal map IDs.
 LOCAL_MAP_ID=0x1110101
@@ -24,7 +25,7 @@ def world_clock_record():
     # This record feeds 4F5280's clock/weather state. Zero disables timed effects.
     return bytes(b)
 
-def player_record(identity,name,selector_fields,position=(416.,144.),map_id=LOCAL_MAP_ID):
+def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL_MAP_ID):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
     b=record(0x21,0x284)
     struct.pack_into('<II',b,4,*identity)
@@ -34,7 +35,7 @@ def player_record(identity,name,selector_fields,position=(416.,144.),map_id=LOCA
     # Native 43F3E9 -> 503AC7 assigns the current player map;
     # 43F3FA -> 4FF9C0 resolves grid cells back to their pixel centers.
     struct.pack_into('<I',b,0x24,map_id)
-    struct.pack_into('<hh',b,0x28,int(position[0]//64),int(position[1]//32))
+    struct.pack_into('<hh',b,0x28,*point_to_grid(position))
     raw=name.encode('utf-16le')
     if len(raw)>62:raise ValueError('Player name exceeds original fixed field')
     b[0x38:0x38+len(raw)]=raw

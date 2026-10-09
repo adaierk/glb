@@ -1,4 +1,4 @@
-"""Launch the original Windows game with a loopback session-bootstrap candidate."""
+"""Run the original Windows game against the recovered local server."""
 import argparse
 import hashlib
 import json
@@ -6,6 +6,7 @@ import os
 import queue
 import shutil
 import sys
+import threading
 import time
 from pathlib import Path
 from session_bootstrap_server import BootstrapServer
@@ -16,12 +17,15 @@ SHA='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('game_directory',nargs='?')
-    p.add_argument('--duration',type=int,default=240)
+    p.add_argument('--duration',type=int,default=0,help='Seconds to run; 0 keeps the game open until the player exits')
     p.add_argument('--out',default='session_bootstrap_report')
     p.add_argument('--local-account',action='store_true',help='Use recovered login and persistent character create/list/delete protocol')
     p.add_argument('--world-route-probe',action='store_true',help='Experimental partial selection-to-world route; requires --local-account')
+    p.add_argument('--demo-character',action='store_true',help='Create Archive only if the local account has no characters')
     args=p.parse_args()
     if args.world_route_probe and not args.local_account:p.error('--world-route-probe requires --local-account')
+    if args.demo_character and not args.local_account:p.error('--demo-character requires --local-account')
+    if args.duration<0:p.error('--duration cannot be negative')
     if os.name!='nt':raise SystemExit('The graphical client runner requires Windows.')
     import frida
     from PIL import ImageGrab
@@ -38,7 +42,9 @@ def main():
     if not binary.is_file():raise SystemExit('ToEO_CL.dat was not found in the game directory.')
     if hashlib.sha256(binary.read_bytes()).hexdigest()!=SHA:
         raise SystemExit('Client binary does not match the original version; native address hooks are disabled.')
-    missing=[n for n in ('resource/icon_item.icd','resource/cid0.idt') if not (game/'data'/n).is_file()]
+    required=['resource/icon_item.icd','resource/cid0.idt']
+    if args.world_route_probe:required+=['map/1110101.'+suffix for suffix in ('mpi','mpd','bnd')]
+    missing=[n for n in required if not (game/'data'/n).is_file()]
     if missing:raise SystemExit('Corrected original data directory is missing required files: '+str(missing))
     out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=True)
     exe=game/('ToEO_CL_local_login_probe.exe' if args.local_account else 'ToEO_CL_session_probe.exe')
@@ -47,8 +53,11 @@ def main():
     if args.local_account:
         from local_account_server import LocalAccountServer
         server=LocalAccountServer(out,world_route_probe=args.world_route_probe)
+        if args.demo_character and not server.characters.list(1):
+            from character_mutation_packets import create_character_request
+            server.characters.create(1,create_character_request('Archive'))
     else:server=BootstrapServer(out)
-    events=[]
+    events=[];observed_names=set();native_exceptions=[];client_closed=threading.Event()
     captures=[];capture_queue=queue.SimpleQueue();captured_stages=set()
     def capture(label):
         filename=f'original_client_{len(captures)+1:03d}_{label}.png'
@@ -67,13 +76,17 @@ def main():
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def on_message(message,data):
             item=message.get('payload',message) if message.get('type')=='send' else {'event':'frida_error','message':message}
+            observed_names.add(item.get('event'))
+            if item.get('event')=='native_exception' and len(native_exceptions)<30:native_exceptions.append(item)
             if str(item.get('event','')).endswith('_NATIVE'):
                 capture_queue.put(item['event'])
-            events.append(item);log.write(json.dumps(item,ensure_ascii=False,default=str)+'\n')
+            if len(events)<1000:events.append(item)
+            log.write(json.dumps(item,ensure_ascii=False,default=str)+'\n')
         try:
             server.start()
             pid=device.spawn([str(exe)],cwd=str(game))
             session=device.attach(pid)
+            session.on('detached',lambda reason,crash:client_closed.set())
             source=Path(__file__).with_name('bootstrap_runtime.js').read_text(encoding='utf-8')
             if args.local_account:
                 source+='\n'+Path(__file__).with_name('account_runtime.js').read_text(encoding='utf-8')
@@ -81,21 +94,24 @@ def main():
             script=session.create_script(source)
             script.on('message',on_message);script.load()
             ready_deadline=time.monotonic()+5
-            ready_event='runtime_account_probe_ready' if args.local_account else 'runtime_probe_ready'
-            while not any(e.get('event')==ready_event for e in events) and time.monotonic()<ready_deadline:
+            ready_event='offline_socket_compat_ready' if args.local_account else 'runtime_probe_ready'
+            while ready_event not in observed_names and time.monotonic()<ready_deadline:
                 time.sleep(.05)
-            if not any(e.get('event')==ready_event for e in events):
+            if ready_event not in observed_names:
                 raise RuntimeError('Loopback hooks failed; original client remains suspended.')
             device.resume(pid)
             print('Use the original Start/agreement/world/login controls. Test ID: archive001; password: local123.',flush=True)
             if args.local_account:
-                print('Recovered login and persistent character create/list/delete are enabled. World/map protocol remains pending.',flush=True)
+                print('Local login and persistent character create/list/delete are enabled.',flush=True)
             if args.world_route_probe:
-                print('Experimental selection route enabled: partial fields, UDP startup and map remain pending.',flush=True)
-            for second in range(args.duration):
-                time.sleep(1)
+                print('Local world enabled: original map 1110101 and the selected character are loaded.',flush=True)
+            print('Close the game or press Ctrl+C here to end the local session.',flush=True)
+            second=0
+            while not client_closed.is_set() and (args.duration==0 or second<args.duration):
+                if client_closed.wait(1):break
+                second+=1
                 capture_stages()
-                if (second+1)%15==0:capture(f'{second+1:03d}s')
+                if second%15==0 and second<=180 or second%300==0:capture(f'{second:03d}s')
         except KeyboardInterrupt:
             print('Stopped; saving native observations.',flush=True)
         finally:
@@ -115,7 +131,7 @@ def main():
                     'world_controller_completed':True if any(e.get('event')=='WORLD_CONTROLLER_COMPLETED_NATIVE' for e in events) else None,
                     'map_entered':None,'playable':None,
                     'note':'Only observed original-code events count as success. Map/playability are not inferred.',
-                    'native_exceptions':[e for e in events if e.get('event')=='native_exception']}
+                    'native_exceptions':native_exceptions}
             (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
             print(json.dumps(result,indent=2),flush=True)
             if pid is not None:
