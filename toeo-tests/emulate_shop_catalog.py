@@ -49,7 +49,7 @@ class CatalogFixture(InteractionFixture):
             self.items.append({'name': self.item_strings[item+0x34],
                 'price_gald': self.read32(item+0x11c),
                 'template_pointer': self.read32(item+0x30),
-                'icon_id': self.read32(item+0xa4)})
+                'catalog_display_value': self.read32(item+0xa4)})
             self.write32(self.shop+0x11c, len(self.items)); self.ret(len(self.items)-1, 8)
         else:
             super().on_code(uc, va, size, context)
@@ -61,7 +61,7 @@ def run(binary):
     packet = shop_open_notice((1, 1), 0x70000001, stock=source['stock'])
     fixture.receive(0x52d561, packet)
     expected = [{'name': x['name'], 'price_gald': x['price_gald'],
-                 'template_pointer': 0, 'icon_id': 0} for x in source['stock']]
+                 'template_pointer': 0, 'catalog_display_value': x['price_gald']} for x in source['stock']]
     assert fixture.shop_parse_result == 1 and fixture.items == expected
     assert not fixture.assertions
     return {'passed': True, 'packet_bytes': len(packet), 'native_parse_result': fixture.shop_parse_result,

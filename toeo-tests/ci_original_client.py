@@ -69,8 +69,8 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(472,301),145:lambda:click(472,301),148:lambda:click(493,107),
-                      150:lambda:click(390,375,hold=2.0),160:lambda:click(520,350,hold=2.0),170:lambda:click(400,350,True)}
+                      141:lambda:click(472,341),145:lambda:click(472,341),148:lambda:click(493,107),
+                      150:lambda:click(360,410,hold=2.0),160:lambda:click(480,380,hold=2.0),170:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
@@ -111,9 +111,11 @@ def main():
             result['historical_merchant_position_native']=any(tuple(e.get('position') or ())==grid_to_point(server.profile.merchant_grid) for e in created)
             result['historical_map_id_native']=any(e.get('event')=='native_world_render_state' and e.get('current_map_id')==server.map_id for e in events)
             result['historical_placement_basis']='Original minimap visually matches Wiki named map; Wiki XY reproduced by native actor grid conversion'
-            result['visible_prices_verified']=False
+            displayed=[e.get('text') for e in events if e.get('event')=='native_shop_display_price_text']
+            result['shop_display_price_text_native']=all(str(x['price_gald']) in displayed for x in expected_stock)
+            result['visible_prices_verified']=None  # Separately reviewed from captured desktop pixels.
             result['original_item_templates_icons_verified']=False
-            if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native')):
+            if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
                 failure=failure or 'Historical name/price/count were not all observed in original shop controls'
             shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
             visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]

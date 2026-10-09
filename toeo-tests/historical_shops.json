@@ -17,11 +17,11 @@
         141,
         313
       ],
-      "coordinate_system": "Historical Wiki X/Y; original native grid conversion unverified",
-      "native_map_id": null,
+      "coordinate_system": "Wiki XY reproduced by original grid-to-pixel actor conversion",
+      "native_map_id": 17957128,
       "native_entity_id": null,
       "appearance": null,
-      "deployment": "pending_map_and_coordinate_verification",
+      "deployment": "verified_native_placement",
       "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb",
       "stock": [
         {
@@ -123,7 +123,22 @@
           "native_template_id": null,
           "native_icon_id": null
         }
-      ]
+      ],
+      "native_grid": [
+        141,
+        313
+      ],
+      "placement_evidence": {
+        "map_identity_basis": "Visual comparison: original 1120108 minimap matches Wiki map image labelled ラシュアン河の河口",
+        "original_minimap_sha256": "1e49849a6be9fc5f28e87c3b756fb3277ac4308b7e029238b9461f4e9dc03c3e",
+        "wiki_map_image_url": "https://www.wikihouse.com/toeowiki/attach/C1B4C2CEA5DEA5C3A5D72FA5F3A5C4BCFECAD5A5DEA5C3A5D7_6D6170322E6A7067",
+        "native_windows_run_id": 37936500328,
+        "native_actor_position": [
+          4544,
+          5024
+        ],
+        "official_entity_id_and_appearance_recovered": false
+      }
     },
     {
       "key": "wikihouse-u5acc5ac",
