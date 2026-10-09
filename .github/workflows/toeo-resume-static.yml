@@ -1,0 +1,44 @@
+name: TOEO resumed login parser static analysis
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-resume-static.yml]
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  analyze-original-client:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: toeo-preservation-audit-20261008
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37767841705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-extracted-original-client-temporary
+          path: ${{ runner.temp }}/TOEO_FIXED
+      - name: Read-only disassembly of original PE32 login parser
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $base=Join-Path $env:RUNNER_TEMP 'TOEO_FIXED'
+          $raw=Join-Path $base 'original'
+          $report=Join-Path $base 'static_report'
+          New-Item -ItemType Directory -Force $raw,$report | Out-Null
+          & (Join-Path $env:ProgramFiles '7-Zip\7z.exe') x -y "-o$raw" (Join-Path $base 'client_pack.7z') | Out-Null
+          if($LASTEXITCODE -ne 0){ throw '7zip error' }
+          $exe=Get-ChildItem $raw -Recurse -Filter 'ToEO_CL.dat' | Select-Object -First 1
+          if(!$exe){ throw 'ToEO_CL.dat not found' }
+          & python -m pip install -q pefile capstone
+          & python -u toeo-tests/recover_client_dispatch.py $exe.FullName --out $report 2>&1 | Tee-Object -FilePath (Join-Path $report 'console.txt')
+          if($LASTEXITCODE -ne 0){ throw 'Disassembler failed' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-resumed-static-report
+          path: ${{ runner.temp }}/TOEO_FIXED/static_report
+          if-no-files-found: warn
