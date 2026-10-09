@@ -1,0 +1,17 @@
+{
+  "run": 56,
+  "workflow_run": 37966559708,
+  "commit": "f52d5fca98ad84e9a3383162204431969c8b2cca",
+  "artifact": 11634261920,
+  "artifact_sha256": "0fec418ffc04c506a13413fcac6aee02d98056843124e8ff6ce531ec7702f6c1",
+  "accepted": false,
+  "map_shop_icon_detail_walk_passed": true,
+  "native_item_use_builder_result": 0,
+  "native_hp": 40,
+  "saved_quantity": 2,
+  "pending_opcode": "E0",
+  "pending_request_id": 41,
+  "pending_sequence": 3,
+  "cause": "Original shop close 595A10 calls shared command builder 4F8910. Missing E0 receipt caused periodic resend and command queue remained pending; 4F6CE0 rejected before sending 55.",
+  "fix": "Owned, current-map E0 validation and original 67 receipt; no item/wallet changes. Original x86 fixture verifies pending rejection, close ack release and following native use construction."
+}

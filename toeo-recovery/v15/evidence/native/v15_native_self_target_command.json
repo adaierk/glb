@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "native_handler": "4C68C0",
+  "command": "/target (no argument)",
+  "native_request": {
+    "opcode": 78,
+    "request_id": 4294967295,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "group": [
+      0,
+      0
+    ],
+    "target": [
+      1,
+      1
+    ],
+    "option": 0
+  },
+  "assertions": [],
+  "substitutions": "Inherited initialized world, transport queue and entity lookups; native command parse and target construction unchanged",
+  "windows_verified": false
+}

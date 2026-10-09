@@ -1,0 +1,59 @@
+004feb90 push     esi
+004feb91 mov      esi, ecx
+004feb93 cmp      dword ptr [esi + 0x70], 1
+004feb97 jne      0x4febf5
+004feb99 mov      eax, dword ptr [esi + 0x90]
+004feb9f mov      edx, dword ptr [esi + 0x94]
+004feba5 mov      ecx, eax
+004feba7 or       ecx, edx
+004feba9 je       0x4febf5
+004febab mov      ecx, dword ptr [esi + 0x10c]
+004febb1 mov      ecx, dword ptr [ecx + 0x14]
+004febb4 mov      ecx, dword ptr [ecx + 0x108]
+004febba test     ecx, ecx
+004febbc je       0x4febf5
+004febbe push     edx
+004febbf push     eax
+004febc0 call     0x49c840
+004febc5 test     eax, eax
+004febc7 je       0x4febf5
+004febc9 mov      eax, dword ptr [eax + 0x20]
+004febcc test     eax, eax
+004febce je       0x4febf5
+004febd0 mov      edx, dword ptr [esi + 0x68]
+004febd3 push     edi
+004febd4 mov      edi, dword ptr [esi + 0x6c]
+004febd7 push     edi
+004febd8 push     edx
+004febd9 mov      ecx, eax
+004febdb call     0x49c840
+004febe0 mov      ecx, eax
+004febe2 test     ecx, ecx
+004febe4 pop      edi
+004febe5 je       0x4febf5
+004febe7 mov      eax, dword ptr [ecx + 0x98]
+004febed mov      edx, dword ptr [ecx + 0x9c]
+004febf3 pop      esi
+004febf4 ret      
+004febf5 mov      eax, dword ptr [esi + 0xd8]
+004febfb mov      edx, dword ptr [esi + 0xdc]
+004fec01 pop      esi
+004fec02 ret      
+004fec03 int3     
+004fec04 int3     
+004fec05 int3     
+004fec06 int3     
+004fec07 int3     
+004fec08 int3     
+004fec09 int3     
+004fec0a int3     
+004fec0b int3     
+004fec0c int3     
+004fec0d int3     
+004fec0e int3     
+004fec0f int3     
+004fec10 push     ebp
+004fec11 mov      ebp, esp
+004fec13 mov      eax, dword ptr [ebp + 8]
+004fec16 mov      edx, dword ptr [ebp + 0xc]
+004fec19 mov      dword ptr [ecx + 0xe0], eax

@@ -1,0 +1,169 @@
+{
+  "passed": true,
+  "run": 59,
+  "tested_commit": "43d883c29817b914e81d010cfb912a140644b660",
+  "windows_run_id": 37970300025,
+  "artifact_id": 11635293295,
+  "artifact_sha256": "71cfb479a9e73469993929fffd149897979666da5197edf523b8b4c56ec5a1cb",
+  "checks": {
+    "map_entered": true,
+    "npc_selected_native": true,
+    "shop_catalog_parsed_native": true,
+    "shop_frame_shown_native": true,
+    "shop_historical_names_native": true,
+    "shop_historical_prices_native": true,
+    "shop_historical_item_count_native": true,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "shop_closed_native": true,
+    "movement_after_shop_close_native": true,
+    "buy_request_built_native": true,
+    "sell_request_built_native": true,
+    "buy_money_quantity_native": true,
+    "sell_money_quantity_native": true,
+    "shop_quantity_refreshed_native": true,
+    "inventory_window_open_native": true,
+    "original_lemon_icon_native": true,
+    "item_used_native": true,
+    "hp_recovered_native": true
+  },
+  "restart_checks": {
+    "map_entered": true,
+    "position_restored_without_movement": true,
+    "inventory_restored_native": true,
+    "vitals_restored_native": true,
+    "inventory_window_open_native": true,
+    "original_lemon_icon_native": true
+  },
+  "native_uses": [
+    {
+      "time": "2026-10-09T18:05:55.453220+00:00",
+      "event": "item_use_committed",
+      "connection": 3,
+      "opcode": 85,
+      "request_id": 49,
+      "sequence": 4,
+      "map_id": 17957128,
+      "identity": [
+        1,
+        1
+      ],
+      "item": [
+        1895825409,
+        1,
+        1,
+        0
+      ],
+      "location": 2,
+      "slot": 0,
+      "count": 0,
+      "target": [
+        1,
+        1
+      ],
+      "status": 0,
+      "reason": null,
+      "replayed": false,
+      "snapshot": {
+        "money": 4100,
+        "capacity": 32,
+        "items": [
+          {
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_key": "wikihouse-u392bcdb",
+            "catalog_index": 0,
+            "name": "レモングミ",
+            "buy_price": 360,
+            "sell_price": 180,
+            "quantity": 1
+          }
+        ]
+      },
+      "vitals": {
+        "hp": 100,
+        "tp": 10,
+        "max_hp": 100,
+        "max_tp": 30
+      },
+      "request_hex": "0055004c003100000000000004000000ef741200801f41d41858dd01080112010100000001000000010000710100000001000000000000000200000000000000000000000100000001000000",
+      "answer_hex": "0067002c0131000000000000040000002c010000000000000000000000000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000100140006000000000000000800000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d0001005000030002000000041000004d000b000200000000000000000000000000000000000000000000000100007101000000010000000000000000000000",
+      "limitation": "Historical recovery amounts; casting, interrupted use and battle targeting still pending"
+    }
+  ],
+  "visual_reviewed": true,
+  "saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 1
+      }
+    ]
+  },
+  "saved_vitals": {
+    "hp": 100,
+    "tp": 10,
+    "max_hp": 100,
+    "max_tp": 30
+  },
+  "database_items": [
+    [
+      "レモングミ",
+      1
+    ]
+  ],
+  "database_vitals": [
+    [
+      100,
+      10,
+      100,
+      30
+    ]
+  ],
+  "database_ledger": [
+    [
+      222,
+      1
+    ],
+    [
+      223,
+      2
+    ],
+    [
+      85,
+      4
+    ]
+  ],
+  "final_pixel": [
+    4480,
+    5152
+  ],
+  "local_checks_passed": 45,
+  "source_files_verified": 107,
+  "complete_gameplay": false,
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "test_fixture": "Only isolated CI save begins HP40/TP10; fresh delivery starts full HP100/TP30",
+  "icon_provenance": "Original ICND lookup verified; item-name associations visually matched, not official item-master IDs",
+  "limitations": [
+    "HP/TP HUD numeric/bar rendering still incomplete",
+    "Casting, interrupted use, buffs, revival and battle targeting pending",
+    "Equipment, combat, quests, map transitions and complete collision pending",
+    "Provisional local level-one stat limits, wallet and stack rules"
+  ]
+}

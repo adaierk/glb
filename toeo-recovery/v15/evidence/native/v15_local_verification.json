@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "unit_tests": 45,
+  "unittest_command": "python3 -m unittest discover -s toeo_work/toeo-tests -p 'test*.py'",
+  "runtime_source_commit": "43d883c29817b914e81d010cfb912a140644b660",
+  "runtime_sources_verified": 107,
+  "native_proofs": [
+    {
+      "name": "v15_native_catalog.json",
+      "sha256": "d06cde537f0ef2de0b82ac69ccd0deb08b5ab731960dc68a2f3bc2ea9660f1c8",
+      "passed": true
+    },
+    {
+      "name": "v15_native_compression.json",
+      "sha256": "582b833629a3dab7d369de15b0683c82d172fe630e05b257bfbccf2436e0f6a5",
+      "passed": true
+    },
+    {
+      "name": "v15_native_icon_groups.json",
+      "sha256": "8cd7a48c0c49df393e939f60503285bc51de5450ac95a5fa942677dbca2c8bd0",
+      "passed": true
+    },
+    {
+      "name": "v15_native_inventory_trade.json",
+      "sha256": "872fb3aa13bf5595ee81aaacf52c93353f702abcaeeb4e5999ba6c1e10018341",
+      "passed": true
+    },
+    {
+      "name": "v15_native_item_source.json",
+      "sha256": "6ae5712448ca8e48541a0be04e85995888d4a67a6760fed095ea044b2e30bda5",
+      "passed": true
+    },
+    {
+      "name": "v15_native_item_use.json",
+      "sha256": "7b3f355aaece06870ca92fa29f242d83de4278cca704464b06754289884932a1",
+      "passed": true
+    },
+    {
+      "name": "v15_native_self_target_command.json",
+      "sha256": "ae0c0306aac4f66553c5b2bfce8aa88716872e8a83ebb38e8a83bd27a1ec4a3c",
+      "passed": true
+    }
+  ],
+  "actual_windows_run": 37970300025,
+  "actual_windows_conclusion": "success",
+  "note": "Test-only startup deadlock corrected; source-description quantity is excluded from owned-bag consumption acceptance."
+}

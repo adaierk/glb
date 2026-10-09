@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "native_name": "レモングミ",
+  "native_description": "HP 300 / TP 0",
+  "native_icon_id": 3811,
+  "request": {
+    "request_id": 44,
+    "map_id": 17957128,
+    "identity": [
+      1,
+      1
+    ],
+    "catalog_ids": [
+      1
+    ]
+  },
+  "assertions": [],
+  "substitutions": [
+    "Empty source C++ constructor",
+    "Source and list container boundaries",
+    "Inherited item-use fixture boundaries"
+  ],
+  "limitations": [
+    "Original Windows item-detail control still needs separate validation"
+  ]
+}

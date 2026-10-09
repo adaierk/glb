@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "bytes": 36,
+      "coded_bytes": 36,
+      "native_compress_result": 1,
+      "sha256": "12800ed3e3afedc6065835a9a5c72e05a374c4e9fd78ff56b7f8276857271eba"
+    },
+    {
+      "bytes": 1500,
+      "coded_bytes": 37,
+      "native_compress_result": 1,
+      "sha256": "dcb99b805d39fa09ce52761034db36548893a8c437990e2bc3f1efa8717417fe"
+    },
+    {
+      "bytes": 24000,
+      "coded_bytes": 18473,
+      "native_compress_result": 1,
+      "sha256": "dfe5fa4eb7ddf0fd0a38cacac2b9fbaa4f5f717a7c22fd0bed7b8c6119958065"
+    }
+  ],
+  "assertions": [],
+  "executed": [
+    "622960 native wrapper/encoder",
+    "622AC0 native wrapper/decoder",
+    "5F8660 native raw CRC32"
+  ],
+  "substitutions": [
+    "NativeFixture allocation/cookie/assertion boundaries; no algorithm substitutions"
+  ]
+}

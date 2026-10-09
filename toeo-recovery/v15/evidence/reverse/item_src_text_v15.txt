@@ -1,0 +1,88 @@
+004d62e0 push     ebp
+004d62e1 mov      ebp, esp
+004d62e3 mov      eax, dword ptr [ebp + 8]
+004d62e6 add      ecx, 0x13c
+004d62ec test     eax, eax
+004d62ee je       0x4d62fb
+004d62f0 push     eax
+004d62f1 call     dword ptr [0x6e2348]
+004d62f7 pop      ebp
+004d62f8 ret      4
+004d62fb call     dword ptr [0x6e22a0]
+004d6301 pop      ebp
+004d6302 ret      4
+004d6305 int3     
+004d6306 int3     
+004d6307 int3     
+004d6308 int3     
+004d6309 int3     
+004d630a int3     
+004d630b int3     
+004d630c int3     
+004d630d int3     
+004d630e int3     
+004d630f int3     
+004d6310 push     ebp
+004d6311 mov      ebp, esp
+004d6313 mov      eax, dword ptr [ebp + 8]
+004d6316 add      ecx, 0x198
+004d631c test     eax, eax
+004d631e je       0x4d632b
+004d6320 push     eax
+004d6321 call     dword ptr [0x6e2348]
+004d6327 pop      ebp
+004d6328 ret      4
+004d632b call     dword ptr [0x6e22a0]
+004d6331 pop      ebp
+004d6332 ret      4
+004d6335 int3     
+004d6336 int3     
+004d6337 int3     
+004d6338 int3     
+004d6339 int3     
+004d633a int3     
+004d633b int3     
+004d633c int3     
+004d633d int3     
+004d633e int3     
+004d633f int3     
+004d6340 push     ebp
+004d6341 mov      ebp, esp
+004d6343 mov      eax, dword ptr [ebp + 8]
+004d6346 add      ecx, 0x1b4
+004d634c test     eax, eax
+004d634e je       0x4d635b
+004d6350 push     eax
+004d6351 call     dword ptr [0x6e2348]
+004d6357 pop      ebp
+004d6358 ret      4
+004d635b call     dword ptr [0x6e22a0]
+004d6361 pop      ebp
+004d6362 ret      4
+004d6365 int3     
+004d6366 int3     
+004d6367 int3     
+004d6368 int3     
+004d6369 int3     
+004d636a int3     
+004d636b int3     
+004d636c int3     
+004d636d int3     
+004d636e int3     
+004d636f int3     
+004d6370 push     ebp
+004d6371 mov      ebp, esp
+004d6373 mov      eax, dword ptr [ebp + 8]
+004d6376 mov      ecx, dword ptr [eax + 8]
+004d6379 mov      dl, byte ptr [ecx + 0x15]
+004d637c test     dl, dl
+004d637e jne      0x4d638c
+004d6380 mov      eax, ecx
+004d6382 mov      ecx, dword ptr [eax + 8]
+004d6385 mov      dl, byte ptr [ecx + 0x15]
+004d6388 test     dl, dl
+004d638a je       0x4d6380
+004d638c pop      ebp
+004d638d ret      
+004d638e int3     
+004d638f int3     

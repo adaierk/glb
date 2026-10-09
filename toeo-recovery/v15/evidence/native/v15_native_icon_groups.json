@@ -1,0 +1,189 @@
+{
+  "passed": true,
+  "original_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "bank_sha256": "58fd6661a42293e106ba484ac09e45da59a45f0899c5ced6afdcba5d39e77c7e",
+  "groups": [
+    {
+      "name": "Weapon",
+      "start": 1,
+      "count": 856
+    },
+    {
+      "name": "Body",
+      "start": 857,
+      "count": 168
+    },
+    {
+      "name": "Head",
+      "start": 1025,
+      "count": 856
+    },
+    {
+      "name": "Shield",
+      "start": 1881,
+      "count": 512
+    },
+    {
+      "name": "Bracelet",
+      "start": 2393,
+      "count": 556
+    },
+    {
+      "name": "Accessory",
+      "start": 2949,
+      "count": 856
+    },
+    {
+      "name": "Item",
+      "start": 3805,
+      "count": 89
+    },
+    {
+      "name": "Unique",
+      "start": 3894,
+      "count": 256
+    },
+    {
+      "name": "Cook",
+      "start": 4150,
+      "count": 36
+    },
+    {
+      "name": "Food",
+      "start": 4186,
+      "count": 33
+    },
+    {
+      "name": "Command",
+      "start": 4219,
+      "count": 256
+    },
+    {
+      "name": "Skill",
+      "start": 4475,
+      "count": 512
+    },
+    {
+      "name": "Magic",
+      "start": 4987,
+      "count": 256
+    },
+    {
+      "name": "Emote",
+      "start": 5243,
+      "count": 64
+    },
+    {
+      "name": "other",
+      "start": 5307,
+      "count": 16
+    },
+    {
+      "name": "Drop",
+      "start": 5323,
+      "count": 512
+    },
+    {
+      "name": "BODY_A",
+      "start": 5835,
+      "count": 154
+    },
+    {
+      "name": "BODY_B",
+      "start": 5989,
+      "count": 256
+    },
+    {
+      "name": "BODY_C",
+      "start": 6245,
+      "count": 256
+    },
+    {
+      "name": "BODY_D",
+      "start": 6501,
+      "count": 256
+    },
+    {
+      "name": "BODY_E",
+      "start": 6757,
+      "count": 256
+    },
+    {
+      "name": "BODY_F",
+      "start": 7013,
+      "count": 256
+    },
+    {
+      "name": "BODY_G",
+      "start": 7269,
+      "count": 256
+    },
+    {
+      "name": "BODY_H",
+      "start": 7525,
+      "count": 256
+    },
+    {
+      "name": "BODY_I",
+      "start": 7781,
+      "count": 256
+    },
+    {
+      "name": "BODY_J",
+      "start": 8037,
+      "count": 256
+    },
+    {
+      "name": "SealA",
+      "start": 8293,
+      "count": 64
+    },
+    {
+      "name": "SealB",
+      "start": 8357,
+      "count": 64
+    },
+    {
+      "name": "SealC",
+      "start": 8421,
+      "count": 64
+    },
+    {
+      "name": "SealD",
+      "start": 8485,
+      "count": 64
+    },
+    {
+      "name": "SealE",
+      "start": 8549,
+      "count": 64
+    },
+    {
+      "name": "SealF",
+      "start": 8613,
+      "count": 64
+    },
+    {
+      "name": "ChatEmo",
+      "start": 8677,
+      "count": 16
+    },
+    {
+      "name": "Grow",
+      "start": 8693,
+      "count": 5
+    }
+  ],
+  "assertions": [],
+  "native_functions": [
+    "6A68B0",
+    "68FF10"
+  ],
+  "substitutions": [
+    "CRT ASCII _stricmp only"
+  ],
+  "limitations": [
+    "Name-to-item associations require separate evidence",
+    "No graphical rendering in this fixture"
+  ]
+}

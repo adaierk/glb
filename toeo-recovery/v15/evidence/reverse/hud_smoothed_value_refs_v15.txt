@@ -1,0 +1,74 @@
+0043e5ca mov      eax, dword ptr [esi + 0x298]
+0043e5d0 mov      dword ptr [ebx + 0x298], eax
+0043e5d6 mov      ecx, dword ptr [esi + 0x29c]
+0043e5dc mov      dword ptr [ebx + 0x29c], ecx
+00444730 mov      ecx, dword ptr [esi + 0x298]
+004447ce mov      ecx, dword ptr [esi + 0x29c]
+0044755e mov      cx, word ptr [esi + 0x29c]
+00447592 cmp      ax, word ptr [esi + 0x29c]
+00448bbc lea      ecx, [eax + 0x29c]
+00449387 lea      ecx, [eax + 0x29c]
+0044a4c7 lea      ecx, [eax + 0x29c]
+00487ba7 mov      ecx, dword ptr [edi + 0x29c]
+0048a6c3 mov      eax, dword ptr [esi + 0x298]
+0048b5e6 mov      dword ptr [eax + 0x29c], edx
+0048ef30 mov      dword ptr [esi + 0x29c], 0xffffffff
+0048f019 mov      eax, dword ptr [edi + 0x29c]
+0048f020 mov      dword ptr [esi + 0x29c], eax
+0048f2e2 mov      eax, dword ptr [edi + 0x298]
+0048f2e8 mov      dword ptr [esi + 0x298], eax
+0048f2ee mov      ecx, dword ptr [edi + 0x29c]
+0048f2f4 mov      dword ptr [esi + 0x29c], ecx
+0048f79f lea      eax, [esi + 0x29c]
+0048fa28 lea      eax, [esi + 0x29c]
+0048fca7 mov      ecx, dword ptr [ebx + 0x298]
+00490065 mov      dword ptr [esi + 0x29c], edi
+0049006b mov      dword ptr [esi + 0x298], edi
+004905a6 mov      dword ptr [esi + 0x298], edi
+004905d6 mov      dword ptr [esi + 0x29c], edi
+00495d38 mov      dword ptr [esi + 0x298], edx
+00495d44 mov      dword ptr [esi + 0x29c], eax
+00499e8f mov      dword ptr [ecx + 0x29c], eax
+0049e2eb lea      ecx, [eax + 0x29c]
+0049e6a7 lea      eax, [esi + 0x29c]
+0049e740 lea      eax, [esi + 0x29c]
+004c1210 lea      ecx, [esi + 0x29c]
+004c1876 lea      ecx, [esi + 0x29c]
+004ccc1a mov      dword ptr [esi + 0x29c], ebx
+004ccf53 mov      byte ptr [esi + 0x298], bl
+004ff75f mov      dword ptr [esi + 0x298], ebx
+004ff765 mov      dword ptr [esi + 0x29c], ebx
+004ff781 mov      dword ptr [esi + 0x298], ebx
+004ff787 mov      dword ptr [esi + 0x29c], ebx
+004ffef6 mov      edx, dword ptr [ecx + 0x298]
+004fff04 mov      dword ptr [ecx + 0x298], edx
+004fff14 mov      dword ptr [ecx + 0x298], edx
+004fff1c mov      dword ptr [ecx + 0x298], ebx
+004fff28 cmp      dword ptr [ecx + 0x298], edx
+004fff30 mov      dword ptr [ecx + 0x298], edx
+004fff36 mov      edx, dword ptr [ecx + 0x29c]
+004fff47 mov      dword ptr [ecx + 0x29c], eax
+004fff57 mov      dword ptr [ecx + 0x29c], edx
+004fff5f mov      dword ptr [ecx + 0x29c], esi
+004fff6b cmp      dword ptr [ecx + 0x29c], edi
+004fff73 mov      dword ptr [ecx + 0x29c], edi
+004fff89 mov      dword ptr [ecx + 0x298], edx
+004fff92 mov      dword ptr [ecx + 0x29c], eax
+00501b76 mov      dword ptr [esi + 0x298], ebx
+00501b7c mov      dword ptr [esi + 0x29c], ebx
+00503c4a mov      eax, dword ptr [esi + 0x298]
+00503c56 mov      ecx, dword ptr [esi + 0x29c]
+00503df1 mov      dword ptr [ebx + 0x298], ecx
+00503dfa mov      dword ptr [ebx + 0x29c], edx
+0053893d mov      edx, dword ptr [eax + 0x298]
+00538955 mov      edx, dword ptr [eax + 0x29c]
+0055834c test     dword ptr [ebx + 0x29c], 0x20000
+005a0490 mov      eax, dword ptr [ebx + 0x298]
+005a049c mov      eax, dword ptr [ebx + 0x29c]
+005a1164 mov      eax, dword ptr [ebx + 0x298]
+005a1170 mov      eax, dword ptr [ebx + 0x29c]
+005a8571 mov      ebx, dword ptr [esi + 0x298]
+005f202c mov      dword ptr [esp + 0x29c], 0
+005f20b4 mov      dword ptr [esp + 0x29c], 0xffffffff
+00625a86 mov      dword ptr [eax + 0x29c], edx
+00625b63 mov      eax, dword ptr [ecx + 0x29c]

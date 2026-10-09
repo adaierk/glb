@@ -1,0 +1,11 @@
+{
+  "run": 55,
+  "workflow_run": 37964889999,
+  "commit": "60d966bf0434def4eb390d3e05ed6f8766ce051b",
+  "conclusion": "cancelled_after_job_timeout",
+  "artifact": 11633971269,
+  "artifact_sha256": "3dcec4e10628030a505309ef95319f724fcec4e8c76acd093e8e8700404bd136",
+  "game_started": false,
+  "cause": "CI-only HP seed resolved CharacterStore.list while already holding the same non-reentrant accounts.lock. Native client never started.",
+  "fix": "Resolve owned identity before transaction lock; production service item handling unchanged."
+}

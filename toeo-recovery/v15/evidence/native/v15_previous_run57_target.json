@@ -1,0 +1,19 @@
+{
+  "run": 57,
+  "workflow_run": 37967868583,
+  "commit": "c4a74654d451f36ad58a2fa71c5bb43b6df318d4",
+  "artifact": 11633759410,
+  "artifact_sha256": "71f0b1464c0a9fba65a6b16012f2bf00fabde647c28633603e31ad0fdd7eecf9",
+  "accepted": false,
+  "shop_close_ack_released_queue": true,
+  "native_item_use_builder_result": 1,
+  "native_use_sequence": 4,
+  "native_target": [
+    1879048193,
+    1
+  ],
+  "server_result": "Rejected NPC target without changing inventory/HP",
+  "saved_quantity": 2,
+  "saved_hp": 40,
+  "correction": "Right-click ground does not clear actor target. Use actual mouse self-selection with bag closed. CI owned-instance predicate corrected: source description quantity1 is not evidence of consumption."
+}
