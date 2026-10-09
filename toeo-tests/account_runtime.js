@@ -303,6 +303,10 @@
       target:[args[0].toUInt32(),args[1].toUInt32()]})));
   }});
   let observedShopFrame=null;
+  let observedInventoryFrame=null;
+  Interceptor.attach(address(0x5b52d0),{onLeave(ret){if(!ret.isNull())observedInventoryFrame=ret;}});
+  setInterval(()=>{if(observedInventoryFrame!==null)emit(safely(()=>({event:'native_inventory_frame_state',
+    visible:!!(observedInventoryFrame.add(0x20).readU32()&32),frame:observedInventoryFrame.toString()})));},500);
   Interceptor.attach(address(0x51ea20),{onEnter(args){
     if(observedShopFrame!==null && this.context.ecx.equals(observedShopFrame.add(0x114))) {
       const item=args[1];
