@@ -20,7 +20,7 @@ def main():
     p.add_argument('--duration',type=int,default=0,help='Seconds to run; 0 keeps the game open until the player exits')
     p.add_argument('--out',default='session_bootstrap_report')
     p.add_argument('--local-account',action='store_true',help='Use recovered login and persistent character create/list/delete protocol')
-    p.add_argument('--world-route-probe',action='store_true',help='Experimental partial selection-to-world route; requires --local-account')
+    p.add_argument('--local-world','--world-route-probe',dest='world_route_probe',action='store_true',help='Load the recovered local map channel; requires --local-account')
     p.add_argument('--demo-character',action='store_true',help='Create Archive only if the local account has no characters')
     args=p.parse_args()
     if args.world_route_probe and not args.local_account:p.error('--world-route-probe requires --local-account')
@@ -29,6 +29,8 @@ def main():
     if os.name!='nt':raise SystemExit('The graphical client runner requires Windows.')
     import frida
     from PIL import ImageGrab
+    prepared=Path(__file__).resolve().parents[1]/'original_game'
+    if not args.game_directory and (prepared/'ToEO_CL.dat').is_file():args.game_directory=str(prepared)
     if not args.game_directory:
         import tkinter
         from tkinter import filedialog
@@ -111,7 +113,7 @@ def main():
                 if client_closed.wait(1):break
                 second+=1
                 capture_stages()
-                if second%15==0 and second<=180 or second%300==0:capture(f'{second:03d}s')
+                if (second%15==0 and second<=180) or second%300==0:capture(f'{second:03d}s')
         except KeyboardInterrupt:
             print('Stopped; saving native observations.',flush=True)
         finally:

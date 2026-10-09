@@ -156,11 +156,35 @@
         world_gate:world.add(0x258).readU32(),world_flags:bytes(world.add(0x1c4),48),
         player:player.toString(),position:[player.add(0xc).readFloat(),player.add(0x10).readFloat()],
         player_instance:player.add(0x14).readU32(),player_controlled:player.add(0x80).readU8(),
+        world_viewport:[world.readS32(),world.add(4).readS32(),world.add(8).readS32(),world.add(12).readS32()],
+        world_mouse:[world.add(0x2c).readFloat(),world.add(0x30).readFloat()],
         world_input_flags:bytes(world.add(0x78),0x70),profile:bytes(player.add(0x114).readPointer(),48)};
     });
     const key=JSON.stringify(state);if(key!==lastRenderState){lastRenderState=key;emit(state);}
   }});
   let drew=false;
+  const lastBindings=new Map();let bindingChanges=0;
+  Interceptor.attach(address(0x69b790),{onEnter(args){
+    this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
+    this.id=args[0].toInt32();this.caller=this.returnAddress.toString();
+  },onLeave(ret){
+    if(!this.keep || ret.isNull())return;
+    const value=safely(()=>ret.readU16()),key=this.id;
+    if(lastBindings.get(key)!==value && ++bindingChanges<=150){
+      lastBindings.set(key,value);emit({event:'native_player_binding_state',id:key,state:value,caller:this.caller});
+    }
+  }});
+  let buttonChanges=0;const lastButtons=new Map();
+  Interceptor.attach(address(0x68e290),{onEnter(args){
+    this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
+    this.id=args[0].toInt32();this.caller=this.returnAddress.toString();
+  },onLeave(ret){
+    if(!this.keep)return;
+    const value=ret.toInt32()&255,key=this.id;
+    if(lastButtons.get(key)!==value && ++buttonChanges<=100){
+      lastButtons.set(key,value);emit({event:'native_player_mouse_button',id:key,state:value,caller:this.caller});
+    }
+  }});
   let inputTicks=0;
   Interceptor.attach(address(0x505200),{onEnter(args){
     if(++inputTicks%120!==1)return;
