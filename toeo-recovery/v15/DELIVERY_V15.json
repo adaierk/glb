@@ -1,0 +1,70 @@
+{
+  "version": "v15",
+  "date": "2026-10-10",
+  "source_evidence_checkpoint": "33618d0935e6132dd4f0717e218b9750cc3792bb",
+  "windows_tested_commit": "43d883c29817b914e81d010cfb912a140644b660",
+  "windows_run_id": 37970300025,
+  "windows_conclusion": "success",
+  "manifest": {
+    "zip": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_World_Recovery_20261010_v15.zip",
+    "sha256": "78fa0dc2e69490a7be1f929234da70115f9d6721ac106257f7d7c28f1a292a0a",
+    "bytes": 6280311,
+    "entries": 239,
+    "crc_check": "PASS",
+    "archive_source_consistency": "PASS",
+    "user_database_included": false,
+    "checkpoint_commit": "33618d0935e6132dd4f0717e218b9750cc3792bb"
+  },
+  "native_buy3_sell1_use1_restart_verified": true,
+  "saved_item_quantity": 1,
+  "saved_money": 4100,
+  "test_hp_before": 40,
+  "saved_hp_after": 100,
+  "saved_tp": 10,
+  "fresh_delivery_full_hp_tp": [
+    100,
+    30
+  ],
+  "original_target_command_keyboard_verified": "/target",
+  "local_tests_passed": 45,
+  "runtime_sources_verified": 107,
+  "complete_gameplay": false,
+  "deliverables": [
+    {
+      "filename": "TOEO_Local_World_Recovery_20261010_v15.zip",
+      "file_id": "file_00000000ac08820c869e84d499a5ed6d",
+      "library_file_id": "libfile_647feb4714a4819198810f0d07d23fe7",
+      "status": "succeeded",
+      "current_version_number": 0,
+      "path": "deliverables/TOEO_Local_World_Recovery_20261010_v15.zip",
+      "sha256": "78fa0dc2e69490a7be1f929234da70115f9d6721ac106257f7d7c28f1a292a0a"
+    },
+    {
+      "filename": "TOEO_Rashuan_Shop_20261010_v15.png",
+      "file_id": "file_00000000b85881f8a927d6d84ad47a9d",
+      "library_file_id": "libfile_151bc0a13d088191a783b1dd367641b1",
+      "status": "succeeded",
+      "current_version_number": 0,
+      "path": "deliverables/TOEO_Rashuan_Shop_20261010_v15.png",
+      "sha256": "2ca3212ed71614ee8cc595bcc766a10bc6bbfa2d0d9c62a4cf2ff1f03f686a59"
+    },
+    {
+      "filename": "TOEO_Rashuan_Item_Detail_20261010_v15.png",
+      "file_id": "file_00000000a8888230a81b683ff3373737",
+      "library_file_id": "libfile_2b82d31c037c819199c3008bb1693718",
+      "status": "succeeded",
+      "current_version_number": 0,
+      "path": "deliverables/TOEO_Rashuan_Item_Detail_20261010_v15.png",
+      "sha256": "e89e722167d52c4f6afbf5572db12efed5a5f63c111dcbd8a2160c53dbef8435"
+    },
+    {
+      "filename": "TOEO_Rashuan_Item_Restored_20261010_v15.png",
+      "file_id": "file_000000008ea481f699340cd880a5196c",
+      "library_file_id": "libfile_ca10d359ef9c819197ca3e027039191f",
+      "status": "succeeded",
+      "current_version_number": 0,
+      "path": "deliverables/TOEO_Rashuan_Item_Restored_20261010_v15.png",
+      "sha256": "5a232e457f0db205854bc81ce1beb2d5e1801301d994b2710090ad0d1f71edf2"
+    }
+  ]
+}
