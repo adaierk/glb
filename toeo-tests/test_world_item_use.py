@@ -5,7 +5,8 @@ from local_account_server import AccountStore,LocalAccountServer
 from character_store import CharacterStore
 from character_mutation_packets import create_character_request
 from world_inventory_store import WorldInventoryStore,TradeRejected
-from world_inventory_packets import parse_trade_request
+from world_inventory_packets import parse_trade_request,parse_shop_close_request
+from world_npc_packets import SHOP_IDENTITY
 from world_item_use_packets import parse_item_use_request
 from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
 from test_world_inventory import request as trade_packet
@@ -92,6 +93,29 @@ class UseTests(unittest.TestCase):
             c.answers=[];bad=dict(state,world_map_ready=False)
             server.process_game_bytes(c,11101,9,data405(p,1,1,route=0xffef),bad)
             self.assertEqual(c.answers,[])
+        finally:server.close()
+
+    def test_shop_close_receipt_preserves_save_and_allows_next_command(self):
+        server=LocalAccountServer(self.temp.name,account_database=self.path,world_route_probe=True,shop_preview=True,world_profile='rashuan')
+        class Capture:
+            def __init__(self):self.answers=[]
+            def sendall(self,value):self.answers.append(parse405(value)['payload'])
+        c=Capture();state={'world_account_control':{'account_id':1,'character_id':self.identity},'world_map_ready':True,'shop_catalog_ack_observed':True,'trade_connection_key':'test'}
+        close=bytearray(message(0xe0,bytes(27),41))
+        struct.pack_into('<IIIIII',close,12,3,*self.identity,RASHUAN.map_id,*SHOP_IDENTITY)
+        p=bytes(close);self.assertEqual(parse_shop_close_request(p)['sequence'],3)
+        try:
+            bad=bytearray(p);struct.pack_into('<I',bad,28,99)
+            server.process_game_bytes(c,11101,9,data405(bad,1,1,route=0xffef),state)
+            self.assertEqual(c.answers,[]);self.assertTrue(state['shop_catalog_ack_observed'])
+            for _ in range(2):server.process_game_bytes(c,11101,9,data405(p,1,1,route=0xffef),state)
+            self.assertEqual(len(c.answers),2)
+            self.assertTrue(all(struct.unpack_from('<I',reply,5)[0]==41 and struct.unpack_from('<I',reply,12)[0]==3 for reply in c.answers))
+            self.assertFalse(state['shop_catalog_ack_observed']);self.assertEqual(self.store.load(1,self.identity),self.before)
+            c.answers=[];use=use_packet(self.identity,self.item,seq=4)
+            server.process_game_bytes(c,11101,9,data405(use,1,1,route=0xffef),state)
+            self.assertEqual([struct.unpack_from('<H',reply,1)[0] for reply in c.answers],[0x67,0x6b,0xb2])
+            self.assertEqual(self.store.load(1,self.identity)['items'][0]['quantity'],1)
         finally:server.close()
 
 

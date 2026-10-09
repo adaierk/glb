@@ -9,7 +9,8 @@ from pathlib import Path
 from unicorn.x86_const import UC_X86_REG_ESP
 from emulate_inventory_trade import WorldFixture
 from world_item_use_packets import parse_item_use_request,vitals_notice
-from world_inventory_packets import inventory_notice,transaction_reply
+from world_inventory_packets import inventory_notice,transaction_reply,parse_shop_close_request
+from world_npc_packets import SHOP_IDENTITY
 
 
 class UseFixture(WorldFixture):
@@ -47,8 +48,22 @@ def run(binary):
     actual={'hp':f.read32(f.profile+8),'tp':f.read32(f.profile+12),
         'max_hp':f.read32(f.profile+0xa8),'max_tp':f.read32(f.profile+0xac)}
     assert actual==vitals and not f.assertions
+    close=UseFixture(binary);close.uc.mem_write(p,struct.pack('<IIII',*instance))
+    close.invoke(0x4f8910,SHOP_IDENTITY,this=close.command)
+    close_request=parse_shop_close_request(close.trade_packets[-1])
+    assert close_request['sequence']==1 and close_request['merchant']==SHOP_IDENTITY
+    # Transport-pending registry is a declared fixture boundary; the original
+    # builder's rejection and 67 handler's release are executed unchanged.
+    close.write32(close.command+0x10,1);sent=len(close.trade_packets)
+    close.invoke(0x4f6ce0,(p,2,0,0,1,1),this=close.command)
+    assert len(close.trade_packets)==sent
+    close.receive(0x52b86b,transaction_reply(1,4100,request_id=close_request['request_id']))
+    assert close.read32(close.command+0x10)==0
+    close.invoke(0x4f6ce0,(p,2,0,0,1,1),this=close.command)
+    assert parse_item_use_request(close.trade_packets[-1])['sequence']==2 and not close.assertions
     return {'passed':True,'native_request':request,'native_request_hex':built.hex(),
         'native_vitals':actual,'native_quantity_after_use':1,'native_pending_command_released':True,
+        'native_shop_close_request':close_request,'native_shop_close_ack_releases_use':True,
         'assertions':f.assertions,'substitutions':['OS clock','Initialized world-ready gate','Native transport enqueue capture',
             'Inherited inventory fixture C++ strings, collection, resource manager and Windows graphical refresh boundaries'],
         'limitations':['Does not establish mouse operation, cast animation or combat interruption']}

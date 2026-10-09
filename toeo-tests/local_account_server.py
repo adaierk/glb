@@ -30,7 +30,7 @@ from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_n
                                npc_selection_reply,npc_action_reply,shop_open_notice)
 from world_position_store import WorldPositionStore,walkable_grid
 from world_inventory_store import WorldInventoryStore,TradeRejected
-from world_inventory_packets import parse_trade_request,transaction_reply,inventory_notice
+from world_inventory_packets import parse_trade_request,parse_shop_close_request,transaction_reply,inventory_notice
 from world_item_use_packets import parse_item_use_request,vitals_notice
 from world_item_source_packets import parse_item_source_request,item_source_reply
 from native_map_geometry import grid_to_point
@@ -347,6 +347,23 @@ class LocalAccountServer(BootstrapServer):
                          **trade,replayed=replayed,status=status,reason=reason,request_hex=payload.hex(),
                          answer_hex=answer.hex(),inventory_notice_hex=notice.hex(),snapshot=inventory,
                          rules='Local initial grant 5000 / stack 20 / bag 32 / resale half; official values unresolved')
+                continue
+            if op==0xe0 and port==11101:
+                control=state.get('world_account_control')
+                try:
+                    close=parse_shop_close_request(payload)
+                    replayed=state.get('shop_close_command_seen')==payload
+                    if not control or not state.get('world_map_ready') or close['identity']!=tuple(control['character_id']) or close['map_id']!=self.map_id or close['merchant']!=SHOP_IDENTITY or not self.shop_preview or (not state.get('shop_catalog_ack_observed') and not replayed):
+                        raise ValueError('Unauthorized shop close command')
+                except ValueError as error:
+                    self.log('shop_close_command_rejected',connection=conn_id,reason=str(error));continue
+                inventory=self.inventory.load(control['account_id'],close['identity'])
+                answer=transaction_reply(close['sequence'],inventory['money'],request_id=close['request_id'])
+                self.send_answer(c,answer,state)
+                if not replayed:
+                    state['shop_catalog_ack_observed']=False
+                    state['shop_close_command_seen']=payload
+                self.log('shop_close_command_ack',connection=conn_id,**close,replayed=replayed,answer_hex=answer.hex())
                 continue
             if op==0xed and port==11101:
                 control=state.get('world_account_control')

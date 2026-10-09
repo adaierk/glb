@@ -99,3 +99,13 @@ def parse_trade_request(payload):
         if not 1<=quantity<=LOCAL_STACK_LIMIT:raise ValueError('Local quantity limit')
     return {'opcode':op,'request_id':req,'sequence':seq,'identity':(first,second),'map_id':map_id,
             'merchant':(npc1,npc2),'lines':lines}
+
+
+def parse_shop_close_request(payload):
+    # 595A10 closes the visible shop via the shared 4F8910 command queue.
+    if len(payload)!=36:raise ValueError('Invalid shop close length')
+    op,size,req=struct.unpack_from('<HHI',payload,1)
+    sequence,first,second,map_id,npc1,npc2=struct.unpack_from('<IIIIII',payload,12)
+    if op!=0xe0 or size!=36 or not req or not sequence:raise ValueError('Invalid shop close header')
+    return {'opcode':op,'request_id':req,'sequence':sequence,'identity':(first,second),
+            'map_id':map_id,'merchant':(npc1,npc2)}

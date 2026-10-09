@@ -421,7 +421,8 @@
   }));},1000);
   Interceptor.attach(address(0x4f6ce0),{onEnter(args){this.controller=this.context.ecx;
     emit(safely(()=>({event:'native_item_use_builder_enter',identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),
-      location:args[1].toUInt32(),slot:args[2].toInt32(),count:args[3].toUInt32(),target:[args[4].toUInt32(),args[5].toUInt32()]})));},
+      location:args[1].toUInt32(),slot:args[2].toInt32(),count:args[3].toUInt32(),target:[args[4].toUInt32(),args[5].toUInt32()],
+      controller:this.controller.toString(),sequence_before:this.controller.readU32(),pending:this.controller.add(0x10).readPointer().toString()})));},
     onLeave(ret){emit({event:'native_item_use_builder_result',result:ret.toInt32()&255});}});
   Interceptor.attach(address(0x4d7db0),{onEnter(args){this.manager=this.context.ecx;emit({event:'native_item_source_reply_enter',...header(args[0],args[0].add(3).readU16())});},
     onLeave(){emit({event:'native_item_source_reply_leave'});}});
