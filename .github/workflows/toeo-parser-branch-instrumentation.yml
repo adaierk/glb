@@ -1,4 +1,4 @@
-name: TOEO frame trailer magic validation
+name: TOEO actual native packet decoder trace
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        greeting: [endmagic_401_36, endmagic_403_24, endmagic_401_44]
+        greeting: [silence, proper_401_36]
     timeout-minutes: 12
     permissions:
       actions: read
