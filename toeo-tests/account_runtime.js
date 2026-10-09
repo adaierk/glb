@@ -122,6 +122,21 @@
                           [0x43f090,'native_map_init_parse'],[0x442270,'native_map_load_construct']]) {
     Interceptor.attach(address(va),{onEnter(args){this.args=args;emit({event,object:this.context.ecx.toString()});},onLeave(ret){emit({event:event+'_returned',result:ret.toInt32()});}});
   }
+  Interceptor.attach(address(0x4c8570),{onEnter(args){emit({event:'native_game_error',code:args[0].toInt32()});}});
+  for(const [va,name] of [[0x4c1bb0,'map_engine_create'],[0x4c1330,'map_engine_init'],
+                         [0x4543d0,'map_resource_load'],[0x420120,'map_mpi_read'],
+                         [0x4181f0,'map_mpd_read'],[0x45c880,'map_bank_read'],
+                         [0x509db0,'player_entity_create'],[0x501470,'player_model_load']]) {
+    Interceptor.attach(address(va),{
+      onEnter(args){this.object=this.context.ecx;this.name=name;
+        const paths=va===0x4543d0?[args[1],args[2],args[3]]:
+          (va===0x420120 || va===0x4181f0)?[args[0]]:va===0x45c880?[args[1]]:[];
+        emit({event:'native_'+name,object:this.object.toString(),
+          paths:paths.map(p=>safely(()=>p.readCString()))});},
+      onLeave(ret){emit({event:'native_'+name+'_returned',object:this.object.toString(),
+        result:ret.toInt32(),result_low_byte:ret.toInt32()&255});}
+    });
+  }
   let worldTaskPhase=-1;
   Interceptor.attach(address(0x43eb50), {
     onEnter() {

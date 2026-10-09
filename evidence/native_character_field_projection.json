@@ -1,0 +1,128 @@
+{
+  "passed": true,
+  "level": "original_lookup_and_pre_resource_model_loader_creation_vs_selection",
+  "cases": [
+    {
+      "parameters": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "original_model_id": 1,
+      "creation_loader_arguments": [
+        17072640,
+        17072384,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "selection_loader_arguments": [
+        17072640,
+        17072384,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "parameters": [
+        5,
+        2,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        1
+      ],
+      "original_model_id": 14,
+      "creation_loader_arguments": [
+        17072640,
+        17072384,
+        14,
+        1,
+        0,
+        2,
+        5,
+        0,
+        1
+      ],
+      "selection_loader_arguments": [
+        17072640,
+        17072384,
+        14,
+        1,
+        0,
+        2,
+        5,
+        0,
+        1
+      ]
+    },
+    {
+      "parameters": [
+        3,
+        1,
+        127,
+        126,
+        0,
+        0,
+        125,
+        0,
+        0,
+        1
+      ],
+      "original_model_id": 4,
+      "creation_loader_arguments": [
+        17072640,
+        17072384,
+        4,
+        127,
+        0,
+        126,
+        125,
+        0,
+        1
+      ],
+      "selection_loader_arguments": [
+        17072640,
+        17072384,
+        4,
+        127,
+        0,
+        126,
+        125,
+        0,
+        1
+      ]
+    }
+  ],
+  "unknown_fields": "Other parameters remain stored verbatim, not mapped into world attributes",
+  "substitutions": [
+    "inherited fixture boundaries",
+    "resource-object constructor 519280"
+  ],
+  "does_not_prove": [
+    "518ed0 resource execution",
+    "valid appearance index ranges",
+    "Windows rendering",
+    "playability"
+  ]
+}

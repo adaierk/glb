@@ -31,7 +31,13 @@ def player_record(identity,name,selector_fields,position=(3200.,3200.)):
     raw=name.encode('utf-16le')
     if len(raw)>62:raise ValueError('Player name exceeds original fixed field')
     b[0x38:0x38+len(raw)]=raw
-    b[0x94:0x94+248]=selector_fields
+    # Original 43f38e copies this 24-byte appearance object; 501584/50162e
+    # then uses exactly the selector's model and appearance parameters.
+    b[0x7c:0x94]=selector_fields[0x30:0x48]
+    # World attributes are a separate 456-byte structure (405e90), not a
+    # selector record. Preserve its two measured constructor defaults.
+    struct.pack_into('<I',b,0x94,1)
+    struct.pack_into('<I',b,0x94+0xdc,1)
     b[0x30:0x33]=bytes((1,0,0))
     return bytes(b)
 

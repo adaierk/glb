@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "parameters": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "model": 1,
+      "selector_args": [
+        17072640,
+        17072384,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "world_args": [
+        17072640,
+        17072384,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "parameters": [
+        5,
+        2,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        1
+      ],
+      "model": 14,
+      "selector_args": [
+        17072640,
+        17072384,
+        14,
+        1,
+        0,
+        2,
+        5,
+        0,
+        1
+      ],
+      "world_args": [
+        17072640,
+        17072384,
+        14,
+        1,
+        0,
+        2,
+        5,
+        0,
+        1
+      ]
+    }
+  ],
+  "limitations": [
+    "Original model lookup and argument loads; resource rendering checked in Windows separately"
+  ]
+}
