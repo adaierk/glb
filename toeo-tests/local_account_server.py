@@ -26,7 +26,8 @@ from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
 from world_map_packets import LOCAL_MAP_ID,world_initialization_reply,world_map_ready_reply
 from world_movement_packets import parse_move_request,move_reply
-from world_npc_packets import shop_actor_notice,SHOP_IDENTITY,SHOP_GRID
+from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_npc_request,
+                               npc_selection_reply,npc_action_reply,shop_open_notice)
 from world_position_store import WorldPositionStore,walkable_grid
 from native_map_geometry import grid_to_point
 
@@ -251,6 +252,37 @@ class LocalAccountServer(BootstrapServer):
                     state['local_shop_announced']=True
                     self.log('local_shop_actor_announced',connection=conn_id,identity=SHOP_IDENTITY,
                              grid=SHOP_GRID,map_id=LOCAL_MAP_ID,bytes=len(notice))
+                continue
+            if op in (0xc6,0xc8) and port==11101:
+                control=state.get('world_account_control')
+                try:npc=parse_npc_request(payload)
+                except ValueError as error:
+                    self.log('npc_request_rejected',connection=conn_id,reason=str(error));continue
+                if not control or not state.get('world_map_ready') or npc['identity']!=tuple(control['character_id']) or npc['map_id']!=LOCAL_MAP_ID or npc['target']!=SHOP_IDENTITY:
+                    self.log('npc_request_rejected',connection=conn_id,reason='Character, ready map or target mismatch');continue
+                self.log('native_npc_request',connection=conn_id,request_hex=payload.hex(),**npc)
+                if op==0xc6:
+                    if npc['grid']!=SHOP_GRID:
+                        self.log('npc_request_rejected',connection=conn_id,reason='NPC grid mismatch');continue
+                    state['npc_selected']=SHOP_IDENTITY
+                    answer=npc_selection_reply(npc)
+                    self.send_answer(c,answer,state)
+                    self.log('npc_selection_answer',connection=conn_id,request_id=req,answer_hex=answer.hex())
+                elif npc['action']==2 and state.get('npc_selected')==SHOP_IDENTITY:
+                    self.send_answer(c,npc_action_reply(npc),state)
+                    notice_id=state.get('shop_notice_sequence',0)+1;state['shop_notice_sequence']=notice_id
+                    notice=shop_open_notice(npc['identity'],0x70000000+notice_id)
+                    self.send_answer(c,notice,state)
+                    state['shop_open_notice_id']=0x70000000+notice_id
+                    self.log('shop_empty_catalog_sent',connection=conn_id,request_id=state['shop_open_notice_id'],notice_hex=notice.hex())
+                else:self.log('npc_request_rejected',connection=conn_id,reason='Unsupported or unselected NPC action')
+                continue
+            if op==0xd7 and port==11101:
+                control=state.get('world_account_control')
+                if len(payload)!=36 or not control or req!=state.get('shop_open_notice_id') or struct.unpack_from('<IIIII',payload,12)!=(*control['character_id'],LOCAL_MAP_ID,*SHOP_IDENTITY):
+                    self.log('shop_catalog_ack_rejected',connection=conn_id,request_hex=payload.hex());continue
+                state['shop_catalog_ack_observed']=True
+                self.log('shop_catalog_ack_native',connection=conn_id,request_id=req,request_hex=payload.hex())
                 continue
             if op==0x42 and port==11101:
                 control=state.get('world_account_control')

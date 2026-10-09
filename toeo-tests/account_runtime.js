@@ -191,7 +191,15 @@
     this.list=args[0];this.caller=this.returnAddress.toString();
     if(this.keep)emit(safely(()=>({event:'native_player_pick_enter',caller:this.caller,
       point:[args[1].readFloat(),args[1].add(4).readFloat()],options:[args[4].toInt32(),args[5].toInt32(),args[6].toInt32()]})));
-  },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_player_pick_result',caller:this.caller,result:ret.toInt32()&255,count:this.list.add(8).readU32()})));}});
+  },onLeave(ret){if(this.keep)emit(safely(()=>{
+    const count=this.list.add(8).readU32(),actors=[];
+    const head=this.list.add(4).readPointer();let node=head.readPointer();
+    for(let i=0;i<Math.min(count,8) && !node.equals(head);i++,node=node.readPointer()){
+      const actor=node.add(8).readPointer();
+      actors.push({identity:[actor.add(0x68).readU32(),actor.add(0x6c).readU32()],category:actor.add(0x70).readU32()});
+    }
+    return {event:'native_player_pick_result',caller:this.caller,result:ret.toInt32()&255,count,actors};
+  }));}});
   const lastBindings=new Map();let bindingChanges=0;
   Interceptor.attach(address(0x69b790),{onEnter(args){
     this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
@@ -282,6 +290,16 @@
     if(safely(()=>args[0].readPointer().equals(address(0x6eeca8))))
       emit({event:'native_shop_extension_attached',actor:this.context.ecx.toString(),extension:args[0].toString()});
   }});
+  Interceptor.attach(address(0x5b9a90),{onEnter(args){
+    emit({event:'native_npc_actions',identity:[args[0].toUInt32(),args[1].toUInt32()],permissions:args[2].toUInt32(),extra:args[3].toUInt32()});
+  }});
+  Interceptor.attach(address(0x59a640),{onEnter(args){
+    this.shop=this.context.ecx;this.size=args[1].toUInt32();
+    emit(safely(()=>({event:'native_shop_catalog_parse_enter',bytes:this.size,opcode:args[0].add(1).readU16()})));
+  },onLeave(ret){emit(safely(()=>({event:'native_shop_catalog_parse_result',result:ret.toInt32()&255,
+    target:[this.shop.add(0x100).readU32(),this.shop.add(0x104).readU32()],items:this.shop.add(0x11c).readU32()})));}});
+  Interceptor.attach(address(0x59a5d0),{onEnter(args){this.argument=args[0].toInt32();},
+    onLeave(ret){emit({event:'native_shop_frame_show',argument:this.argument,result:ret.toInt32()&255});}});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();
