@@ -27,8 +27,8 @@ def main():
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None
     u=ctypes.windll.user32
     def click(x,y):
-        u.SetCursorPos(x,y);u.mouse_event(2,0,0,0,0);time.sleep(.10);u.mouse_event(4,0,0,0,0)
-        events.append({'event':'actual_ui_click','x':x,'y':y})
+        u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(2,0,0,0,0);time.sleep(.90);u.mouse_event(4,0,0,0,0);time.sleep(.35)
+        events.append({'event':'actual_ui_click','x':x,'y':y,'host_time':time.time()});print('PHASE actual_ui_click '+str((x,y)),flush=True)
     def type_text(s):
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
@@ -62,7 +62,8 @@ def main():
                       92:lambda:(click(380,290),type_text('archive001')),
                       96:lambda:(click(380,336),type_text('local123')),100:lambda:click(315,405),
                       115:lambda:click(325,150),120:lambda:click(700,447),
-                      125:lambda:(click(323,303),click(323,324),click(323,348),click(450,376)),
+                      125:lambda:(click(323,303),click(323,324),click(450,376)),
+                      130:lambda:click(450,376),
                       135:lambda:click(700,447)}
             for t in range(args.duration):
                 time.sleep(1)

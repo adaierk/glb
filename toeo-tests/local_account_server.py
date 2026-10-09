@@ -134,7 +134,7 @@ class LocalAccountServer(BootstrapServer):
                 account_id=state.get('game_account_id')
                 if not account_id:
                     self.log('selection_without_game_login',connection=conn_id);continue
-                if len(payload)!=24 or struct.unpack_from('<I',payload,20)[0]!=0:
+                if len(payload)!=24 or struct.unpack_from('<I',payload,20)[0]&~0x0e:
                     self.log('unsupported_selection_request',connection=conn_id);continue
                 identity=struct.unpack_from('<II',payload,12)
                 cache=state.setdefault('selection_answers',{})
