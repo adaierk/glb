@@ -26,9 +26,9 @@ def main():
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None
     u=ctypes.windll.user32
-    def click(x,y):
-        u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(2,0,0,0,0);time.sleep(.90);u.mouse_event(4,0,0,0,0);time.sleep(.35)
-        events.append({'event':'actual_ui_click','x':x,'y':y,'host_time':time.time()});print('PHASE actual_ui_click '+str((x,y)),flush=True)
+    def click(x,y,right=False):
+        u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(8 if right else 2,0,0,0,0);time.sleep(.90);u.mouse_event(16 if right else 4,0,0,0,0);time.sleep(.35)
+        events.append({'event':'actual_ui_click','x':x,'y':y,'right':right,'host_time':time.time()});print('PHASE actual_ui_click '+str((x,y)),flush=True)
     def type_text(s):
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
@@ -65,7 +65,7 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      150:lambda:click(530,330),160:lambda:click(330,380),170:lambda:click(480,380)}
+                      150:lambda:click(360,180),160:lambda:click(620,160),170:lambda:click(400,200,True)}
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()

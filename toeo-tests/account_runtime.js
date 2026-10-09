@@ -160,6 +160,14 @@
     const key=JSON.stringify(state);if(key!==lastRenderState){lastRenderState=key;emit(state);}
   }});
   let drew=false;
+  let moveCalls=0;
+  Interceptor.attach(address(0x502250),{onEnter(args){
+    this.keep=++moveCalls<=40;
+    if(this.keep)emit(safely(()=>({event:'native_move_path_request',
+      player:this.context.ecx.toString(),target_grid:[args[0].readS32(),args[0].add(4).readS32()],
+      options:[args[1].toInt32(),args[2].toInt32(),args[3].toInt32()],
+      position:[this.context.ecx.add(0xc).readFloat(),this.context.ecx.add(0x10).readFloat()]})));
+  },onLeave(ret){if(this.keep)emit({event:'native_move_path_result',result:ret.toInt32()});}});
   Interceptor.attach(address(0x454090),{onEnter(){
     if(!drew){drew=true;emit({event:'native_map_draw_context',object:this.context.ecx.toString()});}
   }});
