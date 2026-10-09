@@ -62,6 +62,7 @@ def main():
                       92:lambda:(click(380,290),type_text('archive001')),
                       96:lambda:(click(380,336),type_text('local123')),100:lambda:click(315,405),
                       115:lambda:click(325,150),120:lambda:click(700,447),
+                      125:lambda:(click(323,303),click(323,324),click(323,348),click(450,376)),
                       135:lambda:click(700,447)}
             for t in range(args.duration):
                 time.sleep(1)
