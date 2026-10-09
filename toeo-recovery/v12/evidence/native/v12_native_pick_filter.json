@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "cases": {
+    "right_players_only": "rejected",
+    "left_npc": "eligible_for_geometry",
+    "left_hidden_rejected": "rejected"
+  },
+  "scope": "original 50A4E0 category/flags checks and 500090 eligibility",
+  "limitations": [
+    "initialized actor/candidate pointers",
+    "does not evaluate model geometry, pick bounds or real Windows mouse input"
+  ]
+}

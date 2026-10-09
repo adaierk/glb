@@ -1,0 +1,69 @@
+永恒传说 Online 本地恢复：v11 位置存档与界面、NPC 实体阶段
+更新：2026-10-09
+
+目标：原 Windows 客户端连接本机服务，进入原地图并逐步恢复游玩。
+已完成：本地账号/角色、原地图与人物、道路点击行走、按角色保存行走终点，
+重启后恢复位置、原角色名、小地图坐标、本地商人类型 NPC 实体显示。
+尚未完成：NPC 拾取和对话/商店买卖、战斗、任务、背包、装备、换图、HUD HP/TP 数字。
+完整游戏尚未恢复。
+
+代码仓库：adaierk/glb；隔离分支 toeo-local-world-recovery-20261009。
+最新实测代码提交：fef88798e184f77ee0368acc6c7393175b7fc9be
+代码 tree：afc794b8cc52fde10f2b299272dfb5246d16d9b5
+Windows RUN30：37920423786，artifact 11611394062，工作流 success。
+两次完整启动复用同一数据库；第一次 2 次 0x42 请求及 0x43 确认，最终保存格子 (19,7)。
+第二次原地图重新加载，服务端 restored=true；原 renderer 10 个样本全部为 (640,128)，
+没有新的移动请求或确认。第二次 desktop150s 已检查，X0019 Y0007、Archive 正常显示。
+原 NPC 0x51C1E0 两次创建成功，category=2、原像素 (352,208)，商人扩展附加成功。
+NPC 仅显示，右键拾取 count=0；身体受树木遮挡，下一步处理拾取/站位和原 C6/C7 链。
+新包：TOEO_Local_World_Recovery_20261009_v11.zip。
+截图：TOEO_Local_World_20261009_v11.png、TOEO_Local_NPC_20261009_v11.png。
+
+原 ToEO_CL.dat SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
+原完整资源 4873 文件、363 地图文件，450 MB 原资源包已保存，本阶段包不重复包含。
+启动：Run_TOEO_Local.cmd；原游戏目录为 original_game 或弹窗选择完整目录。
+资源整理：Prepare_TOEO_Client.cmd；读取既有完整 ZIP/7z，生成独立 original_game。
+本地账号 archive001 / local123，默认 Archive；duration 0 随玩家关闭游戏结束。
+local_world_userdata/local_accounts.sqlite 保留账号、角色和位置；升级复制整个用户数据目录。
+world_positions 自动非破坏迁移；角色归属校验、有效道路校验、删除角色清理均已加入。
+保存规则：服务器确认终点后写库，动画中关闭会从该终点恢复；不是逐帧位置存档。
+
+地图/移动保持已验证的 v10 规则：
+地图十六进制 0x1110101，原 map/1110101.mpd/mpi/bnd 实际加载。
+936B 0x34 初始化；玩家 0x21 状态位 +0x14/+0x18=0；grid 在 +0x28/+0x2A。
+外观保持原 24B 模型参数、世界属性独立 456B；controlled=1。
+5300B 0x3A 就绪响应 +0x12=1 开启原 actor+0x144 移动许可。
+0xA9 原 0x415090 解码 boolean/count RLE；原分配 width*height*2=90000 槽位。
+合法 grid x<399、y<449；偶数行用 layer1200 value1，奇数行要求相邻四瓦片道路。
+末尾备用行阻挡；11821 开放槽位，5244B RLE、5256B A9；官方服务端导航未找回。
+0x42 原 68B：+0x34/+0x38 起点像素，+0x3C/+0x3E 目标格、+0x41 模式。
+0x43 原 48B：保留请求 ID、序号、身份、起止格、模式、速度；原 0x52AE8A 消费。
+身份、地图、就绪和道路校验；重复请求原样 ACK，冲突重放拒绝。
+本地 TCP 11100 账号、11101 地图；广播包装器控制 0x04 ->0x05。
+
+v11 新的原协议结论：
+玩家 0x21 记录 +0x38 名称必须使用原 68B encode_name；直接 UTF-16 会被原解析清空。
+原 0x430B50/0x430BCA 已解码 Archive，Windows HUD 实际显示。
+地图 0x20 记录 +0x14 DWORD=1，经 0x4C1424 写入 loaded_map+0x24；
+原 0x5722E0 检查此位后格式化小地图格子坐标，Windows 已显示。
+本地 NPC identity=(0x70000001,1)，grid=(10,12)，name=Archive Shop；本地重建配置。
+0x3B 广播 req=0xFFFF、固定头32B、0x22实体208B、0x2F商人记录4B、终止4B，总248B。
+原 0x51C1E0 分配原商人扩展 vtable0x6EECA8、kind2；重复就绪不重复发送实体。
+HP/TP 属性存在原实体但 HUD 数字仍空；勿将坐标显示修复等同于全部属性界面修复。
+
+验证：
+32 项账号/世界 TCP、角色位置、启动、原生 TCP 补齐检查通过。
+原 90000 槽位导航逐项、187 个坐标转换点与原机器码一致。
+原机器码地图初始化/名称与保存格子、NPC 名称/类别/商人扩展、坐标权限分支通过。
+实际绘图依据 RUN30 原 Windows 截图与只读 renderer 事件，无内存写入进图/移动成功状态。
+runtime_result.json：map_entered 来自原转场事件与坐标；playable 保留未判定。
+原程序仍有被捕获的 UI/资源 C++ 异常，日志保留；没有宣称无异常或完整可玩。
+
+历史与接续：
+RUN27/v10 原成果和交付包保留不变，history/V10_AND_RUN27_STATE_UNMODIFIED.txt 保留旧状态。
+RUN28 修复名称/存档/NPC，第二次启动被教程阻挡；不要当作重启进图证据。
+RUN29 第二次已从保存点进图，但验证脚本残留确认点击误触地面；不要用其最终位置验存档。
+RUN30 在进入地图后停止教程点击，并明确失败退出；重启位置持续不变已验证。
+NEXT_RECOVERY_V11.txt 和 evidence/reverse 保存 NPC C6/C7/C8、原菜单和 HUD 追踪线索。
+下一步：修原拾取与站位，恢复 NPC 对话/商店，再推进任务/战斗和背包装备。
+旧45000槽位/y225导航结论、旧0x04->0x11广播结论均不适用于当前代码。

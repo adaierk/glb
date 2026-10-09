@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "tested_commit": "98ce3d8aeed23e67719dfabd0daf1697a052b2ee",
+  "windows_run_id": 37926905112,
+  "artifact_id": 11614458414,
+  "map_entered": true,
+  "npc_selected_native": true,
+  "native_empty_shop_parsed": true,
+  "native_shop_frame_shown": true,
+  "shop_parse_events": [
+    {
+      "event": "native_shop_catalog_parse_result",
+      "result": 1,
+      "target": [
+        1879048193,
+        1
+      ],
+      "items": 0,
+      "host_time": 1791547232.9293938
+    }
+  ],
+  "native_requests": [
+    {
+      "time": "2026-10-09T12:00:27.374048+00:00",
+      "event": "actor_target_answer",
+      "connection": 3,
+      "request_hex": "004e0030001600000090d7a9300000000100000001000000010111010000000000000000010000700100000000ffffff",
+      "answer_hex": "004f00300016000000000000010000000100000001011101000000000000000001000070010000000000000000000000",
+      "opcode": 78,
+      "request_id": 22,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "group": [
+        0,
+        0
+      ],
+      "target": [
+        1879048193,
+        1
+      ],
+      "option": 0
+    },
+    {
+      "time": "2026-10-09T12:00:32.876878+00:00",
+      "event": "native_npc_request",
+      "connection": 3,
+      "request_hex": "00c60030001800000000d04301000000010000000101110101000070010000000c000000080000000000000000011900",
+      "opcode": 198,
+      "request_id": 24,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "target": [
+        1879048193,
+        1
+      ],
+      "grid": [
+        12,
+        8
+      ],
+      "extra": 0,
+      "flags": [
+        0,
+        1
+      ]
+    },
+    {
+      "time": "2026-10-09T12:00:32.904398+00:00",
+      "event": "native_npc_request",
+      "connection": 3,
+      "request_hex": "00c8002c00190000000000000000000001000000010000000101110101000070010000000200000000000000",
+      "opcode": 200,
+      "request_id": 25,
+      "action": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "target": [
+        1879048193,
+        1
+      ],
+      "extra": 0,
+      "option": 0
+    },
+    {
+      "time": "2026-10-09T12:00:32.930873+00:00",
+      "event": "shop_catalog_ack_native",
+      "connection": 3,
+      "request_id": 1879048193,
+      "request_hex": "00d700240001000070f0b40a010000000100000001011101010000700100000001000000"
+    }
+  ],
+  "first_movement_acks": [
+    {
+      "time": "2026-10-09T12:00:51.994815+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 29,
+      "sequence": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "source": [
+        6,
+        4
+      ],
+      "target": [
+        19,
+        7
+      ],
+      "mode": 2,
+      "speed": 1.5,
+      "start_point": [
+        224.0,
+        80.0
+      ]
+    }
+  ],
+  "first_positions_unique": [
+    [
+      224,
+      80
+    ],
+    [
+      375.85565185546875,
+      95.18550109863281
+    ],
+    [
+      640,
+      128
+    ]
+  ],
+  "reentry_restored_without_movement": true,
+  "reentry_samples": 11,
+  "reentry_unique_positions": [
+    [
+      640,
+      128
+    ]
+  ],
+  "reentry_movement_acks": 0,
+  "visual_observations": [
+    "first146 original shop window shown with purchase/sell/exit controls and empty catalog",
+    "first150 shop still shown; immediate Escape did not establish closure",
+    "Outside shop click generates original movement while the shop remains visible; closing requires its actual UI button",
+    "reentry150 original minimap X0019 Y0007"
+  ],
+  "limitations": [
+    "Empty catalog, money 0; purchases/sales and complete gameplay not restored",
+    "UI/resource C++ exceptions remain",
+    "RUN35 predates self-target owner safeguard and actual title-bar close verification; final release has a separate later Windows verification record"
+  ]
+}

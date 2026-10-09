@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "tested_commit": "68e6768e4726829c3e6a2ab7c604995321f2d4c5",
+  "scope": "Changed sources compared byte-for-byte to submitted original Windows RUN38 tree",
+  "files": [
+    {
+      "path": "toeo-tests/world_npc_packets.py",
+      "matches_submitted_source": true,
+      "sha256": "e88ef9a759143a08989fa1ffe318a6f7f6ba9a33754796b5af239e5af6768f42"
+    },
+    {
+      "path": "toeo-tests/local_account_server.py",
+      "matches_submitted_source": true,
+      "sha256": "ee7e06ff42e62a60be8d29f6f47180663783f9c0d99cdd649f78179e13c1f71b"
+    },
+    {
+      "path": "toeo-tests/ci_original_client.py",
+      "matches_submitted_source": true,
+      "sha256": "015e5db9867118dbc317da87e8f2e3ac7ac25733191f1606527a8d28a3d06580"
+    },
+    {
+      "path": "toeo-tests/account_runtime.js",
+      "matches_submitted_source": true,
+      "sha256": "b0aac1a123a09b4fd8fc932174b8832e66cdb7fdcf7b3847b398e2eca79dcc14"
+    },
+    {
+      "path": "toeo-tests/test_local_account_server.py",
+      "matches_submitted_source": true,
+      "sha256": "4d878db7668efd26ca8b2e2ce0e7f28c533b4aa2b63fbf3b2c6d9d15ac995ae9"
+    },
+    {
+      "path": "toeo-tests/emulate_npc_interaction.py",
+      "matches_submitted_source": true,
+      "sha256": "750aa7f6d762fcc51b85c2c2ac4e4b4c65e8fc33f71dce9ac8bd3f023138e130"
+    },
+    {
+      "path": "toeo-tests/emulate_npc_creation.py",
+      "matches_submitted_source": true,
+      "sha256": "01d73afccb61ad76bfd34ef49bfb852861745f33dbb29d43e6f9a2386d65911e"
+    }
+  ],
+  "unchanged_sources_verified_against_immutable_v11": 74,
+  "total_python_javascript_sources": 81,
+  "immutable_v11_zip_sha256": "4293f0b064e9f255f2f28db179435cbc4b850169dcd845c599a30a4b3bfdf93c"
+}

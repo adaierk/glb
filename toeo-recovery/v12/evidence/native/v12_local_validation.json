@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "local_checks": 32,
+  "duration_seconds": 13.71,
+  "scope": "Local account/world TCP, session startup and native TCP padding; executed earlier in this restoration session after self-target owner fix. Subsequent changes only to read-only Windows observations and CI assertions, verified by RUN38.",
+  "modules": [
+    "test_local_account_server.py",
+    "test_session_bootstrap.py",
+    "test_native_tcp_padding.py"
+  ],
+  "server_protocol_sha256": {
+    "local_account_server.py": "ee7e06ff42e62a60be8d29f6f47180663783f9c0d99cdd649f78179e13c1f71b",
+    "world_npc_packets.py": "e88ef9a759143a08989fa1ffe318a6f7f6ba9a33754796b5af239e5af6768f42",
+    "test_local_account_server.py": "4d878db7668efd26ca8b2e2ce0e7f28c533b4aa2b63fbf3b2c6d9d15ac995ae9"
+  },
+  "final_windows_run": 37929710697,
+  "final_original_client_boots": 2,
+  "final_windows_conclusion": "success"
+}

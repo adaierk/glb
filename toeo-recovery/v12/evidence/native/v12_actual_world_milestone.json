@@ -1,0 +1,290 @@
+{
+  "passed": true,
+  "tested_commit": "68e6768e4726829c3e6a2ab7c604995321f2d4c5",
+  "windows_run_id": 37929710697,
+  "artifact_id": 11615923041,
+  "map_entered": true,
+  "npc_selected_native": true,
+  "native_empty_shop_parsed": true,
+  "native_shop_frame_shown": true,
+  "native_shop_frame_hidden_after_show": true,
+  "movement_after_shop_close_native": true,
+  "shop_parse_events": [
+    {
+      "event": "native_shop_catalog_parse_result",
+      "result": 1,
+      "target": [
+        1879048193,
+        1
+      ],
+      "items": 0,
+      "host_time": 1791548828.829093
+    }
+  ],
+  "shop_visibility_transitions": [
+    {
+      "event": "native_shop_visibility_change",
+      "argument": 1,
+      "flags_before": 1066370,
+      "flags_after": 1066402,
+      "visible": true,
+      "host_time": 1791548828.829093
+    },
+    {
+      "event": "native_shop_visibility_change",
+      "argument": 0,
+      "flags_before": 1066402,
+      "flags_after": 1066370,
+      "visible": false,
+      "host_time": 1791548834.3215015
+    }
+  ],
+  "first_visible_shop_state": {
+    "event": "native_shop_frame_state",
+    "frame": "0xcd4c010",
+    "visible": true,
+    "target": [
+      1879048193,
+      1
+    ],
+    "host_time": 1791548829.5956635
+  },
+  "first_hidden_shop_state_after_show": {
+    "event": "native_shop_frame_state",
+    "frame": "0xcd4c010",
+    "visible": false,
+    "target": [
+      1879048193,
+      1
+    ],
+    "host_time": 1791548834.601564
+  },
+  "native_requests": [
+    {
+      "time": "2026-10-09T12:27:03.208769+00:00",
+      "event": "actor_target_answer",
+      "connection": 3,
+      "request_hex": "004e00300016000000814771300000000100000001000000010111010000000000000000010000700100000000ffffff",
+      "answer_hex": "004f00300016000000000000010000000100000001011101000000000000000001000070010000000000000000000000",
+      "opcode": 78,
+      "request_id": 22,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "group": [
+        0,
+        0
+      ],
+      "target": [
+        1879048193,
+        1
+      ],
+      "option": 0
+    },
+    {
+      "time": "2026-10-09T12:27:08.780100+00:00",
+      "event": "native_npc_request",
+      "connection": 3,
+      "request_hex": "00c60030001800000000d04301000000010000000101110101000070010000000c000000080000000000000000011900",
+      "opcode": 198,
+      "request_id": 24,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "target": [
+        1879048193,
+        1
+      ],
+      "grid": [
+        12,
+        8
+      ],
+      "extra": 0,
+      "flags": [
+        0,
+        1
+      ]
+    },
+    {
+      "time": "2026-10-09T12:27:08.785110+00:00",
+      "event": "native_npc_request",
+      "connection": 3,
+      "request_hex": "00c8002c00190000000000000000000001000000010000000101110101000070010000000200000000000000",
+      "opcode": 200,
+      "request_id": 25,
+      "action": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "target": [
+        1879048193,
+        1
+      ],
+      "extra": 0,
+      "option": 0
+    },
+    {
+      "time": "2026-10-09T12:27:08.832105+00:00",
+      "event": "shop_catalog_ack_native",
+      "connection": 3,
+      "request_id": 1879048193,
+      "request_hex": "00d70024000100007099b30a010000000100000001011101010000700100000001000000"
+    }
+  ],
+  "first_movement_acks": [
+    {
+      "time": "2026-10-09T12:27:17.065513+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 28,
+      "sequence": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "source": [
+        6,
+        4
+      ],
+      "target": [
+        10,
+        8
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        224.0,
+        80.0
+      ]
+    },
+    {
+      "time": "2026-10-09T12:27:29.740240+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 32,
+      "sequence": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "source": [
+        10,
+        8
+      ],
+      "target": [
+        19,
+        7
+      ],
+      "mode": 2,
+      "speed": 1.5,
+      "start_point": [
+        352.0,
+        144.0
+      ]
+    }
+  ],
+  "final_original_renderer_position": [
+    640,
+    128
+  ],
+  "database_world_positions_columns": [
+    "character_id",
+    "account_id",
+    "map_id",
+    "grid_x",
+    "grid_y",
+    "updated"
+  ],
+  "database_world_positions_rows": [
+    [
+      1,
+      1,
+      17891585,
+      19,
+      7,
+      "2026-10-09 12:27:29"
+    ]
+  ],
+  "reentry_restored_without_movement": true,
+  "reentry_samples": 12,
+  "reentry_unique_positions": [
+    [
+      640,
+      128
+    ]
+  ],
+  "reentry_movement_acks": 0,
+  "server_restored_events": [
+    {
+      "time": "2026-10-09T12:30:20.693705+00:00",
+      "event": "map_initialization_candidate_sent",
+      "connection": 3,
+      "request_id": 14,
+      "map_id": 17891585,
+      "character_id": [
+        1,
+        1
+      ],
+      "bytes": 936,
+      "grid": [
+        19,
+        7
+      ],
+      "restored": true,
+      "request_hex": "00330038000e000000fd1900ecab6d7e380061000000000000000000000000000000000000000000010000000100000001011101c3d40000"
+    }
+  ],
+  "source_image_sha256": {
+    "first/original_desktop_146s.png": "58e474424ef10ff691e508e8a67edaf8d1e86ea2b05ae54c650cfcda0b16f82d",
+    "first/original_desktop_149s.png": "5b23583e072785638190e5e6b272dedd383c1f57b565323b7e1f38a45939cad5",
+    "first/original_desktop_170s.png": "aee06a6e4bf236e9d6e8dcaef60fe7368d84f821169c8bd183635d9faa5b60cb",
+    "reentered/original_desktop_150s.png": "1e4f08a4c4f5f3cfaf10efc72939446f71e671f3254653e2c81f9120b49ebb77"
+  },
+  "original_ui_input": {
+    "merchant_left_clicks": [
+      [
+        424,
+        145
+      ],
+      [
+        424,
+        145
+      ]
+    ],
+    "title_bar_close_click": [
+      493,
+      107
+    ],
+    "road_clicks": [
+      [
+        360,
+        180
+      ],
+      [
+        620,
+        160
+      ]
+    ]
+  },
+  "visual_observations": [
+    "Original desktop146: native Japanese shop with purchase/sell controls; empty catalog.",
+    "Original desktop149: actual title-bar X hides shop; merchant target HUD remains.",
+    "Original desktop170: character walked to grid(19,7), shop remains hidden.",
+    "Reentered desktop150: original map and minimap X0019 Y0007 restored."
+  ],
+  "validation_scope": "Actual Windows desktop, original function observations and TCP captures; no success-state injection.",
+  "limitations": [
+    "Empty catalog and money 0; buying/selling, inventory and complete gameplay remain unfinished.",
+    "NPC identity/name/location are local reconstruction, not recovered official merchant data.",
+    "UI/resource C++ exceptions remain; logs retained.",
+    "Visibility flag reads independently corroborate actual screenshots; fixtures are separately scoped."
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "native_target_selection": {
+    "opcode": 78,
+    "request_id": 22,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "group": [
+      0,
+      0
+    ],
+    "target": [
+      1879048193,
+      1
+    ],
+    "option": 0
+  },
+  "native_actor_target": [
+    1879048193,
+    1
+  ],
+  "native_self_target_owner_preserved": true,
+  "native_c6": {
+    "opcode": 198,
+    "request_id": 123,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "target": [
+      1879048193,
+      1
+    ],
+    "grid": [
+      12,
+      8
+    ],
+    "extra": 0,
+    "flags": [
+      0,
+      1
+    ]
+  },
+  "native_c8": {
+    "opcode": 200,
+    "request_id": 4294967295,
+    "action": 2,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "target": [
+      1879048193,
+      1
+    ],
+    "extra": 0,
+    "option": 0
+  },
+  "native_empty_shop_parse_result": 1,
+  "native_shop_identity": [
+    1879048193,
+    1
+  ],
+  "native_d7_hex": "00d700240001000070000000010000000100000001011101010000700100000001000000",
+  "limitations": [
+    "Collection lookups, pending-query transport/lifetime and graphical menu/control boundaries substituted",
+    "Original packet field reads, action switches, C8 and D7 construction execute unchanged",
+    "Only empty catalog; does not prove Windows picking, rendered UI, item purchase or full gameplay"
+  ]
+}

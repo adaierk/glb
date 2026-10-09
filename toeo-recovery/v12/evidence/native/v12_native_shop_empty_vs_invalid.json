@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "valid_empty_group",
+      "notice_hex": "00d60034000100007000000001000000010000000101110101000070010000000000000000000000000000009a00010000000000",
+      "bytes": 52,
+      "native_parser_result": 1,
+      "native_show_called": true,
+      "native_d7_result": 1
+    },
+    {
+      "case": "terminator_without_group",
+      "notice_hex": "00d600300001000070000000010000000100000001011101010000700100000000000000000000000000000000000000",
+      "bytes": 48,
+      "native_parser_result": 0,
+      "native_show_called": true,
+      "native_d7_result": 1
+    }
+  ],
+  "scope": "Original 52D561 -> 59A640 -> D7 construction with declared graphical/lookup/transport boundaries",
+  "conclusion": "D7 constant 1 is not proof of successful parsing; validate native parser result separately",
+  "real_windows_proof": false
+}
