@@ -29,12 +29,59 @@ class WorldInventoryStore:
                 opcode INTEGER NOT NULL, snapshot TEXT NOT NULL,
                 created TEXT DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(connection_key,sequence))''')
+            accounts.db.execute('''CREATE TABLE IF NOT EXISTS world_vitals(
+                character_id INTEGER PRIMARY KEY, account_id INTEGER NOT NULL,
+                hp INTEGER NOT NULL, tp INTEGER NOT NULL,
+                max_hp INTEGER NOT NULL CHECK(max_hp>0), max_tp INTEGER NOT NULL CHECK(max_tp>=0),
+                CHECK(hp BETWEEN 0 AND max_hp), CHECK(tp BETWEEN 0 AND max_tp))''')
 
     def _ensure(self,account_id,identity):
         db=self.accounts.db
         if identity[1]!=account_id or db.execute('SELECT 1 FROM characters WHERE id=? AND account_id=?',identity).fetchone() is None:
             raise TradeRejected('Character not owned or missing')
         db.execute('INSERT OR IGNORE INTO world_wallets VALUES(?,?,?)',(*identity,LOCAL_INITIAL_MONEY))
+        # Provisional offline level-one limits; no official stat table recovered.
+        db.execute('INSERT OR IGNORE INTO world_vitals VALUES(?,?,100,30,100,30)',identity)
+
+    def _vitals(self,identity):
+        row=self.accounts.db.execute('SELECT hp,tp,max_hp,max_tp FROM world_vitals WHERE character_id=? AND account_id=?',identity).fetchone()
+        return dict(zip(('hp','tp','max_hp','max_tp'),row))
+
+    def load_vitals(self,account_id,identity):
+        with self.accounts.lock,self.accounts.db:
+            self._ensure(account_id,identity)
+            return self._vitals(identity)
+
+    def use(self,account_id,identity,request,payload,connection_key):
+        from world_item_definitions import RECOVERY
+        if request['identity']!=identity or request['target'] not in ((0,0),identity) or request['opcode']!=0x55 or request['location']!=2 or request['count'] not in (0,1) or request['slot'] < -1:
+            raise TradeRejected('Item recovery currently supports the owning character only')
+        digest=hashlib.sha256(payload).hexdigest()
+        with self.accounts.lock,self.accounts.db:
+            self._ensure(account_id,identity);db=self.accounts.db
+            prior=db.execute('SELECT character_id,account_id,request_hash FROM world_trade_ledger WHERE connection_key=? AND sequence=?',
+                (connection_key,request['sequence'])).fetchone()
+            if prior:
+                if prior!=(identity[0],account_id,digest):raise TradeRejected('Conflicting native command sequence')
+                return self._snapshot(identity),self._vitals(identity),True
+            before=self._snapshot(identity);vitals=self._vitals(identity)
+            item=next((x for x in before['items'] if tuple(x['identity'])==request['item']),None)
+            if item is None:raise TradeRejected('Missing or foreign item instance')
+            if request['slot']>=0 and (request['slot']>=len(before['items']) or before['items'][request['slot']]['identity']!=item['identity']):
+                raise TradeRejected('Inventory slot does not match item instance')
+            effect=RECOVERY.get(item['name'])
+            if effect is None:raise TradeRejected('This item effect has not been implemented')
+            if vitals['hp']==0:raise TradeRejected('Recovery gummy cannot revive a defeated character')
+            hp=min(vitals['max_hp'],vitals['hp']+effect[0]);tp=min(vitals['max_tp'],vitals['tp']+effect[1])
+            if (hp,tp)==(vitals['hp'],vitals['tp']):raise TradeRejected('HP and TP do not need this recovery item')
+            item_id=item['identity'][0]-0x71000000
+            if item['quantity']==1:db.execute('DELETE FROM world_inventory_items WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
+            else:db.execute('UPDATE world_inventory_items SET quantity=quantity-1 WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
+            db.execute('UPDATE world_vitals SET hp=?,tp=? WHERE character_id=? AND account_id=?',(hp,tp,*identity))
+            snapshot=self._snapshot(identity);vitals=self._vitals(identity)
+            db.execute('''INSERT INTO world_trade_ledger(character_id,account_id,connection_key,sequence,request_hash,opcode,snapshot)
+                VALUES(?,?,?,?,?,?,?)''',(*identity,connection_key,request['sequence'],digest,0x55,json.dumps(snapshot,ensure_ascii=False)))
+            return snapshot,vitals,False
 
     def _snapshot(self,identity):
         db=self.accounts.db

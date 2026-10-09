@@ -158,10 +158,10 @@ def run(binary):
         'native_transaction_wallet_applied':3920,'native_pending_command_released':True,
         'native_shop_refresh_quantity_after_sale':2,'native_last_stack_deletion_refreshed':True,
         'substitutions':['C++ string and CRT wide string boundaries','Container insertion/lookup/clear',
-                         'Resource lookup returns NULL for unresolved template','Network queue and buffer getter',
+                         'ICND resource-manager boundary returns measured ITEM icon IDs','Network queue and buffer getter',
                          'Initialized actor components, collection moves and temporary lifetimes','Empty item property container clear/copy',
                          'Windows graphical refresh captured at original call boundary','Pending command lifetime'],
-        'limitations':['Does not establish native Windows UI buy/sell or official stack/resale rules','Original item templates/icons unresolved']}
+        'limitations':['Does not establish native Windows UI buy/sell or official stack/resale rules','Official item-master identities and Windows rendering are outside this fixture']}
 
 
 if __name__=='__main__':

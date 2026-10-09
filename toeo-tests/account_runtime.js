@@ -419,6 +419,19 @@
     const key=JSON.stringify(state);if(key===previousInventory)return {event:'native_inventory_sample_unchanged'};
     previousInventory=key;return state;
   }));},1000);
+  Interceptor.attach(address(0x4f6ce0),{onEnter(args){this.controller=this.context.ecx;
+    emit(safely(()=>({event:'native_item_use_builder_enter',identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),
+      location:args[1].toUInt32(),slot:args[2].toInt32(),count:args[3].toUInt32(),target:[args[4].toUInt32(),args[5].toUInt32()]})));},
+    onLeave(ret){emit({event:'native_item_use_builder_result',result:ret.toInt32()&255});}});
+  Interceptor.attach(address(0x4d7db0),{onEnter(args){this.manager=this.context.ecx;emit({event:'native_item_source_reply_enter',...header(args[0],args[0].add(3).readU16())});},
+    onLeave(){emit({event:'native_item_source_reply_leave'});}});
+  let previousVitals='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
+    const p=observedPlayer.add(0x114).readPointer();if(p.isNull())return {event:'native_vitals_unavailable'};
+    const state={event:'native_player_vitals_state',hp:p.add(8).readU32(),tp:p.add(12).readU32(),
+      max_hp:p.add(0xa8).readU32(),max_tp:p.add(0xac).readU32()};
+    const key=JSON.stringify(state);if(key===previousVitals)return {event:'native_vitals_unchanged'};
+    previousVitals=key;return state;
+  }));},500);
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();

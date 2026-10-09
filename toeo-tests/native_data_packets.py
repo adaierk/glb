@@ -34,14 +34,16 @@ def parse405(frame):
     encrypted=False
     if len(payload)<9 or struct.unpack_from('<H',payload,3)[0]!=len(payload):
         payload=decrypt(payload);encrypted=True
+    compressed=False
+    if len(payload)>=16 and payload[:4]==b'\x01\0\0\0':
+        from native_compression import decompress
+        payload=decompress(payload);compressed=True
     if len(payload)<9 or struct.unpack_from('<H',payload,3)[0]!=len(payload):
         raise ValueError('Invalid application header after cipher decoding')
-    if payload[0]&0x80:
-        raise ValueError('Compressed application message requires measured decompression')
     return {'sender_index':index,'sender_uid':uid,'flags':frame[18],
             'route':struct.unpack_from('<H',frame,20)[0],
             'opcode':struct.unpack_from('<H',payload,1)[0],
-            'request_id':struct.unpack_from('<I',payload,5)[0],'payload':payload,'encrypted':encrypted}
+            'request_id':struct.unpack_from('<I',payload,5)[0],'payload':payload,'encrypted':encrypted,'compressed':compressed}
 
 
 class FrameStream:

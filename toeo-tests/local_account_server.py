@@ -31,6 +31,8 @@ from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_n
 from world_position_store import WorldPositionStore,walkable_grid
 from world_inventory_store import WorldInventoryStore,TradeRejected
 from world_inventory_packets import parse_trade_request,transaction_reply,inventory_notice
+from world_item_use_packets import parse_item_use_request,vitals_notice
+from world_item_source_packets import parse_item_source_request,item_source_reply
 from native_map_geometry import grid_to_point
 
 
@@ -238,7 +240,8 @@ class LocalAccountServer(BootstrapServer):
                 position=self.positions.load(control['account_id'],role['identity'])
                 inventory=self.inventory.load(control['account_id'],role['identity'])
                 answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req,
-                    map_id=position['map_id'],position=grid_to_point(position['grid']),label=self.profile.label,inventory=inventory)
+                    map_id=position['map_id'],position=grid_to_point(position['grid']),label=self.profile.label,inventory=inventory,
+                    vitals=self.inventory.load_vitals(control['account_id'],role['identity']))
                 self.send_answer(c,answer,state)
                 state['world_grid']=position['grid']
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
@@ -344,6 +347,48 @@ class LocalAccountServer(BootstrapServer):
                          **trade,replayed=replayed,status=status,reason=reason,request_hex=payload.hex(),
                          answer_hex=answer.hex(),inventory_notice_hex=notice.hex(),snapshot=inventory,
                          rules='Local initial grant 5000 / stack 20 / bag 32 / resale half; official values unresolved')
+                continue
+            if op==0xed and port==11101:
+                control=state.get('world_account_control')
+                try:
+                    source_request=parse_item_source_request(payload)
+                    if not control or not state.get('world_map_ready') or source_request['identity']!=tuple(control['character_id']) or source_request['map_id']!=self.map_id:
+                        raise ValueError('Unauthorized item-source request')
+                    from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
+                    stock=historical_stock(self.profile.stock_key or PREVIEW_SOURCE_KEY)['stock']
+                    answer=item_source_reply(source_request,stock)
+                except ValueError as error:
+                    self.log('item_source_rejected',connection=conn_id,reason=str(error));continue
+                self.send_answer(c,answer,state)
+                self.log('item_source_sent',connection=conn_id,**source_request,compressed=parsed['compressed'],answer_hex=answer.hex())
+                continue
+            if op==0x55 and port==11101:
+                control=state.get('world_account_control')
+                try:use=parse_item_use_request(payload)
+                except ValueError as error:
+                    self.log('item_use_malformed',connection=conn_id,reason=str(error),request_hex=payload.hex());continue
+                if not control or not state.get('world_map_ready') or use['identity']!=tuple(control['character_id']) or use['map_id']!=self.map_id:
+                    self.log('item_use_unauthorized',connection=conn_id,reason='Character or ready map mismatch');continue
+                state.setdefault('trade_connection_key',secrets.token_hex(16))
+                status=0;reason=None;replayed=False
+                try:
+                    inventory,vitals,replayed=self.inventory.use(control['account_id'],use['identity'],use,payload,state['trade_connection_key'])
+                except TradeRejected as error:
+                    status=-1;reason=str(error)
+                    inventory=self.inventory.load(control['account_id'],use['identity'])
+                    vitals=self.inventory.load_vitals(control['account_id'],use['identity'])
+                present={tuple(x['identity']) for x in inventory['items']}
+                removed=() if use['item'] in present or status else (use['item'],)
+                answer=transaction_reply(use['sequence'],inventory['money'],status,request_id=use['request_id'],
+                    snapshot=inventory if status==0 else None,removed=removed)
+                self.send_answer(c,answer,state)
+                if status==0:
+                    self.send_answer(c,inventory_notice(use['identity'],self.map_id,inventory),state)
+                    self.send_answer(c,vitals_notice(use['identity'],self.map_id,vitals),state)
+                self.log('item_use_rejected' if status else 'item_use_committed',connection=conn_id,
+                    **use,status=status,reason=reason,replayed=replayed,snapshot=inventory,vitals=vitals,
+                    request_hex=payload.hex(),answer_hex=answer.hex(),
+                    limitation='Historical recovery amounts; casting, interrupted use and battle targeting still pending')
                 continue
             if op==0x42 and port==11101:
                 control=state.get('world_account_control')

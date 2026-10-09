@@ -32,7 +32,7 @@ def world_clock_record():
     # This record feeds 4F5280's clock/weather state. Zero disables timed effects.
     return bytes(b)
 
-def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL_MAP_ID,money=0):
+def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL_MAP_ID,money=0,vitals=None):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
     b=record(0x21,0x284)
     struct.pack_into('<II',b,4,*identity)
@@ -56,17 +56,19 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     struct.pack_into('<I',b,0x94,1)
     struct.pack_into('<I',b,0x94+0xdc,1)
     # Original 4FFDxx/4FFExx readers: current and maximum HP/TP.
-    struct.pack_into('<II',b,0x94+8,100,30)
-    struct.pack_into('<II',b,0x94+0xa8,100,30)
+    vitals=vitals or {'hp':100,'tp':30,'max_hp':100,'max_tp':30}
+    if not 0<=vitals['hp']<=vitals['max_hp'] or not 0<=vitals['tp']<=vitals['max_tp']:raise ValueError('Invalid native HP/TP')
+    struct.pack_into('<II',b,0x94+8,vitals['hp'],vitals['tp'])
+    struct.pack_into('<II',b,0x94+0xa8,vitals['max_hp'],vitals['max_tp'])
     b[0x30:0x33]=bytes((1,0,0))
     if not isinstance(money,int) or not 0<=money<=10000000:raise ValueError('Native wallet range')
     # 43F4AD calls the original checksum-protected wallet setter 51D740.
     struct.pack_into('<I',b,0x25c,money)
     return bytes(b)
 
-def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.),label='Local World',inventory=None):
+def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.),label='Local World',inventory=None,vitals=None):
     b=bytearray(40)
-    records=map_record(map_id,label)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id,money=0 if inventory is None else inventory['money'])
+    records=map_record(map_id,label)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id,money=0 if inventory is None else inventory['money'],vitals=vitals)
     if inventory is not None:
         from world_inventory_packets import inventory_records
         records+=inventory_records(inventory)

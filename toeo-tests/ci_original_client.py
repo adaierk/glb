@@ -15,6 +15,7 @@ def main():
     p.add_argument('--duration',type=int,default=180);p.add_argument('--pump',action='store_true')
     p.add_argument('--database',help='Reuse a preserved local account database for the reentry check')
     p.add_argument('--reenter-check',action='store_true',help='Observe the restored position without scheduled movement')
+    p.add_argument('--use-check',action='store_true',help='Seed this isolated test character at HP40/TP10, then require a real native use and restart')
     p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
@@ -31,6 +32,10 @@ def main():
     from native_map_geometry import grid_to_point
     expected_position=grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid'])
     expected_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
+    if args.use_check and not args.reenter_check:
+        with server.accounts.lock,server.accounts.db:
+            server.accounts.db.execute('UPDATE world_vitals SET hp=40,tp=10 WHERE character_id=? AND account_id=?',server.characters.list(1)[0]['identity'])
+    expected_vitals=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
     u=ctypes.windll.user32
     def click(x,y,right=False,hold=.90):
         u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(8 if right else 2,0,0,0,0);time.sleep(hold);u.mouse_event(16 if right else 4,0,0,0,0);time.sleep(.35)
@@ -101,7 +106,7 @@ def main():
                       177:lambda:adjust_quantity(1,1),178:lambda:adjust_quantity(1,1),
                       180:lambda:click(349,409),
                       190:lambda:click(493,107),195:lambda:click(28,84),
-                      198:lambda:click(517,487,right=True),203:lambda:click(400,350),
+                      198:lambda:click(517,487,right=True),203:lambda:click(340,350,right=True),
                       205:lambda:double_click(517,487),
                       210:lambda:click(28,84),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
@@ -158,6 +163,13 @@ def main():
             result['native_inventory_samples']=inventory_samples
             saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
             result['saved_inventory']=saved_inventory
+            result['saved_vitals']=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
+            vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
+            result['native_vitals_samples']=vital_samples
+            if args.use_check and not args.reenter_check:
+                result['item_used_native']=any(e.get('event')=='native_item_use_builder_result' and e.get('result')==1 for e in events) and any(e.get('quantity')==1 and e.get('icon_id')==3811 for e in named_items)
+                result['hp_recovered_native']=any(e.get('hp')==40 and e.get('tp')==10 for e in vital_samples) and any(e.get('hp')==100 and e.get('tp')==10 for e in vital_samples)
+                if not result['item_used_native'] or not result['hp_recovered_native']:failure=failure or 'Real native item use / quantity 1 / HP40 to 100 did not pass'
             result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
             result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
             result['buy_money_quantity_native']=any(e.get('money')==3920 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
@@ -167,6 +179,8 @@ def main():
             result['inventory_window_open_native']=any(e.get('event')=='native_inventory_frame_state' and e.get('visible') is True for e in events)
             if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native','shop_quantity_refreshed_native')):
                 failure=failure or 'Native purchase 3 / sell 1 / inventory / wallet checks did not all pass'
+            if not result['original_lemon_icon_native']:
+                failure=failure or 'Original lemon ICND icon was not supplied to original inventory control'
             if not result['inventory_window_open_native']:
                 failure=failure or 'Actual original inventory frame did not become visible through the mouse button'
             if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
@@ -185,6 +199,8 @@ def main():
                 if not result['map_entered'] or not result['position_restored_without_movement']:
                     failure=failure or 'Original reentry did not continuously render the saved destination'
                 result['inventory_restored_native']=bool(inventory_samples) and all(e.get('money')==expected_inventory['money'] and e.get('items')==len(expected_inventory['items']) for e in inventory_samples) and all(any(e.get('identity')==list(item['identity']) and e.get('quantity')==item['quantity'] and e.get('name')==item['name'] for e in named_items) for item in expected_inventory['items'])
+                result['vitals_restored_native']=bool(vital_samples) and all(all(e.get(k)==v for k,v in expected_vitals.items()) for e in vital_samples)
+                if args.use_check and not result['vitals_restored_native']:failure=failure or 'Saved HP/TP were not restored in original client'
                 if not expected_inventory['items'] or not result['inventory_restored_native']:
                     failure=failure or 'Original reentry did not restore saved items and funds'
             (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps(result),flush=True)

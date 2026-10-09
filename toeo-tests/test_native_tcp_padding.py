@@ -20,4 +20,11 @@ class NativePaddingTests(unittest.TestCase):
             struct.pack_into('<H',f,4,len(f));struct.pack_into('<H',f,8,tail)
             with self.assertRaises(ValueError):FrameStream().feed(f)
 
+    def test_actual_encrypted_compressed_right_click(self):
+        frame=bytes.fromhex('123456785c000504580001000000030000000400efff0000000000000100340003000000e04918b34f4918b3664918b349e9927cffb74080ff49dfb3a72ee82eedc15c80e06c8091be4b4efd4f4918b3e4e6fe9e50832b8812345678')
+        result=parse405(frame)
+        self.assertTrue(result['encrypted'] and result['compressed'])
+        self.assertEqual((result['opcode'],result['request_id']),(0xed,44))
+        self.assertEqual(result['payload'].hex(),'80ed0024002c000000000000240000000801120101000000010000000100000001000000')
+
 if __name__=='__main__':unittest.main()
