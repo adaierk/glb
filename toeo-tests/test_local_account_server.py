@@ -101,6 +101,18 @@ class LocalAccountTests(unittest.TestCase):
             world.sendall(data405(world_account_request(1,84),1,3,route=0xffef))
             reply=parse405(recv_frame(world))
             self.assertEqual((reply['opcode'],reply['request_id']),(5,84))
+            # Real world 39 is a 40-byte map-ready request, distinct from
+            # the selector's 20-byte character-delete request.
+            ready=bytearray(message(0x39,bytes(31),85))
+            struct.pack_into('<II',ready,24,99,1)
+            world.sendall(data405(ready,1,3,route=0xffef))
+            with self.assertRaises(socket.timeout):world.recv(1)
+            struct.pack_into('<II',ready,24,*identity)
+            world.sendall(data405(ready,1,3,route=0xffef))
+            answer=parse405(recv_frame(world))['payload']
+            self.assertEqual((len(answer),struct.unpack_from('<I',answer,12)[0]),(40,40))
+            self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,1110101))
+            self.assertEqual(len(self.server.characters.list(1)),1)
 
     def open_admitted_world(self,ticket):
         world=socket.create_connection(('127.0.0.1',self.server.main_port));world.settimeout(.5)

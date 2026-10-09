@@ -24,7 +24,7 @@ from character_store import CharacterStore,CharacterRejected
 from world_auth_packets import parse_world_admission,world_admission_ack,parse_world_account,world_account_ack
 from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
-from world_map_packets import world_initialization_reply
+from world_map_packets import world_initialization_reply,world_map_ready_reply
 
 
 class AccountStore:
@@ -226,6 +226,16 @@ class LocalAccountServer(BootstrapServer):
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
                          map_id=1110101,character_id=role['identity'],bytes=len(answer),
                          request_hex=payload.hex(),note='Original record parser verified; real map rendering still requires GUI evidence')
+                continue
+            if op==0x39 and len(payload)==40 and port==11101:
+                control=state.get('world_account_control')
+                identity=struct.unpack_from('<II',payload,24)
+                if not control or identity!=tuple(control['character_id']):
+                    self.log('world_map_ready_rejected',connection=conn_id,identity=identity);continue
+                self.send_answer(c,world_map_ready_reply(req),state)
+                state['world_map_ready']=True
+                self.log('world_map_ready_answer',connection=conn_id,request_id=req,
+                         map_id=1110101,identity=identity,bytes=40)
                 continue
             if op==0x35 and len(payload)==9:
                 if not state.get('game_account_id'):

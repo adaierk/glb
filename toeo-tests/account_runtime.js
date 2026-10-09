@@ -111,7 +111,7 @@
   Interceptor.attach(address(0x6897f0), {
     onEnter(args) {
       const id=args[0].toUInt32();
-      if(id===7 || id===8 || id===17) {
+      if(id>=7 && id<=9 || id===17) {
         emit({event:'native_task_transition_requested',id,manager:this.context.ecx.toString(),
           manager_hex:bytes(this.context.ecx,64),factory:args[1].toString(),cleanup:args[2].toString()});
         if(id===7 && args[1].equals(address(0x440180)))emit({event:'CHARACTER_SELECTION_ACCEPTED_NATIVE'});
@@ -123,6 +123,12 @@
     Interceptor.attach(address(va),{onEnter(args){this.args=args;emit({event,object:this.context.ecx.toString()});},onLeave(ret){emit({event:event+'_returned',result:ret.toInt32()});}});
   }
   Interceptor.attach(address(0x4c8570),{onEnter(args){emit({event:'native_game_error',code:args[0].toInt32()});}});
+  const observedMapTasks=new Set();
+  for(const [va,name] of [[0x4414f0,'map_ready_request'],[0x4416e0,'map_ready_wait'],
+                         [0x52a200,'map_ready_reply_apply'],[0x441870,'map_enter_transition']]) {
+    Interceptor.attach(address(va),{onEnter(){const object=this.context.ecx.toString(),key=name+object;
+      if(!observedMapTasks.has(key)){observedMapTasks.add(key);emit({event:'native_'+name,object});}}});
+  }
   for(const [va,name] of [[0x4c1bb0,'map_engine_create'],[0x4c1330,'map_engine_init'],
                          [0x4543d0,'map_resource_load'],[0x420120,'map_mpi_read'],
                          [0x4181f0,'map_mpd_read'],[0x45c880,'map_bank_read'],
@@ -131,9 +137,10 @@
       onEnter(args){this.object=this.context.ecx;this.name=name;
         const paths=va===0x4543d0?[args[1],args[2],args[3]]:
           (va===0x420120 || va===0x4181f0)?[args[0]]:va===0x45c880?[args[1]]:[];
-        emit({event:'native_'+name,object:this.object.toString(),
+        this.keep=va!==0x45c880 || paths.some(p=>safely(()=>p.readCString().includes('1110101'))===true);
+        if(this.keep)emit({event:'native_'+name,object:this.object.toString(),
           paths:paths.map(p=>safely(()=>p.readCString()))});},
-      onLeave(ret){emit({event:'native_'+name+'_returned',object:this.object.toString(),
+      onLeave(ret){if(this.keep)emit({event:'native_'+name+'_returned',object:this.object.toString(),
         result:ret.toInt32(),result_low_byte:ret.toInt32()&255});}
     });
   }

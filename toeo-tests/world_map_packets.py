@@ -49,3 +49,12 @@ def world_initialization_reply(identity,name,selector_fields,request_id,map_id=1
     struct.pack_into('<I',b,12,size)
     struct.pack_into('<III',b,20,*identity,1)
     return bytes(b)+records
+
+def world_map_ready_reply(request_id,map_id=1110101):
+    # Original world 3A consumer 52a200 requires a 40-byte fixed header;
+    # length 40 means no optional A8/A9/AA records follow. 441731 reads
+    # signed status at +16, and 52a260 looks up the loaded map at +36.
+    b=bytearray(message(0x3a,bytes(31),request_id))
+    struct.pack_into('<I',b,12,len(b))
+    struct.pack_into('<I',b,36,map_id)
+    return bytes(b)
