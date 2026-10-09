@@ -100,9 +100,11 @@ def main():
             result['npc_selected_native']=any(e.get('event')=='native_npc_actions' and e.get('identity')==[0x70000001,1] for e in events)
             result['shop_catalog_parsed_native']=any(e.get('event')=='native_shop_catalog_parse_result' and e.get('result')==1 and e.get('target')==[0x70000001,1] for e in events)
             result['shop_frame_shown_native']=any(e.get('event')=='native_shop_frame_show' and e.get('result')==1 for e in events)
-            closes=[e for e in events if e.get('event')=='native_shop_frame_closed' and e.get('result')==1 and e.get('target')==[0,0]]
+            shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
+            visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]
+            closes=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is False and visible and e.get('host_time',0)>visible[0]['host_time']]
             result['shop_closed_native']=bool(closes)
-            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and positions[-1]==[640,128] and any(e.get('event')=='native_move_path_request' and e.get('target_grid')==[19,7] and e.get('host_time',0)>closes[-1]['host_time'] for e in events)
+            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and positions[-1]==[640,128] and any(e.get('event')=='native_move_path_request' and e.get('target_grid')==[19,7] and e.get('host_time',0)>closes[0]['host_time'] for e in events)
             if not args.reenter_check and (not result['map_entered'] or not result['npc_selected_native'] or not result['shop_catalog_parsed_native'] or not result['shop_frame_shown_native']):
                 failure=failure or 'Original map/NPC selection/shop data/open checks did not all pass'
             if not args.reenter_check and (not result['shop_closed_native'] or not result['movement_after_shop_close_native']):

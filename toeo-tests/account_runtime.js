@@ -297,8 +297,10 @@
     emit(safely(()=>({event:'native_actor_target_set',actor:[this.context.ecx.add(0x68).readU32(),this.context.ecx.add(0x6c).readU32()],
       target:[args[0].toUInt32(),args[1].toUInt32()]})));
   }});
+  let observedShopFrame=null;
   Interceptor.attach(address(0x59a640),{onEnter(args){
     this.shop=this.context.ecx;this.size=args[1].toUInt32();
+    observedShopFrame=this.shop;
     emit(safely(()=>({event:'native_shop_catalog_parse_enter',bytes:this.size,opcode:args[0].add(1).readU16()})));
   },onLeave(ret){emit(safely(()=>({event:'native_shop_catalog_parse_result',result:ret.toInt32()&255,
     target:[this.shop.add(0x100).readU32(),this.shop.add(0x104).readU32()],items:this.shop.add(0x11c).readU32()})));}});
@@ -308,6 +310,18 @@
     this.keep=safely(()=>this.shop.add(0x100).readU32()===0x70000001 && this.shop.add(0x104).readU32()===1);
   },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_shop_frame_closed',result:ret.toInt32()&255,
     target:[this.shop.add(0x100).readU32(),this.shop.add(0x104).readU32()]})));}});
+  Interceptor.attach(address(0x5c1a10),{onEnter(args){
+    this.frame=this.context.ecx;
+    this.keep=observedShopFrame!==null && this.frame.equals(observedShopFrame);
+    if(this.keep){this.argument=args[0].toInt32();this.before=this.frame.add(0x20).readU32();}
+  },onLeave(){if(this.keep)emit(safely(()=>({event:'native_shop_visibility_change',argument:this.argument,
+    flags_before:this.before,flags_after:this.frame.add(0x20).readU32(),
+    visible:(this.frame.add(0x20).readU32()&0x20)!==0})));}});
+  // Original 5C1A90 queries visibility from frame+20 bit 5. Read only;
+  // the title-bar close hides this frame without the server D8 cleanup path.
+  setInterval(()=>{if(observedShopFrame!==null)emit(safely(()=>({event:'native_shop_frame_state',
+    frame:observedShopFrame.toString(),visible:(observedShopFrame.add(0x20).readU32()&0x20)!==0,
+    target:[observedShopFrame.add(0x100).readU32(),observedShopFrame.add(0x104).readU32()]})));},1000);
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();
