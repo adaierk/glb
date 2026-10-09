@@ -15,8 +15,8 @@ class CharacterRejected(ValueError):
 
 
 def native_character_fields(character_id,name,parameters):
-    raw=name.encode('cp932')
-    if not raw or len(raw)>63 or b'\0' in raw:
+    raw=name.encode('utf-16le')
+    if not raw or len(raw)>62 or '\0' in name:
         raise CharacterRejected('Name cannot fit original selector')
     if parameters[0] not in range(1,6) or parameters[1] not in (1,2):
         raise CharacterRejected('Original selector preserves preview models for class 1..5, variant 1..2')

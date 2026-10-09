@@ -141,10 +141,10 @@ class LocalAccountServer(BootstrapServer):
             if op==0x10 and self.world_route_probe:
                 status,parameter,version,uid=parse_endpoint_attachment(payload)
                 with self.endpoint_lock:route=self.endpoint_routes.get(uid)
-                if port!=11101 or not route or uid!=state['client_uid'] or status!=0 or \
+                if port!=self.main_port or not route or state.get('game_account_id')!=route['account_id'] or status!=0 or \
                         (parameter,version)!=(route['network_parameter'],route['version']):
                     self.log('world_endpoint_attachment_rejected',connection=conn_id,uid=uid,status=status);continue
-                state['game_account_id']=route['account_id']
+                with self.endpoint_lock:route['attached']=True
                 state['world_endpoint_ticket']=route['ticket']
                 self.send_answer(c,message(0x11,b'',req),state)
                 self.log('world_endpoint_attachment_ack',connection=conn_id,uid=uid,**route)
@@ -158,12 +158,16 @@ class LocalAccountServer(BootstrapServer):
             if op==4:
                 account_id=parse_world_account(payload)
                 authenticated=state.get('game_account_id') or state.get('account_id')
+                if port==11101:
+                    with self.endpoint_lock:route=self.endpoint_routes.get(state['client_uid'])
+                    if route and route.get('attached'):authenticated=route['account_id']
                 completed=self.world_tickets.complete(account_id,str(conn_id)) if authenticated==account_id else None
                 if not completed:
                     self.log('world_account_control_rejected',connection=conn_id,account_id=account_id,
                              note='Requires authenticated matching account and one active admission')
                     continue
                 state['world_account_control']=completed
+                state['game_account_id']=account_id
                 self.send_answer(c,world_account_ack(req),state)
                 self.log('world_account_control_ack',connection=conn_id,request_id=req,**completed)
                 continue
