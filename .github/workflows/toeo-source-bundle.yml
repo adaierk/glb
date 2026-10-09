@@ -1,4 +1,4 @@
-name: TOEO restoration source archive
+name: TOEO offline restoration source snapshot
 on:
   push:
     branches: [toeo-preservation-audit-20261008]
@@ -7,41 +7,60 @@ on:
 permissions:
   contents: read
 jobs:
-  archive-restoration-work:
+  archive-original-client-research:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
         with:
           ref: toeo-preservation-audit-20261008
-      - name: Prepare recovery notes
+      - name: Document verified results and limitations
         run: |
-          cat > README_TOEO_RECOVERY_20261009.txt <<'EOF'
-          TOEO / Tales of Eternia Online original client preservation work, 2026-10-09.
-          Source: archive.org/details/tales-of-eternia-online-dvd (user's original ISO).
-          Original Windows client starts, has genuine Japanese login and game art.
-          Loopback world selector 127.0.0.1:45000 works; TCP11100 is redirected to local fake server.
-          Native original receive: 0x608CE3; frame assembler 0x60E1E0, packet scanner 0x60CE60.
-          Native 0x0401 packet handler requires total length 44 (0x2c).
-          Experiment compares packet field endianness, payload lengths, and trailing data.
-          Real original native path reached opcode 0x401 parser, validated little-endian 44-byte frame and native handler 0x612430.
-          Original 0x401 callback requires payload+17 status 1 or 2 (previous zero sent invalid status); dedicated status401 tests now available.
-          Real original UI still returns main-server-not-found. NOT signed in and NOT entered character selection or map.
-          No claim that login authentication, character selection or world map is already working.
-          This archive contains tests/scripts only; install original game files separately from source.
-          See workflows and logs in Github branch toeo-preservation-audit-20261008.
+          cat > TOEO_RESTORATION_CURRENT_STATE.txt <<'EOF'
+          Tales of Eternia Online (Namco) original PC client preservation.
+          State at 2026-10-09.
+          SOURCE
+          The original Japanese Windows client was extracted from the DVD ISO
+          archive.org/details/tales-of-eternia-online-dvd .
+          Original client resources or copyrighted binaries are NOT in this research ZIP.
+          VERIFIED IN ORIGINAL GRAPHICAL CLIENT
+          Startup, license agreement, world list and game ID/password login screen all work.
+          Fake offline ID archive001 and fake password local123 used solely for diagnostic.
+          World-discovery service is localhost:45000. Main server is localhost:11100 via
+          Frida connect redirect, not a proprietary live Namco account.
+          The 0x0401 original handler executes for 44-byte little-endian header packets:
+          initial sentinel 12 34 56 78
+          16-bit length 2c 00, opcode 01 04, marker offset 28 00
+          end sentinel 12 34 56 78 at byte offset 40.
+          The 0x0401 payload byte +0x25 is status 1 or 2.
+          Native original code: socket recv around 0x608CE3,
+          assembler 0x60E1E0, scanner 0x60CE60, dispatch 0x612430,
+          opcode 0x0401 handler 0x61273C.
+          Important: current main connection[+0x0c] is NULL. The opcode 0x0401 handler
+          branches to 0x612987 (abort_no_callback) before a login result can be delivered.
+          Server greeting delay 0.2/4/10/15 seconds fails to create that owner.
+          Prepending a syntactically accepted zero-row 0x0402 also fails to create owner.
+          Registry method 0x617AD0 may assign session owner at 0x617BF1; precisely
+          when the original client triggers this registration is under investigation.
+          Various other standalone 0x0403..0x0407 greeting probes caused native
+          access violations at 0x616553 and should not be treated as validated handshakes.
+          NOT YET WORKING
+          No real offline account authorization, character list, character selection,
+          gameplay map or playable world is restored. An Actions workflow showing
+          success only proves the diagnostic harness completed.
+          TEST LOCATIONS
+          All Python files in toeo-tests/ are reverse engineering/emulation probes.
+          All relevant Actions in .github/workflows/toeo-*.yml use the original client.
+          Current branch toeo-preservation-audit-20261008.
+          Verified Actions URL:
+          https://github.com/adaierk/glb/actions/runs/37875822763
+          https://github.com/adaierk/glb/actions/runs/37876902235
           EOF
       - uses: actions/upload-artifact@v4
         with:
-          name: TOEOnline-authentic-client-restoration-source-20261009
+          name: TOEO_Offline_Login_Research_20261009_v2
           path: |
-            README_TOEO_RECOVERY_20261009.txt
+            TOEO_RESTORATION_CURRENT_STATE.txt
             toeo-tests/*.py
-            .github/workflows/toeo-status401.yml
-            .github/workflows/toeo-source-bundle.yml
-            .github/workflows/toeo-resume-static.yml
-            .github/workflows/toeo-route-recovery.yml
-            .github/workflows/toeo-trailer-boundary.yml
-            .github/workflows/toeo-native-endian.yml
-            .github/workflows/toeo-authentic-frame-test.yml
+            .github/workflows/toeo-*.yml
           if-no-files-found: error
