@@ -304,7 +304,6 @@
   }});
   let observedShopFrame=null;
   let observedInventoryFrame=null;
-  Interceptor.attach(address(0x5b52d0),{onLeave(ret){if(!ret.isNull())observedInventoryFrame=ret;}});
   setInterval(()=>{if(observedInventoryFrame!==null)emit(safely(()=>({event:'native_inventory_frame_state',
     visible:!!(observedInventoryFrame.add(0x20).readU32()&32),frame:observedInventoryFrame.toString()})));},500);
   Interceptor.attach(address(0x51ea20),{onEnter(args){
@@ -410,7 +409,7 @@
       name:safely(()=>{const s=this.item.add(0x34);return (s.add(24).readU32()>=8?s.add(4).readPointer():s.add(4)).readUtf16String();}),quantity:this.item.add(0x24).readS16(),
       stack_capacity:this.item.add(0x26).readS16(),sell_price:this.item.add(0xa8).readU32(),
       template_pointer:this.item.add(0x30).readPointer().toString()})));}});
-  Interceptor.attach(address(0x565210),{onEnter(args){emit(safely(()=>({event:'native_inventory_ui_item',
+  Interceptor.attach(address(0x565210),{onEnter(args){observedInventoryFrame=this.context.ecx;emit(safely(()=>({event:'native_inventory_ui_item',
     identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),slot:args[1].toInt32(),
     template_pointer:args[2].toString(),quantity:args[3].toInt32(),flags:args[4].toUInt32()})));}});
   let previousInventory='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
