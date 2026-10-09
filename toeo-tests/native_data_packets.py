@@ -1,6 +1,7 @@
 """Plain NNet 0x0405 data frames, checked against original x86 code."""
 import struct
 from native_handshake_packets import MAGIC
+from native_cipher import decode as decrypt
 
 
 def data405(payload, sender_index, sender_uid, target_index=1, target_uid=1, route=0xffff, flags=4):
@@ -30,14 +31,17 @@ def parse405(frame):
     if n!=tail-36:
         raise ValueError('Payload length mismatch')
     payload=frame[36:tail]
+    encrypted=False
     if len(payload)<9 or struct.unpack_from('<H',payload,3)[0]!=len(payload):
-        raise ValueError('Not a plain application message (compression/encryption unsupported)')
+        payload=decrypt(payload);encrypted=True
+    if len(payload)<9 or struct.unpack_from('<H',payload,3)[0]!=len(payload):
+        raise ValueError('Invalid application header after cipher decoding')
     if payload[0]&0x80:
-        raise ValueError('Encrypted application message requires runtime evidence')
+        raise ValueError('Compressed application message requires measured decompression')
     return {'sender_index':index,'sender_uid':uid,'flags':frame[18],
             'route':struct.unpack_from('<H',frame,20)[0],
             'opcode':struct.unpack_from('<H',payload,1)[0],
-            'request_id':struct.unpack_from('<I',payload,5)[0],'payload':payload}
+            'request_id':struct.unpack_from('<I',payload,5)[0],'payload':payload,'encrypted':encrypted}
 
 
 class FrameStream:

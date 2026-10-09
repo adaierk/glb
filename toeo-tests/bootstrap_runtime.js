@@ -88,7 +88,7 @@ for(const name of ['send','recv']) {
   });
 }
 Process.setExceptionHandler(details=>{
-  emit({event:'native_exception',type:details.type,address:String(details.address)});
+  emit({event:'native_exception',type:details.type,address:String(details.address),stack:Thread.backtrace(details.context,Backtracer.ACCURATE).map(String)});
   return false;
 });
 emit({event:'runtime_probe_ready',image_base:base.toString()});

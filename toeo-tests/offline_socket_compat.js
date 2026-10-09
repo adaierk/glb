@@ -6,7 +6,7 @@
   const a = va => Process.mainModule.base.add(va - 0x400000);
   const ws = Process.getModuleByName('ws2_32.dll');
   const lastError=new NativeFunction(ws.getExportByName('WSAGetLastError'),'int',[]);
-  for(const name of ['bind','connect','socket','WSAEventSelect']) {
+  for(const name of ['bind','connect','socket','WSAEventSelect','ioctlsocket','getsockopt','setsockopt','listen','inet_addr']) {
     Interceptor.attach(ws.getExportByName(name), {
       onEnter(args){
         this.name=name;this.first=args[0].toString();this.caller=this.returnAddress.toString();
@@ -15,7 +15,7 @@
           const p=args[1];this.endpoint={family:p.readU16(),port:p.add(2).readU8()*256+p.add(3).readU8(),
             ip:[4,5,6,7].map(i=>p.add(i).readU8()).join('.')};
         }
-        send({event:'os_socket_enter',name,first:this.first,caller:this.caller,endpoint:this.endpoint});
+        send({event:'os_socket_enter',name,first:this.first,caller:this.caller,endpoint:this.endpoint,args:[args[1].toString(),args[2].toString(),args[3].toString()],text:name==='inet_addr'?args[0].readCString():null});
       },
       onLeave(ret){send({event:'os_socket_return',name,result:ret.toInt32(),last_error:ret.toInt32()<0?lastError():0});}
     });
@@ -30,10 +30,10 @@
       }
     }
   });
-  for(const [va,name] of [[0x60e6a0,'socket_init'],[0x61ba60,'world_controller_start']]) {
+  for(const [va,name] of [[0x60e6a0,'socket_init'],[0x61ba60,'world_controller_start'],[0x619130,'socket_endpoint_init']]) {
     Interceptor.attach(a(va), {
       onEnter(args){this.p=this.context.ecx;send({event:name+'_enter',object:this.p.toString(),args:[args[0].toString(),args[1].toString()]});},
-      onLeave(ret){send({event:name+'_leave',result:ret.toInt32()});}
+      onLeave(ret){send({event:name+'_leave',result:ret.toInt32(),internal_error:this.p.add(0x100).readS32()});}
     });
   }
   for(const name of ['sendto','recvfrom']) {

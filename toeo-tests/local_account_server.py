@@ -15,6 +15,7 @@ from pathlib import Path
 from session_bootstrap_server import BootstrapServer
 from native_handshake_packets import bootstrap402,user_record
 from native_data_packets import FrameStream,parse405,data405
+from native_cipher import encode as encrypt
 from account_packets import decode_string,message,login_ok_body
 from game_login_packets import game_login_reply,native_crc
 from character_packets import character_list_reply,select_character_reply
@@ -85,16 +86,30 @@ class LocalAccountServer(BootstrapServer):
     def connection_closed(self,conn_id,state):
         self.world_tickets.disconnect(str(conn_id))
 
+    def send_answer(self,c,payload,state):
+        c.sendall(data405(encrypt(payload) if state.get('encrypted') else payload,0,2,1,1))
+
     def process_game_bytes(self,c,port,conn_id,data,state):
         stream=state.setdefault('stream',FrameStream())
         for frame in stream.feed(data):
             outer=struct.unpack_from('<H',frame,6)[0]
+            if outer==0x406:
+                notification=bytearray(36)
+                notification[:4]=frame[:4]
+                struct.pack_into('<HHHH',notification,4,36,0x406,31,0)
+                struct.pack_into('<I',notification,14,2)
+                struct.pack_into('<IHB',notification,24,2,0,1)
+                notification[31:35]=frame[:4]
+                c.sendall(notification)
+                self.log('server_receive_ready406',connection=conn_id,hex=notification.hex())
+                continue
             if outer!=0x405:
                 self.log('unimplemented_control',connection=conn_id,outer=hex(outer),hex=frame.hex())
                 continue
             parsed=parse405(frame)
+            state['encrypted']=parsed['encrypted']
             op,payload,req=parsed['opcode'],parsed['payload'],parsed['request_id']
-            self.log('plain_application_request',connection=conn_id,opcode=hex(op),request_id=req)
+            self.log('application_request',connection=conn_id,opcode=hex(op),request_id=req,encrypted=state['encrypted'])
             if op==4:
                 account_id=parse_world_account(payload)
                 authenticated=state.get('game_account_id') or state.get('account_id')
@@ -104,7 +119,7 @@ class LocalAccountServer(BootstrapServer):
                              note='Requires authenticated matching account and one active admission')
                     continue
                 state['world_account_control']=completed
-                c.sendall(data405(world_account_ack(req),0,2,1,1))
+                self.send_answer(c,world_account_ack(req),state)
                 self.log('world_account_control_ack',connection=conn_id,request_id=req,**completed)
                 continue
             if op==0x3b and self.world_route_probe:
@@ -118,7 +133,7 @@ class LocalAccountServer(BootstrapServer):
                 key=(account_id,req)
                 prior=cache.get(key)
                 if prior:
-                    if prior[0]==payload:c.sendall(data405(prior[1],0,2,1,1))
+                    if prior[0]==payload:self.send_answer(c,prior[1],state)
                     else:self.log('selection_request_id_conflict',connection=conn_id,request_id=req)
                     continue
                 try:
@@ -133,7 +148,7 @@ class LocalAccountServer(BootstrapServer):
                     self.log('selection_probe_rejected',connection=conn_id,reason=str(error))
                 if len(cache)>=128:cache.pop(next(iter(cache)))
                 cache[key]=(payload,answer)
-                c.sendall(data405(answer,0,2,1,1));continue
+                self.send_answer(c,answer,state);continue
             if op==0x18:
                 network_parameter,ticket=parse_world_admission(payload)
                 claimed=self.world_tickets.claim(ticket,str(conn_id),state.get('game_account_id'))
@@ -142,7 +157,7 @@ class LocalAccountServer(BootstrapServer):
                              note='No valid locally issued ticket; unmeasured world error reply not fabricated')
                     continue
                 state['world_admission']=claimed
-                c.sendall(data405(world_admission_ack(req),0,2,1,1))
+                self.send_answer(c,world_admission_ack(req),state)
                 self.log('world_admission_ack',connection=conn_id,network_parameter=network_parameter,
                          ticket=ticket,request_id=req,**claimed)
                 continue
@@ -152,7 +167,7 @@ class LocalAccountServer(BootstrapServer):
                     continue
                 roles=self.characters.list(state['game_account_id'])
                 answer=character_list_reply([r['record'] for r in roles],3-len(roles),request_id=req)
-                c.sendall(data405(answer,0,2,1,1))
+                self.send_answer(c,answer,state)
                 self.log('send_character_list',connection=conn_id,request_id=req,
                          count=len(roles),available_slots=3-len(roles),
                          note='Recovered core fields; actual model resources and world remain unverified')
@@ -165,7 +180,7 @@ class LocalAccountServer(BootstrapServer):
                 key=(state['game_account_id'],op,req)
                 prior=cache.get(key)
                 if prior and prior[0]==payload:
-                    c.sendall(data405(prior[1],0,2,1,1))
+                    self.send_answer(c,prior[1],state)
                     self.log('repeat_mutation_answer',connection=conn_id,opcode=hex(op),request_id=req)
                     continue
                 identity=None;status=0;reason=None
@@ -184,7 +199,7 @@ class LocalAccountServer(BootstrapServer):
                 # Bounded per-connection retransmission cache; request IDs are assigned by original code.
                 if len(cache)>=128:cache.pop(next(iter(cache)))
                 cache[key]=(payload,answer)
-                c.sendall(data405(answer,0,2,1,1))
+                self.send_answer(c,answer,state)
                 event=('character_created' if op==0x37 else 'character_deleted') if status==0 else 'character_mutation_rejected'
                 self.log(event,connection=conn_id,
                          account_id=state['game_account_id'],identity=identity,status=status,reason=reason,
@@ -218,7 +233,7 @@ class LocalAccountServer(BootstrapServer):
                 state['game_account_id']=account_id
                 self.log('game_prelogin_candidate',connection=conn_id,account_id=account_id,
                          note='Native receive/filter/correlator and core identity checks verified')
-            reply=data405(answer,0,2,1,1)
+            reply=data405(encrypt(answer) if state.get('encrypted') else answer,0,2,1,1)
             c.sendall(reply)
             self.log('send_application_answer',connection=conn_id,opcode=hex(struct.unpack_from('<H',answer,1)[0]),
                      request_id=req,bytes=len(reply),hex=reply.hex())
