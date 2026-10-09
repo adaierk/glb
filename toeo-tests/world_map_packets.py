@@ -30,7 +30,9 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     b=record(0x21,0x284)
     struct.pack_into('<II',b,4,*identity)
     struct.pack_into('<II',b,0xc,*identity)
-    struct.pack_into('<ff',b,0x14,*position)
+    # 43F382 -> 503995/50399B copies these DWORDs to actor+74/+78:
+    # they are status masks, not pixel coordinates. Position comes from grid.
+    struct.pack_into('<II',b,0x14,0,0)
     struct.pack_into('<I',b,0x1c,1)
     # Native 43F3E9 -> 503AC7 assigns the current player map;
     # 43F3FA -> 4FF9C0 resolves grid cells back to their pixel centers.
