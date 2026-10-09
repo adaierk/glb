@@ -245,6 +245,30 @@ try {
   emit({event:'TOEO_HEADER_HOOK_READY',addr:addr.toString()});
 }catch(e){emit({event:'TOEO_HEADER_HOOK_ERROR',error:String(e)})}
 
+
+for(const [fun,off] of [['SWAP_EXTENDED_HEADER',0x20b1f0],['SWAP_PAYLOAD20',0x20b260],['SWAP_PAYLOAD24',0x20b2c0],['DECODE_EXTRA',0x20b350]]){
+  try{
+    const addr=Process.getModuleByName('ToEO_CL_trace.exe').base.add(off);
+    Interceptor.attach(addr,{
+      onEnter(args){
+        this.i=(sent[fun]=(sent[fun]||0)+1);
+        this.p=args[0];
+        if(this.i<=25){
+          try{emit({event:fun+'_BEFORE',i:this.i,hex:hex(Array.from(new Uint8Array(this.p.readByteArray(48))))})}
+          catch(e){emit({event:fun+'_READ_ERROR',i:this.i,error:String(e)})}
+        }
+      },
+      onLeave(ret){
+        if(this.i<=25){
+          try{emit({event:fun+'_AFTER',i:this.i,hex:hex(Array.from(new Uint8Array(this.p.readByteArray(48))))})}
+          catch(e){}
+        }
+      }
+    });
+    emit({event:'PARSER_HOOK_READY',name:fun,addr:addr.toString()});
+  }catch(e){emit({event:'PARSER_HOOK_ERROR',name:fun,error:String(e)})}
+}
+
 emit({event:'hook_setup_complete'});
 """
 def parse_hex(d):
