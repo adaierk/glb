@@ -550,7 +550,7 @@ Interceptor.attach(originalStart,{
      const q=this.context.esi.sub(0xd8);
      origLoginController=q;
      emit({event:'TOEO_NATIVE_POLL_OWNER_CAPTURE',controller:q.toString(),state:readUiConnection(q),mode:nativePollMode});
-     if(nativePollMode==='off')return;
+     if(nativePollMode==='off'||nativePollMode.endsWith('_off'))return;
      setTimeout(()=>{
        const callPoll=new NativeFunction(Process.mainModule.base.add(0x61bba0-0x400000),'int',['pointer'],'thiscall');
        pollTimer=setInterval(()=>{
