@@ -1,0 +1,48 @@
+{
+  "version": "v12",
+  "delivery_status": "succeeded",
+  "tested_commit": "68e6768e4726829c3e6a2ab7c604995321f2d4c5",
+  "checkpoint_commit": "cdf9e8eb93c66b7120d0b2bb1f7be8af9f7c7af4",
+  "windows_run_id": 37929710697,
+  "artifact_id": 11615923041,
+  "workflow_conclusion": "success",
+  "local_checks": 32,
+  "scope": "Native NPC selection and original empty shop; actual title-bar close; walking; restart position persistence",
+  "limitations": [
+    "Empty goods/money0; purchases, sales, inventory, combat and full gameplay not restored",
+    "Original 450MB resources remain separate",
+    "Original UI/resource C++ exceptions retained"
+  ],
+  "files": [
+    {
+      "name": "TOEO_Local_World_Recovery_20261009_v12.zip",
+      "sandbox_path": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_World_Recovery_20261009_v12.zip",
+      "library_file_id": "libfile_dacf92b533d881919e6c41af6fef0729",
+      "file_id": "file_00000000d28881f7a8583e257d87d64d",
+      "version_number": 0,
+      "sha256": "018bb84b30c7778518ff0ebf4746591c8ecd1a6ad59801e6906db542ee9fd93a",
+      "bytes": 6184849,
+      "status": "succeeded"
+    },
+    {
+      "name": "TOEO_Local_Shop_20261009_v12.png",
+      "sandbox_path": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_Shop_20261009_v12.png",
+      "library_file_id": "libfile_7ad1b710d5a4819185135126bb8b55c4",
+      "file_id": "file_00000000f7b081f7a3713f96ae2d3021",
+      "version_number": 0,
+      "sha256": "d343f63de93a05b557ca19ccb096b724e6fd6560cc660b2d8ed206ab4be0938d",
+      "bytes": 298272,
+      "status": "succeeded"
+    },
+    {
+      "name": "TOEO_Local_World_20261009_v12.png",
+      "sandbox_path": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_World_20261009_v12.png",
+      "library_file_id": "libfile_f9b1a93d3764819182e8da2a317ab22d",
+      "file_id": "file_00000000018081f79af0232e85c88134",
+      "version_number": 0,
+      "sha256": "d17b88da3f3e52ef41ad5bf3cea3202b226144a38ba2e6a8aaaaee07b8585df9",
+      "bytes": 373425,
+      "status": "succeeded"
+    }
+  ]
+}
