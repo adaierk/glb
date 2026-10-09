@@ -24,6 +24,9 @@ jobs:
           Native original receive: 0x608CE3; frame assembler 0x60E1E0, packet scanner 0x60CE60.
           Native 0x0401 packet handler requires total length 44 (0x2c).
           Experiment compares packet field endianness, payload lengths, and trailing data.
+          Real original native path reached opcode 0x401 parser, validated little-endian 44-byte frame and native handler 0x612430.
+          Original 0x401 callback requires payload+17 status 1 or 2 (previous zero sent invalid status); dedicated status401 tests now available.
+          Real original UI still returns main-server-not-found. NOT signed in and NOT entered character selection or map.
           No claim that login authentication, character selection or world map is already working.
           This archive contains tests/scripts only; install original game files separately from source.
           See workflows and logs in Github branch toeo-preservation-audit-20261008.
@@ -34,6 +37,8 @@ jobs:
           path: |
             README_TOEO_RECOVERY_20261009.txt
             toeo-tests/*.py
+            .github/workflows/toeo-status401.yml
+            .github/workflows/toeo-source-bundle.yml
             .github/workflows/toeo-resume-static.yml
             .github/workflows/toeo-route-recovery.yml
             .github/workflows/toeo-trailer-boundary.yml
