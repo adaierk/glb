@@ -1,0 +1,60 @@
+{
+  "version": "v14",
+  "date": "2026-10-09",
+  "source_evidence_checkpoint": "88a65321cfcce1c9415bffd9b0e0273be1eea2ea",
+  "windows_tested_commit": "f8812b9fb03839a325bc97e2fae17515030ab579",
+  "windows_run_id": 37954385467,
+  "windows_conclusion": "success",
+  "manifest": {
+    "zip": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_World_Recovery_20261009_v14.zip",
+    "sha256": "a6de2f32a16658a4bceb2b37824453c68430911d4c014e5e5365a54a8b44749b",
+    "bytes": 7117519,
+    "entries": 199,
+    "crc_check": "PASS",
+    "archive_source_consistency": "PASS",
+    "user_database_included": false,
+    "checkpoint_commit": "88a65321cfcce1c9415bffd9b0e0273be1eea2ea"
+  },
+  "native_buy3_sell1_inventory_window_restart_verified": true,
+  "buy_money_after": 3920,
+  "sell_money_after": 4100,
+  "saved_item_quantity": 2,
+  "local_tests_passed": 38,
+  "runtime_sources_verified": 97,
+  "complete_gameplay": false,
+  "official_initial_stack_resale_rules_verified": false,
+  "deliverables": [
+    {
+      "filename": "TOEO_Local_World_Recovery_20261009_v14.zip",
+      "file_id": "file_00000000a684822f89de880e305b5621",
+      "library_file_id": "libfile_1cfca9b955948191a7490602aefb7d34",
+      "status": "succeeded",
+      "path": "deliverables/TOEO_Local_World_Recovery_20261009_v14.zip",
+      "sha256": "a6de2f32a16658a4bceb2b37824453c68430911d4c014e5e5365a54a8b44749b"
+    },
+    {
+      "filename": "TOEO_Rashuan_Buy_20261009_v14.png",
+      "file_id": "file_00000000a5f0820db93958ce3db3f78d",
+      "library_file_id": "libfile_8e0c5e9d8c8c8191a7da39b432ee738b",
+      "status": "succeeded",
+      "path": "deliverables/TOEO_Rashuan_Buy_20261009_v14.png",
+      "sha256": "d7ceaa3aac2e83a791cd26a93fba34dd9b81ade874250b56b68989c2ab9175cd"
+    },
+    {
+      "filename": "TOEO_Rashuan_Inventory_20261009_v14.png",
+      "file_id": "file_00000000cc6881f8be5f5c49bd117a44",
+      "library_file_id": "libfile_99d0b5314efc8191bc664eeab587550a",
+      "status": "succeeded",
+      "path": "deliverables/TOEO_Rashuan_Inventory_20261009_v14.png",
+      "sha256": "d9a027f84ca0cf6a2a52522e1671ac510707fdf03675bfdb1d29af9101e74e19"
+    },
+    {
+      "filename": "TOEO_Rashuan_Reentered_20261009_v14.png",
+      "file_id": "file_00000000527881f8b0974ca1a2a8ad81",
+      "library_file_id": "libfile_6292906d6308819190bd23b8187d3448",
+      "status": "succeeded",
+      "path": "deliverables/TOEO_Rashuan_Reentered_20261009_v14.png",
+      "sha256": "47b675c3b64b6547ce10a4cf211a7ce388c89297b0213c1709746b7c87cc83db"
+    }
+  ]
+}
