@@ -41,14 +41,15 @@ class CatalogFixture(InteractionFixture):
                 self.item_strings[obj] += self.item_strings[self.read32(sp+4)]
                 self.ret(obj, 4)
         elif va == 0x46eaf0:
-            # No original item templates have been recovered. Original Windows
-            # lookup returns NULL for resource ID zero, independently observed.
-            self.ret(0)
+            # Resource-manager boundary; IDs independently verified by unchanged
+            # 6A68B0 / 68FF10 execution over original icon_item.icd.
+            kind, offset = self.read32(sp+4), self.read32(sp+8)
+            self.ret(3805+offset if kind==8 else 0)
         elif va == 0x51ea20:
             item = self.read32(sp+8)
             self.items.append({'name': self.item_strings[item+0x34],
                 'price_gald': self.read32(item+0x11c),
-                'template_pointer': self.read32(item+0x30),
+                'icon_id': self.read32(item+0x30),
                 'catalog_display_value': self.read32(item+0xa4)})
             self.write32(self.shop+0x11c, len(self.items)); self.ret(len(self.items)-1, 8)
         else:
@@ -60,15 +61,16 @@ def run(binary):
     fixture = CatalogFixture(binary)
     packet = shop_open_notice((1, 1), 0x70000001, stock=source['stock'])
     fixture.receive(0x52d561, packet)
+    from world_item_definitions import icon_id
     expected = [{'name': x['name'], 'price_gald': x['price_gald'],
-                 'template_pointer': 0, 'catalog_display_value': x['price_gald']} for x in source['stock']]
+                 'icon_id': icon_id(x['name']), 'catalog_display_value': x['price_gald']} for x in source['stock']]
     assert fixture.shop_parse_result == 1 and fixture.items == expected
     assert not fixture.assertions
     return {'passed': True, 'packet_bytes': len(packet), 'native_parse_result': fixture.shop_parse_result,
             'items': fixture.items, 'source_url': source['source_url'],
-            'substitutions': ['External C++ string operations', 'Resource lookup returns NULL for local resource ID 0',
+            'substitutions': ['External C++ string operations', 'ICND resource-manager boundary returns verified ITEM group base plus supplied offset',
                 'Catalog insertion boundary captures original-built item object', 'Inherited UI/collections/transport boundaries'],
-            'limitations': ['Catalog preview only; no verified placement, original templates/icons or buy/sell']}
+            'limitations': ['This fixture alone does not prove Windows icon rendering or official item-master identities']}
 
 
 if __name__ == '__main__':

@@ -119,7 +119,7 @@ def run(binary):
     item=f.collections[f.inventory][0]
     assert f.item_strings[item+0x34]=='レモングミ'
     assert struct.unpack('<hh',f.uc.mem_read(item+0x24,4))==(2,20)
-    assert f.read32(item+0xa4)==360 and f.read32(item+0xa8)==180 and f.read32(item+0x30)==0
+    assert f.read32(item+0xa4)==360 and f.read32(item+0xa8)==180 and f.read32(item+0x30)==3811
     f.invoke(0x51d740,(4100,),this=f.wallet);f.invoke(0x51d8a0,this=f.wallet)
     from unicorn.x86_const import UC_X86_REG_EAX
     assert f.uc.reg_read(UC_X86_REG_EAX)==4100 and not f.assertions

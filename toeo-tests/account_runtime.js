@@ -310,7 +310,7 @@
     if(observedShopFrame!==null && this.context.ecx.equals(observedShopFrame.add(0x114))) {
       const item=args[1];
       emit(safely(()=>({event:'native_shop_item_insert',item:item.toString(),
-        price_gald:item.add(0x11c).readU32(),template_pointer:item.add(0x30).readPointer().toString(),
+        price_gald:item.add(0x11c).readU32(),icon_id:item.add(0x30).readU32(),
         catalog_display_value:item.add(0xa4).readU32(),local_catalog_row:item.add(0x10).readU32()})));
     }
   }});
@@ -318,7 +318,7 @@
     if(observedShopFrame!==null && (this.context.ecx.equals(observedShopFrame.add(0x680)) ||
         this.context.ecx.equals(observedShopFrame.add(0x1c0c))))
       emit(safely(()=>({event:'native_shop_row_render',row:args[0].toInt32(),name:args[4].readUtf16String(),
-        template_pointer:args[2].toString(),catalog_display_value:args[6].toUInt32(),
+        icon_id:args[2].toUInt32(),catalog_display_value:args[6].toUInt32(),
         quantity:args[5].toInt32(),mode:observedShopFrame.add(0x110).readU32()})));
   }});
   let activePriceWidget=null,priceAssignments=0;const observedPriceTexts=new Set();
@@ -408,10 +408,10 @@
     emit(safely(()=>({event:'native_inventory_named_item',identity:[0,4,8,12].map(x=>this.item.add(x).readU32()),
       name:safely(()=>{const s=this.item.add(0x34);return (s.add(24).readU32()>=8?s.add(4).readPointer():s.add(4)).readUtf16String();}),quantity:this.item.add(0x24).readS16(),
       stack_capacity:this.item.add(0x26).readS16(),sell_price:this.item.add(0xa8).readU32(),
-      template_pointer:this.item.add(0x30).readPointer().toString()})));}});
+      icon_id:this.item.add(0x30).readU32()})));}});
   Interceptor.attach(address(0x565210),{onEnter(args){observedInventoryFrame=this.context.ecx;emit(safely(()=>({event:'native_inventory_ui_item',
     identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),slot:args[1].toInt32(),
-    template_pointer:args[2].toString(),quantity:args[3].toInt32(),flags:args[4].toUInt32()})));}});
+    icon_id:args[2].toUInt32(),quantity:args[3].toInt32(),flags:args[4].toUInt32()})));}});
   let previousInventory='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
     const wallet=observedPlayer.add(0x1d4).readPointer(),bag=observedPlayer.add(0x1d8).readPointer();
     const state={event:'native_player_inventory_state',money:wallet.isNull()?null:wallet.readU32(),

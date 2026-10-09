@@ -1,6 +1,6 @@
 """Recovered original inventory and trade packet layouts, with local rules.
 
-Native item templates/icons are unresolved. NAME: is an original item property
+Official item-master IDs are unresolved. NAME: is an original item property
 handled by 51D930, not an injected display string. Initial money, stack limit,
 bag capacity and half-price resale are provisional OFFLINE rules.
 """
@@ -26,8 +26,10 @@ def inventory_records(snapshot):
         attributes=record(0x38,84)
         struct.pack_into('<IIII',attributes,4,*identity)
         struct.pack_into('<IIIII',attributes,0x14,item['catalog_index']+1,1,0,0,1)
-        struct.pack_into('<hhh',attributes,0x28,item['quantity'],LOCAL_STACK_LIMIT,0)
-        struct.pack_into('<IIII',attributes,0x34,0,item['buy_price'],item['sell_price'],0)
+        from world_item_definitions import icon_selector
+        icon_type, icon_offset = icon_selector(item['name'])
+        struct.pack_into('<hhh',attributes,0x28,item['quantity'],LOCAL_STACK_LIMIT,icon_offset)
+        struct.pack_into('<IIII',attributes,0x34,icon_type,item['buy_price'],item['sell_price'],0)
         name=('NAME:'+item['name']+';').encode('utf-16le')+b'\0\0'
         properties=record(0x39,(28+len(name)+3)&~3)
         struct.pack_into('<IIII',properties,4,*identity)

@@ -101,6 +101,8 @@ def main():
                       177:lambda:adjust_quantity(1,1),178:lambda:adjust_quantity(1,1),
                       180:lambda:click(349,409),
                       190:lambda:click(493,107),195:lambda:click(28,84),
+                      198:lambda:click(517,487,right=True),203:lambda:click(400,350),
+                      205:lambda:double_click(517,487),
                       210:lambda:click(28,84),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
             if args.reenter_check:
@@ -148,7 +150,9 @@ def main():
             displayed=[e.get('text') for e in events if e.get('event')=='native_shop_display_price_text']
             result['shop_display_price_text_native']=all(str(x['price_gald']) in displayed for x in expected_stock)
             result['visible_prices_verified']=None  # Separately reviewed from captured desktop pixels.
-            result['original_item_templates_icons_verified']=False
+            result['official_item_master_ids_verified']=False
+            result['original_lemon_icon_native']=any(e.get('event')=='native_inventory_ui_item' and e.get('icon_id')==3811 for e in events)
+            result['icon_name_association_basis']='Visual match against unchanged original ICND sprites'
             inventory_samples=[e for e in events if e.get('event')=='native_player_inventory_state']
             named_items=[e for e in events if e.get('event')=='native_inventory_named_item']
             result['native_inventory_samples']=inventory_samples
@@ -194,6 +198,6 @@ def main():
             for retry in range(30):
                 try:exe.unlink(missing_ok=True);break
                 except PermissionError:time.sleep(.1)
-        if failure and not args.resource_probe:raise RuntimeError(failure)
+        if failure:raise RuntimeError(failure)
 
 if __name__=='__main__':main()

@@ -2,7 +2,8 @@
 
 Historical shop coordinates are kept separate from native placements until map
 and coordinate identities are verified. Preview goods carry local catalog IDs;
-original template/icon IDs have not yet been recovered.
+official item-master IDs have not yet been recovered. Icon group selectors use
+the original ICND resource bank; name associations have separate provenance.
 """
 import json
 import struct
@@ -48,11 +49,13 @@ def catalog_records(stock):
         # limits. Native bit 0 enables quantity controls; +2A is stack capacity.
         from world_inventory_packets import LOCAL_STACK_LIMIT
         struct.pack_into('<IIIII', item_record, 0x14, index+1, 1, 0, 0, 1)
-        struct.pack_into('<hhh', item_record, 0x28, 1, LOCAL_STACK_LIMIT, 0)
+        from world_item_definitions import icon_selector
+        icon_type, icon_offset = icon_selector(item['name'])
+        struct.pack_into('<hhh', item_record, 0x28, 1, LOCAL_STACK_LIMIT, icon_offset)
         # 51D780 writes +38 to item+A4; 599C60 passes that value
         # to row+38, and 596FE3 formats it as the displayed gald price.
-        # This field is not an icon ID. Original icons come from templates.
-        struct.pack_into('<IIII', item_record, 0x34, 0, price, price//2, 0)
+        # +34 selects a named ICND group; +2C is its zero-based icon offset.
+        struct.pack_into('<IIII', item_record, 0x34, icon_type, price, price//2, 0)
         result.extend(item_record)
         price_record = record(0x9e, 16)
         struct.pack_into('<III', price_record, 4, price, 0, 0)
