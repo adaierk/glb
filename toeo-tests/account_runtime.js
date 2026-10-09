@@ -163,6 +163,25 @@
     const key=JSON.stringify(state);if(key!==lastRenderState){lastRenderState=key;emit(state);}
   }});
   let drew=false;
+  const lastInputGates=new Map();let inputGateChanges=0;
+  for(const va of [0x524670,0x4bb190,0x500ab0,0x500020,0x4ca9b0,0x4feca0]){
+    Interceptor.attach(address(va),{onEnter(){
+      this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
+      this.caller=this.returnAddress.toString();
+    },onLeave(ret){
+      if(!this.keep)return;
+      const key=va+this.caller,value=ret.toInt32()&255;
+      if(lastInputGates.get(key)!==value && ++inputGateChanges<=80){
+        lastInputGates.set(key,value);emit({event:'native_player_input_gate',function:'0x'+va.toString(16),caller:this.caller,result:value});
+      }
+    }});
+  }
+  let pickCalls=0;
+  Interceptor.attach(address(0x50a3e0),{onEnter(args){
+    this.keep=drew && ++pickCalls<=40;this.list=args[0];this.caller=this.returnAddress.toString();
+    if(this.keep)emit(safely(()=>({event:'native_player_pick_enter',caller:this.caller,
+      point:[args[1].readFloat(),args[1].add(4).readFloat()],options:[args[4].toInt32(),args[5].toInt32(),args[6].toInt32()]})));
+  },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_player_pick_result',caller:this.caller,result:ret.toInt32()&255,count:this.list.add(8).readU32()})));}});
   const lastBindings=new Map();let bindingChanges=0;
   Interceptor.attach(address(0x69b790),{onEnter(args){
     this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
