@@ -24,9 +24,11 @@ def world_account_request(account_id,request_id=0xffffffff):
     return message(4,struct.pack('<I',account_id),request_id)
 
 
-def world_account_ack(request_id):
-    # Native 61fdf0 maps 0x11 to zero-payload query correlation.
-    return message(0x11,b'',request_id)
+def world_account_ack(request_id,*,broadcast=True):
+    # The original primary world wrapper (vtable 7085e4) uses 61fc50,
+    # whose 04 account query is correlated by 05. The account wrapper
+    # (708614 / 61fdf0) correlates its control queries with 11.
+    return message(5 if broadcast else 0x11,b'',request_id)
 
 
 def parse_world_account(payload):

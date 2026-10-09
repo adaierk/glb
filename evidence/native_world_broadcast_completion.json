@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "wrapper_vtable": "0x7085e4",
+  "receive_dispatch": "0x61fc50",
+  "account_query_opcode": 4,
+  "account_ack_opcode": 5,
+  "cases": {
+    "wrong_account_wrapper_ack": {
+      "stage": 8,
+      "result": 1,
+      "upstream_request_status": 1,
+      "assertions": []
+    },
+    "wrong_request_id": {
+      "stage": 8,
+      "result": 1,
+      "upstream_request_status": 1,
+      "assertions": []
+    },
+    "wrong_channel": {
+      "stage": 8,
+      "result": 1,
+      "upstream_request_status": 1,
+      "assertions": []
+    },
+    "matched_broadcast_ack": {
+      "stage": 9,
+      "result": 2,
+      "upstream_request_status": 2,
+      "assertions": []
+    }
+  },
+  "limitations": [
+    "Native transport fixture; Windows execution and map rendering require separate evidence"
+  ]
+}

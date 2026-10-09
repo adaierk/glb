@@ -100,7 +100,7 @@ class LocalAccountTests(unittest.TestCase):
             self.assertEqual(struct.unpack_from('<H',self.exchange(world_admission_request(11101,ticket,83)),1)[0],0x19)
             world.sendall(data405(world_account_request(1,84),1,3,route=0xffef))
             reply=parse405(recv_frame(world))
-            self.assertEqual((reply['opcode'],reply['request_id']),(0x11,84))
+            self.assertEqual((reply['opcode'],reply['request_id']),(5,84))
 
     def open_admitted_world(self,ticket):
         world=socket.create_connection(('127.0.0.1',self.server.main_port));world.settimeout(.5)
@@ -113,7 +113,7 @@ class LocalAccountTests(unittest.TestCase):
         ticket=self.server.world_tickets.issue(1,identity)
         with self.open_admitted_world(ticket):
             answer=self.exchange(world_account_request(1,103))
-            self.assertEqual((struct.unpack_from('<H',answer,1)[0],len(answer)),(0x11,9))
+            self.assertEqual((struct.unpack_from('<H',answer,1)[0],len(answer)),(5,9))
             self.assertEqual(self.exchange(world_account_request(1,103)),answer)
             self.assertIsNotNone(self.server.accounts.db.execute('SELECT attached_by FROM world_tickets WHERE ticket=?',(ticket,)).fetchone()[0])
 

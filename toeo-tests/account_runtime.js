@@ -14,7 +14,9 @@
       hex:bytes(p,n)}));
   }
   function wrapper(p) {
-    return safely(()=>({wrapper:p.toString(),cipher_object:p.add(0x14).readPointer().toString(),
+    return safely(()=>({wrapper:p.toString(),vtable:p.readPointer().toString(),
+      receive_handler:p.readPointer().add(0x14).readPointer().toString(),
+      cipher_object:p.add(0x14).readPointer().toString(),
       send_compressor:p.add(0x44).readPointer().toString(),
       compression_option:p.add(0x48).readU32(),
       receive_decompressor:p.add(0x4c).readPointer().toString(),
@@ -34,8 +36,9 @@
   });
   Interceptor.attach(address(0x6095d0), {
     onEnter(args) {
-      if(++received<=250)emit({event:'native_response_correlated',request_id:args[0].toUInt32(),
-        ...header(args[1],args[2].toInt32())});
+      if(++received<=250)emit({event:'native_response_correlated',module:this.context.ecx.toString(),
+        request_id:args[0].toUInt32(),ack_only:args[1].isNull(),
+        ...(args[1].isNull()?{}:header(args[1],args[2].toInt32()))});
     }
   });
   Interceptor.attach(address(0x61d9e0), {
@@ -98,9 +101,11 @@
   for(const va of [0x530600,0x52a580]) {
     Interceptor.attach(address(va), {
       onEnter(args) {
-        if(received<250)emit({event:'native_game_incoming',handler:'0x'+va.toString(16),
+        this.keep=received<250;this.op=args[1].add(1).readU16();
+        if(this.keep)emit({event:'native_game_incoming',handler:'0x'+va.toString(16),
           ...header(args[1],args[2].toInt32())});
-      }
+      },
+      onLeave(ret){if(this.keep)emit({event:'native_game_incoming_returned',handler:'0x'+va.toString(16),opcode:this.op,result:ret.toInt32()});}
     });
   }
   Interceptor.attach(address(0x6897f0), {
