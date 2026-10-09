@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "enabled": {
+    "permission": 1,
+    "input_branch": "0x505bcb"
+  },
+  "disabled": {
+    "permission": 0,
+    "input_branch": "0x505bbe"
+  },
+  "scope": "original 52A3A8 -> 4FE6C0 setter and 505BAD movement permission branch",
+  "does_not_prove": [
+    "complete mouse input loop",
+    "successful path search",
+    "map movement"
+  ]
+}

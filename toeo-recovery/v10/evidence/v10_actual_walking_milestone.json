@@ -1,0 +1,280 @@
+{
+  "stage": "Original Windows map and repeatable mouse-driven walking",
+  "passed": true,
+  "map_entered_verified": true,
+  "walking_verified": true,
+  "fully_playable": false,
+  "workflow_run": 37915436136,
+  "artifact_id": 11609213512,
+  "tested_commit": "ee121997caa39dd27f76e889f42b7993b447e3bd",
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "positions": [
+    {
+      "position": [
+        224,
+        80
+      ],
+      "current_map_id": 17891585,
+      "player_controlled": 1,
+      "movement_permitted": 1,
+      "path_state": {
+        "object": "0xfd38360",
+        "index": -1,
+        "point": [
+          224,
+          80
+        ],
+        "target": [
+          0,
+          0
+        ],
+        "hex": "00000000000060430000a0420000000000000000ffffffff000000000000000000000000000000000000803f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000085e010d00000000"
+      },
+      "host_time": 1791540524.9450645
+    },
+    {
+      "position": [
+        352,
+        144
+      ],
+      "current_map_id": 17891585,
+      "player_controlled": 1,
+      "movement_permitted": 1,
+      "path_state": {
+        "object": "0xfd38360",
+        "index": -1,
+        "point": [
+          352,
+          144
+        ],
+        "target": [
+          0,
+          0
+        ],
+        "hex": "8a0000000000b043000010430000b04300001043ffffffff7dbc22407dbca23f2ef9643f2ef9e43e0000803f0700000000000000ba1b0f4300000000000000001821241018212410282124100000000000000000000000000000000000000000085e010d00000000"
+      },
+      "host_time": 1791540552.911826
+    },
+    {
+      "position": [
+        531.5814208984375,
+        134.023193359375
+      ],
+      "current_map_id": 17891585,
+      "player_controlled": 1,
+      "movement_permitted": 1,
+      "path_state": {
+        "object": "0xfd38360",
+        "index": 1,
+        "point": [
+          531.5814208984375,
+          134.023193359375
+        ],
+        "target": [
+          640,
+          128
+        ],
+        "hex": "b600000036e50444f0050643000020440000004301000000ce8d3f4029452abe1a9b7f3f893463bd0000c03f0600000000000000dadb334300000000000000001821241028212410282124100000b043000010430000204400000043d8389043085e010d00000000"
+      },
+      "host_time": 1791540564.8875394
+    },
+    {
+      "position": [
+        640,
+        128
+      ],
+      "current_map_id": 17891585,
+      "player_controlled": 1,
+      "movement_permitted": 1,
+      "path_state": {
+        "object": "0xfd38360",
+        "index": -1,
+        "point": [
+          640,
+          128
+        ],
+        "target": [
+          0,
+          0
+        ],
+        "hex": "ed00000000002044000000430000204400000043ffffffffce8d3f4029452abe1a9b7f3f893463bd0000c03f0600000000000000db38904300000000000000001821241018212410282124100000000000000000000000000000000000000000085e010d00000000"
+      },
+      "host_time": 1791540566.8930476
+    }
+  ],
+  "native_path_results": [
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540528.3187454
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540528.3512602
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540528.3522592
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540528.3842585
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540534.9002368
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540534.9012349
+    },
+    {
+      "event": "native_move_path_result",
+      "result": 0,
+      "host_time": 1791540551.607641
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540552.4498258
+    },
+    {
+      "event": "native_move_path_result",
+      "result": 0,
+      "host_time": 1791540564.2606885
+    },
+    {
+      "event": "native_move_path_result",
+      "result": -1,
+      "host_time": 1791540565.3210945
+    }
+  ],
+  "movement_acknowledgments": [
+    {
+      "time": "2026-10-09T10:09:11.607641+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 24,
+      "sequence": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "source": [
+        6,
+        4
+      ],
+      "target": [
+        10,
+        8
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        224.0,
+        80.0
+      ]
+    },
+    {
+      "time": "2026-10-09T10:09:24.261533+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 27,
+      "sequence": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17891585,
+      "source": [
+        10,
+        8
+      ],
+      "target": [
+        19,
+        7
+      ],
+      "mode": 2,
+      "speed": 1.5,
+      "start_point": [
+        352.0,
+        144.0
+      ]
+    }
+  ],
+  "native_navigation": {
+    "event": "native_map_navigation_applied",
+    "width": 399,
+    "height": 449,
+    "resource_dimensions": [
+      200,
+      225
+    ],
+    "primary_cells": 90000,
+    "cells": [
+      {
+        "grid": [
+          6,
+          4
+        ],
+        "flags": 65280
+      },
+      {
+        "grid": [
+          10,
+          8
+        ],
+        "flags": 65280
+      },
+      {
+        "grid": [
+          19,
+          7
+        ],
+        "flags": 64256
+      },
+      {
+        "grid": [
+          13,
+          21
+        ],
+        "flags": 13313
+      }
+    ],
+    "host_time": 1791540524.9320626
+  },
+  "visual_review": [
+    "Original desktop 150s: avatar visibly walking on original road",
+    "Original desktop 170s: avatar on road after camera follow",
+    "Original renderer records intermediate coordinates before reaching second destination"
+  ],
+  "screenshot": {
+    "file": "TOEO_Local_Walking_20261009_v10.png",
+    "source": "original_desktop_170s.png",
+    "crop": [
+      8,
+      32,
+      808,
+      632
+    ],
+    "pixels_modified": false,
+    "sha256": "f7269d91efb1d8bef795840fb8e70fa1f5e704cce8b4b334603f12b4e82489ac"
+  },
+  "checks": {
+    "local_tcp_startup_native_padding": 31,
+    "original_navigation_slots": 90000,
+    "original_coordinate_points": 187
+  },
+  "limitations": [
+    "NPCs, combat, quests, inventory, equipment and map transitions remain unimplemented",
+    "World coordinates are not persisted on exit",
+    "HUD property and minimap coordinate display remain incomplete",
+    "Road navigation uses a conservative local reconstruction, not official server navigation data"
+  ]
+}

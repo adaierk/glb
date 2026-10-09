@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "original_consumer": "415090",
+  "grid_cells_verified": 90000,
+  "walkable_cells": 11821,
+  "samples": {
+    "(6, 4)": {
+      "native_flags": 65280,
+      "blocked": false
+    },
+    "(10, 8)": {
+      "native_flags": 65280,
+      "blocked": false
+    },
+    "(19, 7)": {
+      "native_flags": 64256,
+      "blocked": false
+    },
+    "(13, 21)": {
+      "native_flags": 13313,
+      "blocked": true
+    },
+    "(21, 25)": {
+      "native_flags": 1,
+      "blocked": true
+    },
+    "(25, 7)": {
+      "native_flags": 51201,
+      "blocked": true
+    },
+    "(31, 7)": {
+      "native_flags": 1,
+      "blocked": true
+    },
+    "(398, 448)": {
+      "native_flags": 1,
+      "blocked": true
+    },
+    "(397, 447)": {
+      "native_flags": 1,
+      "blocked": true
+    }
+  },
+  "limitations": [
+    "Native metadata is a fixture initialized with blocked cells",
+    "Real Windows map movement requires separate evidence"
+  ]
+}

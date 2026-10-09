@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "cases": {
+    "same": {
+      "query_released": true,
+      "alternate_path": null,
+      "path_speed": 1.5,
+      "actor_speed": 1.5
+    },
+    "different": {
+      "query_released": true,
+      "alternate_path": {
+        "actor": 17498112,
+        "target": [
+          10,
+          8
+        ],
+        "source": [
+          6,
+          4
+        ],
+        "mode": 2,
+        "speed": 1.5
+      },
+      "path_speed": 0.0,
+      "actor_speed": 0.0
+    }
+  },
+  "scope": "original 52AE8A success reply branch, 423830/413BD0 grid comparison and 423820 speed setter",
+  "substitutions": [
+    "actor collection lookup 508A80",
+    "alternate path application 50B730",
+    "query disposal 4CAC70"
+  ],
+  "does_not_prove": [
+    "complete receive transport",
+    "real map collision or movement"
+  ]
+}

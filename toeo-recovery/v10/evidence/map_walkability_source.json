@@ -1,0 +1,18 @@
+{
+  "source": "original map/1110101.mpd",
+  "layer_type": 1200,
+  "source_width": 200,
+  "source_height": 225,
+  "source_cells": 45000,
+  "native_primary_cells": 90000,
+  "grid_bounds": [
+    399,
+    449
+  ],
+  "walkable_cells": 11821,
+  "rle_bytes": 5244,
+  "rule": "Even rows use road tile centers; odd rows require all four surrounding tiles to be road; last unused row remains blocked",
+  "limitations": [
+    "Conservative local rule reconstructed from asset classifications; official server navigation data unavailable"
+  ]
+}
