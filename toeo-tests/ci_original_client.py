@@ -98,15 +98,15 @@ def main():
                       174:lambda:double_click(107,195),176:lambda:drag(107,195,324,195) if not any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 and e.get('mode')==1 for e in events) else None,
                       177:lambda:adjust_quantity(1,1),178:lambda:adjust_quantity(1,1),
                       180:lambda:click(349,409),
-                      190:lambda:click(493,107),195:lambda:click(28,52),
-                      210:lambda:click(28,52),215:lambda:click(360,410,hold=2.0),
+                      190:lambda:click(493,107),195:lambda:click(28,212),
+                      210:lambda:click(28,212),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
-                schedule.update({145:lambda:click(28,52)})
+                schedule.update({145:lambda:click(28,212)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
