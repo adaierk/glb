@@ -24,13 +24,17 @@ def world_clock_record():
     # This record feeds 4F5280's clock/weather state. Zero disables timed effects.
     return bytes(b)
 
-def player_record(identity,name,selector_fields,position=(3200.,3200.)):
+def player_record(identity,name,selector_fields,position=(416.,144.),map_id=LOCAL_MAP_ID):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
     b=record(0x21,0x284)
     struct.pack_into('<II',b,4,*identity)
     struct.pack_into('<II',b,0xc,*identity)
     struct.pack_into('<ff',b,0x14,*position)
     struct.pack_into('<I',b,0x1c,1)
+    # Native 43F3E9 -> 503AC7 assigns the current player map;
+    # 43F3FA -> 4FF9C0 resolves grid cells back to their pixel centers.
+    struct.pack_into('<I',b,0x24,map_id)
+    struct.pack_into('<hh',b,0x28,int(position[0]//64),int(position[1]//32))
     raw=name.encode('utf-16le')
     if len(raw)>62:raise ValueError('Player name exceeds original fixed field')
     b[0x38:0x38+len(raw)]=raw
@@ -41,12 +45,15 @@ def player_record(identity,name,selector_fields,position=(3200.,3200.)):
     # selector record. Preserve its two measured constructor defaults.
     struct.pack_into('<I',b,0x94,1)
     struct.pack_into('<I',b,0x94+0xdc,1)
+    # Original 4FFDxx/4FFExx readers: current and maximum HP/TP.
+    struct.pack_into('<II',b,0x94+8,100,30)
+    struct.pack_into('<II',b,0x94+0xa8,100,30)
     b[0x30:0x33]=bytes((1,0,0))
     return bytes(b)
 
 def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID):
     b=bytearray(40)
-    records=map_record(map_id)+world_clock_record()+player_record(identity,name,selector_fields)+bytes(4)
+    records=map_record(map_id)+world_clock_record()+player_record(identity,name,selector_fields,map_id=map_id)+bytes(4)
     size=len(b)+len(records)
     b[:9]=message(0x34,bytes(size-9),request_id)[:9]
     struct.pack_into('<I',b,12,size)

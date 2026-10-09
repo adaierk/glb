@@ -47,6 +47,8 @@ def run(binary):
     assert result==0 and not f.assertions
     assert f.read32(f.data+0x14)==0x1110101
     assert [f.read32(f.data+0xe0),f.read32(f.data+0xe4)]==[1,1]
+    assert f.read32(f.data+0xe0+0x22c)==0x1110101
+    assert [f.read32(f.data+0xe0+0x230),f.read32(f.data+0xe0+0x234)]==[6,4]
     assert list(f.strings.values())==['map/1110101.mpd','map/1110101.mpi','map/1110101.bnd','']
     return dict(passed=True,original_sha256=EXPECTED_SHA256,native_result=result,
                 native_map_id=f.read32(f.data+0x14),paths=f.strings,
