@@ -15,6 +15,7 @@ def main():
     p.add_argument('--duration',type=int,default=180);p.add_argument('--pump',action='store_true')
     p.add_argument('--database',help='Reuse a preserved local account database for the reentry check')
     p.add_argument('--reenter-check',action='store_true',help='Observe the restored position without scheduled movement')
+    p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
     import frida
@@ -72,6 +73,7 @@ def main():
             source='\n'.join(Path(__file__).with_name(n).read_text(encoding='utf-8') for n in
                              ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js'))
             if args.pump:source+='\n'+Path(__file__).with_name('native_gui_pump.js').read_text(encoding='utf-8')
+            if args.resource_probe:source+='\n'+Path(__file__).with_name('resource_probe.js').read_text(encoding='utf-8')
             print('PHASE native_hooks_load',flush=True)
             script=session.create_script(source);script.on('message',receive);script.load()
             print('PHASE hooks_loaded',flush=True)
@@ -192,6 +194,6 @@ def main():
             for retry in range(30):
                 try:exe.unlink(missing_ok=True);break
                 except PermissionError:time.sleep(.1)
-        if failure:raise RuntimeError(failure)
+        if failure and not args.resource_probe:raise RuntimeError(failure)
 
 if __name__=='__main__':main()
