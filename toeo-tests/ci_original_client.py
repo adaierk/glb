@@ -156,7 +156,9 @@ def main():
             result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
             result['buy_money_quantity_native']=any(e.get('money')==3920 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
             result['sell_money_quantity_native']=any(e.get('money')==4100 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
-            if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native')):
+            sales=[e for e in events if e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1]
+            result['shop_quantity_refreshed_native']=bool(sales) and any(e.get('event')=='native_shop_row_render' and e.get('name')=='レモングミ' and e.get('mode')==1 and e.get('quantity')==2 and e.get('host_time',0)>sales[-1]['host_time'] for e in events)
+            if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native','shop_quantity_refreshed_native')):
                 failure=failure or 'Native purchase 3 / sell 1 / inventory / wallet checks did not all pass'
             if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
                 failure=failure or 'Historical name/price/count were not all observed in original shop controls'

@@ -14,7 +14,7 @@ from world_npc_packets import SHOP_IDENTITY
 
 class InventoryFixture(CatalogFixture):
     def __init__(self,binary):
-        self.collections={};self.trade_packets=[];self.wide_arena=0x1300000
+        self.collections={};self.trade_packets=[];self.wide_arena=0x1300000;self.shop_refresh_quantities=[]
         super().__init__(binary)
         self.buffer=0x10e0000;self.wallet=0x10e1000;self.inventory=0x10e2000
         self.command=0x10e5000;self.write32(self.game+0x90,self.command)
@@ -22,6 +22,7 @@ class InventoryFixture(CatalogFixture):
         self.write32(self.player+0x1d4,self.wallet);self.write32(self.player+0x1d8,self.inventory)
         for i,iat in enumerate((0x6e2338,0x6e2530,0x6e2534,0x6e2520)):
             self.write32(iat,0x10df000+i*16)
+        self.write32(0x6e234c,0x10df040)
 
     def wide(self,p):
         result=bytearray()
@@ -45,6 +46,15 @@ class InventoryFixture(CatalogFixture):
         elif va==0x10df030:
             p,character=self.read32(sp+4),self.read32(sp+8)
             index=self.wide(p).find(chr(character));self.ret(0 if index<0 else p+index*2)
+        elif va==0x10df040:
+            self.item_strings[obj]=self.item_strings.get(self.read32(sp+4),'');self.ret(obj,4)
+        elif va==0x51ecc0:
+            identity=bytes(uc.mem_read(self.read32(sp+4),16))
+            values=self.collections.setdefault(obj,[])
+            values[:]=[p for p in values if bytes(uc.mem_read(p,16))!=identity]
+            self.write32(obj+8,len(values));self.ret(1,4)
+        elif va==0x4d7710:self.ret() # empty item property collection boundary
+        elif va==0x51e950:self.ret(0,16) # empty property collection copy boundary
         elif va==0x51ef30:
             self.collections[obj]=[];uc.mem_write(obj,bytes(16));self.ret()
         elif va==0x51ea20 and obj!=self.shop+0x114:
@@ -79,6 +89,10 @@ class WorldFixture(InventoryFixture):
         elif va in (0x51f860,0x51efc0,0x4b0080):self.ret() # temporary collection lifetime
         elif va==0x5ba530:self.ret(0,8) # Windows graphical refresh only
         elif va==0x5b52d0:self.ret(0) # graphical inventory absent in this fixture
+        elif va==0x5b53b0:self.ret(0) # graphical equipment absent in this fixture
+        elif va==0x59a210:
+            self.shop_refresh_quantities.append([struct.unpack('<h',uc.mem_read(p+0x24,2))[0] for p in self.collections.get(self.inventory,[])])
+            self.ret() # capture native request to refresh the visible shop
         elif va==0x609c50:
             p=self.read32(sp+4);self.write32(p,0);self.write32(p+8,0);self.ret(1,4) # pending queue lifetime
         else:super().on_code(uc,va,size,context)
@@ -125,15 +139,28 @@ def run(binary):
     notice.receive(0x52b86b,transaction_reply(1,3920))
     assert notice.read32(notice.wallet)==3920 and notice.read32(notice.command+4)==1
     assert notice.read32(notice.command+0x10)==0 and not notice.assertions
+    notice.write32(notice.shop+0x20,32) # visible frame flag, read by original 4F9720
+    notice.write32(notice.command+0x10,1)
+    notice.receive(0x52b86b,transaction_reply(2,4100,snapshot=snapshot))
+    assert notice.shop_refresh_quantities==[[2]]
+    assert len(notice.collections[notice.inventory])==1
+    clone=notice.collections[notice.inventory][0]
+    assert notice.item_strings[clone+0x34]=='レモングミ' and notice.read32(notice.wallet)==4100
+    notice.write32(notice.command+0x10,1)
+    notice.receive(0x52b86b,transaction_reply(3,4460,snapshot={'money':4460,'capacity':32,'items':[]},removed=[instance]))
+    assert notice.collections[notice.inventory]==[] and notice.shop_refresh_quantities[-1]==[]
+    assert notice.read32(notice.wallet)==4460 and notice.read32(notice.command+0x10)==0 and not notice.assertions
     return {'passed':True,'native_buy':buy,'native_buy_hex':f.trade_packets[0].hex(),
         'native_sell':sell,'native_sell_hex':f.trade_packets[1].hex(),
         'native_inventory_name':f.item_strings[item+0x34],'native_quantity':2,
         'native_stack_capacity':20,'native_bag_capacity':32,'native_wallet_crc_read':4100,
         'native_world_initial_inventory_restored':True,'native_full_inventory_notice_applied':True,
         'native_transaction_wallet_applied':3920,'native_pending_command_released':True,
+        'native_shop_refresh_quantity_after_sale':2,'native_last_stack_deletion_refreshed':True,
         'substitutions':['C++ string and CRT wide string boundaries','Container insertion/lookup/clear',
                          'Resource lookup returns NULL for unresolved template','Network queue and buffer getter',
-                         'Initialized actor components, collection moves and temporary lifetimes','Windows graphical refresh','Pending command lifetime'],
+                         'Initialized actor components, collection moves and temporary lifetimes','Empty item property container clear/copy',
+                         'Windows graphical refresh captured at original call boundary','Pending command lifetime'],
         'limitations':['Does not establish native Windows UI buy/sell or official stack/resale rules','Original item templates/icons unresolved']}
 
 

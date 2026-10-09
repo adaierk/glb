@@ -334,7 +334,10 @@ class LocalAccountServer(BootstrapServer):
                     # The receipt is idempotent; a full snapshot must reflect
                     # today's saved state, even after newer transactions.
                     inventory=self.inventory.load(control['account_id'],trade['identity'])
-                answer=transaction_reply(trade['sequence'],inventory['money'],status,request_id=trade['request_id'])
+                present={tuple(item['identity']) for item in inventory['items']}
+                removed=[line['identity'] for line in trade['lines'] if trade['opcode']==0xdf and tuple(line['identity']) not in present]
+                answer=transaction_reply(trade['sequence'],inventory['money'],status,request_id=trade['request_id'],
+                                         snapshot=inventory if status==0 else None,removed=removed)
                 notice=inventory_notice(trade['identity'],self.map_id,inventory)
                 self.send_answer(c,answer,state);self.send_answer(c,notice,state)
                 self.log('shop_trade_rejected' if status else 'shop_trade_committed',connection=conn_id,

@@ -85,15 +85,28 @@ class InventoryTests(unittest.TestCase):
         try:
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)
             self.assertEqual([struct.unpack_from('<H',p,1)[0] for p in c.answers],[0x67,0x6b])
-            self.assertEqual(struct.unpack_from('<IIhh',c.answers[0],12),(1,52,0,0))
+            self.assertEqual(struct.unpack_from('<IIhh',c.answers[0],12),(1,len(c.answers[0]),0,0))
+            self.assertEqual(struct.unpack_from('<H',c.answers[0],36)[0],0x36)
             self.assertEqual(struct.unpack_from('<I',c.answers[0],5)[0],31)
             self.assertEqual(struct.unpack_from('<H',c.answers[1],32)[0],0x36)
             self.assertEqual(server.inventory.load(1,self.identity)['money'],3920)
             server.process_game_bytes(c,11101,9,data405(payload,1,1,route=0xffef),state)
             self.assertEqual(server.inventory.load(1,self.identity)['money'],3920)
+            def records(p):
+                offset=36;result={}
+                while struct.unpack_from('<H',p,offset)[0]:
+                    kind,words=struct.unpack_from('<HH',p,offset)
+                    result[kind]=p[offset:offset+words*4];offset+=words*4
+                return result
+            self.assertEqual(struct.unpack_from('<IIII',records(c.answers[0])[0x4d],28),(0x71000001,1,1,0))
             bad=dict(state);bad.pop('world_map_ready');c.answers=[]
             server.process_game_bytes(c,11101,9,data405(request(0xde,2,self.identity,[(0,1)]),1,1,route=0xffef),bad)
             self.assertEqual(c.answers,[])
+            item=server.inventory.load(1,self.identity)['items'][0];c.answers=[]
+            server.process_game_bytes(c,11101,9,data405(request(0xdf,2,self.identity,[(*item['identity'],2,3)]),1,1,route=0xffef),state)
+            self.assertEqual(struct.unpack_from('<IIII',records(c.answers[0])[0x4c],12),tuple(item['identity']))
+            self.assertNotIn(0x4d,records(c.answers[0]))
+            self.assertEqual(server.inventory.load(1,self.identity),{'money':4460,'capacity':32,'items':[]})
         finally:server.close()
 
 

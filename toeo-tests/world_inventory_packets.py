@@ -49,13 +49,23 @@ def inventory_notice(identity,map_id,snapshot):
     return bytes(b)
 
 
-def transaction_reply(sequence,money,status=0,request_id=0xffffffff):
+def transaction_reply(sequence,money,status=0,request_id=0xffffffff,snapshot=None,removed=()):
     # 52B86B -> 4FAB30 -> 4F9720 releases the original pending command.
     # Record 50 location 2 updates the checksum-protected player wallet.
     tail=bytearray()
     if status==0:
+        if snapshot is not None:tail.extend(inventory_records(snapshot))
         wallet=record(0x50,12);struct.pack_into('<II',wallet,4,2,money)
         tail.extend(wallet)
+        for identity in removed:
+            deletion=record(0x4c,28);struct.pack_into('<I',deletion,4,2)
+            struct.pack_into('<IIII',deletion,12,*identity);tail.extend(deletion)
+        if snapshot is not None:
+            for slot,item in enumerate(snapshot['items']):
+                # 4F9720 decodes the temporary inventory, clones each named
+                # instance into location 2, and refreshes bag AND open shop.
+                update=record(0x4d,44);struct.pack_into('<II',update,4,2,slot)
+                struct.pack_into('<IIII',update,28,*item['identity']);tail.extend(update)
     tail.extend(bytes(4))
     b=bytearray(message(0x67,bytes(27+len(tail)),request_id))
     struct.pack_into('<IIhh',b,12,sequence,len(b),status,0)
