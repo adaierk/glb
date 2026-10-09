@@ -64,7 +64,8 @@ def main():
                       115:lambda:click(325,150),120:lambda:click(700,447),
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
-                      135:lambda:click(700,447)}
+                      135:lambda:click(700,447),
+                      150:lambda:click(530,330),160:lambda:click(330,380),170:lambda:click(480,380)}
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()
