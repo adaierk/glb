@@ -109,7 +109,8 @@ def main():
                       177:lambda:adjust_quantity(1,1),178:lambda:adjust_quantity(1,1),
                       180:lambda:click(349,409),
                       190:lambda:click(493,107),195:lambda:click(28,84),
-                      198:lambda:click(517,487,right=True),203:lambda:click(340,350,right=True),
+                      198:lambda:click(517,487,right=True),201:lambda:click(316,430),
+                      202:lambda:click(28,84),203:lambda:click(406,341),204:lambda:click(28,84),
                       205:lambda:double_click(517,487),
                       210:lambda:click(28,84),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
@@ -170,7 +171,10 @@ def main():
             vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
             result['native_vitals_samples']=vital_samples
             if args.use_check and not args.reenter_check:
-                result['item_used_native']=any(e.get('event')=='native_item_use_builder_result' and e.get('result')==1 for e in events) and any(e.get('quantity')==1 and e.get('icon_id')==3811 for e in named_items)
+                owned_items={tuple(item['identity']) for item in saved_inventory['items']}
+                # Item-source descriptions also pass through 51D930 and have
+                # quantity1; require the actual owned bag instance in 565210.
+                result['item_used_native']=any(e.get('event')=='native_item_use_builder_result' and e.get('result')==1 for e in events) and any(e.get('event')=='native_inventory_ui_item' and e.get('quantity')==1 and e.get('icon_id')==3811 and tuple(e.get('identity',())) in owned_items for e in events)
                 result['hp_recovered_native']=any(e.get('hp')==40 and e.get('tp')==10 for e in vital_samples) and any(e.get('hp')==100 and e.get('tp')==10 for e in vital_samples)
                 if not result['item_used_native'] or not result['hp_recovered_native']:failure=failure or 'Real native item use / quantity 1 / HP40 to 100 did not pass'
             result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
