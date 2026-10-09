@@ -426,6 +426,7 @@
     onLeave(ret){emit({event:'native_item_use_builder_result',result:ret.toInt32()&255});}});
   Interceptor.attach(address(0x4d7db0),{onEnter(args){this.manager=this.context.ecx;emit({event:'native_item_source_reply_enter',...header(args[0],args[0].add(3).readU16())});},
     onLeave(){emit({event:'native_item_source_reply_leave'});}});
+  Interceptor.attach(address(0x4c68c0),{onEnter(args){emit(safely(()=>({event:'native_target_chat_command',argument:args[1].isNull()?null:args[1].readUtf16String()})));}});
   let previousVitals='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
     const p=observedPlayer.add(0x114).readPointer();if(p.isNull())return {event:'native_vitals_unavailable'};
     const state={event:'native_player_vitals_state',hp:p.add(8).readU32(),tp:p.add(12).readU32(),

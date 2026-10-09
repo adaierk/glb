@@ -45,7 +45,20 @@ def main():
         events.append({'event':'actual_ui_click','x':x,'y':y,'right':right,'host_time':time.time()});print('PHASE actual_ui_click '+str((x,y)),flush=True)
     def type_text(s):
         for c in s:
-            vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
+            code=u.VkKeyScanW(ord(c))
+            if code==-1:raise ValueError('Character is not available on the native keyboard')
+            vk=code&255;modifiers=[key for bit,key in ((1,16),(2,17),(4,18)) if (code>>8)&bit]
+            for key in modifiers:u.keybd_event(key,0,0,0)
+            u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0)
+            for key in reversed(modifiers):u.keybd_event(key,0,2,0)
+            time.sleep(.04)
+    def self_target_command():
+        # Original 4C68C0 with no argument constructs 4E target=self.
+        # Enter opens native chat input; no game function is called or patched.
+        u.keybd_event(13,0,0,0);time.sleep(.08);u.keybd_event(13,0,2,0);time.sleep(.3)
+        type_text('/target')
+        u.keybd_event(13,0,0,0);time.sleep(.08);u.keybd_event(13,0,2,0);time.sleep(.5)
+        events.append({'event':'actual_ui_chat_command','command':'/target','host_time':time.time()})
     def double_click(x,y):
         u.SetCursorPos(x,y);time.sleep(.15)
         for _ in range(2):
@@ -110,7 +123,7 @@ def main():
                       180:lambda:click(349,409),
                       190:lambda:click(493,107),195:lambda:click(28,84),
                       198:lambda:click(517,487,right=True),201:lambda:click(316,430),
-                      202:lambda:click(28,84),203:lambda:click(406,341),204:lambda:click(28,84),
+                      202:lambda:click(28,84),203:self_target_command,204:lambda:click(28,84),
                       205:lambda:double_click(517,487),
                       210:lambda:click(28,84),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
