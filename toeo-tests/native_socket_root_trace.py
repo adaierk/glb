@@ -525,7 +525,7 @@ try{
     onEnter(args){
        this.sc=this.context.ecx;inOriginalInit++;
        emit({event:'TOEO_NATIVE_CHILD_ENTER',routine:'0x618820',object:this.sc.toString(),a0:args[0].toString(),
-         a1:args[1].toString(),port:()=>0});
+         a1:args[1].toString(),socketPort:11100});
     },
     onLeave(ret){
       inOriginalInit--;
