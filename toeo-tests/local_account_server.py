@@ -1,7 +1,6 @@
 """Local account/prelogin plus persistent character creation/list/deletion.
 
-Plain transport is verified through original x86 send/receive code. Compression
-or encryption selected by real startup is logged and rejected, never guessed.
+Plain and encrypted transport are verified through original x86 send/receive code.
 """
 import argparse
 import hashlib
@@ -42,6 +41,9 @@ class AccountStore:
             self.db.commit()
 
     def authenticate(self,username,password):
+        # Original GUI appends this exact historical realm before opcode 0x20.
+        if username.endswith('@toeo.isao.net'):
+            username=username[:-len('@toeo.isao.net')]
         with self.lock:
             row=self.db.execute('SELECT id,salt,hash FROM accounts WHERE username=?',(username,)).fetchone()
         if row is None:return None

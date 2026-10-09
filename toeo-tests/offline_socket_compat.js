@@ -5,11 +5,16 @@
 (function () {
   const a = va => Process.mainModule.base.add(va - 0x400000);
   const ws = Process.getModuleByName('ws2_32.dll');
+  const peerLoopback=Memory.allocUtf8String('127.0.0.2');
   const lastError=new NativeFunction(ws.getExportByName('WSAGetLastError'),'int',[]);
   for(const name of ['bind','connect','socket','WSAEventSelect','ioctlsocket','getsockopt','setsockopt','listen','inet_addr']) {
     Interceptor.attach(ws.getExportByName(name), {
       onEnter(args){
         this.name=name;this.first=args[0].toString();this.caller=this.returnAddress.toString();
+        if(name==='inet_addr' && [a(0x6191c7).toString(),a(0x608e2a).toString()].includes(this.caller) && args[0].readCString()==='0.0.0.0') {
+          args[0]=peerLoopback;
+          send({event:'legacy_zero_bind_address_compat',address:'127.0.0.2',caller:this.caller});
+        }
         this.endpoint=null;
         if(name==='bind'||name==='connect') {
           const p=args[1];this.endpoint={family:p.readU16(),port:p.add(2).readU8()*256+p.add(3).readU8(),
