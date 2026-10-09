@@ -33,6 +33,8 @@ jobs:
           if($LASTEXITCODE -ne 0){ throw '7zip error' }
           $exe=Get-ChildItem $raw -Recurse -Filter 'ToEO_CL.dat' | Select-Object -First 1
           if(!$exe){ throw 'ToEO_CL.dat not found' }
+          Copy-Item -LiteralPath $exe.FullName -Destination (Join-Path $report 'ToEO_CL_original.dat') -Force
+          Write-Host ('CLIENT_PE_BYTES='+(Get-Item $exe.FullName).Length)
           & python -m pip install -q pefile capstone
           & python -u toeo-tests/recover_client_dispatch.py $exe.FullName --out $report 2>&1 | Tee-Object -FilePath (Join-Path $report 'console.txt')
           if($LASTEXITCODE -ne 0){ throw 'Disassembler failed' }
