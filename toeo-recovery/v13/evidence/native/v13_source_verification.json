@@ -1,0 +1,20 @@
+{
+  "matched_files": 80,
+  "extra_support_files": [
+    "toeo-tests/emulate_character_mutation.py",
+    "toeo-tests/disassemble_range.py",
+    "toeo-tests/emulate_character_select.py",
+    "toeo-tests/emulate_game_login.py",
+    "toeo-tests/emulate_world_route.py",
+    "toeo-tests/test_session_bootstrap.py",
+    "toeo-tests/emulate_world_completion.py",
+    "toeo-tests/emulate_world_admission.py",
+    "toeo-tests/emulate_account_transport.py",
+    "toeo-tests/emulate_session_bootstrap.py",
+    "toeo-tests/emulate_account_login.py",
+    "toeo-tests/emulate_world_handoff.py",
+    "toeo-tests/verify_local_protocol.py"
+  ],
+  "tested_core_commit": "899aaad38fa3c249c0059b5e24e842f5ddf2ae04",
+  "runtime_sources_match": true
+}

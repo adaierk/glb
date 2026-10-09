@@ -1,0 +1,653 @@
+{
+  "passed": true,
+  "tested_commit": "899aaad38fa3c249c0059b5e24e842f5ddf2ae04",
+  "windows_run_id": 37939132465,
+  "artifact_id": 11621671486,
+  "checks": {
+    "map_entered": true,
+    "npc_selected_native": true,
+    "shop_catalog_parsed_native": true,
+    "shop_frame_shown_native": true,
+    "shop_historical_names_native": true,
+    "shop_historical_prices_native": true,
+    "shop_historical_item_count_native": true,
+    "shop_display_price_text_native": true,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "shop_closed_native": true,
+    "movement_after_shop_close_native": true
+  },
+  "visual_prices_reviewed": true,
+  "map_id_hex": "1120108",
+  "map_name": "ラシュアン河の河口",
+  "merchant_name": "行商人＜道具屋＞",
+  "merchant_grid": [
+    141,
+    313
+  ],
+  "merchant_pixel": [
+    4544.0,
+    5024.0
+  ],
+  "map_identity_basis": "Original minimap pixels visually match named historical Wiki map; this is an inference",
+  "source_url": "https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb",
+  "goods": [
+    {
+      "name": "レモングミ",
+      "price_gald": 360,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "ミックスグミ",
+      "price_gald": 360,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "パイングミ",
+      "price_gald": 1500,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "レッドセージ",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "レッドセボリー",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "レッドベルベーヌ",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "レッドラベンダー",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "マグログミ",
+      "price_gald": 600,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "ライフボトル",
+      "price_gald": 1500,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "リキュールボトル",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    },
+    {
+      "name": "フレアボトル",
+      "price_gald": 1000,
+      "category": "消耗品",
+      "jobs": null,
+      "level": null,
+      "native_template_id": null,
+      "native_icon_id": null
+    }
+  ],
+  "native_rows": [
+    {
+      "event": "native_shop_row_render",
+      "row": 0,
+      "name": "レモングミ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 360,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 1,
+      "name": "ミックスグミ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 360,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 2,
+      "name": "パイングミ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1500,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 3,
+      "name": "レッドセージ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 4,
+      "name": "レッドセボリー",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 5,
+      "name": "レッドベルベーヌ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 6,
+      "name": "レッドラベンダー",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 7,
+      "name": "マグログミ",
+      "template_pointer": "0x0",
+      "catalog_display_value": 600,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 8,
+      "name": "ライフボトル",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1500,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 9,
+      "name": "リキュールボトル",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8405447
+    },
+    {
+      "event": "native_shop_row_render",
+      "row": 10,
+      "name": "フレアボトル",
+      "template_pointer": "0x0",
+      "catalog_display_value": 1000,
+      "host_time": 1791553737.8415368
+    }
+  ],
+  "display_price_text_events": [
+    {
+      "event": "native_shop_display_price_text",
+      "text": "360",
+      "host_time": 1791553737.8645382
+    },
+    {
+      "event": "native_shop_display_price_text",
+      "text": "1500",
+      "host_time": 1791553737.8645382
+    },
+    {
+      "event": "native_shop_display_price_text",
+      "text": "1000",
+      "host_time": 1791553737.8655388
+    },
+    {
+      "event": "native_shop_display_price_text",
+      "text": "600",
+      "host_time": 1791553741.968221
+    }
+  ],
+  "first_movement_acks": [
+    {
+      "time": "2026-10-09T13:49:09.810369+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 29,
+      "sequence": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        139,
+        313
+      ],
+      "target": [
+        137,
+        315
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4480.0,
+        5024.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:10.250470+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 30,
+      "sequence": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        137,
+        315
+      ],
+      "target": [
+        135,
+        317
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4416.0,
+        5056.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:10.696769+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 31,
+      "sequence": 3,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        135,
+        317
+      ],
+      "target": [
+        133,
+        319
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4352.0,
+        5088.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:11.121463+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 32,
+      "sequence": 4,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        133,
+        319
+      ],
+      "target": [
+        131,
+        321
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4288.0,
+        5120.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:22.420926+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 46,
+      "sequence": 15,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        131,
+        321
+      ],
+      "target": [
+        133,
+        321
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4224.0,
+        5152.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:22.770830+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 47,
+      "sequence": 16,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        133,
+        321
+      ],
+      "target": [
+        135,
+        321
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4288.0,
+        5152.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:23.142491+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 48,
+      "sequence": 17,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        135,
+        321
+      ],
+      "target": [
+        137,
+        321
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4352.0,
+        5152.0
+      ]
+    },
+    {
+      "time": "2026-10-09T13:49:23.520500+00:00",
+      "event": "world_move_ack",
+      "connection": 3,
+      "request_id": 49,
+      "sequence": 18,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "source": [
+        137,
+        321
+      ],
+      "target": [
+        139,
+        321
+      ],
+      "mode": 1,
+      "speed": 1.0,
+      "start_point": [
+        4416.0,
+        5152.0
+      ]
+    }
+  ],
+  "native_rejection_restore_events": [
+    {
+      "time": "2026-10-09T13:49:11.555480+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 33,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.583481+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 34,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.613479+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 35,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.640791+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 36,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.666790+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 37,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.691786+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 38,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.717787+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 39,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.743788+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 40,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.771484+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 41,
+      "status": -93
+    },
+    {
+      "time": "2026-10-09T13:49:11.798798+00:00",
+      "event": "world_move_rejected_and_restored",
+      "connection": 3,
+      "reason": "Destination blocked by local navigation",
+      "rejected_grid": [
+        129,
+        323
+      ],
+      "restored_grid": [
+        131,
+        321
+      ],
+      "request_id": 42,
+      "status": -93
+    }
+  ],
+  "final_grid": [
+    139,
+    321
+  ],
+  "final_pixel": [
+    4480.0,
+    5152.0
+  ],
+  "database_rows": [
+    [
+      1,
+      1,
+      17957128,
+      139,
+      321
+    ]
+  ],
+  "reentry_restored_without_movement": true,
+  "reentry_samples": 12,
+  "source_image_sha256": {
+    "first/original_desktop_140s.png": "14e70f60cf577190be846ccf32781ca1c3d5940f9a4c3cd01363dff975967562",
+    "first/original_desktop_146s.png": "e3401fe9ad340ed194a8d6867b137ef4d396e3cd89478a3f8d24d73a4e11aff7",
+    "first/original_desktop_147s.png": "d4caed714a55d9dcaea1b81ad36feeda9cd8ca998440547ef5b0927d46e1f3ca",
+    "first/original_desktop_170s.png": "bafbd2c65be74318f2e0642eedef577095f84abea11bbee2e469ae1b53251aea",
+    "reentered/original_desktop_150s.png": "90327e2318cbec1eb0359a5393a84a6227ce748c6a4f0c00c86ce16142d6a415"
+  },
+  "validation_scope": "Original Windows desktop, read-only original parser/renderer observations and TCP captures",
+  "limitations": [
+    "Historical merchant position/name/stock sourced from community Wiki; original server database unavailable",
+    "Native entity ID and humanoid appearance are local choices; original templates/icons still unknown",
+    "178 conservative pier navigation cells; wider map collision and transitions pending",
+    "Currency 0; buying/selling, inventory, quests and combat not implemented",
+    "Original UI/resource C++ first-chance exception logs retained; HP/TP digits unfinished"
+  ]
+}

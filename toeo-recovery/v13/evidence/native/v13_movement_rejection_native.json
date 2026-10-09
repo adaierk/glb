@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "native_branch": "52B0CE",
+  "status": -93,
+  "restored_grid": [
+    131,
+    321
+  ],
+  "native_position": [
+    4224.0,
+    5152.0
+  ],
+  "path_stopped": true,
+  "scope": "Original reply field reads, 4FF9C0 grid conversion and actor position assignment",
+  "substitutions": [
+    "Inherited actor lookup/query boundaries",
+    "Animation path container stop",
+    "Animation/model synchronization and graphical pose setter"
+  ],
+  "limitations": [
+    "Original status semantic name unknown; stop/restore behavior measured",
+    "Separate Windows run required for prediction rollback and persistence"
+  ]
+}

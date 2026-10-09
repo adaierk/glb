@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "native_minimap_decode": true,
+  "pixel_sha256": "c1174151b202bda0db8a8913e7be2f02e1e226057a3bf342bd19bc741e0d4f64",
+  "minimap_sha256": "1e49849a6be9fc5f28e87c3b756fb3277ac4308b7e029238b9461f4e9dc03c3e",
+  "dimensions": [
+    256,
+    256
+  ],
+  "native_map_record_parse": true,
+  "map_id": 17957128,
+  "spawn_grid": [
+    139,
+    313
+  ],
+  "limitations": [
+    "Map parser fixture substitutes constructors/strings/OS/UI/send boundaries",
+    "Visual Wiki map matching is an inference; official server placement unavailable",
+    "These bounded checks do not demonstrate Windows GUI or shop interaction"
+  ]
+}

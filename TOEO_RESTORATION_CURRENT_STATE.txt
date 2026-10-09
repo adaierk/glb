@@ -1,50 +1,50 @@
-永恒传说 Online 本地恢复：v9 原地图与人物已显示
-更新：2026-10-09 09:09 UTC
+永恒传说 Online 当前恢复状态 v13（2026-10-09）
 
-用户目标：恢复停服游戏的本地可游玩端；至少实际进入地图后再提交阶段成果和截图。
-本轮已经实际进入原地图并显示人物；移动、NPC、战斗尚未完成，不能称完整可游玩。
+最终原Windows客户端检查已通过。
+测试代码提交：899aaad38fa3c249c0059b5e24e842f5ddf2ae04
+测试Git tree：6ea87f148c8a745ac96c554fe4975ba57e94ace6
+隔离分支：adaierk/glb / toeo-local-world-recovery-20261009，main不变。
+Windows RUN42：37939132465；artifact：11621671486；工作流success。
+Artifact SHA256：cad5793a91892d23abc11374c71374f3f1f08a57da81cc065ccd56cd223cf1ba
+最终证据：evidence/native/v13_actual_world_milestone.json 与 evidence/windows_run42。
 
-原资源：4873 文件、363 地图文件。
-原 ToEO_CL.dat SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
-完整原资源已有持久保存，TOEO_Original_Client_Full.zip / client_pack.7z。
+原河口地图与商人
+0x1120108 / ラシュアン河の河口。地图身份由原小地图和Wiki带地名地图的图像对照推断。
+道具商人名称与位置：行商人＜道具屋＞，grid(141,313)，pixel(4544,5024)。
+资料： https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb
+原客户端已在木码头渲染该商人，选中并打开原商店。
+出生grid(139,313)。只开放178个保守码头通行单元，完整碰撞与换图待恢复。
+NPC实体编号及外观使用本地选择，官方ID和模型对应未知。
 
-Windows 实测进度：
-第 16 轮 run 37905931191：第一次真正显示地图；选角应答第二 DWORD 改为十六进制
-0x1110101，让原 49E140 将 pending map 传给 selected+20，原 4455F0 renderer 能找到地图。
-第 18 轮 run 37906674097：人物可见；原 actor+14 map 正确、原网格出生点 (6,4)
-自然换算为像素 (224,80)，世界属性 HP/TP 为 100/30。
-第 21 轮 run 37908425175，提交 1af5eb67b5bf1aee7dd074c10f9a587f1601b707：
-修正 21 记录 +14/+18 为状态位 0；原游戏完整显示地图、人物，未崩溃或返回标题。
-最新实际截图：new_evidence/windows_run21/original_desktop_180s.png。
-人物 controlled=1；实际道路左右键点击均没有 native_move_path_request，服务端没收到 42。
+商品资料与原界面
+历史库13组地区商店、140条商品、6组明确XY；当前仅1组已部署。
+11件该商人对应的商品已进入原商品列表，真实窗口显示来源价格。
+上半部360/1500/1000及滚动后600/1500/1000均有原价格文本和截图。
+9D+38 -> item+A4 -> row+38为显示金额，之前误当图标ID；9E+4 -> item+11C是另一价格字段。
+原模板指针仍NULL，图标、数量和堆叠规则未恢复，未宣称可以交易。
+未验证地图/坐标的其他12组商店保持未部署。
 
-已恢复完整原登录/世界通路：
-旧账号 TCP 11100，地图 TCP 11101，各自注册表 UID 1/2 与 3/4。
-原 0D/0F/10 端点分配与绑定、18/19 准入；地图广播包装器 7085E4/61FC50 的 04->05。
-旧包装器 708614/61FDF0 的 04->11 原验证仅属于历史独立测试，不适用于真实地图通道。
-原加解密/CRC/对齐、406 就绪、地址及 WSA 兼容已通过真实客户端。
-33(56B)->34(936B) 初始化，20/BF/21/end 记录；39(40B)->3A(40B) 地图就绪。
-路径 map/1110101.mpd/mpi/bnd，map ID 0x1110101 (17891585)，MPI/MPD/BND 实际加载成功。
-角色外观 24B 来自 selector+30:48；独立 456B profile；原模型参数已逐项匹配。
-坐标转换 native_map_geometry.py 已通过原 413BD0/413D10 对 187 个点的检查。
-24 项 test_local_account_server 测试通过；地图原记录解析和外观验证通过。
+移动与重进
+长按地面遇到本地阻挡时，原43 status=-93分支停止预测路径并恢复服务端权威位置。
+最终存档grid(139,321)，renderer pixel(4480,5152)。第二次完整登录12个样本均为该位置，没有新移动。
+森林world_positions保留；河口world_profile_positions按角色/账号/地图隔离。
+删除角色清理两张位置表。数据库不纳入交付包。
+本地34项检查通过；原机码小地图解码、地图解析、商品构造和拒绝移动回退检查通过。
+80个已有Git源文件与实际打包源逐字节一致；13个研究/测试支持文件在v13/source_support另行保存。
 
-可复现入口：Run_TOEO_Local.cmd。--local-world / --demo-character / --duration 0。
-原游戏关闭才退出，账号 archive001 / local123；角色与账号保存 local_world_userdata。
-Prepare_TOEO_Client.cmd 从保存的完整 zip/7z 恢复原游戏目录和 data 布局。
+使用Run_TOEO_Rashuan.cmd进入新河口；Run_TOEO_Local.cmd保留v12森林入口。
+使用此前完整原资源包，ToEO_CL.dat保持SHA256
+635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
+本包无原完整资源、无用户数据库；账户archive001 / local123。
 
-下一步实质阻塞：原 505200 玩家输入 tick 在实际游戏运行，controlled=1；
-原 502250 寻路入口尚未被鼠标点击触发。world+DB=0，无 world gate 阻塞；状态位已归零。
-继续观察原 69B790 输入映射、68E290 按钮状态及 world viewport (0..0C) 与 mouse (2C/30)，
-确认 DirectInput 原鼠标状态、视口判断和 UI 屏蔽条件后，再补齐 42->43 移动应答。
+尚未完成
+原商品模板和图标、实际购买/出售、货币与背包持久化、道具使用、装备、战斗、任务、换图。
+原UI/资源C++异常和HP/TP数字仍需排查。完整游戏流程尚未完成。
+下一步先恢复一件有效道具模板，再抓取原交易按钮的真实请求，完成货币/库存校验。
+NEXT_RECOVERY_V13.txt保留字段、原入口与中间失败原因。
 
-已静态定位：原 522580 生成 68B 42；+12 序列、+28/+32 身份、+36 map、
-+44/+48 与 +52/+56 浮点对、+60/+62 当前格子、+64/+65/+66 移动模式。
-原 52AE8A 消费至少 48B 43：+10 status，+12 序列，+16/+20 身份，
-+28/+30 和 +32/+34 起终格子，+36 方向、+37 mode、+44 float speed。
-52AF02 成功处理后 4CAC70 删除移动查询；同格子应用 speed，异格子通过原 50B730 寻路。
-原 500D10 得到基础 speed 比率 1、跑步 1.5；不是直接像素/秒。
-尚未实现 movement reply，不要伪造任何移动成功声明。
-
-历史恢复记录保持在 history。源代码隔离分支 adaierk/glb/toeo-local-world-recovery-20261009。
-原 glb 主分支未动。真实原 GUI 由专用 Windows Actions 工作流复现；不要使用旧无效 locale YAML。
+旧成果不修改
+v12最终GUI源68e6768e4726829c3e6a2ab7c604995321f2d4c5，RUN38 37929710697。
+v12交付提交535b74a5bca92ca064a645b04961eee052110e04。
+v12恢复包SHA256 018bb84b30c7778518ff0ebf4746591c8ecd1a6ad59801e6906db542ee9fd93a。
+history/V12_AND_RUN38_STATE_UNMODIFIED.txt保存原状态。
