@@ -112,6 +112,12 @@ class LocalAccountServer(BootstrapServer):
             state['encrypted']=parsed['encrypted']
             op,payload,req=parsed['opcode'],parsed['payload'],parsed['request_id']
             self.log('application_request',connection=conn_id,opcode=hex(op),request_id=req,encrypted=state['encrypted'])
+            if op==0x14 and len(payload)==9:
+                if not state.get('game_account_id'):
+                    self.log('world_relogin_without_game_login',connection=conn_id);continue
+                self.send_answer(c,message(0x15,b'',req),state)
+                self.log('world_relogin_ack',connection=conn_id,request_id=req)
+                continue
             if op==4:
                 account_id=parse_world_account(payload)
                 authenticated=state.get('game_account_id') or state.get('account_id')

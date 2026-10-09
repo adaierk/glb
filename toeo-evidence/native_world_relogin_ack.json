@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "original_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "request_hex": "001400090001000000",
+  "cases": {
+    "pending": 1,
+    "wrong_id": 1,
+    "unmatched_opcode": 1,
+    "matched": 2
+  },
+  "level": "original enqueue/frame/receive/query correlation",
+  "limitations": [
+    "Transport fixture scaffolding and OS/CRT boundaries",
+    "Does not execute GUI relogin or load maps"
+  ]
+}
