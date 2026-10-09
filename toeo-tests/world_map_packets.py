@@ -15,6 +15,9 @@ def record(kind,size):
 def map_record(map_id=LOCAL_MAP_ID):
     b=record(0x20,0xe4)
     struct.pack_into('<II',b,4,map_id,1)
+    # 43F176 copies +14 to map data +24; 4C1424 retains it in the
+    # loaded map. 5722E0 bit 0 permits original minimap coordinates.
+    struct.pack_into('<I',b,0x14,1)
     label='Local World'.encode('utf-16le');b[0x24:0x24+len(label)]=label
     for offset,suffix in [(0x64,'mpd'),(0x84,'mpi'),(0xa4,'bnd')]:
         path=f'map/{map_id:07x}.{suffix}'.encode('ascii')

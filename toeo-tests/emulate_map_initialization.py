@@ -51,6 +51,7 @@ def run(binary):
     result=f.uc.reg_read(UC_X86_REG_EAX)
     assert result==0 and not f.assertions
     assert f.read32(f.data+0x14)==0x1110101
+    assert f.read32(f.data+0x24)==1
     assert [f.read32(f.data+0xe0),f.read32(f.data+0xe4)]==[1,1]
     assert f.read32(f.data+0xe0+0x22c)==0x1110101
     assert [f.read32(f.data+0xe0+0x230),f.read32(f.data+0xe0+0x234)]==[19,7]

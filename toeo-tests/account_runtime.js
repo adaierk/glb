@@ -276,7 +276,7 @@
   },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_local_shop_create_result',actor:ret.toString(),
     category:ret.isNull()?null:ret.add(0x70).readU32(),
     position:ret.isNull()?null:[ret.add(0xc).readFloat(),ret.add(0x10).readFloat()],
-    extension:ret.isNull()?null:ret.add(0x84).readPointer().toString()})));}});
+    extension:ret.isNull()?null:ret.add(0x64).readPointer().toString()})));}});
   Interceptor.attach(address(0x4fe510),{onEnter(args){
     if(args[0].isNull())return;
     if(safely(()=>args[0].readPointer().equals(address(0x6eeca8))))

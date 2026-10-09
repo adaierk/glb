@@ -26,7 +26,9 @@ def main():
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
     server=LocalAccountServer(out,world_route_probe=True,account_database=args.database)
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
-    events=[];shots=[];device=frida.get_local_device();pid=None;session=None
+    events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
+    from native_map_geometry import grid_to_point
+    expected_position=grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid'])
     u=ctypes.windll.user32
     def click(x,y,right=False,hold=.90):
         u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(8 if right else 2,0,0,0,0);time.sleep(hold);u.mouse_event(16 if right else 4,0,0,0,0);time.sleep(.35)
@@ -34,6 +36,8 @@ def main():
     def type_text(s):
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
+    def escape():
+        u.keybd_event(0x1b,0,0,0);u.keybd_event(0x1b,0,2,0)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
@@ -67,18 +71,20 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      145:lambda:click(360,288,True),
+                      145:lambda:click(360,225,True),147:escape,
                       150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
-                for t in (145,150,160,170):schedule.pop(t,None)
+                for t in (145,147,150,160,170):schedule.pop(t,None)
             for t in range(args.duration):
                 time.sleep(1)
-                if t in schedule:schedule[t]()
-                if t%10==0 or t in (101,107,121,136):shot(t);print('PHASE screenshot '+str(t),flush=True)
+                entered=any(e.get('event')=='native_map_draw_context' for e in events)
+                if t in schedule and not (t in (125,130,135) and entered):schedule[t]()
+                if t%10==0 or t in (101,107,121,126,136,146):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
-            (out/'python_error.txt').write_text(traceback.format_exc(),encoding='utf-8');traceback.print_exc()
+            failure=traceback.format_exc()
+            (out/'python_error.txt').write_text(failure,encoding='utf-8');traceback.print_exc()
         finally:
             try:shot(args.duration)
             except Exception:pass
@@ -89,7 +95,14 @@ def main():
                      ('game_prelogin_accepted','GAME_PRELOGIN_ACCEPTED_NATIVE'),('character_list_accepted','CHARACTER_LIST_ACCEPTED_NATIVE'),
                      ('character_selection_accepted','CHARACTER_SELECTION_ACCEPTED_NATIVE'),('world_admission_accepted','WORLD_ADMISSION_ACK_ACCEPTED_NATIVE'),
                      ('world_controller_completed','WORLD_CONTROLLER_COMPLETED_NATIVE')]}
-            result.update(map_entered=None,playable=None,native_exceptions=[e for e in events if e.get('event')=='native_exception'])
+            positions=[e['position'] for e in events if e.get('event')=='native_world_render_state' and 'position' in e]
+            result.update(map_entered=('native_map_enter_transition' in names and bool(positions)),playable=None,
+                          observed_positions=positions,expected_reentry_position=list(expected_position) if args.reenter_check else None,
+                          native_exceptions=[e for e in events if e.get('event')=='native_exception'])
+            if args.reenter_check:
+                result['position_restored_without_movement']=bool(positions) and all(tuple(x)==expected_position for x in positions)
+                if not result['map_entered'] or not result['position_restored_without_movement']:
+                    failure=failure or 'Original reentry did not continuously render the saved destination'
             (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps(result),flush=True)
             if pid is not None:
                 try:device.kill(pid)
@@ -101,5 +114,6 @@ def main():
             for retry in range(30):
                 try:exe.unlink(missing_ok=True);break
                 except PermissionError:time.sleep(.1)
+        if failure:raise RuntimeError(failure)
 
 if __name__=='__main__':main()
