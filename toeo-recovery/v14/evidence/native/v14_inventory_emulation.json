@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "native_buy": {
+    "opcode": 222,
+    "request_id": 4294967295,
+    "sequence": 1,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "merchant": [
+      1879048193,
+      1
+    ],
+    "lines": [
+      {
+        "catalog_index": 0,
+        "quantity": 3
+      }
+    ]
+  },
+  "native_buy_hex": "00de003000ffffffff000000010000000100000001000000010111010100007001000000010000000000000003000000",
+  "native_sell": {
+    "opcode": 223,
+    "request_id": 4294967295,
+    "sequence": 2,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "merchant": [
+      1879048193,
+      1
+    ],
+    "lines": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "quantity": 1
+      }
+    ]
+  },
+  "native_sell_hex": "00df004000ffffffff00000002000000010000000100000001011101010000700100000001000000010000710100000001000000000000000200000001000000",
+  "native_inventory_name": "レモングミ",
+  "native_quantity": 2,
+  "native_stack_capacity": 20,
+  "native_bag_capacity": 32,
+  "native_wallet_crc_read": 4100,
+  "native_world_initial_inventory_restored": true,
+  "native_full_inventory_notice_applied": true,
+  "native_transaction_wallet_applied": 3920,
+  "native_pending_command_released": true,
+  "native_shop_refresh_quantity_after_sale": 2,
+  "native_last_stack_deletion_refreshed": true,
+  "substitutions": [
+    "C++ string and CRT wide string boundaries",
+    "Container insertion/lookup/clear",
+    "Resource lookup returns NULL for unresolved template",
+    "Network queue and buffer getter",
+    "Initialized actor components, collection moves and temporary lifetimes",
+    "Empty item property container clear/copy",
+    "Windows graphical refresh captured at original call boundary",
+    "Pending command lifetime"
+  ],
+  "limitations": [
+    "Does not establish native Windows UI buy/sell or official stack/resale rules",
+    "Original item templates/icons unresolved"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "tested_commit": "441db0b1698710119a4b9c83c29904f887c4fe69",
+  "windows_run": 37953136509,
+  "artifact": 11626603018,
+  "artifact_sha256": "7dd08317ab43d420687a0735c435e988e29ad3f95ef133066c00e8dce184e26a",
+  "native_buy_money_quantity": true,
+  "native_sell_money_quantity": true,
+  "saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 2
+      }
+    ]
+  },
+  "visual_post_sale_quantity": 2,
+  "visual_post_sale_wallet": 4100,
+  "screenshot_sha256": "4d0ea97da33a35d0f2937c9fb54960a88faeb673963643e31c53e1650bde8678",
+  "original_game_pixels_modified": false,
+  "driver_passed": false,
+  "reason": "Strict observer only captured catalog widget+680, excluding original owned-item widget+1C0C; then read cart mode at the root instead of root+110. Observation corrected later; native shop pixels show2/4100.",
+  "reentry_tested": false,
+  "final_v14_release": false
+}

@@ -1,0 +1,226 @@
+{
+  "passed": true,
+  "tested_commit": "f8812b9fb03839a325bc97e2fae17515030ab579",
+  "windows_run_id": 37954385467,
+  "artifact_id": 11627862123,
+  "artifact_sha256": "ea437039bd9c548e99efdbe766f421822453762841d846562089eb10e83a345a",
+  "run": 52,
+  "checks": {
+    "map_entered": true,
+    "npc_selected_native": true,
+    "shop_catalog_parsed_native": true,
+    "shop_frame_shown_native": true,
+    "shop_historical_names_native": true,
+    "shop_historical_prices_native": true,
+    "shop_historical_item_count_native": true,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "shop_closed_native": true,
+    "movement_after_shop_close_native": true,
+    "buy_request_built_native": true,
+    "sell_request_built_native": true,
+    "buy_money_quantity_native": true,
+    "sell_money_quantity_native": true,
+    "shop_quantity_refreshed_native": true,
+    "inventory_window_open_native": true
+  },
+  "native_trades": [
+    {
+      "time": "2026-10-09T15:51:59.020321+00:00",
+      "event": "shop_trade_committed",
+      "connection": 3,
+      "opcode": 222,
+      "request_id": 31,
+      "sequence": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "merchant": [
+        1879048193,
+        1
+      ],
+      "lines": [
+        {
+          "catalog_index": 0,
+          "quantity": 3
+        }
+      ],
+      "replayed": false,
+      "status": 0,
+      "reason": null,
+      "request_hex": "00de0030001f000000000000010000000100000001000000080112010100007001000000010000000000000003000000",
+      "answer_hex": "0067002c011f000000000000010000002c010000000000000000000000000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000300140000000000000000000000000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d0001005000030002000000500f00004d000b000200000000000000000000000000000000000000000000000100007101000000010000000000000000000000",
+      "inventory_notice_hex": "006b00f800ffffffff000000f8000000080112010100000001000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000300140000000000000000000000000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d0001006b000200500f000000000000",
+      "snapshot": {
+        "money": 3920,
+        "capacity": 32,
+        "items": [
+          {
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_key": "wikihouse-u392bcdb",
+            "catalog_index": 0,
+            "name": "レモングミ",
+            "buy_price": 360,
+            "sell_price": 180,
+            "quantity": 3
+          }
+        ]
+      },
+      "rules": "Local initial grant 5000 / stack 20 / bag 32 / resale half; official values unresolved"
+    },
+    {
+      "time": "2026-10-09T15:52:24.825181+00:00",
+      "event": "shop_trade_committed",
+      "connection": 3,
+      "opcode": 223,
+      "request_id": 37,
+      "sequence": 2,
+      "identity": [
+        1,
+        1
+      ],
+      "map_id": 17957128,
+      "merchant": [
+        1879048193,
+        1
+      ],
+      "lines": [
+        {
+          "identity": [
+            1895825409,
+            1,
+            1,
+            0
+          ],
+          "quantity": 1
+        }
+      ],
+      "replayed": false,
+      "status": 0,
+      "reason": null,
+      "request_hex": "00df0040002500000000000002000000010000000100000008011201010000700100000001000000010000710100000001000000000000000200000001000000",
+      "answer_hex": "0067002c0125000000000000020000002c010000000000000000000000000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000200140000000000000000000000000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d0001005000030002000000041000004d000b000200000000000000000000000000000000000000000000000100007101000000010000000000000000000000",
+      "inventory_notice_hex": "006b00f800ffffffff000000f8000000080112010100000001000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000200140000000000000000000000000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d0001006b0002000410000000000000",
+      "snapshot": {
+        "money": 4100,
+        "capacity": 32,
+        "items": [
+          {
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_key": "wikihouse-u392bcdb",
+            "catalog_index": 0,
+            "name": "レモングミ",
+            "buy_price": 360,
+            "sell_price": 180,
+            "quantity": 2
+          }
+        ]
+      },
+      "rules": "Local initial grant 5000 / stack 20 / bag 32 / resale half; official values unresolved"
+    }
+  ],
+  "inventory_and_wallet_restored_native": true,
+  "visual_reviewed": true,
+  "database_wallets": [
+    [
+      1,
+      1,
+      4100
+    ]
+  ],
+  "database_items": [
+    [
+      1,
+      1,
+      "レモングミ",
+      2,
+      360,
+      180
+    ]
+  ],
+  "database_ledger": [
+    [
+      222,
+      1
+    ],
+    [
+      223,
+      2
+    ]
+  ],
+  "saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 2
+      }
+    ]
+  },
+  "reentry_saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 2
+      }
+    ]
+  },
+  "final_pixel": [
+    4480,
+    5152
+  ],
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "local_checks_passed": 38,
+  "original_item_templates_icons_verified": false,
+  "complete_gameplay": false,
+  "offline_rules": {
+    "initial_money_once_per_character": 5000,
+    "stack_limit": 20,
+    "bag_capacity": 32,
+    "resale": "half of purchase price rounded down",
+    "provenance": "Provisional local recovery rules; official initial grant/stack/resale values unresolved"
+  },
+  "scope": "Actual Windows original executable, real mouse controls, unchanged original parsers/renderer, localhost server and restart",
+  "limitations": [
+    "Original item templates/icons and use effects unresolved",
+    "Right-click item details remain unresolved; Run45 recorded original-client disconnection",
+    "Combat, equipment, quests, map transitions and full collision pending",
+    "Merchant native identity/model provisional; placement/name/stock sourced as in v13",
+    "Original resource/UI exception logs retained"
+  ]
+}

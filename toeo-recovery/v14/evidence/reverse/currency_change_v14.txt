@@ -1,0 +1,23 @@
+004fa64a mov      eax, dword ptr [edi + 4]
+004fa64d sub      eax, 2
+004fa650 mov      esi, edi
+004fa652 je       0x4fa68c
+004fa654 sub      eax, 6
+004fa657 jne      0x4fa6bc
+004fa659 call     0x401210
+004fa65e mov      ecx, dword ptr [eax + 0x44]
+004fa661 call     0x5b5370
+004fa666 mov      eax, dword ptr [eax + 0x20]
+004fa669 shr      eax, 5
+004fa66c test     al, 1
+004fa66e je       0x4fa6bc
+004fa670 call     0x401210
+004fa675 mov      ecx, dword ptr [esi + 8]
+004fa678 mov      eax, dword ptr [eax + 0x44]
+004fa67b push     ecx
+004fa67c mov      ecx, eax
+004fa67e call     0x5b5370
+004fa683 mov      ecx, eax
+004fa685 call     0x537470
+004fa68a jmp      0x4fa6bc
+004fa68c mov      edx, dword ptr [edi + 8]

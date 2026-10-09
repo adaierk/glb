@@ -1,0 +1,65 @@
+{
+  "tested_commit": "d5153d4a1d998eec040e3d179111de427210d4c4",
+  "windows_run": 37950390100,
+  "artifact": 11625084513,
+  "artifact_sha256": "a3f902265b004588d24fa86d978889c0b789fd65d8d54b775a94265b14ceb393",
+  "native_checks": {
+    "map_entered": true,
+    "npc_selected_native": true,
+    "shop_catalog_parsed_native": true,
+    "buy_request_built_native": true,
+    "sell_request_built_native": true,
+    "buy_money_quantity_native": true,
+    "sell_money_quantity_native": true,
+    "shop_closed_native": true,
+    "movement_after_shop_close_native": true
+  },
+  "saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 2
+      }
+    ]
+  },
+  "reentry_saved_inventory": {
+    "money": 4100,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 2
+      }
+    ]
+  },
+  "inventory_and_position_restored": true,
+  "visual_review": {
+    "purchase_cart": "3 items, total1080, held5000 visible in original_desktop_156s.png",
+    "status": "held4100 visible in original_desktop_196s.png and reentry150s",
+    "open_shop_after_sale": "181s still shows3 although saved/native inventory2; fixed later through original4D/4C records",
+    "item_window": "firstbook opens status; corrected to actual bag icon in subsequent run"
+  },
+  "final_v14_release": false
+}

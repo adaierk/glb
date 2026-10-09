@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "tests": 38,
+  "suites": [
+    "test_world_inventory",
+    "test_world_profiles",
+    "test_local_account_server",
+    "test_session_bootstrap",
+    "test_native_tcp_padding"
+  ],
+  "native_inventory_trade_emulation_passed": true,
+  "actual_wire_id_regression_test_passed": true,
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "source_files": 97,
+  "windows_trade_reentry_verification": "PASS: Run52 / 37954385467; actual inventory window and post-sale shop quantity visually verified",
+  "native_shop_delta_update_passed": true,
+  "native_last_stack_deletion_passed": true,
+  "actual_original_windows_verified": true
+}

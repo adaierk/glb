@@ -1,58 +1,49 @@
-永恒传说 Online 当前恢复状态 v13（2026-10-09）
+永恒传说 Online 当前恢复状态 v14（2026-10-09）
 
-最终原Windows客户端检查已通过。
-测试代码提交：899aaad38fa3c249c0059b5e24e842f5ddf2ae04
-测试Git tree：6ea87f148c8a745ac96c554fe4975ba57e94ace6
-隔离分支：adaierk/glb / toeo-local-world-recovery-20261009，main不变。
-Windows RUN42：37939132465；artifact：11621671486；工作流success。
-Artifact SHA256：cad5793a91892d23abc11374c71374f3f1f08a57da81cc065ccd56cd223cf1ba
-最终证据：evidence/native/v13_actual_world_milestone.json 与 evidence/windows_run42。
+最终原Windows客户端购买、出售、物品窗口、关闭商店、行走与重启检查均通过。
+测试代码提交：f8812b9fb03839a325bc97e2fae17515030ab579
+Windows RUN52：37954385467；artifact：11627862123。
+Artifact SHA256：ea437039bd9c548e99efdbe766f421822453762841d846562089eb10e83a345a
+隔离分支：adaierk/glb / toeo-local-world-recovery-20261009。
+证据：evidence/native/v14_actual_trade_milestone.json、v14_source_consistency.json，
+以及evidence/windows_run52/first和reentered。截图已人工核对原游戏像素。
 
-原河口地图与商人
-0x1120108 / ラシュアン河の河口。地图身份由原小地图和Wiki带地名地图的图像对照推断。
-道具商人名称与位置：行商人＜道具屋＞，grid(141,313)，pixel(4544,5024)。
-资料： https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb
-原客户端已在木码头渲染该商人，选中并打开原商店。
-出生grid(139,313)。只开放178个保守码头通行单元，完整碰撞与换图待恢复。
-NPC实体编号及外观使用本地选择，官方ID和模型对应未知。
+实际原端交易
+初始5000，买3个レモングミ（购价360），余额3920、持有3个。
+卖出1个（暂定回收价180），余额4100、持有2个；原商店即时显示新数量。
+购买DE/出售DF由原4F8050/4F81B0构包。保留发送层改写的线上请求号。
+67回执解除原挂起请求，50更新原校验钱包，36..3D和4D/4C更新物品及可见商店。
+6B完整通知同步背包；初次及重登入图34均恢复持久化金币和物品。
+真实鼠标打开原物品窗口，565210只读观察确认窗口可见与数量2。
+未替换游戏界面、物品名称解码、数量解码或原渲染逻辑。
 
-商品资料与原界面
-历史库13组地区商店、140条商品、6组明确XY；当前仅1组已部署。
-11件该商人对应的商品已进入原商品列表，真实窗口显示来源价格。
-上半部360/1500/1000及滚动后600/1500/1000均有原价格文本和截图。
-9D+38 -> item+A4 -> row+38为显示金额，之前误当图标ID；9E+4 -> item+11C是另一价格字段。
-原模板指针仍NULL，图标、数量和堆叠规则未恢复，未宣称可以交易。
-未验证地图/坐标的其他12组商店保持未部署。
+持久化与校验
+world_wallets、world_inventory_items、world_trade_ledger按角色保存。
+一次SQLite事务完成订单；失败回滚，重复请求不重复交易，拒绝越权和超量出售。
+重启原端及本地服务后仍是4100金币、レモングミ2个；地图位置也恢复一致。
+删角色清理交易、物品、金币和位置。交付不含用户数据库。
+38项本地检查通过；原机码构包、背包名称/数量、钱包校验、67/6B处理、
+4D原物品克隆与刷新、4C售空删除通过。97个源文件与被测Git版本逐字节一致。
 
-移动与重进
-长按地面遇到本地阻挡时，原43 status=-93分支停止预测路径并恢复服务端权威位置。
-最终存档grid(139,321)，renderer pixel(4480,5152)。第二次完整登录12个样本均为该位置，没有新移动。
-森林world_positions保留；河口world_profile_positions按角色/账号/地图隔离。
-删除角色清理两张位置表。数据库不纳入交付包。
-本地34项检查通过；原机码小地图解码、地图解析、商品构造和拒绝移动回退检查通过。
-80个已有Git源文件与实际打包源逐字节一致；13个研究/测试支持文件在v13/source_support另行保存。
+商人与史料
+地图0x1120108，ラシュアン河の河口。地名由原小地图和Wiki地名图像对照推断。
+行商人＜道具屋＞：grid(141,313)，pixel(4544,5024)。11件商品购价沿用同地区史料。
+https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb
+历史库13组商店、140条商品、6组明确XY；仅1组完成定位并部署。
+NPC原官方实体编号与模型未找回，目前使用本地选择。
+河口只开放码头178个保守通行单元；森林与河口位置分别保存。
 
-使用Run_TOEO_Rashuan.cmd进入新河口；Run_TOEO_Local.cmd保留v12森林入口。
-使用此前完整原资源包，ToEO_CL.dat保持SHA256
+明确暂定的离线规则
+初始金币5000（每角色一次）、单种20个堆叠、32格、回收购价一半。
+这些规则尚无可靠原服史料，不能当作官方机制。原钱包上限10000000。
+
+启动与下一阶段
+Run_TOEO_Rashuan.cmd进入河口；Run_TOEO_Local.cmd保留旧森林入口。
+沿用完整原资源包，升级复制local_world_userdata，账号archive001 / local123。
+ToEO_CL.dat不修改，SHA256：
 635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
-本包无原完整资源、无用户数据库；账户archive001 / local123。
-
-尚未完成
-原商品模板和图标、实际购买/出售、货币与背包持久化、道具使用、装备、战斗、任务、换图。
-原UI/资源C++异常和HP/TP数字仍需排查。完整游戏流程尚未完成。
-下一步先恢复一件有效道具模板，再抓取原交易按钮的真实请求，完成货币/库存校验。
-NEXT_RECOVERY_V13.txt保留字段、原入口与中间失败原因。
-
-旧成果不修改
-v12最终GUI源68e6768e4726829c3e6a2ab7c604995321f2d4c5，RUN38 37929710697。
-v12交付提交535b74a5bca92ca064a645b04961eee052110e04。
-v12恢复包SHA256 018bb84b30c7778518ff0ebf4746591c8ecd1a6ad59801e6906db542ee9fd93a。
-history/V12_AND_RUN38_STATE_UNMODIFIED.txt保存原状态。
-
-V13 FINAL DELIVERY (2026-10-09 UTC)
-Package: TOEO_Local_World_Recovery_20261009_v13.zip
-SHA256: 88ece02005c92913b8edc3b26ca4c9b84c80cea3c98fd53302b8dbb447a59e25
-Archive: 175 entries, CRC PASS; source bytes match tested runtime.
-Source/evidence checkpoint: ecd53552a49d4626c12adf27e6f017144f573abd
-Delivery receipts and screenshots: toeo-recovery/v13/DELIVERY_V13.json
-All three deliverables saved successfully. Use Run_TOEO_Rashuan.cmd for the historical river merchant.
+原道具模板/图标/使用效果、装备、战斗、任务、完整碰撞与换图尚未完成。
+物品右键详情曾触发原端断线，左键购物车为本版已验证操作。
+原资源/UI异常及HP/TP数值仍待恢复，完整游玩流程尚未完成。
+下一阶段优先恢复原ITEM模板及图标映射，再接道具使用、HP/TP效果与战斗。
+NEXT_RECOVERY_V14.txt保留接续入口和失败记录，旧v13状态保存在history中。
