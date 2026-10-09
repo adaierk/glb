@@ -46,7 +46,7 @@ class InventoryFixture(CatalogFixture):
             p,character=self.read32(sp+4),self.read32(sp+8)
             index=self.wide(p).find(chr(character));self.ret(0 if index<0 else p+index*2)
         elif va==0x51ef30:
-            self.collections[obj]=[];uc.mem_write(obj,bytes(20));self.ret()
+            self.collections[obj]=[];uc.mem_write(obj,bytes(16));self.ret()
         elif va==0x51ea20 and obj!=self.shop+0x114:
             item=self.read32(sp+8);values=self.collections.setdefault(obj,[])
             values.append(item);self.write32(obj+8,len(values));self.ret(len(values)-1,8)
@@ -65,7 +65,7 @@ class WorldFixture(InventoryFixture):
     def __init__(self,binary):
         super().__init__(binary)
         self.write32(self.player+0x80,1);self.write32(self.player+0x1dc,0x10e6000)
-        self.write32(0x10db008,0x10e7000) # startup transport pending-query registry
+        self.write32(0x10da008,0x10e7000) # startup transport pending-query registry
 
     def on_code(self,uc,va,size,context):
         sp=uc.reg_read(UC_X86_REG_ESP);obj=uc.reg_read(UC_X86_REG_ECX)

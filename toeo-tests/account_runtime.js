@@ -356,6 +356,24 @@
     target:[observedShopFrame.add(0x100).readU32(),observedShopFrame.add(0x104).readU32()]})));},1000);
   // v14: transaction/inventory observations only. No NativeFunction calls,
   // state writes, UI bypass or replacement game rendering.
+  let shopInputSamples=0;
+  Interceptor.attach(address(0x59ad30),{onEnter(args){
+    if(observedShopFrame!==null && ++shopInputSamples<=120)emit({event:'native_shop_input',
+      object:this.context.ecx.toString(),kind:args[0].toUInt32(),arguments:[1,2,3,4].map(x=>args[x].toString())});
+  }});
+  Interceptor.attach(address(0x59a950),{onEnter(args){emit({event:'native_shop_choose_catalog',row:args[0].toInt32()});}});
+  Interceptor.attach(address(0x597090),{onEnter(){this.keep=observedShopFrame!==null;},
+    onLeave(ret){if(this.keep)emit({event:'native_shop_hit_test',row:ret.toInt32()});}});
+  Interceptor.attach(address(0x596690),{onEnter(args){this.item=args[0];this.quantity=args[1].toInt32();this.output=args[2];},
+    onLeave(ret){emit(safely(()=>({event:'native_shop_quantity_check',requested:this.quantity,result:ret.toInt32()&255,
+      accepted:this.output.readS32(),flags:this.item.add(0x14).readU32(),max_stack:this.item.add(0x26).readS16(),
+      buy_price:this.item.add(0xa4).readU32(),sell_price:this.item.add(0xa8).readU32()})));}});
+  Interceptor.attach(address(0x59a2a0),{onEnter(){this.cart=this.context.ecx;},onLeave(ret){
+    emit(safely(()=>({event:'native_shop_cart_add_result',result:ret.toInt32()&255,
+      lines:this.cart.add(0xef4).readU32(),total:this.cart.add(0xefc).readU32(),mode:this.cart.add(0xee8).readU32()})));}});
+  Interceptor.attach(address(0x598950),{onEnter(){this.cart=this.context.ecx;
+    emit(safely(()=>({event:'native_shop_cart_submit',mode:this.cart.add(0xee8).readU32(),
+      lines:this.cart.add(0xef4).readU32(),total:this.cart.add(0xefc).readU32()})));}});
   for(const [va,kind] of [[0x4f8050,'buy'],[0x4f81b0,'sell']]){
     Interceptor.attach(address(va),{onEnter(args){this.kind=kind;this.controller=this.context.ecx;
       emit({event:'native_trade_builder_enter',kind:kind,merchant:[args[0].toUInt32(),args[1].toUInt32()],

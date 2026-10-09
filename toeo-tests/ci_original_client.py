@@ -42,6 +42,13 @@ def main():
         for _ in range(2):
             u.mouse_event(2,0,0,0,0);time.sleep(.08);u.mouse_event(4,0,0,0,0);time.sleep(.08)
         time.sleep(.35);events.append({'event':'actual_ui_double_click','x':x,'y':y,'host_time':time.time()})
+    def drag(x,y,tx,ty):
+        u.SetCursorPos(x,y);time.sleep(.2);u.mouse_event(2,0,0,0,0);time.sleep(.4)
+        for step in range(1,11):
+            u.SetCursorPos(round(x+(tx-x)*step/10),round(y+(ty-y)*step/10));time.sleep(.08)
+        time.sleep(.3);u.mouse_event(4,0,0,0,0);time.sleep(.4)
+        events.append({'event':'actual_ui_drag','from':[x,y],'to':[tx,ty],'host_time':time.time()})
+    def has_cart():return any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 for e in events)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
@@ -78,18 +85,21 @@ def main():
                       141:lambda:click(472,341),145:lambda:click(472,341),
                       147:lambda:[click(271,411,hold=.15) for _ in range(6)],
                       148:lambda:[click(271,183,hold=.15) for _ in range(6)],
-                      150:lambda:double_click(145,193),153:lambda:click(441,186,hold=.15),155:lambda:click(441,186,hold=.15),
+                      150:lambda:click(107,195,True,hold=.2),
+                      152:lambda:None if has_cart() else drag(107,195,324,195),
+                      153:lambda:click(441,186,hold=.15),155:lambda:click(441,186,hold=.15),
                       160:lambda:click(349,409),170:lambda:click(159,142),
-                      174:lambda:double_click(145,193),180:lambda:click(349,409),
-                      190:lambda:click(493,107),195:lambda:click(28,182),
-                      210:lambda:click(28,182),215:lambda:click(360,410,hold=2.0),
+                      174:lambda:click(107,195,True,hold=.2),176:lambda:drag(107,195,324,195) if not any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 and e.get('mode')==1 for e in events) else None,
+                      180:lambda:click(349,409),
+                      190:lambda:click(493,107),195:lambda:click(28,52),
+                      210:lambda:click(28,52),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
-                schedule.update({145:lambda:click(28,182)})
+                schedule.update({145:lambda:click(28,52)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
