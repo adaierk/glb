@@ -45,7 +45,7 @@ def run(binary):
         raise RuntimeError(f'{e}; native PC={hex(f.uc.reg_read(UC_X86_REG_EIP))}') from e
     result=f.uc.reg_read(UC_X86_REG_EAX)
     assert result==0 and not f.assertions
-    assert f.read32(f.data+0x14)==1110101
+    assert f.read32(f.data+0x14)==0x1110101
     assert [f.read32(f.data+0xe0),f.read32(f.data+0xe4)]==[1,1]
     assert list(f.strings.values())==['map/1110101.mpd','map/1110101.mpi','map/1110101.bnd','']
     return dict(passed=True,original_sha256=EXPECTED_SHA256,native_result=result,

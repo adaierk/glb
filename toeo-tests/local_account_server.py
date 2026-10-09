@@ -24,7 +24,7 @@ from character_store import CharacterStore,CharacterRejected
 from world_auth_packets import parse_world_admission,world_admission_ack,parse_world_account,world_account_ack
 from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
-from world_map_packets import world_initialization_reply,world_map_ready_reply
+from world_map_packets import LOCAL_MAP_ID,world_initialization_reply,world_map_ready_reply
 
 
 class AccountStore:
@@ -189,7 +189,7 @@ class LocalAccountServer(BootstrapServer):
                 try:
                     ticket=self.world_tickets.issue(account_id,identity)
                     # Research endpoint: first DWORD is measured ticket; remaining fields are partial.
-                    fields=(ticket,0,*identity,0,0,0,0,0)
+                    fields=(ticket,LOCAL_MAP_ID,*identity,0,0,0,0,0)
                     answer=select_character_reply(fields,[(0x0100007f,45002,self.main_port)],request_id=req)
                     self.log('selection_probe_ticket_issued',connection=conn_id,ticket=ticket,identity=identity,
                              note='Partial research route; UDP and remaining selection fields unresolved')
@@ -224,7 +224,7 @@ class LocalAccountServer(BootstrapServer):
                 answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req)
                 self.send_answer(c,answer,state)
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
-                         map_id=1110101,character_id=role['identity'],bytes=len(answer),
+                         map_id=LOCAL_MAP_ID,character_id=role['identity'],bytes=len(answer),
                          request_hex=payload.hex(),note='Original record parser verified; real map rendering still requires GUI evidence')
                 continue
             if op==0x39 and len(payload)==40 and port==11101:
@@ -235,7 +235,7 @@ class LocalAccountServer(BootstrapServer):
                 self.send_answer(c,world_map_ready_reply(req),state)
                 state['world_map_ready']=True
                 self.log('world_map_ready_answer',connection=conn_id,request_id=req,
-                         map_id=1110101,identity=identity,bytes=40)
+                         map_id=LOCAL_MAP_ID,identity=identity,bytes=40)
                 continue
             if op==0x35 and len(payload)==9:
                 if not state.get('game_account_id'):

@@ -111,7 +111,7 @@ class LocalAccountTests(unittest.TestCase):
             world.sendall(data405(ready,1,3,route=0xffef))
             answer=parse405(recv_frame(world))['payload']
             self.assertEqual((len(answer),struct.unpack_from('<I',answer,12)[0]),(40,40))
-            self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,1110101))
+            self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,0x1110101))
             self.assertEqual(len(self.server.characters.list(1)),1)
 
     def open_admitted_world(self,ticket):

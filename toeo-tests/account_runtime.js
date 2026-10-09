@@ -111,7 +111,7 @@
   Interceptor.attach(address(0x6897f0), {
     onEnter(args) {
       const id=args[0].toUInt32();
-      if(id>=7 && id<=9 || id===17) {
+      if(id>=7 && id<=10 || id===17) {
         emit({event:'native_task_transition_requested',id,manager:this.context.ecx.toString(),
           manager_hex:bytes(this.context.ecx,64),factory:args[1].toString(),cleanup:args[2].toString()});
         if(id===7 && args[1].equals(address(0x440180)))emit({event:'CHARACTER_SELECTION_ACCEPTED_NATIVE'});
@@ -144,6 +144,25 @@
         result:ret.toInt32(),result_low_byte:ret.toInt32()&255});}
     });
   }
+  let lastRenderState='',renderSamples=0;
+  Interceptor.attach(address(0x4455f0),{onEnter(args){
+    if(++renderSamples%120!==1)return;
+    const state=safely(()=>{
+      const g=address(0x80dbf4).readPointer().add(0x28).readPointer().add(0x28).readPointer().add(0x2c).readPointer();
+      const selected=g.add(0x28).readPointer(),world=g.add(0x74).readPointer();
+      const player=g.add(0x78).readPointer().add(0xc).readPointer();
+      return {event:'native_world_render_state',task:bytes(args[0],24),
+        current_map_id:selected.add(0x20).readU32(),
+        world_gate:world.add(0x258).readU32(),world_flags:bytes(world.add(0x1c4),48),
+        player:player.toString(),position:[player.add(0xc).readFloat(),player.add(0x10).readFloat()],
+        player_instance:player.add(0x14).readU32(),profile:bytes(player.add(0x114).readPointer(),48)};
+    });
+    const key=JSON.stringify(state);if(key!==lastRenderState){lastRenderState=key;emit(state);}
+  }});
+  let drew=false;
+  Interceptor.attach(address(0x454090),{onEnter(){
+    if(!drew){drew=true;emit({event:'native_map_draw_context',object:this.context.ecx.toString()});}
+  }});
   let worldTaskPhase=-1;
   Interceptor.attach(address(0x43eb50), {
     onEnter() {

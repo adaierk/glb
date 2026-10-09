@@ -1,0 +1,42 @@
+永恒传说 Online 本地恢复：原 Windows 客户端联调中
+日期：2026-10-09
+
+用户当前目标：持续修复到原客户端进入真实地图并可以游玩，再交付阶段截图。
+没有进入地图或可游玩完成声明；不以验证窗口或背景画面代替游戏截图。
+
+本轮已恢复：完整原客户端 4873 个文件、363 个 map 文件。
+原 ToEO_CL.dat SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
+完整资源已经持久保存，并可由 Windows GitHub Actions 实际运行。
+
+最新已完成的真实原客户端验证：Actions run 37903179166（第 13 轮）。
+账号登录、游戏预登录、角色列表、角色选择、世界端点连接、入服确认均由原机器码自然通过。
+原客户端已建立独立 TCP 11101 地图通道；地图通道 0x05 确认已成功，世界控制器自然完成阶段 9；随后原客户端发出地图初始化查询，
+接受 936 字节响应、原 43F090 解析结果为 0，并启动原 442270 地图加载任务。
+实际地图加载后退回标题画面，尚未进入地图。
+
+当前修复：地图通道的原始广播包装器使用 vtable 7085e4 / 61fc50。
+0x04 账号附着请求需要 0x05 确认；之前 0x11 仅适用于账号包装器 708614 / 61fdf0。
+正确确认、错误指令、错误请求号和错误通道均已执行原始机器码测试验证。
+第 13 轮真实 GUI 已验证确认包修复成功。第 14 轮正在捕获实际地图资源加载和错误码。
+
+地图初始化候选包：0x34，936 字节，20/BF/21 原始记录、原始 map/1110101.mpd/mpi/bnd 路径。
+原 43F090 在真实 Windows GUI 已解析通过；资源加载仍在联调。
+地图角色外观已经映射到原 24 字节外观对象，世界属性不再复用选角记录；
+原世界模型与选角模型参数逐项一致，测试已执行原 lookup/load 参数机器码。
+完整原 MPI 文件已通过原 44DDB0 头部验证及指针重定位，无断言失败。
+角色固定字段及记录尾部名称均为 UTF-16LE；鼠标操作使用足够帧长的真实按下/释放。
+上一轮诊断挂钩曾干扰任务迭代，已移除该中间指令挂钩，无游戏状态补丁。
+
+本轮已修复真实运行阻塞：TCP 尾部对齐、0x0406 收包就绪、原生加解密、原界面账号后缀、
+旧网络库的本地地址与 WSA 错误语义、原生 0x0D/0x0F/0x10 端点连接及 0x18 入服确认路由。
+这些修复都以真实 Windows 原客户端或有明确替代边界的原机器码测试为证。
+
+源代码分支：adaierk/glb / toeo-local-world-recovery-20261009。
+第 13 轮提交：7fc097b3a9872f02604e48adb9e1a43200af1d6d。
+第 14 轮提交：e53f1e78350ea28002302907011d6935b791c622。
+原始全客户端另已保存在 90 天 Windows 构建资源 artifact 11602465232。
+
+剩余：真实地图加载、角色外观和属性、移动、交互与战斗。
+历史 v8 原文保存在 history/V8_STATE_UNMODIFIED.txt。
+
+2026-10-09 08:40 UTC continuation: Windows run 37904892292 proves real MPI/MPD/BND and player model load plus 3A map-ready acceptance. Screenshot remains black; this is NOT map visibility. Found selected+20 current map zero from selection route field 2; renderer 4455F0 uses it. Set route second DWORD and map initialization/ready map ID consistently to 0x1110101, paths formatted hex. Next original Windows run must verify actual scene.
