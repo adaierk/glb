@@ -40,7 +40,12 @@ jobs:
           branches to 0x612987 (abort_no_callback) before a login result can be delivered.
           Server greeting delay 0.2/4/10/15 seconds fails to create that owner.
           Prepending a syntactically accepted zero-row 0x0402 also fails to create owner.
-          Isolated transient flag 0x8002 -> 5 triggers session registration 0x617AD0\n          and assignment 0x617BF1, but original game then displays a Send Failed error.\n          This is research evidence, not proof of successful remote login.\n          Mere connect() return override -1 -> 0 does not fix that missing owner.\n          Deferred state switch and genuine WinSock blocking connect are being tested.\n          Registry method 0x617AD0 may assign session owner at 0x617BF1; precisely
+          Isolated transient flag 0x8002 -> 5 triggers session registration 0x617AD0
+          and assignment 0x617BF1, but original game then displays a Send Failed error.
+          This is research evidence, not proof of successful remote login.
+          Mere connect() return override -1 -> 0 does not fix that missing owner.
+          Deferred state switch and genuine WinSock blocking connect are being tested.
+          Registry method 0x617AD0 may assign session owner at 0x617BF1; precisely
           when the original client triggers this registration is under investigation.
           Various other standalone 0x0403..0x0407 greeting probes caused native
           access violations at 0x616553 and should not be treated as validated handshakes.
