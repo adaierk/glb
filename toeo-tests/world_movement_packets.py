@@ -12,7 +12,7 @@ def parse_move_request(packet):
     mode=packet[65]
     if mode not in (1,2,3):raise ValueError('Unsupported native movement mode')
     for grid in (source,target):
-        if not (0<=grid[0]<400 and 0<=grid[1]<450 and (grid[0]-grid[1])%2==0):
+        if not (0<=grid[0]<400 and 0<=grid[1]<225 and (grid[0]-grid[1])%2==0):
             raise ValueError('Movement outside the original 1110101 map grid')
     return {'request_id':struct.unpack_from('<I',packet,5)[0],
         'sequence':struct.unpack_from('<I',packet,12)[0],

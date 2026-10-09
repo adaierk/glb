@@ -217,7 +217,7 @@
       actor_flags:bytes(args[0].add(0x70),40),actor_modes:bytes(args[0].add(0x134),32)})));
   }});
   let moveCalls=0,lastMoveKey='';
-  for(const va of [0x4205b0,0x422d70,0x423900]){
+  for(const va of [0x4205b0,0x422d70]){
     let calls=0;
     Interceptor.attach(address(va),{onEnter(args){
       this.keep=++calls<=60;this.p=this.context.ecx;
@@ -227,6 +227,12 @@
     },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_path_internal_result',function:'0x'+va.toString(16),
       result:ret.toInt32(),map_binding:this.p.add(0x34).readPointer().toString()})));}});
   }
+  Interceptor.attach(address(0x415090),{onEnter(args){this.map=this.context.ecx;
+    emit({event:'native_map_navigation_apply',object:this.map.toString(),value:args[2].toUInt32()});
+  },onLeave(){emit(safely(()=>{const p=this.map,base=p.add(4).readPointer(),stride=p.add(0xa4).readS32();
+    const cells=[[6,4],[10,8],[19,7],[13,21]].map(g=>({grid:g,flags:base.add((g[1]*stride+Math.trunc(g[0]/2))*12).readU32()}));
+    return {event:'native_map_navigation_applied',width:p.add(0xd8).readS32(),height:p.add(0xdc).readS32(),cells};
+  }));}});
   Interceptor.attach(address(0x4fe6c0),{onEnter(args){
     emit({event:'native_actor_movement_permission',actor:this.context.ecx.toString(),enabled:args[0].toInt32()&255,
       caller:this.returnAddress.toString()});

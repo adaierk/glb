@@ -233,10 +233,11 @@ class LocalAccountServer(BootstrapServer):
                 identity=struct.unpack_from('<II',payload,24)
                 if not control or identity!=tuple(control['character_id']):
                     self.log('world_map_ready_rejected',connection=conn_id,identity=identity);continue
-                self.send_answer(c,world_map_ready_reply(req),state)
+                ready_answer=world_map_ready_reply(req)
+                self.send_answer(c,ready_answer,state)
                 state['world_map_ready']=True
                 self.log('world_map_ready_answer',connection=conn_id,request_id=req,
-                         map_id=LOCAL_MAP_ID,identity=identity,bytes=40)
+                         map_id=LOCAL_MAP_ID,identity=identity,bytes=len(ready_answer))
                 continue
             if op==0x42 and port==11101:
                 control=state.get('world_account_control')

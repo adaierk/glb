@@ -110,7 +110,8 @@ class LocalAccountTests(unittest.TestCase):
             struct.pack_into('<II',ready,24,*identity)
             world.sendall(data405(ready,1,3,route=0xffef))
             answer=parse405(recv_frame(world))['payload']
-            self.assertEqual((len(answer),struct.unpack_from('<I',answer,12)[0]),(40,40))
+            self.assertEqual((len(answer),struct.unpack_from('<I',answer,12)[0]),(2720,2720))
+            self.assertEqual(struct.unpack_from('<HH',answer,40),(0xa9,669))
             self.assertEqual((struct.unpack_from('<h',answer,16)[0],struct.unpack_from('<I',answer,36)[0]),(0,0x1110101))
             self.assertEqual(answer[18],1)  # Original movement permission consumer.
             move=bytearray(message(0x42,bytes(59),86))

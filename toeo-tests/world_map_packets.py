@@ -2,6 +2,7 @@
 import struct
 from account_packets import message
 from native_map_geometry import point_to_grid
+from world_map_navigation import NAV_RLE,NAV_WIDTH,NAV_HEIGHT
 
 # Resource names and original minimap %x formatter use hexadecimal map IDs.
 LOCAL_MAP_ID=0x1110101
@@ -65,12 +66,16 @@ def world_initialization_reply(identity,name,selector_fields,request_id,map_id=L
 
 def world_map_ready_reply(request_id,map_id=LOCAL_MAP_ID):
     # Original world 3A consumer 52a200 requires a 40-byte fixed header;
-    # length 40 means no optional A8/A9/AA records follow. 441731 reads
+    # A9 carries original walkable cells. 441731 reads
     # signed status at +16, and 52a260 looks up the loaded map at +36.
-    b=bytearray(message(0x3a,bytes(31),request_id))
-    struct.pack_into('<I',b,12,len(b))
+    nav=record(0xa9,12+len(NAV_RLE))
+    struct.pack_into('<II',nav,4,NAV_WIDTH*NAV_HEIGHT,0)
+    nav[12:]=NAV_RLE
+    tail=bytes(nav)+bytes(4)
+    b=bytearray(message(0x3a,bytes(31+len(tail)),request_id)[:40])
+    struct.pack_into('<I',b,12,len(b)+len(tail))
     # 52A3A8 reads +18 and calls 4FE6C0 to set actor+144. 505BAD
     # requires this permission before requesting a path from ground clicks.
     b[18]=1
     struct.pack_into('<I',b,36,map_id)
-    return bytes(b)
+    return bytes(b)+tail
