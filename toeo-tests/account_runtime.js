@@ -104,6 +104,21 @@
       }
     });
   }
+  let worldTaskPhase=-1;
+  Interceptor.attach(address(0x43eb50), {
+    onEnter() {
+      const phase=safely(()=>this.context.ecx.add(0x14).readPointer().add(4).readU32());
+      if(phase!==worldTaskPhase) {worldTaskPhase=phase;emit({event:'native_world_task_phase',phase});}
+    }
+  });
+  for(const [va,name] of [[0x61e9f0,'world_relogin'],[0x61ec50,'world_endpoint_answer']]) {
+    Interceptor.attach(address(va),{
+      onEnter(args) {this.p=this.context.ecx;emit({event:'native_'+name+'_enter',controller:this.p.toString(),
+        args:[args[0].toString(),args[1].toString()],stage:this.p.add(0x2c).readU32()});},
+      onLeave(ret) {emit({event:'native_'+name+'_leave',result:ret.toInt32(),
+        stage:this.p.add(0x2c).readU32(),status:this.p.add(0x34).readS32()});}
+    });
+  }
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();

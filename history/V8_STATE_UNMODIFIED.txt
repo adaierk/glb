@@ -1,0 +1,62 @@
+永恒传说 Online 本地恢复 v8：世界控制阶段完成
+日期：2026-10-09
+
+继续 v7 角色选择/票据衔接。原客户端此前已经能显示账号密码登录界面，
+本阶段处理进入地图前的协议；尚未形成可游玩端。
+
+本次新增
+1. 原 0x04 账号控制请求恢复完整发送：13 字节，body 是账号 ID（并非 SID）。
+   执行原 0x620760 -> 0x61B090 -> 0x43D2C0 -> 0x60A3E0 -> 0x6098D0 -> 原传输封装。
+   原控制器自然从阶段 7 进入阶段 8，原查询对象保存到 controller+0xCC。
+2. 分离两个原通信通道及查询池：0x18 准入走 controller+8，0x04 控制走 controller+4。
+   测试初始化两个独立 NNet 对象、注册表、包装器和查询池，分别执行原 bootstrap 与 sender。
+   v7 等旧测试中的两个包装器曾共享同一测试对象；v8 新测试不再依赖该共享假设。
+   通道名称仅描述原对象路径，不声称已经确认历史服务器端完整拓扑。
+3. 原 0x11 header-only 答复（9 字节）可关联 0x04 请求并将阶段 8->9，result=2。
+   请求号错误、答复到错查询池或 opcode 0x05 均保持阶段 8/result=1。
+   使用真实原机器码设置查询状态与结果，没有手工写入成功状态。
+   这是经原处理器验证的兼容答复，不证明已取得停服服务端当年的真实答复记录。
+4. 本地服务端加入 0x04/0x11 处理。要求控制连接已通过账号登录或游戏登录，
+   包内账号 ID 与已验证账号匹配，并存在唯一可绑定、未过期、角色仍存在的准入票据。
+   两条 TCP 连接分别执行准入和控制消息。已绑定同一控制连接可重复答复；
+   多个未绑定准入导致歧义时拒绝，不任意挑选角色。
+5. 数据库票据表自动增加 attached_by 列，保留原账号与角色。
+   准入或控制连接断开后对应票据失效。服务重启不复活旧连接票据。
+6. Windows 只读探针增加 WORLD_CONTROLLER_COMPLETED_NATIVE，条件为真实原 worker
+   阶段 8->9 且 result=2；runtime_result.json 增加 world_controller_completed。
+   达到该原生事件后自动截图并记录到 screenshots.json。
+   map_entered/playable 保持未知，不从阶段 9 推断进入地图。
+
+验证结果
+27 项协议/TCP 测试、12 组原 x86 验证、5 组真实 TCP 与原代码组合验证通过。
+新增组合验证使用两个实际 TCP 连接和两个不同原查询池；原 controller 到达阶段 9/result=2。
+Python 编译、合并 Frida JavaScript 语法检查、ZIP 内文件哈希检查通过。
+完整报告在 new_evidence/v8_validation。
+阶段截图 new_evidence/v8_visuals/TOEO_v8_actual_verification_window.png
+是实际运行的验证窗口，不是游戏画面，窗口内容来自本次测试报告。
+
+边界与剩余工作
+新原代码测试仍从阶段 5 初始化，阶段 2..4 的实际套接字/UDP 启动没有执行。
+实际 Windows 登录的压缩/加密配置、连续事件循环和完整 data 资源仍需联调。
+选择答复中剩余字段和身份对语义仍为研究状态。
+阶段 9 完成仅指本控制器的一个等待流程；后续仍有控制消息和地图初始化，
+当前没有地图、移动、战斗、怪物、任务或可游玩验证。
+本环境没有 Windows/Wine 或完整原 data，没有 v8 原游戏图形实测。
+
+使用
+默认入口 Run_Local_Login.cmd 沿用账号、角色保存和删除。
+实验入口 Run_World_Route_Probe.cmd 启用部分角色选择路由，并沿用本次控制消息处理。
+两个入口均选择已修好资源布局的完整原 Windows 游戏目录。
+账号 archive001 / local123；保留 local_login_report/local_accounts.sqlite。
+本包不含原程序及完整资源，不改原 ToEO_CL.dat，不向原游戏写入成功状态。
+原阶段截图与 runtime.jsonl/runtime_result.json 用于联调，而不是保证能进入世界。
+
+复现
+python -m pip install -r requirements_native.txt
+python toeo-tests/verify_local_protocol.py "D:\TOEO\game\ToEO_CL.dat" --out native_protocol_report
+单独实验服务：
+python toeo-tests/local_account_server.py --world-route-probe --out local_login_report --duration 600
+
+下一步
+补齐阶段 2..4 的套接字启动与 0x0D/0x10 控制消息，再继续恢复后续世界数据及地图加载。
+history/V7_STATE_UNMODIFIED.txt 保存前阶段原文；以 README_V8_CN.txt 为最新说明。

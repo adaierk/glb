@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "plain_bytes": 9,
+      "wire_bytes": 24,
+      "padding_draw": 0,
+      "tick": 0
+    },
+    {
+      "plain_bytes": 149,
+      "wire_bytes": 164,
+      "padding_draw": 3,
+      "tick": 123456
+    },
+    {
+      "plain_bytes": 176,
+      "wire_bytes": 200,
+      "padding_draw": 11,
+      "tick": 4294967295
+    },
+    {
+      "plain_bytes": 1024,
+      "wire_bytes": 1044,
+      "padding_draw": 5,
+      "tick": 7340288
+    }
+  ],
+  "encrypted_native_login_result": 1,
+  "executed": [
+    "622420 original permutation generator",
+    "622930 original encoder",
+    "622900 original decoder",
+    "original CRC corruption rejection",
+    "original encrypted login serializer, transport filter, correlator and account handler"
+  ],
+  "substitutions": [
+    "random padding draw",
+    "CRT allocation/free, clock and cookie boundaries from inherited native fixture"
+  ],
+  "limitations": [
+    "Does not verify Windows network routing or map entry"
+  ]
+}

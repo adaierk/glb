@@ -61,7 +61,8 @@ def main():
                       78:lambda:click(360,299),82:lambda:click(340,391),
                       92:lambda:(click(380,290),type_text('archive001')),
                       96:lambda:(click(380,336),type_text('local123')),100:lambda:click(315,405),
-                      120:lambda:click(385,550),135:lambda:click(385,550)}
+                      115:lambda:click(325,150),120:lambda:click(700,447),
+                      135:lambda:click(700,447)}
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()

@@ -14,10 +14,12 @@ def character_list_request():
 def character_record(native_fields,name):
     if len(native_fields)!=0xf8:
         raise ValueError('Native character fields must occupy 248 bytes')
-    raw=name.encode('cp932')
-    if not raw or b'\0' in raw or len(raw)>63:
-        raise ValueError('Character name must occupy 1..63 CP932 bytes')
-    size=(4+len(native_fields)+len(raw)+1+3)&~3
+    # 4387DC assigns this tail to std::basic_string<unsigned short>, confirmed
+    # by the MSVCP71 import at 6E2348 and actual Windows selector rendering.
+    raw=name.encode('utf-16le')
+    if not raw or '\0' in name or len(raw)>62:
+        raise ValueError('Character name must occupy 1..31 UTF-16 code units')
+    size=(4+len(native_fields)+len(raw)+2+3)&~3
     return struct.pack('<HH',0x20,size//4)+native_fields+raw+bytes(size-252-len(raw))
 
 
