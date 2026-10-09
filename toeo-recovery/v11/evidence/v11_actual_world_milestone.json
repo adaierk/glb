@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "stage": "Original Windows restart position persistence, player name, minimap coordinates and local NPC entity display",
+  "tested_commit": "fef88798e184f77ee0368acc6c7393175b7fc9be",
+  "windows_run_id": 37920423786,
+  "artifact_id": 11611394062,
+  "original_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "first_native_positions_unique": [
+    [
+      224,
+      80
+    ],
+    [
+      305.3681640625,
+      120.68408203125
+    ],
+    [
+      352,
+      144
+    ],
+    [
+      640,
+      128
+    ]
+  ],
+  "first_movement_acks": 2,
+  "persisted_rows": [
+    [
+      1,
+      1,
+      17891585,
+      19,
+      7
+    ]
+  ],
+  "reentry_renderer_samples": 10,
+  "reentry_position": [
+    640,
+    128
+  ],
+  "reentry_movement_acks": 0,
+  "images": [
+    {
+      "source": "reentered/original_desktop_150s.png",
+      "source_sha256": "c3036f0ab23cc4ed96d3cde757ae9b6ecffe78f0a9ecda444e22d0f83fcd2964",
+      "display_file": "TOEO_Local_World_20261009_v11.png",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "desktop crop only; game pixels unchanged"
+    },
+    {
+      "source": "first/original_desktop_146s.png",
+      "source_sha256": "a2af0064844db11e4dfbcefa0f4c1c77113cb065781073cc35d920ee7f67b7c0",
+      "display_file": "TOEO_Local_NPC_20261009_v11.png",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "desktop crop only; game pixels unchanged"
+    }
+  ],
+  "visual_observations": [
+    "Archive HUD name displayed",
+    "Minimap X0019 Y0007 displayed on reentry",
+    "Archive Shop entity head/name visible, body partly occluded by trees"
+  ],
+  "limitations": [
+    "NPC right-click pick count=0; no C6 request or shop interaction verified",
+    "HP/TP numbers still blank",
+    "Original UI/resource C++ exceptions remain caught and recorded",
+    "NPC configuration and conservative navigation are locally reconstructed",
+    "Full gameplay not completed"
+  ]
+}

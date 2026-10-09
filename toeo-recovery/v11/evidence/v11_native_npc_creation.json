@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "native_projection": {
+    "identity": [
+      1879048193,
+      1
+    ],
+    "category": 2,
+    "controlled": 0,
+    "map_id": 17891585,
+    "grid": [
+      10,
+      12
+    ],
+    "appearance_hex": "010000000100000000000000000000000000000001000000",
+    "hp": [
+      100,
+      100
+    ],
+    "tp": [
+      30,
+      30
+    ]
+  },
+  "native_names": [
+    "Archive Shop"
+  ],
+  "native_shop_extension": {
+    "vtable": "0x6eeca8",
+    "actor": 17436672,
+    "kind": 2
+  },
+  "limitations": [
+    "Graphics construction, loaded-map lookup, temporary containers, ownership and attachments explicitly substituted",
+    "Original chunks, name decoder, position fields, shop allocation and vtable execute unchanged",
+    "Does not establish Windows rendering or merchant interaction"
+  ]
+}
