@@ -1,0 +1,42 @@
+name: TOEO restoration source archive
+on:
+  push:
+    branches: [toeo-preservation-audit-20261008]
+    paths: [.github/workflows/toeo-source-bundle.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive-restoration-work:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: toeo-preservation-audit-20261008
+      - name: Prepare recovery notes
+        run: |
+          cat > README_TOEO_RECOVERY_20261009.txt <<'EOF'
+          TOEO / Tales of Eternia Online original client preservation work, 2026-10-09.
+          Source: archive.org/details/tales-of-eternia-online-dvd (user's original ISO).
+          Original Windows client starts, has genuine Japanese login and game art.
+          Loopback world selector 127.0.0.1:45000 works; TCP11100 is redirected to local fake server.
+          Native original receive: 0x608CE3; frame assembler 0x60E1E0, packet scanner 0x60CE60.
+          Native 0x0401 packet handler requires total length 44 (0x2c).
+          Experiment compares packet field endianness, payload lengths, and trailing data.
+          No claim that login authentication, character selection or world map is already working.
+          This archive contains tests/scripts only; install original game files separately from source.
+          See workflows and logs in Github branch toeo-preservation-audit-20261008.
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TOEOnline-authentic-client-restoration-source-20261009
+          path: |
+            README_TOEO_RECOVERY_20261009.txt
+            toeo-tests/*.py
+            .github/workflows/toeo-resume-static.yml
+            .github/workflows/toeo-route-recovery.yml
+            .github/workflows/toeo-trailer-boundary.yml
+            .github/workflows/toeo-native-endian.yml
+            .github/workflows/toeo-authentic-frame-test.yml
+          if-no-files-found: error
