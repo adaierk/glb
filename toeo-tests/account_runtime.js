@@ -231,7 +231,8 @@
     emit({event:'native_map_navigation_apply',object:this.map.toString(),value:args[2].toUInt32()});
   },onLeave(){emit(safely(()=>{const p=this.map,base=p.add(4).readPointer(),stride=p.add(0xa4).readS32();
     const cells=[[6,4],[10,8],[19,7],[13,21]].map(g=>({grid:g,flags:base.add((g[1]*stride+Math.trunc(g[0]/2))*12).readU32()}));
-    return {event:'native_map_navigation_applied',width:p.add(0xd8).readS32(),height:p.add(0xdc).readS32(),cells};
+    return {event:'native_map_navigation_applied',width:p.add(0xd8).readS32(),height:p.add(0xdc).readS32(),
+      resource_dimensions:[stride,p.add(0xa8).readS32()],primary_cells:p.add(8).readPointer().sub(base).toInt32()/12,cells};
   }));}});
   Interceptor.attach(address(0x4fe6c0),{onEnter(args){
     emit({event:'native_actor_movement_permission',actor:this.context.ecx.toString(),enabled:args[0].toInt32()&255,
