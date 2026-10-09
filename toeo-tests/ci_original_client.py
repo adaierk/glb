@@ -13,6 +13,8 @@ SHA='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 def main():
     p=argparse.ArgumentParser();p.add_argument('game');p.add_argument('out')
     p.add_argument('--duration',type=int,default=180);p.add_argument('--pump',action='store_true')
+    p.add_argument('--database',help='Reuse a preserved local account database for the reentry check')
+    p.add_argument('--reenter-check',action='store_true',help='Observe the restored position without scheduled movement')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
     import frida
@@ -22,7 +24,7 @@ def main():
     original=game/'ToEO_CL.dat'
     if hashlib.sha256(original.read_bytes()).hexdigest()!=SHA:raise SystemExit('Original SHA mismatch')
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
-    server=LocalAccountServer(out,world_route_probe=True)
+    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database)
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None
     u=ctypes.windll.user32
@@ -66,6 +68,8 @@ def main():
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
                       150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
+            if args.reenter_check:
+                for t in (125,130,135,150,160,170):schedule.pop(t,None)
             for t in range(args.duration):
                 time.sleep(1)
                 if t in schedule:schedule[t]()

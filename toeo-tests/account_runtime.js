@@ -108,6 +108,11 @@
       onLeave(ret){if(this.keep)emit({event:'native_game_incoming_returned',handler:'0x'+va.toString(16),opcode:this.op,result:ret.toInt32()});}
     });
   }
+  let nameCalls=0;
+  Interceptor.attach(address(0x430b50),{onEnter(args){this.keep=++nameCalls<=20;this.dest=args[0];
+    this.caller=this.returnAddress.toString();
+  },onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_world_name_decode',caller:this.caller,
+    result:ret.toInt32(),name:this.dest.readUtf16String()})));}});
   Interceptor.attach(address(0x6897f0), {
     onEnter(args) {
       const id=args[0].toUInt32();

@@ -130,6 +130,12 @@ class LocalAccountTests(unittest.TestCase):
             # A retransmission retains the exact correlated response.
             world.sendall(data405(move,1,3,route=0xffef))
             self.assertEqual(parse405(recv_frame(world))['payload'],movement_answer)
+            self.assertEqual(self.server.positions.load(1,identity)['grid'],(10,8))
+            struct.pack_into('<I',move,5,87)
+            struct.pack_into('<hh',move,60,31,7)  # Preserved forest classification.
+            world.sendall(data405(move,1,3,route=0xffef))
+            with self.assertRaises(socket.timeout):world.recv(1)
+            self.assertEqual(self.server.positions.load(1,identity)['grid'],(10,8))
             self.assertEqual(len(self.server.characters.list(1)),1)
 
     def open_admitted_world(self,ticket):
@@ -270,13 +276,31 @@ class LocalAccountTests(unittest.TestCase):
         self.authorize()
         self.assertEqual(self.mutation_status(create_character_request('SavedHero',request_id=10)),0)
         identity=self.server.characters.list(1)[0]['identity']
+        self.server.positions.save(1,identity,0x1110101,(19,7))
         self.sock.close();self.server.close()
         self.server=LocalAccountServer(self.temp.name,main_port=0,world_port=0,bind_extra=False)
         self.server.start()
         self.sock=socket.create_connection(('127.0.0.1',self.server.main_port));self.sock.settimeout(2)
         recv_frame(self.sock);self.authorize()
         self.assertEqual(self.server.characters.list(1)[0]['identity'],identity)
+        self.assertEqual(self.server.positions.load(1,identity),{'map_id':0x1110101,'grid':(19,7),'restored':True})
         self.assertEqual(struct.unpack_from('<II',self.exchange(character_list_request()),20),(1,2))
+
+    def test_world_positions_isolate_characters_and_survive_existing_store_migration(self):
+        one=self.server.characters.create(1,create_character_request('PositionOne'))
+        two=self.server.characters.create(1,create_character_request('PositionTwo'))
+        self.server.positions.save(1,one,0x1110101,(19,7))
+        self.assertEqual(self.server.positions.load(1,two)['grid'],(6,4))
+        for account,identity,grid in [(2,one,(10,8)),(1,(one[0],2),(10,8)),(1,one,(31,7)),(1,one,(19,449))]:
+            with self.assertRaises(ValueError):self.server.positions.save(account,identity,0x1110101,grid)
+        self.assertEqual(self.server.positions.load(1,one)['grid'],(19,7))
+        # A corrupted/obsolete saved cell must not strand the original client.
+        with self.server.accounts.lock:
+            self.server.accounts.db.execute('UPDATE world_positions SET grid_y=449 WHERE character_id=?',(one[0],))
+            self.server.accounts.db.commit()
+        self.assertEqual(self.server.positions.load(1,one)['grid'],(6,4))
+        self.server.characters.delete(1,one)
+        self.assertEqual(self.server.accounts.db.execute('SELECT COUNT(*) FROM world_positions WHERE character_id=?',(one[0],)).fetchone()[0],0)
 
     def test_three_slots_duplicates_and_request_replay(self):
         self.authorize()

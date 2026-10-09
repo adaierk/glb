@@ -77,3 +77,7 @@ class CharacterStore:
             with self.accounts.db:
                 cursor=self.accounts.db.execute('DELETE FROM characters WHERE id=? AND account_id=?',(identity[0],account_id))
                 if cursor.rowcount!=1:raise CharacterRejected('Character is missing or belongs to another account')
+                # Older stores may predate position migration; no table is required
+                # by standalone character-list tools.
+                if self.accounts.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='world_positions'").fetchone():
+                    self.accounts.db.execute('DELETE FROM world_positions WHERE character_id=? AND account_id=?',(identity[0],account_id))

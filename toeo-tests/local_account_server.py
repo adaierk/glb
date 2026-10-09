@@ -26,6 +26,8 @@ from world_ticket_store import WorldTicketStore
 from world_endpoint_packets import parse_endpoint_request,endpoint_reply,parse_endpoint_attachment
 from world_map_packets import LOCAL_MAP_ID,world_initialization_reply,world_map_ready_reply
 from world_movement_packets import parse_move_request,move_reply
+from world_position_store import WorldPositionStore,walkable_grid
+from native_map_geometry import grid_to_point
 
 
 class AccountStore:
@@ -69,11 +71,12 @@ class AccountStore:
 
 
 class LocalAccountServer(BootstrapServer):
-    def __init__(self,out,world_route_probe=False,**kwargs):
+    def __init__(self,out,world_route_probe=False,account_database=None,**kwargs):
         super().__init__(out,**kwargs)
         self.world_route_probe=world_route_probe
-        self.accounts=AccountStore(self.out/'local_accounts.sqlite')
+        self.accounts=AccountStore(Path(account_database) if account_database else self.out/'local_accounts.sqlite')
         self.characters=CharacterStore(self.accounts)
+        self.positions=WorldPositionStore(self.accounts)
         self.world_tickets=WorldTicketStore(self.accounts)
         self.accounts_closed=False
         self.endpoint_lock=threading.Lock()
@@ -222,11 +225,14 @@ class LocalAccountServer(BootstrapServer):
                 role=next((r for r in roles if r['identity']==tuple(control['character_id'])),None)
                 if role is None:
                     self.log('map_query_character_missing',connection=conn_id);continue
-                answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req)
+                position=self.positions.load(control['account_id'],role['identity'])
+                answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req,
+                    map_id=position['map_id'],position=grid_to_point(position['grid']))
                 self.send_answer(c,answer,state)
+                state['world_grid']=position['grid']
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
                          map_id=LOCAL_MAP_ID,character_id=role['identity'],bytes=len(answer),
-                         request_hex=payload.hex(),note='Original record parser verified; real map rendering still requires GUI evidence')
+                         grid=position['grid'],restored=position['restored'],request_hex=payload.hex())
                 continue
             if op==0x39 and len(payload)==40 and port==11101:
                 control=state.get('world_account_control')
@@ -246,6 +252,8 @@ class LocalAccountServer(BootstrapServer):
                     self.log('world_move_rejected',connection=conn_id,reason=str(error));continue
                 if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=LOCAL_MAP_ID:
                     self.log('world_move_rejected',connection=conn_id,reason='Character or ready map mismatch');continue
+                if not walkable_grid(move['target']):
+                    self.log('world_move_rejected',connection=conn_id,reason='Destination blocked by local navigation');continue
                 cache=state.setdefault('movement_answers',{})
                 previous=cache.get(req)
                 if previous:
@@ -253,11 +261,15 @@ class LocalAccountServer(BootstrapServer):
                     else:self.log('world_move_rejected',connection=conn_id,reason='Conflicting movement request id')
                     continue
                 answer=move_reply(move)
+                try:self.positions.save(control['account_id'],move['identity'],move['map_id'],move['target'])
+                except ValueError as error:
+                    self.log('world_move_rejected',connection=conn_id,reason=str(error));continue
                 if len(cache)>=128:cache.pop(next(iter(cache)))
                 cache[req]=(payload,answer)
                 self.send_answer(c,answer,state)
                 state['world_grid']=move['target']
                 self.log('world_move_ack',connection=conn_id,**move)
+                self.log('world_destination_saved',connection=conn_id,identity=move['identity'],map_id=move['map_id'],grid=move['target'])
                 continue
             if op==0x35 and len(payload)==9:
                 if not state.get('game_account_id'):

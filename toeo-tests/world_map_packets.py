@@ -2,6 +2,7 @@
 import struct
 from account_packets import message
 from native_map_geometry import point_to_grid
+from character_mutation_packets import encode_name
 from world_map_navigation import NAV_RLE,NAV_WIDTH,NAV_HEIGHT
 
 # Resource names and original minimap %x formatter use hexadecimal map IDs.
@@ -39,9 +40,9 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     # 43F3FA -> 4FF9C0 resolves grid cells back to their pixel centers.
     struct.pack_into('<I',b,0x24,map_id)
     struct.pack_into('<hh',b,0x28,*point_to_grid(position))
-    raw=name.encode('utf-16le')
-    if len(raw)>62:raise ValueError('Player name exceeds original fixed field')
-    b[0x38:0x38+len(raw)]=raw
+    # Original 43F34A ->430B50 expects checksum/count/encoded UTF-16,
+    # the same 68-byte format as creation, rather than plain UTF-16.
+    b[0x38:0x7c]=encode_name(name)
     # Original 43f38e copies this 24-byte appearance object; 501584/50162e
     # then uses exactly the selector's model and appearance parameters.
     b[0x7c:0x94]=selector_fields[0x30:0x48]
@@ -55,9 +56,9 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     b[0x30:0x33]=bytes((1,0,0))
     return bytes(b)
 
-def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID):
+def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.)):
     b=bytearray(40)
-    records=map_record(map_id)+world_clock_record()+player_record(identity,name,selector_fields,map_id=map_id)+bytes(4)
+    records=map_record(map_id)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id)+bytes(4)
     size=len(b)+len(records)
     b[:9]=message(0x34,bytes(size-9),request_id)[:9]
     struct.pack_into('<I',b,12,size)

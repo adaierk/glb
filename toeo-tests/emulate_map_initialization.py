@@ -2,23 +2,28 @@
 import argparse,json,struct
 from pathlib import Path
 from unicorn.x86_const import UC_X86_REG_ESP,UC_X86_REG_ECX,UC_X86_REG_EAX,UC_X86_REG_EIP
-from emulate_character_list import CharacterFixture
+from emulate_character_mutation import MutationFixture
 from world_map_packets import world_initialization_reply
 from character_store import native_character_fields
 from emulate_session_bootstrap import EXPECTED_SHA256
 
-class MapFixture(CharacterFixture):
+class MapFixture(MutationFixture):
     def __init__(self,binary):
         super().__init__(binary)
         self.world_state,self.data,self.clock=0x1090000,0x1091000,0x1095000
         self.write32(self.game+0x74,self.world_state);self.write32(self.world_state+0x10,self.data)
         self.write32(self.world_state+0x14,0x1096000);self.write32(self.game+0xc4,self.clock)
-        self.strings={};self.notices=[]
+        self.strings={};self.notices=[];self.decoded_names=[]
         for i,iat in enumerate((0x6e23dc,0x6e234c,0x6e2338,0x6e27fc,0x6e2110,0x6e210c)):
             self.write32(iat,0x1098000+i*16)
     def on_code(self,uc,va,size,x):
         sp=uc.reg_read(UC_X86_REG_ESP);obj=uc.reg_read(UC_X86_REG_ECX)
-        if va==0x1098000: # narrow basic_string assignment
+        if va==0x430bca:
+            from unicorn.x86_const import UC_X86_REG_EDI
+            p=uc.reg_read(UC_X86_REG_EDI)
+            raw=bytes(uc.mem_read(p,64));n=next((i for i in range(0,64,2) if raw[i:i+2]==bytes(2)),64)
+            self.decoded_names.append(raw[:n].decode('utf-16le'))
+        elif va==0x1098000: # narrow basic_string assignment
             source=self.read32(sp+4);raw=bytes(uc.mem_read(source,32)).split(b'\0')[0]
             self.strings[obj]=raw.decode('ascii');self.ret(obj,4)
         elif va==0x1098010: self.ret(obj,4) # basic_string copy; packet reads remain native
@@ -38,7 +43,7 @@ class MapFixture(CharacterFixture):
 def run(binary):
     f=MapFixture(binary);p=0x109a000
     fields=native_character_fields((1,1),'Archive',(1,1,0,0,0,0,0,0,0,0))
-    reply=world_initialization_reply((1,1),'Archive',fields,1)
+    reply=world_initialization_reply((1,1),'Archive',fields,1,position=(640.,128.))
     f.uc.mem_write(p,reply)
     try:f.invoke(0x43f090,(p,p+40),this=f.ui)
     except Exception as e:
@@ -48,11 +53,13 @@ def run(binary):
     assert f.read32(f.data+0x14)==0x1110101
     assert [f.read32(f.data+0xe0),f.read32(f.data+0xe4)]==[1,1]
     assert f.read32(f.data+0xe0+0x22c)==0x1110101
-    assert [f.read32(f.data+0xe0+0x230),f.read32(f.data+0xe0+0x234)]==[6,4]
+    assert [f.read32(f.data+0xe0+0x230),f.read32(f.data+0xe0+0x234)]==[19,7]
+    assert f.decoded_names==['Archive']
     assert list(f.strings.values())==['map/1110101.mpd','map/1110101.mpi','map/1110101.bnd','']
     return dict(passed=True,original_sha256=EXPECTED_SHA256,native_result=result,
                 native_map_id=f.read32(f.data+0x14),paths=f.strings,
                 native_entity_id=[f.read32(f.data+0xe0),f.read32(f.data+0xe4)],
+                native_names=f.decoded_names,restored_grid=[19,7],
                 native_notifications=f.notices,reply_bytes=len(reply),
                 limitations=['State/constructor/standard-library/OS/UI and send boundaries explicitly substituted',
                              'Original record tags, copying, traversal and parse result executed',
