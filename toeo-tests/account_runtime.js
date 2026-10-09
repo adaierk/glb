@@ -368,9 +368,16 @@
     onLeave(ret){emit(safely(()=>({event:'native_shop_quantity_check',requested:this.quantity,result:ret.toInt32()&255,
       accepted:this.output.readS32(),flags:this.item.add(0x14).readU32(),max_stack:this.item.add(0x26).readS16(),
       buy_price:this.item.add(0xa4).readU32(),sell_price:this.item.add(0xa8).readU32()})));}});
-  Interceptor.attach(address(0x59a2a0),{onEnter(){this.cart=this.context.ecx;},onLeave(ret){
+  let observedCart=null;
+  Interceptor.attach(address(0x59a2a0),{onEnter(){this.cart=this.context.ecx;observedCart=this.cart;},onLeave(ret){
     emit(safely(()=>({event:'native_shop_cart_add_result',result:ret.toInt32()&255,
       lines:this.cart.add(0xef4).readU32(),total:this.cart.add(0xefc).readU32(),mode:this.cart.add(0xee8).readU32()})));}});
+  setInterval(()=>{if(observedCart!==null)emit(safely(()=>{
+    const count=observedCart.add(0xef4).readU32(),head=observedCart.add(0xef0).readPointer();
+    const item=count && !head.isNull()?head.readPointer().add(8).readPointer():null;
+    return {event:'native_shop_cart_state',mode:observedCart.add(0xee8).readU32(),lines:count,
+      total:observedCart.add(0xefc).readU32(),quantity:item===null?0:item.add(0x24).readS16()};
+  }));},500);
   Interceptor.attach(address(0x598950),{onEnter(){this.cart=this.context.ecx;
     emit(safely(()=>({event:'native_shop_cart_submit',mode:this.cart.add(0xee8).readU32(),
       lines:this.cart.add(0xef4).readU32(),total:this.cart.add(0xefc).readU32()})));}});

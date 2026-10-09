@@ -49,6 +49,12 @@ def main():
         time.sleep(.3);u.mouse_event(4,0,0,0,0);time.sleep(.4)
         events.append({'event':'actual_ui_drag','from':[x,y],'to':[tx,ty],'host_time':time.time()})
     def has_cart():return any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 for e in events)
+    def adjust_quantity(mode,target):
+        samples=[e for e in events if e.get('event')=='native_shop_cart_state' and e.get('mode')==mode and e.get('lines')==1]
+        if not samples:return
+        quantity=samples[-1]['quantity']
+        if quantity<target:click(441,186,hold=.15)
+        elif quantity>target:click(441,202,hold=.15)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
@@ -85,11 +91,12 @@ def main():
                       141:lambda:click(472,341),145:lambda:click(472,341),
                       147:lambda:[click(271,411,hold=.15) for _ in range(6)],
                       148:lambda:[click(271,183,hold=.15) for _ in range(6)],
-                      150:lambda:click(107,195,True,hold=.2),
+                      150:lambda:double_click(107,195),
                       152:lambda:None if has_cart() else drag(107,195,324,195),
-                      153:lambda:click(441,186,hold=.15),155:lambda:click(441,186,hold=.15),
+                      153:lambda:adjust_quantity(0,3),155:lambda:adjust_quantity(0,3),157:lambda:adjust_quantity(0,3),
                       160:lambda:click(349,409),170:lambda:click(159,142),
-                      174:lambda:click(107,195,True,hold=.2),176:lambda:drag(107,195,324,195) if not any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 and e.get('mode')==1 for e in events) else None,
+                      174:lambda:double_click(107,195),176:lambda:drag(107,195,324,195) if not any(e.get('event')=='native_shop_cart_add_result' and e.get('result')==1 and e.get('mode')==1 for e in events) else None,
+                      177:lambda:adjust_quantity(1,1),178:lambda:adjust_quantity(1,1),
                       180:lambda:click(349,409),
                       190:lambda:click(493,107),195:lambda:click(28,52),
                       210:lambda:click(28,52),215:lambda:click(360,410,hold=2.0),
