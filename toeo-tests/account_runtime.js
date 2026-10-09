@@ -193,6 +193,7 @@
       emit(safely(()=>{const p=this.context.edi;return {event:'native_pick_candidate',phase:'0x'+va.toString(16),
         identity:[p.add(0x68).readU32(),p.add(0x6c).readU32()],category:p.add(0x70).readU32(),
         flags:p.add(0x74).readU32(),pick_flags:p.add(0xa8).readU32(),scale:p.add(0xac).readFloat(),
+        animation_action:p.add(0xa0).readU32(),
         position:[p.add(0xc).readFloat(),p.add(0x10).readFloat()],
         model:p.add(0x158).readPointer().toString(),geometry:p.add(0x15c).readPointer().toString(),
         zero_flag:!!(this.context.eflags&64)};}));

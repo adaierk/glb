@@ -25,6 +25,7 @@ class NpcFixture(MapFixture):
                 'category':self.read32(state+8),'controlled':uc.mem_read(state+0x14,1)[0],
                 'map_id':self.read32(state+0x22c),
                 'grid':[self.read32(state+0x230),self.read32(state+0x234)],
+                'animation_action':self.read32(state+0x23c),
                 'appearance_hex':bytes(uc.mem_read(state+0x38,24)).hex(),
                 'hp':[self.read32(state+0x58),self.read32(state+0xf8)],
                 'tp':[self.read32(state+0x5c),self.read32(state+0xfc)]}
@@ -47,6 +48,7 @@ def run(binary):
     assert f.projected['identity']==list(SHOP_IDENTITY)
     assert f.projected['category']==2 and f.projected['controlled']==0
     assert f.projected['map_id']==LOCAL_MAP_ID and f.projected['grid']==list(SHOP_GRID)
+    assert f.projected['animation_action']==1
     assert f.decoded_names==[SHOP_NAME]
     assert f.shop_extension=={'vtable':'0x6eeca8','actor':f.actor,'kind':2}
     assert not f.assertions

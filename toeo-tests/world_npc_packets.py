@@ -19,6 +19,10 @@ def shop_actor_records():
     struct.pack_into('<I',b,4,2)
     struct.pack_into('<II',b,12,*SHOP_IDENTITY)
     struct.pack_into('<hh',b,0x18,*SHOP_GRID)
+    # 51C3E2 -> state+23C -> actor+A0: native model animation action.
+    # The controlled-player decoder 43F410 sets idle action 1; action 0
+    # leaves this NPC's graphical and pick model without a valid idle pose.
+    struct.pack_into('<h',b,0x1c,1)
     b[0x23]=0xff # original signed direction -1 (automatic)
     b[0x24:0x28]=bytes((1,0,0,1))
     b[0x30:0x74]=encode_name(SHOP_NAME)
