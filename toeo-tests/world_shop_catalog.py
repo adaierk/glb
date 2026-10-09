@@ -44,12 +44,15 @@ def catalog_records(stock):
         item_record = record(0x9d, 0x44)
         # Native 59A800..59A852 feeds 51D780. These are local catalog-row IDs,
         # never presented as the recovered official item template/instance IDs.
-        struct.pack_into('<IIIII', item_record, 0x14, index+1, 0, 0, 0, 1)
-        struct.pack_into('<hhh', item_record, 0x28, 0, 0, 0)
+        # Local offline stack/resale rules are explicit, not recovered official
+        # limits. Native bit 0 enables quantity controls; +2A is stack capacity.
+        from world_inventory_packets import LOCAL_STACK_LIMIT
+        struct.pack_into('<IIIII', item_record, 0x14, index+1, 1, 0, 0, 1)
+        struct.pack_into('<hhh', item_record, 0x28, 1, LOCAL_STACK_LIMIT, 0)
         # 51D780 writes +38 to item+A4; 599C60 passes that value
         # to row+38, and 596FE3 formats it as the displayed gald price.
         # This field is not an icon ID. Original icons come from templates.
-        struct.pack_into('<IIII', item_record, 0x34, 0, price, 0, 0)
+        struct.pack_into('<IIII', item_record, 0x34, 0, price, price//2, 0)
         result.extend(item_record)
         price_record = record(0x9e, 16)
         struct.pack_into('<III', price_record, 4, price, 0, 0)

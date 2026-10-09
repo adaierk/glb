@@ -29,6 +29,7 @@ def main():
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
     from native_map_geometry import grid_to_point
     expected_position=grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid'])
+    expected_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
     u=ctypes.windll.user32
     def click(x,y,right=False,hold=.90):
         u.SetCursorPos(x,y);time.sleep(.15);u.mouse_event(8 if right else 2,0,0,0,0);time.sleep(hold);u.mouse_event(16 if right else 4,0,0,0,0);time.sleep(.35)
@@ -36,6 +37,11 @@ def main():
     def type_text(s):
         for c in s:
             vk=ord(c.upper());u.keybd_event(vk,0,0,0);u.keybd_event(vk,0,2,0);time.sleep(.04)
+    def double_click(x,y):
+        u.SetCursorPos(x,y);time.sleep(.15)
+        for _ in range(2):
+            u.mouse_event(2,0,0,0,0);time.sleep(.08);u.mouse_event(4,0,0,0,0);time.sleep(.08)
+        time.sleep(.35);events.append({'event':'actual_ui_double_click','x':x,'y':y,'host_time':time.time()})
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
@@ -69,17 +75,26 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(472,341),145:lambda:click(472,341),147:lambda:[click(271,411,hold=.15) for _ in range(6)],148:lambda:click(493,107),
-                      150:lambda:click(360,410,hold=2.0),160:lambda:click(480,380,hold=2.0),170:lambda:click(400,350,True)}
+                      141:lambda:click(472,341),145:lambda:click(472,341),
+                      147:lambda:[click(271,411,hold=.15) for _ in range(6)],
+                      148:lambda:[click(271,183,hold=.15) for _ in range(6)],
+                      150:lambda:double_click(145,193),153:lambda:click(441,186,hold=.15),155:lambda:click(441,186,hold=.15),
+                      160:lambda:click(349,409),170:lambda:click(159,142),
+                      174:lambda:double_click(145,193),180:lambda:click(349,409),
+                      190:lambda:click(493,107),195:lambda:click(28,182),
+                      210:lambda:click(28,182),215:lambda:click(360,410,hold=2.0),
+                      225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
-                for t in (141,145,147,148,150,160,170):schedule.pop(t,None)
+                for t in tuple(schedule):
+                    if t>=141:schedule.pop(t,None)
+                schedule.update({145:lambda:click(28,182)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
                 if t in schedule and not (t in (125,130,135) and entered):schedule[t]()
-                if t%10==0 or t in (101,107,121,126,136,142,146,147,149):shot(t);print('PHASE screenshot '+str(t),flush=True)
+                if t%10==0 or t in (101,107,121,126,136,142,146,147,149,151,156,161,171,175,181,191,196):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
             failure=traceback.format_exc()
             (out/'python_error.txt').write_text(failure,encoding='utf-8');traceback.print_exc()
@@ -115,6 +130,17 @@ def main():
             result['shop_display_price_text_native']=all(str(x['price_gald']) in displayed for x in expected_stock)
             result['visible_prices_verified']=None  # Separately reviewed from captured desktop pixels.
             result['original_item_templates_icons_verified']=False
+            inventory_samples=[e for e in events if e.get('event')=='native_player_inventory_state']
+            named_items=[e for e in events if e.get('event')=='native_inventory_named_item']
+            result['native_inventory_samples']=inventory_samples
+            saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
+            result['saved_inventory']=saved_inventory
+            result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
+            result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
+            result['buy_money_quantity_native']=any(e.get('money')==3920 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
+            result['sell_money_quantity_native']=any(e.get('money')==4100 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
+            if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native')):
+                failure=failure or 'Native purchase 3 / sell 1 / inventory / wallet checks did not all pass'
             if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
                 failure=failure or 'Historical name/price/count were not all observed in original shop controls'
             shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
@@ -130,6 +156,9 @@ def main():
                 result['position_restored_without_movement']=bool(positions) and all(tuple(x)==expected_position for x in positions)
                 if not result['map_entered'] or not result['position_restored_without_movement']:
                     failure=failure or 'Original reentry did not continuously render the saved destination'
+                result['inventory_restored_native']=bool(inventory_samples) and all(e.get('money')==expected_inventory['money'] and e.get('items')==len(expected_inventory['items']) for e in inventory_samples) and all(any(e.get('identity')==list(item['identity']) and e.get('quantity')==item['quantity'] and e.get('name')==item['name'] for e in named_items) for item in expected_inventory['items'])
+                if not expected_inventory['items'] or not result['inventory_restored_native']:
+                    failure=failure or 'Original reentry did not restore saved items and funds'
             (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps(result),flush=True)
             if pid is not None:
                 try:device.kill(pid)

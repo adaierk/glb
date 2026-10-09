@@ -102,6 +102,8 @@ def shop_open_notice(identity,request_id,stock=None,map_id=LOCAL_MAP_ID):
         tail=catalog_records(stock)
     b=bytearray(message(0xd6,bytes(35+len(tail)),request_id))
     struct.pack_into('<IIIII',b,12,*identity,map_id,*SHOP_IDENTITY)
-    struct.pack_into('<II',b,36,0,0)
+    # 59A640 -> shop+10C/+108: sell/buy price multipliers, not funds.
+    # Native wallet is the controlled actor+1D4 (51D8A0).
+    struct.pack_into('<ff',b,36,1.0,1.0)
     b[44:]=tail
     return bytes(b)

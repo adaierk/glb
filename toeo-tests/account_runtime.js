@@ -150,12 +150,14 @@
     });
   }
   let lastRenderState='',renderSamples=0;
+  let observedPlayer=null;
   Interceptor.attach(address(0x4455f0),{onEnter(args){
     if(++renderSamples%120!==1)return;
     const state=safely(()=>{
       const g=address(0x80dbf4).readPointer().add(0x28).readPointer().add(0x28).readPointer().add(0x2c).readPointer();
       const selected=g.add(0x28).readPointer(),world=g.add(0x74).readPointer();
       const player=g.add(0x78).readPointer().add(0xc).readPointer();
+      observedPlayer=player;
       return {event:'native_world_render_state',task:bytes(args[0],24),
         current_map_id:selected.add(0x20).readU32(),
         world_gate:world.add(0x258).readU32(),world_flags:bytes(world.add(0x1c4),48),
@@ -352,6 +354,41 @@
   setInterval(()=>{if(observedShopFrame!==null)emit(safely(()=>({event:'native_shop_frame_state',
     frame:observedShopFrame.toString(),visible:(observedShopFrame.add(0x20).readU32()&0x20)!==0,
     target:[observedShopFrame.add(0x100).readU32(),observedShopFrame.add(0x104).readU32()]})));},1000);
+  // v14: transaction/inventory observations only. No NativeFunction calls,
+  // state writes, UI bypass or replacement game rendering.
+  for(const [va,kind] of [[0x4f8050,'buy'],[0x4f81b0,'sell']]){
+    Interceptor.attach(address(va),{onEnter(args){this.kind=kind;this.controller=this.context.ecx;
+      emit({event:'native_trade_builder_enter',kind:kind,merchant:[args[0].toUInt32(),args[1].toUInt32()],
+        lines:args[2].toUInt32(),controller:this.controller.toString(),sequence_before:this.controller.readU32()});
+    },onLeave(ret){emit({event:'native_trade_builder_result',kind:this.kind,result:ret.toInt32()&255,
+      sequence_after:this.controller.readU32(),pending:this.controller.add(0x10).readPointer().toString()});}});
+  }
+  Interceptor.attach(address(0x4fab30),{onEnter(args){this.controller=this.context.ecx;
+    emit(safely(()=>({event:'native_trade_reply_enter',sequence:args[0].add(12).readU32(),
+      status:args[0].add(20).readS16(),pending:this.controller.add(0x10).readPointer().toString()})));
+  },onLeave(){emit(safely(()=>({event:'native_trade_reply_leave',applied_sequence:this.controller.add(4).readU32(),
+    pending:this.controller.add(0x10).readPointer().toString()})));}});
+  Interceptor.attach(address(0x51d740),{onEnter(args){this.wallet=this.context.ecx;this.money=args[0].toInt32();},
+    onLeave(){emit(safely(()=>({event:'native_wallet_set',object:this.wallet.toString(),requested:this.money,
+      money:this.wallet.readU32(),checksum:this.wallet.add(4).readU32()})));}});
+  Interceptor.attach(address(0x51f030),{onEnter(args){this.container=args[1];this.keep=!this.container.isNull();},
+    onLeave(ret){if(this.keep)emit(safely(()=>({event:'native_inventory_records_result',result:ret.toInt32()&255,
+      capacity:this.container.add(12).readU32(),items:this.container.add(8).readU32()})));}});
+  Interceptor.attach(address(0x51d930),{onEnter(){this.item=this.context.ecx;},onLeave(){
+    emit(safely(()=>({event:'native_inventory_named_item',identity:[0,4,8,12].map(x=>this.item.add(x).readU32()),
+      name:safely(()=>{const s=this.item.add(0x34);return (s.add(24).readU32()>=8?s.add(4).readPointer():s.add(4)).readUtf16String();}),quantity:this.item.add(0x24).readS16(),
+      stack_capacity:this.item.add(0x26).readS16(),sell_price:this.item.add(0xa8).readU32(),
+      template_pointer:this.item.add(0x30).readPointer().toString()})));}});
+  Interceptor.attach(address(0x565210),{onEnter(args){emit(safely(()=>({event:'native_inventory_ui_item',
+    identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),slot:args[1].toInt32(),
+    template_pointer:args[2].toString(),quantity:args[3].toInt32(),flags:args[4].toUInt32()})));}});
+  let previousInventory='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
+    const wallet=observedPlayer.add(0x1d4).readPointer(),bag=observedPlayer.add(0x1d8).readPointer();
+    const state={event:'native_player_inventory_state',money:wallet.isNull()?null:wallet.readU32(),
+      items:bag.isNull()?null:bag.add(8).readU32(),capacity:bag.isNull()?null:bag.add(12).readU32()};
+    const key=JSON.stringify(state);if(key===previousInventory)return {event:'native_inventory_sample_unchanged'};
+    previousInventory=key;return state;
+  }));},1000);
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();

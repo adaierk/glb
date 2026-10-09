@@ -32,7 +32,7 @@ def world_clock_record():
     # This record feeds 4F5280's clock/weather state. Zero disables timed effects.
     return bytes(b)
 
-def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL_MAP_ID):
+def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL_MAP_ID,money=0):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
     b=record(0x21,0x284)
     struct.pack_into('<II',b,4,*identity)
@@ -59,11 +59,18 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     struct.pack_into('<II',b,0x94+8,100,30)
     struct.pack_into('<II',b,0x94+0xa8,100,30)
     b[0x30:0x33]=bytes((1,0,0))
+    if not isinstance(money,int) or not 0<=money<=10000000:raise ValueError('Native wallet range')
+    # 43F4AD calls the original checksum-protected wallet setter 51D740.
+    struct.pack_into('<I',b,0x25c,money)
     return bytes(b)
 
-def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.),label='Local World'):
+def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.),label='Local World',inventory=None):
     b=bytearray(40)
-    records=map_record(map_id,label)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id)+bytes(4)
+    records=map_record(map_id,label)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id,money=0 if inventory is None else inventory['money'])
+    if inventory is not None:
+        from world_inventory_packets import inventory_records
+        records+=inventory_records(inventory)
+    records+=bytes(4)
     size=len(b)+len(records)
     b[:9]=message(0x34,bytes(size-9),request_id)[:9]
     struct.pack_into('<I',b,12,size)

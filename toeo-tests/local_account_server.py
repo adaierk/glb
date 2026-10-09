@@ -29,6 +29,8 @@ from world_movement_packets import parse_move_request,move_reply,move_rejection_
 from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_npc_request,
                                npc_selection_reply,npc_action_reply,shop_open_notice)
 from world_position_store import WorldPositionStore,walkable_grid
+from world_inventory_store import WorldInventoryStore,TradeRejected
+from world_inventory_packets import parse_trade_request,transaction_reply,inventory_notice
 from native_map_geometry import grid_to_point
 
 
@@ -84,6 +86,7 @@ class LocalAccountServer(BootstrapServer):
         self.accounts=AccountStore(Path(account_database) if account_database else self.out/'local_accounts.sqlite')
         self.characters=CharacterStore(self.accounts)
         self.positions=WorldPositionStore(self.accounts,self.profile)
+        self.inventory=WorldInventoryStore(self.accounts)
         self.world_tickets=WorldTicketStore(self.accounts)
         self.accounts_closed=False
         self.endpoint_lock=threading.Lock()
@@ -233,13 +236,15 @@ class LocalAccountServer(BootstrapServer):
                 if role is None:
                     self.log('map_query_character_missing',connection=conn_id);continue
                 position=self.positions.load(control['account_id'],role['identity'])
+                inventory=self.inventory.load(control['account_id'],role['identity'])
                 answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req,
-                    map_id=position['map_id'],position=grid_to_point(position['grid']),label=self.profile.label)
+                    map_id=position['map_id'],position=grid_to_point(position['grid']),label=self.profile.label,inventory=inventory)
                 self.send_answer(c,answer,state)
                 state['world_grid']=position['grid']
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
                          map_id=self.map_id,character_id=role['identity'],bytes=len(answer),
                          grid=position['grid'],restored=position['restored'],request_hex=payload.hex())
+                self.log('world_inventory_restored',connection=conn_id,identity=role['identity'],**inventory)
                 continue
             if op==0x39 and len(payload)==40 and port==11101:
                 control=state.get('world_account_control')
@@ -308,6 +313,34 @@ class LocalAccountServer(BootstrapServer):
                     self.log('shop_catalog_ack_rejected',connection=conn_id,request_hex=payload.hex());continue
                 state['shop_catalog_ack_observed']=True
                 self.log('shop_catalog_ack_native',connection=conn_id,request_id=req,request_hex=payload.hex())
+                continue
+            if op in (0xde,0xdf) and port==11101:
+                control=state.get('world_account_control')
+                try:trade=parse_trade_request(payload)
+                except ValueError as error:
+                    self.log('shop_trade_malformed',connection=conn_id,reason=str(error),request_hex=payload.hex());continue
+                if not control or not state.get('world_map_ready') or trade['identity']!=tuple(control['character_id']) or trade['map_id']!=self.map_id or trade['merchant']!=SHOP_IDENTITY or state.get('npc_selected')!=SHOP_IDENTITY or not state.get('shop_catalog_ack_observed') or not self.shop_preview:
+                    self.log('shop_trade_unauthorized',connection=conn_id,reason='Character, map or selected catalog mismatch');continue
+                from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
+                source=historical_stock(self.profile.stock_key or PREVIEW_SOURCE_KEY)
+                state.setdefault('trade_connection_key',secrets.token_hex(16))
+                status=0;reason=None;replayed=False
+                try:
+                    inventory,replayed=self.inventory.trade(control['account_id'],trade['identity'],source,trade,payload,state['trade_connection_key'])
+                except TradeRejected as error:
+                    status=-1;reason=str(error)
+                    inventory=self.inventory.load(control['account_id'],trade['identity'])
+                if replayed:
+                    # The receipt is idempotent; a full snapshot must reflect
+                    # today's saved state, even after newer transactions.
+                    inventory=self.inventory.load(control['account_id'],trade['identity'])
+                answer=transaction_reply(trade['sequence'],inventory['money'],status)
+                notice=inventory_notice(trade['identity'],self.map_id,inventory)
+                self.send_answer(c,answer,state);self.send_answer(c,notice,state)
+                self.log('shop_trade_rejected' if status else 'shop_trade_committed',connection=conn_id,
+                         **trade,replayed=replayed,status=status,reason=reason,request_hex=payload.hex(),
+                         answer_hex=answer.hex(),inventory_notice_hex=notice.hex(),snapshot=inventory,
+                         rules='Local initial grant 5000 / stack 20 / bag 32 / resale half; official values unresolved')
                 continue
             if op==0x42 and port==11101:
                 control=state.get('world_account_control')

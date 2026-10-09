@@ -79,6 +79,6 @@ class CharacterStore:
                 if cursor.rowcount!=1:raise CharacterRejected('Character is missing or belongs to another account')
                 # Older stores may predate position migration; no table is required
                 # by standalone character-list tools.
-                for table in ('world_positions','world_profile_positions'):
+                for table in ('world_positions','world_profile_positions','world_wallets','world_inventory_items','world_trade_ledger'):
                     if self.accounts.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(table,)).fetchone():
                         self.accounts.db.execute(f'DELETE FROM {table} WHERE character_id=? AND account_id=?',(identity[0],account_id))
