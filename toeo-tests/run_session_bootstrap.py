@@ -22,9 +22,13 @@ def main():
     p.add_argument('--local-account',action='store_true',help='Use recovered login and persistent character create/list/delete protocol')
     p.add_argument('--local-world','--world-route-probe',dest='world_route_probe',action='store_true',help='Load the recovered local map channel; requires --local-account')
     p.add_argument('--demo-character',action='store_true',help='Create Archive only if the local account has no characters')
+    p.add_argument('--shop-preview',action='store_true',help='Preview sourced historical goods on the local diagnostic merchant; original merchant placement and item templates are still pending')
+    p.add_argument('--world-profile',choices=('forest','rashuan'),default='forest',help='Original map and sourced merchant profile')
     args=p.parse_args()
     if args.world_route_probe and not args.local_account:p.error('--world-route-probe requires --local-account')
     if args.demo_character and not args.local_account:p.error('--demo-character requires --local-account')
+    if args.shop_preview and not args.world_route_probe:p.error('--shop-preview requires --local-world')
+    if args.world_profile!='forest' and not args.world_route_probe:p.error('--world-profile requires --local-world')
     if args.duration<0:p.error('--duration cannot be negative')
     if os.name!='nt':raise SystemExit('The graphical client runner requires Windows.')
     import frida
@@ -45,7 +49,9 @@ def main():
     if hashlib.sha256(binary.read_bytes()).hexdigest()!=SHA:
         raise SystemExit('Client binary does not match the original version; native address hooks are disabled.')
     required=['resource/icon_item.icd','resource/cid0.idt']
-    if args.world_route_probe:required+=['map/1110101.'+suffix for suffix in ('mpi','mpd','bnd')]
+    from world_profiles import world_profile
+    profile=world_profile(args.world_profile)
+    if args.world_route_probe:required+=[f'map/{profile.map_id:07x}.'+suffix for suffix in ('mpi','mpd','bnd')]
     missing=[n for n in required if not (game/'data'/n).is_file()]
     if missing:raise SystemExit('Corrected original data directory is missing required files: '+str(missing))
     out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=True)
@@ -54,7 +60,7 @@ def main():
     shutil.copyfile(binary,exe)
     if args.local_account:
         from local_account_server import LocalAccountServer
-        server=LocalAccountServer(out,world_route_probe=args.world_route_probe)
+        server=LocalAccountServer(out,world_route_probe=args.world_route_probe,shop_preview=args.shop_preview,world_profile=profile)
         if args.demo_character and not server.characters.list(1):
             from character_mutation_packets import create_character_request
             server.characters.create(1,create_character_request('Archive'))
@@ -106,7 +112,7 @@ def main():
             if args.local_account:
                 print('Local login and persistent character create/list/delete are enabled.',flush=True)
             if args.world_route_probe:
-                print('Local world enabled: original map 1110101 and the selected character are loaded.',flush=True)
+                print(f'Local world enabled: original map {profile.map_id:07x} / {profile.label}; merchant {profile.merchant_grid}.',flush=True)
             print('Close the game or press Ctrl+C here to end the local session.',flush=True)
             second=0
             while not client_closed.is_set() and (args.duration==0 or second<args.duration):

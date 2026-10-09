@@ -13,30 +13,32 @@ SHOP_IDENTITY=(0x70000001,1)
 SHOP_GRID=(12,8)
 SHOP_NAME='Archive Shop'
 
-def shop_actor_records():
+def shop_actor_records(profile=None):
+    grid=SHOP_GRID if profile is None else profile.merchant_grid
+    name=SHOP_NAME if profile is None else profile.merchant_name
     b=record(0x22,0xd0)
     # 51C31F: actor category. 51C2F3: two-DWORD entity identity.
     struct.pack_into('<I',b,4,2)
     struct.pack_into('<II',b,12,*SHOP_IDENTITY)
-    struct.pack_into('<hh',b,0x18,*SHOP_GRID)
+    struct.pack_into('<hh',b,0x18,*grid)
     # 51C3E2 -> state+23C -> actor+A0: native model animation action.
     # The controlled-player decoder 43F410 sets idle action 1; action 0
     # leaves this NPC's graphical and pick model without a valid idle pose.
     struct.pack_into('<h',b,0x1c,1)
     b[0x23]=0xff # original signed direction -1 (automatic)
     b[0x24:0x28]=bytes((1,0,0,1))
-    b[0x30:0x74]=encode_name(SHOP_NAME)
-    fields=native_character_fields(SHOP_IDENTITY,SHOP_NAME,(1,1,0,0,0,0,0,0,0,0))
+    b[0x30:0x74]=encode_name(name)
+    fields=native_character_fields(SHOP_IDENTITY,name,(1,1,0,0,0,0,0,0,0,0))
     b[0x74:0x8c]=fields[0x30:0x48]
     struct.pack_into('<IIII',b,0x8c,100,100,30,30)
     # 51CB14 creates CActorExtParamCl_Shop; this chunk has no extra fields.
     return bytes(b)+bytes(record(0x2f,4))+bytes(4)
 
-def shop_actor_notice():
-    tail=shop_actor_records()
+def shop_actor_notice(profile=None):
+    tail=shop_actor_records(profile)
     b=bytearray(message(0x3b,bytes(23+len(tail)),0xffff)[:32])
     struct.pack_into('<I',b,12,32+len(tail))
-    struct.pack_into('<III',b,20,*SHOP_IDENTITY,LOCAL_MAP_ID)
+    struct.pack_into('<III',b,20,*SHOP_IDENTITY,LOCAL_MAP_ID if profile is None else profile.map_id)
     return bytes(b)+tail
 
 def parse_npc_request(payload):
@@ -70,17 +72,17 @@ def actor_target_reply(request):
     # The controlled actor's owner comes from player record+0C (43F416),
     # whereas the merchant's local owner is zero. Preserve it on self-target.
     owner=request['identity'][0] if request['target']==request['identity'] else 0
-    struct.pack_into('<IIIIIIII',b,12,*request['identity'],LOCAL_MAP_ID,
+    struct.pack_into('<IIIIIIII',b,12,*request['identity'],request.get('map_id',LOCAL_MAP_ID),
                      *request['group'],*request['target'],owner)
     b[44]=request['option']
     return bytes(b)
 
-def npc_selection_reply(request):
+def npc_selection_reply(request,profile=None):
     # Original 52CC40: type 4 opens native NPC actions, exact mask 2
     # selects native action 20002 and constructs C8 action 2 itself.
     b=bytearray(message(0xc7,bytes(51),request['request_id']))
     struct.pack_into('<I',b,12,4)
-    struct.pack_into('<IIIIIii',b,16,*request['identity'],LOCAL_MAP_ID,*SHOP_IDENTITY,*SHOP_GRID)
+    struct.pack_into('<IIIIIii',b,16,*request['identity'],request.get('map_id',LOCAL_MAP_ID),*SHOP_IDENTITY,*(SHOP_GRID if profile is None else profile.merchant_grid))
     struct.pack_into('<II',b,48,2,0)
     return bytes(b)
 
@@ -88,10 +90,10 @@ def npc_action_reply(request):
     # C9 fixed header, 52CDE7: result 0, original action 2 stops selection.
     b=bytearray(message(0xc9,bytes(39),request['request_id']))
     struct.pack_into('<Ii',b,12,0,0)
-    struct.pack_into('<IIIIII',b,20,*request['identity'],LOCAL_MAP_ID,*SHOP_IDENTITY,request['action'])
+    struct.pack_into('<IIIIII',b,20,*request['identity'],request.get('map_id',LOCAL_MAP_ID),*SHOP_IDENTITY,request['action'])
     return bytes(b)
 
-def shop_open_notice(identity,request_id,stock=None):
+def shop_open_notice(identity,request_id,stock=None,map_id=LOCAL_MAP_ID):
     """Original D6 header; optional explicitly scoped historical catalog preview."""
     if stock is None:
         tail=bytes(record(0x9a,4))+bytes(4)
@@ -99,7 +101,7 @@ def shop_open_notice(identity,request_id,stock=None):
         from world_shop_catalog import catalog_records
         tail=catalog_records(stock)
     b=bytearray(message(0xd6,bytes(35+len(tail)),request_id))
-    struct.pack_into('<IIIII',b,12,*identity,LOCAL_MAP_ID,*SHOP_IDENTITY)
+    struct.pack_into('<IIIII',b,12,*identity,map_id,*SHOP_IDENTITY)
     struct.pack_into('<II',b,36,0,0)
     b[44:]=tail
     return bytes(b)

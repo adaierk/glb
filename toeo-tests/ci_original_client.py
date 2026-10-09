@@ -24,7 +24,7 @@ def main():
     original=game/'ToEO_CL.dat'
     if hashlib.sha256(original.read_bytes()).hexdigest()!=SHA:raise SystemExit('Original SHA mismatch')
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
-    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True)
+    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True,world_profile='rashuan')
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
     from native_map_geometry import grid_to_point
@@ -69,8 +69,8 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(424,145),145:lambda:click(424,145),148:lambda:click(493,107),
-                      150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
+                      141:lambda:click(472,301),145:lambda:click(472,301),148:lambda:click(493,107),
+                      150:lambda:click(390,375,hold=2.0),160:lambda:click(520,350,hold=2.0),170:lambda:click(400,350,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
@@ -107,7 +107,11 @@ def main():
             result['shop_historical_names_native']=all(x['name'] in rendered_names for x in expected_stock)
             result['shop_historical_prices_native']=built_prices[:len(expected_stock)]==[x['price_gald'] for x in expected_stock]
             result['shop_historical_item_count_native']=any(e.get('event')=='native_shop_catalog_parse_result' and e.get('result')==1 and e.get('items')==len(expected_stock) for e in events)
-            result['historical_placement_verified']=False
+            created=[e for e in events if e.get('event')=='native_local_shop_create_result']
+            result['historical_merchant_position_native']=any(tuple(e.get('position') or ())==grid_to_point(server.profile.merchant_grid) for e in created)
+            result['historical_map_id_native']=any(e.get('event')=='native_world_render_state' and e.get('current_map_id')==server.map_id for e in events)
+            result['historical_placement_basis']='Original minimap visually matches Wiki named map; Wiki XY reproduced by native actor grid conversion'
+            result['visible_prices_verified']=False
             result['original_item_templates_icons_verified']=False
             if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native')):
                 failure=failure or 'Historical name/price/count were not all observed in original shop controls'
@@ -115,7 +119,7 @@ def main():
             visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]
             closes=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is False and visible and e.get('host_time',0)>visible[0]['host_time']]
             result['shop_closed_native']=bool(closes)
-            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and positions[-1]==[640,128] and any(e.get('event')=='native_move_path_request' and e.get('target_grid')==[19,7] and e.get('host_time',0)>closes[0]['host_time'] for e in events)
+            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and tuple(positions[-1])==grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid']) and tuple(positions[-1])!=expected_position and any(e.get('event')=='native_move_path_request' and e.get('host_time',0)>closes[0]['host_time'] for e in events)
             if not args.reenter_check and (not result['map_entered'] or not result['npc_selected_native'] or not result['shop_catalog_parsed_native'] or not result['shop_frame_shown_native']):
                 failure=failure or 'Original map/NPC selection/shop data/open checks did not all pass'
             if not args.reenter_check and (not result['shop_closed_native'] or not result['movement_after_shop_close_native']):

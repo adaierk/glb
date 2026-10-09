@@ -73,13 +73,17 @@ class AccountStore:
 
 
 class LocalAccountServer(BootstrapServer):
-    def __init__(self,out,world_route_probe=False,account_database=None,shop_preview=False,**kwargs):
+    def __init__(self,out,world_route_probe=False,account_database=None,shop_preview=False,world_profile='forest',**kwargs):
         super().__init__(out,**kwargs)
         self.world_route_probe=world_route_probe
-        self.shop_preview=shop_preview
+        from world_profiles import world_profile as get_world_profile
+        self.profile=get_world_profile(world_profile)
+        self.map_id=self.profile.map_id
+        self.shop_grid=self.profile.merchant_grid
+        self.shop_preview=shop_preview or self.profile.stock_key is not None
         self.accounts=AccountStore(Path(account_database) if account_database else self.out/'local_accounts.sqlite')
         self.characters=CharacterStore(self.accounts)
-        self.positions=WorldPositionStore(self.accounts)
+        self.positions=WorldPositionStore(self.accounts,self.profile)
         self.world_tickets=WorldTicketStore(self.accounts)
         self.accounts_closed=False
         self.endpoint_lock=threading.Lock()
@@ -196,7 +200,7 @@ class LocalAccountServer(BootstrapServer):
                 try:
                     ticket=self.world_tickets.issue(account_id,identity)
                     # Research endpoint: first DWORD is measured ticket; remaining fields are partial.
-                    fields=(ticket,LOCAL_MAP_ID,*identity,0,0,0,0,0)
+                    fields=(ticket,self.map_id,*identity,0,0,0,0,0)
                     answer=select_character_reply(fields,[(0x0100007f,45002,self.main_port)],request_id=req)
                     self.log('selection_probe_ticket_issued',connection=conn_id,ticket=ticket,identity=identity,
                              note='Partial research route; UDP and remaining selection fields unresolved')
@@ -230,11 +234,11 @@ class LocalAccountServer(BootstrapServer):
                     self.log('map_query_character_missing',connection=conn_id);continue
                 position=self.positions.load(control['account_id'],role['identity'])
                 answer=world_initialization_reply(role['identity'],role['name'],role['native_fields'],req,
-                    map_id=position['map_id'],position=grid_to_point(position['grid']))
+                    map_id=position['map_id'],position=grid_to_point(position['grid']),label=self.profile.label)
                 self.send_answer(c,answer,state)
                 state['world_grid']=position['grid']
                 self.log('map_initialization_candidate_sent',connection=conn_id,request_id=req,
-                         map_id=LOCAL_MAP_ID,character_id=role['identity'],bytes=len(answer),
+                         map_id=self.map_id,character_id=role['identity'],bytes=len(answer),
                          grid=position['grid'],restored=position['restored'],request_hex=payload.hex())
                 continue
             if op==0x39 and len(payload)==40 and port==11101:
@@ -242,17 +246,17 @@ class LocalAccountServer(BootstrapServer):
                 identity=struct.unpack_from('<II',payload,24)
                 if not control or identity!=tuple(control['character_id']):
                     self.log('world_map_ready_rejected',connection=conn_id,identity=identity);continue
-                ready_answer=world_map_ready_reply(req)
+                ready_answer=world_map_ready_reply(req,self.map_id,self.profile.navigation)
                 self.send_answer(c,ready_answer,state)
                 state['world_map_ready']=True
                 self.log('world_map_ready_answer',connection=conn_id,request_id=req,
-                         map_id=LOCAL_MAP_ID,identity=identity,bytes=len(ready_answer))
+                         map_id=self.map_id,identity=identity,bytes=len(ready_answer))
                 if not state.get('local_shop_announced'):
-                    notice=shop_actor_notice()
+                    notice=shop_actor_notice(self.profile)
                     self.send_answer(c,notice,state)
                     state['local_shop_announced']=True
                     self.log('local_shop_actor_announced',connection=conn_id,identity=SHOP_IDENTITY,
-                             grid=SHOP_GRID,map_id=LOCAL_MAP_ID,bytes=len(notice))
+                             grid=self.shop_grid,map_id=self.map_id,bytes=len(notice))
                 continue
             if op==0x4e and port==11101:
                 from world_npc_packets import actor_target_reply
@@ -260,7 +264,7 @@ class LocalAccountServer(BootstrapServer):
                 try:target=parse_npc_request(payload)
                 except ValueError as error:
                     self.log('actor_target_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=LOCAL_MAP_ID or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])):
+                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=self.map_id or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])):
                     self.log('actor_target_rejected',connection=conn_id,reason='Character, ready map, group or target mismatch');continue
                 answer=actor_target_reply(target)
                 self.send_answer(c,answer,state)
@@ -271,14 +275,14 @@ class LocalAccountServer(BootstrapServer):
                 try:npc=parse_npc_request(payload)
                 except ValueError as error:
                     self.log('npc_request_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or npc['identity']!=tuple(control['character_id']) or npc['map_id']!=LOCAL_MAP_ID or npc['target']!=SHOP_IDENTITY:
+                if not control or not state.get('world_map_ready') or npc['identity']!=tuple(control['character_id']) or npc['map_id']!=self.map_id or npc['target']!=SHOP_IDENTITY:
                     self.log('npc_request_rejected',connection=conn_id,reason='Character, ready map or target mismatch');continue
                 self.log('native_npc_request',connection=conn_id,request_hex=payload.hex(),**npc)
                 if op==0xc6:
-                    if npc['grid']!=SHOP_GRID:
+                    if npc['grid']!=self.shop_grid:
                         self.log('npc_request_rejected',connection=conn_id,reason='NPC grid mismatch');continue
                     state['npc_selected']=SHOP_IDENTITY
-                    answer=npc_selection_reply(npc)
+                    answer=npc_selection_reply(npc,self.profile)
                     self.send_answer(c,answer,state)
                     self.log('npc_selection_answer',connection=conn_id,request_id=req,answer_hex=answer.hex())
                 elif npc['action']==2 and state.get('npc_selected')==SHOP_IDENTITY:
@@ -286,32 +290,33 @@ class LocalAccountServer(BootstrapServer):
                     notice_id=state.get('shop_notice_sequence',0)+1;state['shop_notice_sequence']=notice_id
                     if self.shop_preview:
                         from world_shop_catalog import historical_stock,PREVIEW_SOURCE_KEY
-                        source=historical_stock(PREVIEW_SOURCE_KEY)
-                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id,stock=source['stock'])
+                        source=historical_stock(self.profile.stock_key or PREVIEW_SOURCE_KEY)
+                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id,stock=source['stock'],map_id=self.map_id)
                     else:
-                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id)
+                        notice=shop_open_notice(npc['identity'],0x70000000+notice_id,map_id=self.map_id)
                     self.send_answer(c,notice,state)
                     state['shop_open_notice_id']=0x70000000+notice_id
                     self.log('shop_historical_preview_sent' if self.shop_preview else 'shop_empty_catalog_sent',connection=conn_id,request_id=state['shop_open_notice_id'],notice_hex=notice.hex(),
                              **({'source_url':source['source_url'],'historical_area':source['area'],'historical_xy':source['source_xy'],'stock_count':len(source['stock']),
-                                 'official_placement_verified':False,'native_templates_and_icons_verified':False} if self.shop_preview else {}))
+                                 'placement_basis': 'Original minimap/Wiki visual match plus Wiki XY' if self.profile.stock_key else 'Local diagnostic placement',
+                                 'world_profile':self.profile.key,'merchant_grid':self.shop_grid,'native_templates_and_icons_verified':False} if self.shop_preview else {}))
                 else:self.log('npc_request_rejected',connection=conn_id,reason='Unsupported or unselected NPC action')
                 continue
             if op==0xd7 and port==11101:
                 control=state.get('world_account_control')
-                if len(payload)!=36 or not control or req!=state.get('shop_open_notice_id') or struct.unpack_from('<IIIII',payload,12)!=(*control['character_id'],LOCAL_MAP_ID,*SHOP_IDENTITY):
+                if len(payload)!=36 or not control or req!=state.get('shop_open_notice_id') or struct.unpack_from('<IIIII',payload,12)!=(*control['character_id'],self.map_id,*SHOP_IDENTITY):
                     self.log('shop_catalog_ack_rejected',connection=conn_id,request_hex=payload.hex());continue
                 state['shop_catalog_ack_observed']=True
                 self.log('shop_catalog_ack_native',connection=conn_id,request_id=req,request_hex=payload.hex())
                 continue
             if op==0x42 and port==11101:
                 control=state.get('world_account_control')
-                try:move=parse_move_request(payload)
+                try:move=parse_move_request(payload,self.profile)
                 except ValueError as error:
                     self.log('world_move_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=LOCAL_MAP_ID:
+                if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=self.map_id:
                     self.log('world_move_rejected',connection=conn_id,reason='Character or ready map mismatch');continue
-                if not walkable_grid(move['target']):
+                if not self.profile.walkable(move['target']):
                     self.log('world_move_rejected',connection=conn_id,reason='Destination blocked by local navigation');continue
                 cache=state.setdefault('movement_answers',{})
                 previous=cache.get(req)

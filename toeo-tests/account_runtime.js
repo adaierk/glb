@@ -142,7 +142,7 @@
       onEnter(args){this.object=this.context.ecx;this.name=name;
         const paths=va===0x4543d0?[args[1],args[2],args[3]]:
           (va===0x420120 || va===0x4181f0)?[args[0]]:va===0x45c880?[args[1]]:[];
-        this.keep=va!==0x45c880 || paths.some(p=>safely(()=>p.readCString().includes('1110101'))===true);
+        this.keep=va!==0x45c880 || paths.some(p=>safely(()=>/1110101|1120108/.test(p.readCString()))===true);
         if(this.keep)emit({event:'native_'+name,object:this.object.toString(),
           paths:paths.map(p=>safely(()=>p.readCString()))});},
       onLeave(ret){if(this.keep)emit({event:'native_'+name+'_returned',object:this.object.toString(),
@@ -166,6 +166,7 @@
           index:p.add(0x14).readS32(),point:[p.add(4).readFloat(),p.add(8).readFloat()],
           target:[p.add(0x54).readFloat(),p.add(0x58).readFloat()],hex:bytes(p,0x68)};}),
         world_viewport:[world.readS32(),world.add(4).readS32(),world.add(8).readS32(),world.add(12).readS32()],
+        world_camera_fields:bytes(world.add(0x10),28),
         world_mouse:[world.add(0x2c).readFloat(),world.add(0x30).readFloat()],
         world_input_flags:bytes(world.add(0x78),0x70),profile:bytes(player.add(0x114).readPointer(),48)};
     });
@@ -261,7 +262,9 @@
       planner:safely(()=>{const p=this.context.ecx.add(0x124).readPointer();return {object:p.toString(),hex:bytes(p,0x64),map:p.add(0x34).readPointer().toString()};})}))); 
   },onLeave(ret){if(this.keep)emit({event:'native_move_path_result',result:ret.toInt32()});}});
   Interceptor.attach(address(0x454090),{onEnter(){
-    if(!drew){drew=true;emit({event:'native_map_draw_context',object:this.context.ecx.toString()});}
+    if(!drew){drew=true;emit(safely(()=>({event:'native_map_draw_context',object:this.context.ecx.toString(),
+      screen_translation:[this.context.esp.add(8).readFloat(),this.context.esp.add(12).readFloat()],
+      args:bytes(this.context.esp.add(4),32)})));}
   }});
   let worldTaskPhase=-1;
   Interceptor.attach(address(0x43eb50), {

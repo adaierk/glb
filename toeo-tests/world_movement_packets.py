@@ -4,7 +4,7 @@ from account_packets import message
 from native_map_geometry import point_to_grid
 from world_map_navigation import GRID_WIDTH,GRID_HEIGHT
 
-def parse_move_request(packet):
+def parse_move_request(packet,profile=None):
     if len(packet)!=68 or struct.unpack_from('<HH',packet,1)!=(0x42,68):
         raise ValueError('Expected original 68-byte movement request')
     start=struct.unpack_from('<ff',packet,52)
@@ -13,8 +13,8 @@ def parse_move_request(packet):
     mode=packet[65]
     if mode not in (1,2,3):raise ValueError('Unsupported native movement mode')
     for grid in (source,target):
-        if not (0<=grid[0]<GRID_WIDTH and 0<=grid[1]<GRID_HEIGHT and (grid[0]-grid[1])%2==0):
-            raise ValueError('Movement outside the original 1110101 map grid')
+        valid=profile.in_bounds(grid) if profile is not None else (0<=grid[0]<GRID_WIDTH and 0<=grid[1]<GRID_HEIGHT and (grid[0]-grid[1])%2==0)
+        if not valid:raise ValueError('Movement outside the selected original map grid')
     return {'request_id':struct.unpack_from('<I',packet,5)[0],
         'sequence':struct.unpack_from('<I',packet,12)[0],
         'identity':struct.unpack_from('<II',packet,28),

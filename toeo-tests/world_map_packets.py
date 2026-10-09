@@ -12,13 +12,15 @@ def record(kind,size):
     if size%4:raise ValueError('Native record size must be DWORD aligned')
     b=bytearray(size);struct.pack_into('<HH',b,0,kind,size//4);return b
 
-def map_record(map_id=LOCAL_MAP_ID):
+def map_record(map_id=LOCAL_MAP_ID,label='Local World'):
     b=record(0x20,0xe4)
     struct.pack_into('<II',b,4,map_id,1)
     # 43F176 copies +14 to map data +24; 4C1424 retains it in the
     # loaded map. 5722E0 bit 0 permits original minimap coordinates.
     struct.pack_into('<I',b,0x14,1)
-    label='Local World'.encode('utf-16le');b[0x24:0x24+len(label)]=label
+    label=label.encode('utf-16le')
+    if len(label)>62:raise ValueError('Native map label too long')
+    b[0x24:0x24+len(label)]=label
     for offset,suffix in [(0x64,'mpd'),(0x84,'mpi'),(0xa4,'bnd')]:
         path=f'map/{map_id:07x}.{suffix}'.encode('ascii')
         if len(path)>=32:raise ValueError('Native map path exceeds fixed record field')
@@ -59,22 +61,24 @@ def player_record(identity,name,selector_fields,position=(224.,80.),map_id=LOCAL
     b[0x30:0x33]=bytes((1,0,0))
     return bytes(b)
 
-def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.)):
+def world_initialization_reply(identity,name,selector_fields,request_id,map_id=LOCAL_MAP_ID,position=(224.,80.),label='Local World'):
     b=bytearray(40)
-    records=map_record(map_id)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id)+bytes(4)
+    records=map_record(map_id,label)+world_clock_record()+player_record(identity,name,selector_fields,position=position,map_id=map_id)+bytes(4)
     size=len(b)+len(records)
     b[:9]=message(0x34,bytes(size-9),request_id)[:9]
     struct.pack_into('<I',b,12,size)
     struct.pack_into('<III',b,20,*identity,1)
     return bytes(b)+records
 
-def world_map_ready_reply(request_id,map_id=LOCAL_MAP_ID):
+def world_map_ready_reply(request_id,map_id=LOCAL_MAP_ID,navigation=None):
     # Original world 3A consumer 52a200 requires a 40-byte fixed header;
     # A9 carries original walkable cells. 441731 reads
     # signed status at +16, and 52a260 looks up the loaded map at +36.
-    nav=record(0xa9,12+len(NAV_RLE))
-    struct.pack_into('<II',nav,4,NAV_WIDTH*NAV_HEIGHT,0)
-    nav[12:]=NAV_RLE
+    rle= NAV_RLE if navigation is None else navigation.NAV_RLE
+    cells=NAV_WIDTH*NAV_HEIGHT if navigation is None else navigation.NAV_WIDTH*navigation.NAV_HEIGHT
+    nav=record(0xa9,12+len(rle))
+    struct.pack_into('<II',nav,4,cells,0)
+    nav[12:]=rle
     tail=bytes(nav)+bytes(4)
     b=bytearray(message(0x3a,bytes(31+len(tail)),request_id)[:40])
     struct.pack_into('<I',b,12,len(b)+len(tail))
