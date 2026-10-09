@@ -47,6 +47,8 @@ def main():
                              ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js'))
             if args.pump:source+='\n'+Path(__file__).with_name('native_gui_pump.js').read_text(encoding='utf-8')
             script=session.create_script(source);script.on('message',receive);script.load()
+            deadline=time.monotonic()+5
+            while not any(e.get('event')=='offline_socket_compat_ready' for e in events) and time.monotonic()<deadline:time.sleep(.05)
             if not any(e.get('event')=='offline_socket_compat_ready' for e in events):raise RuntimeError('Hook readiness failed')
             device.resume(pid)
             schedule={34:lambda:click(408,447),45:lambda:click(218,534),
@@ -78,6 +80,9 @@ def main():
             if session is not None:
                 try:session.detach()
                 except Exception:pass
-            server.close();exe.unlink(missing_ok=True)
+            server.close()
+            for retry in range(30):
+                try:exe.unlink(missing_ok=True);break
+                except PermissionError:time.sleep(.1)
 
 if __name__=='__main__':main()

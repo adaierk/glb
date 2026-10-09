@@ -66,9 +66,9 @@
     }
   });
   for(const [va,event] of [[0x438ce2,'CHARACTER_CREATED_NATIVE'],
-                         [0x438e3c,'CHARACTER_DELETED_NATIVE'],
                          [0x43809a,'CHARACTER_SELECTION_ACCEPTED_NATIVE']]) {
-    Interceptor.attach(address(va), {onEnter() {emit({event});}});
+    try {Interceptor.attach(address(va), {onEnter() {emit({event});}});}
+    catch(e) {emit({event:'optional_native_hook_unavailable',native_event:event,error:String(e)});}
   }
   Interceptor.attach(address(0x5308e0), {
     onEnter(args) {
