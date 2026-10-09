@@ -71,7 +71,7 @@ def main():
                       125:lambda:(click(323,303),click(323,324),click(450,376)),
                       130:lambda:click(450,376),
                       135:lambda:click(700,447),
-                      141:lambda:click(424,113),145:lambda:click(424,113),147:escape,
+                      141:lambda:click(424,145),145:lambda:click(424,145),147:escape,
                       150:lambda:click(360,180,hold=2.0),160:lambda:click(620,160,hold=2.0),170:lambda:click(400,200,True)}
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.

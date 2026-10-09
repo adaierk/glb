@@ -186,26 +186,12 @@
     }});
   }
   let pickCalls=0;
-  let activePick=0;
-  for(const va of [0x50a4f6,0x50a556,0x50a62e]) {
-    Interceptor.attach(address(va),{onEnter(){
-      if(!activePick)return;
-      emit(safely(()=>{const p=this.context.edi;return {event:'native_pick_candidate',phase:'0x'+va.toString(16),
-        identity:[p.add(0x68).readU32(),p.add(0x6c).readU32()],category:p.add(0x70).readU32(),
-        flags:p.add(0x74).readU32(),pick_flags:p.add(0xa8).readU32(),scale:p.add(0xac).readFloat(),
-        animation_action:p.add(0xa0).readU32(),
-        position:[p.add(0xc).readFloat(),p.add(0x10).readFloat()],
-        model:p.add(0x158).readPointer().toString(),geometry:p.add(0x15c).readPointer().toString(),
-        zero_flag:!!(this.context.eflags&64)};}));
-    }});
-  }
   Interceptor.attach(address(0x50a3e0),{onEnter(args){
     this.keep=drew && (this.returnAddress.equals(address(0x5059d4)) || this.returnAddress.equals(address(0x50585e))) && ++pickCalls<=40;
     this.list=args[0];this.caller=this.returnAddress.toString();
-    if(this.keep)activePick++;
     if(this.keep)emit(safely(()=>({event:'native_player_pick_enter',caller:this.caller,
       point:[args[1].readFloat(),args[1].add(4).readFloat()],options:[args[4].toInt32(),args[5].toInt32(),args[6].toInt32()]})));
-  },onLeave(ret){if(this.keep){activePick--;emit(safely(()=>{
+  },onLeave(ret){if(this.keep)emit(safely(()=>{
     const count=this.list.add(8).readU32(),actors=[];
     const head=this.list.add(4).readPointer();let node=head.readPointer();
     for(let i=0;i<Math.min(count,8) && !node.equals(head);i++,node=node.readPointer()){
@@ -213,7 +199,7 @@
       actors.push({identity:[actor.add(0x68).readU32(),actor.add(0x6c).readU32()],category:actor.add(0x70).readU32()});
     }
     return {event:'native_player_pick_result',caller:this.caller,result:ret.toInt32()&255,count,actors};
-  }));}}});
+  }));}});
   const lastBindings=new Map();let bindingChanges=0;
   Interceptor.attach(address(0x69b790),{onEnter(args){
     this.keep=drew && this.returnAddress.compare(address(0x505200))>=0 && this.returnAddress.compare(address(0x505f40))<0;
