@@ -208,3 +208,22 @@ for sec in pe.sections:
 
 (OUT/'world_actor_initialize_actual.txt').write_text(dis(0x5036e0,0xa10))
 (OUT/'world_actor_state_defaults.txt').write_text(dis(0x4ff5f0,0x570))
+
+vts={}
+for vt in (0x6eecb8,0x6eeb50,0x6eeb5c,0x6eeb68):
+ entries=list(struct.unpack('<3I',pe.get_data(vt-base,12)));vts[hex(vt)]=[hex(v) for v in entries]
+ for index,va in enumerate(entries):
+  if base<=va<base+pe.OPTIONAL_HEADER.SizeOfImage:
+   (OUT/f'mode_{vt:x}_{index}_{va:x}.txt').write_text(dis(va,0x900))
+(OUT/'enemy_mode_vtables.json').write_text(json.dumps(vts,indent=2))
+(OUT/'world_deferred_model_request.txt').write_text(dis(0x501d30,0x100))
+refs_request=[]
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ body=sec.get_data();start=base+sec.VirtualAddress
+ for m in re.finditer(b'\\xe8',body):
+  at=m.start()
+  if at+5<=len(body) and (start+at+5+struct.unpack_from('<i',body,at+1)[0])&0xffffffff==0x501d30:
+   refs_request.append(hex(start+at))
+   (OUT/f'request_model_call_{start+at:x}.txt').write_text(dis(start+max(0,at-0x100),0x280))
+(OUT/'world_request_model_calls.json').write_text(json.dumps(refs_request,indent=2))
