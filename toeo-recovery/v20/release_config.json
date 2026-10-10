@@ -1,0 +1,12 @@
+{
+  "run": 38029546220,
+  "tested_commit": "53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9",
+  "baseline_run": 38029546328,
+  "encounter_entry": true,
+  "limitations": [
+    "Only original native encounter and battle sprite display are restored; A1/A3 control/ability initialization, attack, damage, AI, outcomes and return to map are pending.",
+    "Local test entity uses field classification1200/se000 and battle E000/bank100; official monster instance/resource mapping and spawn/stats are unverified.",
+    "Original native run still reports caught C++/D3D exceptions; engine exception-free behavior is not claimed.",
+    "Formal battle picking dimensions, all maps/NPCs and main/side quests remain incomplete."
+  ]
+}

@@ -1,0 +1,54 @@
+永恒传说 OL 本地服务恢复进度（v20，2026-10-10）
+仓库：adaierk/glb；分支：toeo-local-world-recovery-20261009，main未修改。
+方向：保留原版Windows客户端，重建localhost服务。
+最终目标：全部地图、NPC、主支线任务、战斗、商店和装备；本文件只记阶段事实。
+
+已验证的阶段成果：
+- 原客户端进入Rashuan河口地图，保留NPC商店、交易及存档流程。
+- 原生装备穿脱、服装外观、HP上限与重新登录保存继续通过回归。
+- 原生地图敌人、遭遇符号、鼠标选择、名称和血条。
+- C6/C7/C8/C9/9D进入原版BBg0015战斗背景及UI；9E/9F/A0确认和资源就绪。
+- v20修复战斗动画加载失败：59+34应传原生朝向2/6，之前0/1让动画100返回失败。
+- 清除59+C2→actor+168的测试冻结标志，恢复不透明显示及原版常规更新路径。
+- 将本地测试战斗出生点设为玩家(220,0)、敌人(580,0)，避免玩家被夹到边界20并被窗口裁切。
+- 原版人物和E000怪物精灵在战场内实际可见；动画资源选择及516750原生绘制返回成功。
+- 战斗显示是原客户端绘制；原始EXE未改写，战斗Frida脚本只读取对象和返回值。
+
+本地测试数据与限制：
+敌人名称：Original Enemy Test；identity=(0x72000001,1)，HP100、位置和遭遇范围是测试设定。
+地图CID0分类1200名SLIME→field bank800/se000；战斗bank100名E000→e000。
+实际E000精灵是类人怪物；不能把它当作已还原的官方SLIME实例。
+官方怪物分类/实例/战斗资源对应表、刷怪点、数值、掉落与战斗背景对应关系仍未验证。
+人物actor readiness仍为0；A1/A3战斗控制和能力初始化没有接通。
+攻击、技能、受伤、敌人AI、胜负、经验掉落及返回地图仍未完成。
+测试战斗目前需要退出重启回到地图；本版本还不是完整单机游戏。
+
+下一步：
+按原版52C1A4恢复A1/A2，按52C2F8恢复A3/A4能力初始化。
+A3调用511030→50F800/50F820→50F7F0，不是位置或伤害包。
+继续恢复战斗选取尺寸、原生攻击输入和动作广播，再做AI、结算、回地图及存档一致性。
+优先从客户端读取NPC/地图/任务；缺失的正式配置按有出处的历史资料补全。
+详见toeo-recovery/v20/next_battle_protocol_notes.json与NEXT_RECOVERY_V20.txt。
+不得用Frida写角色状态、强制调用/返回、伪造HP或伪造战斗完成。
+
+启动与保存：
+Run_TOEO_Rashuan.cmd：地图/商店；Run_TOEO_Equipment_Test.cmd：装备测试。
+Run_TOEO_Encounter_Test.cmd：--combat-preview原生遭遇/战斗显示测试。
+账号archive001 / local123；沿用local_world_userdata，升级不得覆盖玩家数据库。
+修复包不带原游戏资源和玩家数据库；保留v16无损TGA兼容缓存。
+原始EXE SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55
+
+本轮验证：
+实机测试源提交：53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9
+Windows遭遇run：38029546220，artifact11661711616
+artifact SHA256：b2d38fc7bf5c5fe3ceaca9972d99ba2cf7b90cfacd73c6a655827f7647c251c2
+同一源提交装备/存档/重进地图回归run：38029546328（通过）
+回归artifact11661786930，SHA256：7d1ef5c1a95d49c25ee9af3d53368b4e443641eeee44d82d6f62082b8a2a1bcd
+原版解析证据：toeo-recovery/v19/verification/53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9/
+实机与截图证据：toeo-recovery/v20/evidence/38029546220/
+发布封存验证124个源文件来自实机测试提交，执行61项打包回归，ZIP解压与CRC校验。
+包：toeo-recovery/v20/TOEO_Local_World_Recovery_20261010_v20.zip
+单独截图包：toeo-recovery/v20/TOEO_Screenshots_20261010_v20.zip
+用户要求：后续阶段实机截图单独ZIP交付，不混入修复包；持续推进到实质成果再交付。
+
+观测字段说明：model_state.animation_clock实际读取model+74动画长度上限，并非当前帧；不要据此误判动画停住。
