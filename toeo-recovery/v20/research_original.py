@@ -1,0 +1,40 @@
+"""v20 read-only original battle rendering investigation."""
+import hashlib,json,os,re,struct,subprocess
+from pathlib import Path
+import pefile
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path.cwd();OUT=ROOT/'toeo-recovery/v20/research';OUT.mkdir(parents=True,exist_ok=True)
+raw=Path(os.environ['RUNNER_TEMP'])/'TOEO_V20_RAW'
+pack=Path(os.environ['RUNNER_TEMP'])/'TOEO_ORIGINAL/client_pack.7z'
+subprocess.run(['7z','x','-y','-o'+str(raw),str(pack),'DefaultComponent/ToEO_CL.dat'],check=True,stdout=subprocess.DEVNULL)
+data=(raw/'DefaultComponent/ToEO_CL.dat').read_bytes()
+assert hashlib.sha256(data).hexdigest()=='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
+pe=pefile.PE(data=data);base=pe.OPTIONAL_HEADER.ImageBase
+cs=Cs(CS_ARCH_X86,CS_MODE_32);cs.skipdata=True
+def dis(va,size):
+ return '\n'.join(f'{i.address:08x}  {i.mnemonic:8s} {i.op_str}' for i in cs.disasm(pe.get_data(va-base,size),va))
+ranges={
+'battle_main_draw':(0x433b40,0x290),
+'battle_main_tick_complete':(0x433dd0,0xa00),
+'battle_actor_update_and_draw':(0x50fe50,0x1b50),
+'battle_pool_update_and_draw':(0x515870,0xd00),
+'model_animation_and_draw':(0x519140,0x2000),
+'model_resource_ctor':(0x518ed0,0x270),
+'battle_abilities_a3_handler':(0x52c940,0x850),
+}
+for name,(va,size) in ranges.items():(OUT/(name+'.txt')).write_text(dis(va,size))
+targets={0x515710:'pool_tick',0x515870:'pool_walk',0x519140:'model_orientation',0x518ed0:'model_ctor'}
+refs=[]
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ body=sec.get_data();start=base+sec.VirtualAddress
+ for m in re.finditer(b'\xe8',body):
+  at=m.start()
+  if at+5>len(body):continue
+  dst=(start+at+5+struct.unpack_from('<i',body,at+1)[0])&0xffffffff
+  if dst in targets:
+   ref=start+at;refs.append({'va':hex(ref),'target':hex(dst),'kind':targets[dst]})
+   if 0x50ee00<=ref<0x519000:(OUT/f'render_ref_{ref:x}.txt').write_text(dis(ref-0x90,0x180))
+(OUT/'render_refs.json').write_text(json.dumps(refs,indent=2))
+(OUT/'original_binary.json').write_text(json.dumps({'sha256':hashlib.sha256(data).hexdigest(),'ranges':ranges},indent=2))
+print('V20_ORIGINAL_RENDER_RESEARCH_PASS',len(refs))
