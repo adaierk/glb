@@ -1,0 +1,70 @@
+{
+  "zip": "/workspace/scratch/bbe55fd37c54/deliverables/TOEO_Local_World_Recovery_20261010_v16.zip",
+  "sha256": "6066679d4bf0739fb495954823fa938b5b9399019bd898ce8e78d303ae35defa",
+  "bytes": 14031832,
+  "entries": 333,
+  "crc_check": "PASS",
+  "archive_source_consistency": "PASS",
+  "user_database_included": false,
+  "checkpoint_commit": "f247ee32b1ced8b1fb8d32e9e53367f5c28e7d12",
+  "windows_run_id": 38014388401,
+  "windows_tested_commit": "fc9f4712d17d95afd1848fd68c1f7cdba2ab889b",
+  "windows_artifact_id": 11655124827,
+  "windows_artifact_sha256": "82c037ee1ebf9bcf105171e6be406ee082bfdfa5f16c5def0065a8900846fa8f",
+  "local_checks_passed": 53,
+  "source_files_verified": 112,
+  "images": [
+    {
+      "file": "TOEO_Rashuan_HP40_Bag_20261010_v16.png",
+      "source": "first/original_desktop_196s.png",
+      "source_sha256": "29f592ee051e1b1cc33678ed0607bd5f7fbd5f917b03d58e6c762f276ded91df",
+      "sha256": "1252e53dd6614d332ccc8553a084dd704e8efd3f3cc9e32d0fba23625483f107",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; all original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_HP100_Bag_Swapped_20261010_v16.png",
+      "source": "first/original_desktop_208s.png",
+      "source_sha256": "200f81a58d7141970e6ea8b49be0ef4bb33aed622379ffb21f8293a406841a6a",
+      "sha256": "9a0355adae9706b930c44b25cee18eed862162f5a6d6a38b9126d2045b488ac3",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; all original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_HP_Bag_Restored_20261010_v16.png",
+      "source": "reentered/original_desktop_150s.png",
+      "source_sha256": "b73be0f4a5a8bbad903fab93cfbb6efdeddb644a9c47bfb5bbd91bba7e95d8e6",
+      "sha256": "b93999f27c71b9c4b5e3e99c9713f329d48af6e9ecc66bcac39ac7b4930a2321",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; all original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_Map_HP100_20261010_v16.png",
+      "source": "first/original_desktop_220s.png",
+      "source_sha256": "08861335775e71e79b4d35b0ed2928f414bfd5ba582d90d1b97052ce3d2686af",
+      "sha256": "43181d92d18ef2665e39a87bb345b49b100f6b8547fb05300c48f0ecb791aebb",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; all original game pixels unchanged"
+    }
+  ]
+}
