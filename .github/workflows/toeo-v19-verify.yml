@@ -24,11 +24,12 @@ jobs:
           PYTHONPATH: toeo-tests:toeo-recovery/v13/source_support
         run: |
           python -m pip install -q unicorn pefile capstone
-          mkdir -p "$RUNNER_TEMP/TOEO_V19_RAW" toeo-recovery/v19/verification
+          report="toeo-recovery/v19/verification/$GITHUB_SHA"
+          mkdir -p "$RUNNER_TEMP/TOEO_V19_RAW" "$report"
           7z x -y "-o$RUNNER_TEMP/TOEO_V19_RAW" "$RUNNER_TEMP/TOEO_ORIGINAL/client_pack.7z" DefaultComponent/ToEO_CL.dat >/dev/null
-          python -m unittest discover -s toeo-tests -p 'test_*.py' >toeo-recovery/v19/verification/unit_checks.txt 2>&1
-          python toeo-tests/emulate_enemy.py "$RUNNER_TEMP/TOEO_V19_RAW/DefaultComponent/ToEO_CL.dat" --out toeo-recovery/v19/verification/native_enemy.json
-          python toeo-tests/emulate_combat.py "$RUNNER_TEMP/TOEO_V19_RAW/DefaultComponent/ToEO_CL.dat" --out toeo-recovery/v19/verification/native_battle_record.json
+          python -m unittest discover -s toeo-tests -p 'test_*.py' >"$report/unit_checks.txt" 2>&1
+          python toeo-tests/emulate_enemy.py "$RUNNER_TEMP/TOEO_V19_RAW/DefaultComponent/ToEO_CL.dat" --out "$report/native_enemy.json"
+          python toeo-tests/emulate_combat.py "$RUNNER_TEMP/TOEO_V19_RAW/DefaultComponent/ToEO_CL.dat" --out "$report/native_battle_record.json"
       - name: Preserve protocol evidence
         if: always()
         run: |
