@@ -54,16 +54,17 @@ function renderBattle(){
  battleCtx.drawImage(canvas,0,0,W,H);
  battleCtx.fillStyle="rgba(12,24,29,.55)";battleCtx.fillRect(0,0,W,H);
  const floor=battleCtx.createLinearGradient(0,350,0,560);floor.addColorStop(0,"#766c4e");floor.addColorStop(1,"#3a4943");
- battleCtx.fillStyle=floor;battleCtx.beginPath();battleCtx.moveTo(0,420);battleCtx.lineTo(800,400);battleCtx.lineTo(800,600);battleCtx.lineTo(0,600);battleCtx.closePath();battleCtx.fill();
+ battleCtx.fillStyle=floor;battleCtx.beginPath();battleCtx.moveTo(0,365);battleCtx.lineTo(800,350);battleCtx.lineTo(800,600);battleCtx.lineTo(0,600);battleCtx.closePath();battleCtx.fill();
  battleCtx.strokeStyle="#c6b57b66";battleCtx.lineWidth=2;for(let i=0;i<6;i++){const y=450+i*26;battleCtx.beginPath();battleCtx.moveTo(0,y);battleCtx.lineTo(800,y-18);battleCtx.stroke()}
- if(images.avatar)battleCtx.drawImage(images.avatar,0,0,64,100,158,314,128,200);
- battleCtx.fillStyle="#16211d66";battleCtx.beginPath();battleCtx.ellipse(614,508,67,16,0,0,Math.PI*2);battleCtx.fill();
- const jelly=battleCtx.createRadialGradient(590,450,8,615,480,68);jelly.addColorStop(0,"#dcff9c");jelly.addColorStop(.48,"#8fd554");jelly.addColorStop(1,"#397f48");
- battleCtx.fillStyle=jelly;battleCtx.beginPath();battleCtx.moveTo(550,492);battleCtx.quadraticCurveTo(560,428,603,418);battleCtx.quadraticCurveTo(647,414,675,490);battleCtx.quadraticCurveTo(624,519,550,492);battleCtx.fill();
- battleCtx.strokeStyle="#e5ffb0";battleCtx.lineWidth=3;battleCtx.beginPath();battleCtx.ellipse(605,442,20,7,-.25,Math.PI,Math.PI*2);battleCtx.stroke();
- battleCtx.fillStyle="#18352a";battleCtx.beginPath();battleCtx.ellipse(595,467,4,7,0,0,Math.PI*2);battleCtx.ellipse(634,466,4,7,0,0,Math.PI*2);battleCtx.fill();
- battleCtx.strokeStyle="#315b39";battleCtx.lineWidth=2;battleCtx.beginPath();battleCtx.arc(615,481,9,.2,Math.PI-.2);battleCtx.stroke();
- battleCtx.font="bold 13px 'MS Gothic','Microsoft YaHei',sans-serif";battleCtx.textAlign="center";battleCtx.fillStyle="#f9f0c6";battleCtx.strokeStyle="#1b3028";battleCtx.lineWidth=3;battleCtx.strokeText("SLIME · ID 1200",614,402);battleCtx.fillText("SLIME · ID 1200",614,402);
+ battleCtx.fillStyle="#16211d66";battleCtx.beginPath();battleCtx.ellipse(220,423,43,11,0,0,Math.PI*2);battleCtx.fill();
+ if(images.avatar)battleCtx.drawImage(images.avatar,0,0,64,100,160,230,120,188);
+ battleCtx.fillStyle="#16211d66";battleCtx.beginPath();battleCtx.ellipse(614,428,67,14,0,0,Math.PI*2);battleCtx.fill();
+ const jelly=battleCtx.createRadialGradient(590,365,8,615,393,68);jelly.addColorStop(0,"#dcff9c");jelly.addColorStop(.48,"#8fd554");jelly.addColorStop(1,"#397f48");
+ battleCtx.fillStyle=jelly;battleCtx.beginPath();battleCtx.moveTo(550,413);battleCtx.quadraticCurveTo(560,350,603,342);battleCtx.quadraticCurveTo(647,339,675,411);battleCtx.quadraticCurveTo(624,440,550,413);battleCtx.fill();
+ battleCtx.strokeStyle="#e5ffb0";battleCtx.lineWidth=3;battleCtx.beginPath();battleCtx.ellipse(605,366,20,7,-.25,Math.PI,Math.PI*2);battleCtx.stroke();
+ battleCtx.fillStyle="#18352a";battleCtx.beginPath();battleCtx.ellipse(595,390,4,7,0,0,Math.PI*2);battleCtx.ellipse(634,389,4,7,0,0,Math.PI*2);battleCtx.fill();
+ battleCtx.strokeStyle="#315b39";battleCtx.lineWidth=2;battleCtx.beginPath();battleCtx.arc(615,404,9,.2,Math.PI-.2);battleCtx.stroke();
+ battleCtx.font="bold 13px 'MS Gothic','Microsoft YaHei',sans-serif";battleCtx.textAlign="center";battleCtx.fillStyle="#f9f0c6";battleCtx.strokeStyle="#1b3028";battleCtx.lineWidth=3;battleCtx.strokeText("SLIME · ID 1200",614,328);battleCtx.fillText("SLIME · ID 1200",614,328);
  $("battle-player-name").textContent=state.name;$("battle-player-hp").textContent=state.hp+" / 100";$("battle-player-bar").style.width=state.hp+"%";$("battle-player-bar").style.background=state.hp<30?"#d54c3f":"#20acd0";$("battle-player-tp").textContent="TP "+state.tp+" / 30";
  $("battle-enemy-hp").textContent=Math.max(0,battle.enemy.hp)+" / "+battle.enemy.maxHp;$("battle-enemy-bar").style.width=Math.max(0,battle.enemy.hp/battle.enemy.maxHp*100)+"%";$("battle-message").textContent=battle.message;
  const done=["victory","defeat"].includes(battle.phase);document.querySelectorAll("[data-battle-action]").forEach(b=>b.disabled=battle.phase!=="player");
