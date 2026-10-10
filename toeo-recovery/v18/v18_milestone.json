@@ -1,0 +1,194 @@
+{
+  "version": "v18",
+  "passed": true,
+  "visual_reviewed": false,
+  "tested_commit": "7d956edef4c1713c388c04c7b5ff7df005011d7e",
+  "windows_run_id": 38021208178,
+  "artifact_id": 11658687321,
+  "artifact_sha256": "3d7011690f6514c7036631a24e464521c3a712b971bdd841140660883f836db6",
+  "original_exe_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "native_equipment_transitions": [
+    [],
+    [
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "native_move_counts": [
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+  ],
+  "native_equip_unequip_reequip_verified": true,
+  "same_instances_restored_after_restart": true,
+  "native_icon_ids": {
+    "weapon": 1,
+    "body": 857
+  },
+  "native_hp": 100,
+  "native_max_hp": 110,
+  "native_tp": 30,
+  "local_checks_passed": 61,
+  "source_files_verified": 118,
+  "equipment_fixture_provenance": "Explicit Local Test Sword / Local Test Body, provisional local maxHP+10; official item masters unresolved",
+  "appearance_restored": true,
+  "native_exceptions": {
+    "first": 21,
+    "reentered": 18
+  },
+  "limitations": [
+    "Official gear stats, job/level rules and starter gear unresolved",
+    "Official equipment-to-visual mapping and weapon attack/battle animation pending; original sword descriptor has empty map sprite fields",
+    "Occupied gear replacement and full combat pending",
+    "Complete maps/NPCs/main and side quests/level progression pending",
+    "Other caught original native exceptions remain"
+  ],
+  "native_original_visual_protocol": {
+    "passed": true,
+    "native_3a_item_resources": [
+      10000,
+      4000
+    ],
+    "native_44_components": {
+      "1": [
+        1895825409,
+        1,
+        1,
+        0,
+        500,
+        10000,
+        4
+      ],
+      "2": [
+        1895825410,
+        1,
+        1,
+        0,
+        0,
+        4000,
+        1
+      ]
+    },
+    "native_world_layers": [
+      {
+        "model": 17747968,
+        "layer": 4,
+        "resource": 10000,
+        "source_bank": 500,
+        "refresh": 1
+      },
+      {
+        "model": 17747968,
+        "layer": 1,
+        "resource": 4000,
+        "source_bank": 0,
+        "refresh": 1
+      }
+    ],
+    "native_unequip_fallback": [
+      [
+        1,
+        200
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
+    "native_preview_body": [
+      1,
+      4000,
+      0
+    ],
+    "native_preview_weapon": [
+      4,
+      10000,
+      500
+    ],
+    "native_initial_34_visual_restore": true,
+    "native_6c_equip_unequip_reequip": true,
+    "assertions": [],
+    "substitutions": [
+      "Inherited explicit equipment fixture boundaries",
+      "C++ visual tree storage, lookup, clear and copy",
+      "Model loading boundary captures original requested parts",
+      "Windows graphical lifetime/refresh boundary"
+    ],
+    "limitations": [
+      "Native GUI and asset rendering are verified separately",
+      "Resource IDs are original symbols; gear-to-resource mapping is an explicit local fixture"
+    ]
+  },
+  "native_visual_resources": {
+    "body": {
+      "resource": 4000,
+      "layer": 1,
+      "source_bank": 0
+    },
+    "weapon": {
+      "resource": 10000,
+      "layer": 4,
+      "source_bank": 500
+    }
+  },
+  "native_weapon_descriptor": {
+    "symbol": "ID_SWORD_000",
+    "map_amd": "",
+    "map_bnd": "",
+    "battle_amd": "b_sword.amd",
+    "battle_bnd": "b_sword_000.bnd"
+  },
+  "weapon_map_hidden_by_original_asset": true,
+  "native_visual_component_transitions": [
+    [],
+    [
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ]
+}
