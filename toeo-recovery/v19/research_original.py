@@ -96,3 +96,32 @@ for name,va,size in [
  ('battle_actor',0x50ee00,0x1b00),('npc_menu_dispatch',0x52cc40,0x580),
  ('world_target',0x505900,0x1100),('command_queue',0x4f5700,0x820)
  ]:(OUT/(name+'.txt')).write_text(dis(va,size))
+
+for name,va,size in [
+ ('actor_model_dispatch',0x501470,0xb00),('battle_enter_modes',0x4ecb10,0x750),
+ ('world_command_more',0x522c20,0x750),('battle_record_59',0x529840,0x1200),
+ ('battle_record_group',0x49d2f0,0x900),('encounter_request',0x430000,0xc00),
+ ('battle_status_start',0x49e1c0,0x600),('world_click_target',0x505c90,0x750)
+ ]:(OUT/(name+'.txt')).write_text(dis(va,size))
+code_refs=[]
+more_targets={0x4ece10:'battle_enter_modes',0x431d10:'battle_task_ctor',0x529840:'battle_actor_record',0x49d2f0:'battle_group',0x430e50:'battle_init'}
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ body=sec.get_data();start=base+sec.VirtualAddress
+ for m in re.finditer(b'\xe8',body):
+  at=m.start()
+  if at+5>len(body):continue
+  dest=(start+at+5+struct.unpack_from('<i',body,at+1)[0])&0xffffffff
+  if dest in more_targets:code_refs.append({'address':hex(start+at),'target':hex(dest),'kind':more_targets[dest]})
+ builders=[];last=0
+ for i in cs.disasm(body,start):
+  if i.mnemonic=='push' and i.op_str=='ebp':last=i.address
+  if i.mnemonic=='mov' and i.op_str.startswith('word ptr [ebp') and ',' in i.op_str:
+   dst,value=i.op_str.rsplit(',',1)
+   try:op=int(value.strip(),0)
+   except ValueError:continue
+   if 0x90<=op<=0xb2:
+    builders.append({'address':hex(i.address),'value':hex(op),'possible_function':hex(last),'instruction':i.mnemonic+' '+i.op_str})
+    if 0x9c<=op<=0xad:(OUT/(f'builder_{op:x}_{last:x}.txt')).write_text(dis(last,0x900))
+(OUT/'combat_refs_more.json').write_text(json.dumps(code_refs,indent=2))
+(OUT/'combat_builders.json').write_text(json.dumps(builders,indent=2))
