@@ -1,0 +1,16 @@
+00405e70  cmp      dword ptr [ecx], 0
+00405e73  je       0x405e89
+00405e75  mov      eax, dword ptr [ecx + 4]
+00405e78  test     eax, eax
+00405e7a  je       0x405e89
+00405e7c  mov      eax, dword ptr [ecx + 0x14]
+00405e7f  test     eax, eax
+00405e81  je       0x405e89
+00405e83  mov      eax, 1
+00405e88  ret      
+00405e89  xor      eax, eax
+00405e8b  ret      
+00405e8c  int3     
+00405e8d  int3     
+00405e8e  int3     
+00405e8f  int3     
