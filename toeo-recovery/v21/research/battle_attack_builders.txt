@@ -1,0 +1,63 @@
+00522fd0  push     ebp
+00522fd1  mov      ebp, esp
+00522fd3  sub      esp, 0x48
+00522fd6  mov      eax, dword ptr [0x80dbf4]
+00522fdb  mov      ecx, dword ptr [eax + 0x28]
+00522fde  mov      edx, dword ptr [ecx + 0x28]
+00522fe1  test     edx, edx
+00522fe3  jne      0x522fe9
+00522fe5  xor      eax, eax
+00522fe7  jmp      0x522fec
+00522fe9  mov      eax, dword ptr [edx + 0x2c]
+00522fec  mov      eax, dword ptr [eax + 0x78]
+00522fef  test     eax, eax
+00522ff1  jne      0x522ff7
+00522ff3  xor      ecx, ecx
+00522ff5  jmp      0x522ffa
+00522ff7  mov      ecx, dword ptr [eax + 0xc]
+00522ffa  test     edx, edx
+00522ffc  jne      0x523002
+00522ffe  xor      eax, eax
+00523000  jmp      0x523005
+00523002  mov      eax, dword ptr [edx + 0x30]
+00523005  mov      dl, byte ptr [eax + 0x34]
+00523008  test     dl, dl
+0052300a  jne      0x523014
+0052300c  xor      al, al
+0052300e  mov      esp, ebp
+00523010  pop      ebp
+00523011  ret      4
+00523014  mov      edx, dword ptr [ecx + 0x68]
+00523017  mov      dword ptr [ebp - 0x30], edx
+0052301a  mov      eax, dword ptr [ecx + 0x6c]
+0052301d  mov      dword ptr [ebp - 0x2c], eax
+00523020  mov      edx, dword ptr [ecx + 0x14]
+00523023  mov      dword ptr [ebp - 0x3c], edx
+00523026  mov      eax, dword ptr [ecx + 0x90]
+0052302c  mov      dword ptr [ebp - 0x38], eax
+0052302f  mov      edx, dword ptr [ecx + 0x94]
+00523035  mov      eax, dword ptr [ebp + 8]
+00523038  mov      dword ptr [ebp - 0x34], edx
+0052303b  mov      dword ptr [ebp - 0x28], eax
+0052303e  call     0x4feb90
+00523043  mov      dword ptr [ebp - 0x24], eax
+00523046  mov      dword ptr [ebp - 0x20], edx
+00523049  call     dword ptr [0x6e27fc]
+0052304f  lea      ecx, [ebp - 0x10]
+00523052  push     ecx
+00523053  mov      dword ptr [ebp - 0x1c], eax
+00523056  call     dword ptr [0x6e2110]
+0052305c  lea      edx, [ebp - 0x18]
+0052305f  push     edx
+00523060  lea      eax, [ebp - 0x10]
+00523063  push     eax
+00523064  call     dword ptr [0x6e210c]
+0052306a  mov      ecx, dword ptr [0x80dbf4]
+00523070  mov      byte ptr [ebp - 0x48], 0
+00523074  mov      word ptr [ebp - 0x47], 0xa8
+0052307a  mov      word ptr [ebp - 0x45], 0x38
+00523080  mov      dword ptr [ebp - 0x43], 0xffffffff
+00523087  mov      edx, dword ptr [ecx + 0x28]
+0052308a  mov      eax, dword ptr [edx + 0x28]
+0052308d  test     eax, eax
+0052308f  .byte    0x74

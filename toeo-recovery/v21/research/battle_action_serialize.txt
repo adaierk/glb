@@ -1,0 +1,71 @@
+00406af0  push     ebp
+00406af1  mov      ebp, esp
+00406af3  mov      eax, dword ptr [ebp + 8]
+00406af6  mov      edx, dword ptr [ebp + 0xc]
+00406af9  mov      dword ptr [eax + 4], edx
+00406afc  mov      edx, dword ptr [ebp + 0x10]
+00406aff  mov      word ptr [eax], 0x5a
+00406b04  mov      word ptr [eax + 2], 0xd
+00406b0a  mov      dword ptr [eax + 8], edx
+00406b0d  mov      edx, dword ptr [ecx]
+00406b0f  mov      dword ptr [eax + 0xc], edx
+00406b12  mov      edx, dword ptr [ecx + 4]
+00406b15  mov      dword ptr [eax + 0x10], edx
+00406b18  mov      edx, dword ptr [ecx + 8]
+00406b1b  mov      dword ptr [eax + 0x14], edx
+00406b1e  mov      edx, dword ptr [ecx + 0xc]
+00406b21  mov      dword ptr [eax + 0x18], edx
+00406b24  mov      edx, dword ptr [ecx + 0x10]
+00406b27  mov      dword ptr [eax + 0x1c], edx
+00406b2a  mov      edx, dword ptr [ecx + 0x14]
+00406b2d  mov      dword ptr [eax + 0x20], edx
+00406b30  mov      edx, dword ptr [ecx + 0x18]
+00406b33  mov      dword ptr [eax + 0x24], edx
+00406b36  mov      edx, dword ptr [ecx + 0x1c]
+00406b39  mov      dword ptr [eax + 0x28], edx
+00406b3c  mov      edx, dword ptr [ecx + 0x20]
+00406b3f  mov      dword ptr [eax + 0x2c], edx
+00406b42  mov      ecx, dword ptr [ecx + 0x28]
+00406b45  mov      dword ptr [eax + 0x30], ecx
+00406b48  pop      ebp
+00406b49  ret      0xc
+00406b4c  int3     
+00406b4d  int3     
+00406b4e  int3     
+00406b4f  int3     
+00406b50  push     ebp
+00406b51  mov      ebp, esp
+00406b53  mov      eax, dword ptr [ebp + 8]
+00406b56  cmp      word ptr [eax], 0x5a
+00406b5a  jne      0x406b9c
+00406b5c  mov      edx, dword ptr [eax + 0xc]
+00406b5f  mov      dword ptr [ecx], edx
+00406b61  mov      edx, dword ptr [eax + 0x10]
+00406b64  mov      dword ptr [ecx + 4], edx
+00406b67  mov      edx, dword ptr [eax + 0x14]
+00406b6a  mov      dword ptr [ecx + 8], edx
+00406b6d  mov      edx, dword ptr [eax + 0x18]
+00406b70  mov      dword ptr [ecx + 0xc], edx
+00406b73  mov      edx, dword ptr [eax + 0x1c]
+00406b76  mov      dword ptr [ecx + 0x10], edx
+00406b79  mov      edx, dword ptr [eax + 0x20]
+00406b7c  mov      dword ptr [ecx + 0x14], edx
+00406b7f  mov      edx, dword ptr [eax + 0x24]
+00406b82  mov      dword ptr [ecx + 0x18], edx
+00406b85  mov      edx, dword ptr [eax + 0x28]
+00406b88  mov      dword ptr [ecx + 0x1c], edx
+00406b8b  mov      edx, dword ptr [eax + 0x2c]
+00406b8e  mov      dword ptr [ecx + 0x20], edx
+00406b91  mov      eax, dword ptr [eax + 0x30]
+00406b94  mov      dword ptr [ecx + 0x28], eax
+00406b97  call     0x4068b0
+00406b9c  pop      ebp
+00406b9d  ret      4
+00406ba0  push     ebp
+00406ba1  mov      ebp, esp
+00406ba3  mov      eax, dword ptr [ebp + 8]
+00406ba6  mov      edx, dword ptr [eax]
+00406ba8  mov      dword ptr [ecx + 0xc], edx
+00406bab  mov      eax, dword ptr [eax + 4]
+00406bae  .byte    0x89
+00406baf  inc      ecx
