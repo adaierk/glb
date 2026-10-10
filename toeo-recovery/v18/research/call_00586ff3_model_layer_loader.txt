@@ -33,3 +33,6 @@
 0058700a  push     0xc8
 0058700f  push     1
 00587011  mov      ecx, edi
+00587013  .byte    0xe8
+00587014  .byte    0x68
+00587015  .byte    0x12

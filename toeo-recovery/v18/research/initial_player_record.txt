@@ -246,3 +246,6 @@
 0043f6ec  mov      dword ptr [ebp - 4], 0xffffffff
 0043f6f3  call     0x43e070
 0043f6f8  mov      eax, 0xfffffff9
+0043f6fd  .byte    0xe9
+0043f6fe  in       eax, dx
+0043f6ff  sti      

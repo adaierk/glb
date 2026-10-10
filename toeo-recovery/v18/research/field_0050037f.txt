@@ -1,0 +1,65 @@
+00500339  int3     
+0050033a  int3     
+0050033b  int3     
+0050033c  int3     
+0050033d  int3     
+0050033e  int3     
+0050033f  int3     
+00500340  push     ebp
+00500341  mov      ebp, esp
+00500343  push     -1
+00500345  push     0x6d1ccb
+0050034a  mov      eax, dword ptr fs:[0]
+00500350  push     eax
+00500351  mov      dword ptr fs:[0], esp
+00500358  push     ecx
+00500359  push     esi
+0050035a  mov      esi, ecx
+0050035c  mov      eax, dword ptr [esi + 0x15c]
+00500362  test     eax, eax
+00500364  je       0x500377
+00500366  mov      al, 1
+00500368  pop      esi
+00500369  mov      ecx, dword ptr [ebp - 0xc]
+0050036c  mov      dword ptr fs:[0], ecx
+00500373  mov      esp, ebp
+00500375  pop      ebp
+00500376  ret      
+00500377  mov      eax, dword ptr [esi + 0x114]
+0050037d  push     ebx
+0050037e  push     edi
+0050037f  mov      edi, dword ptr [eax + 0x1ac]
+00500385  test     edi, edi
+00500387  jne      0x500394
+00500389  mov      eax, dword ptr [esi + 0x110]
+0050038f  mov      edi, dword ptr [eax + 8]
+00500392  jmp      0x500399
+00500394  cmp      edi, 1
+00500397  jne      0x5003cb
+00500399  mov      ecx, dword ptr [esi + 0x110]
+0050039f  call     0x405e70
+005003a4  test     al, al
+005003a6  je       0x5003cb
+005003a8  mov      eax, dword ptr [esi + 0x110]
+005003ae  mov      edx, dword ptr [eax]
+005003b0  mov      ecx, dword ptr [0x80dbf4]
+005003b6  mov      ecx, dword ptr [ecx + 0x64]
+005003b9  push     edx
+005003ba  mov      edx, dword ptr [eax + 4]
+005003bd  mov      eax, dword ptr [eax + 0x14]
+005003c0  push     edx
+005003c1  push     eax
+005003c2  call     0x4d81f0
+005003c7  xor      bl, bl
+005003c9  jmp      0x5003dc
+005003cb  mov      ecx, dword ptr [0x80dbf4]
+005003d1  mov      ecx, dword ptr [ecx + 0x64]
+005003d4  push     edi
+005003d5  call     0x4d9b90
+005003da  mov      bl, 1
+005003dc  mov      edi, eax
+005003de  test     edi, edi
+005003e0  je       0x500433
+005003e2  push     0x9c
+005003e7  call     0x5f0bbc
+005003ec  .byte    0x83

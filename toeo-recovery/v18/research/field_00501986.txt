@@ -1,0 +1,30 @@
+00501940  mov      word ptr [esi + 0xa4], bx
+00501947  mov      dword ptr [esi + 0x11c], ebx
+0050194d  mov      word ptr [esi + 0x120], bx
+00501954  mov      dword ptr [esi + 0xa8], ebx
+0050195a  mov      dword ptr [esi + 0xd4], 0x3c088889
+00501964  mov      eax, 0x3f800000
+00501969  mov      dword ptr [esi + 0xac], eax
+0050196f  mov      dword ptr [esi + 0xcc], eax
+00501975  mov      dword ptr [esi + 0xd0], eax
+0050197b  mov      edi, 1
+00501980  mov      dword ptr [esi + 0xa0], edi
+00501986  mov      dword ptr [esi + 0xb0], ebx
+0050198c  mov      dword ptr [esi + 0xb4], ebx
+00501992  mov      dword ptr [esi + 0xb8], ebx
+00501998  mov      dword ptr [esi + 0xbc], 0xc2800000
+005019a2  mov      dword ptr [esi + 0xc0], 0x1e
+005019ac  mov      dword ptr [esi + 0xc4], 0xffffffa8
+005019b6  mov      dword ptr [esi + 0x1f4], ebx
+005019bc  mov      dword ptr [esi + 0x1f8], ebx
+005019c2  mov      dword ptr [esi + 0x1fc], ebx
+005019c8  mov      byte ptr [esi + 0x80], bl
+005019ce  mov      dword ptr [esi + 0x134], edi
+005019d4  mov      dword ptr [esi + 0x138], ebx
+005019da  mov      dword ptr [esi + 0x13c], ebx
+005019e0  mov      dword ptr [esi + 0x140], eax
+005019e6  mov      byte ptr [esi + 0x144], bl
+005019ec  mov      dword ptr [esi + 0x64], ebx
+005019ef  .byte    0x89
+005019f0  sahf     
+005019f1  add      dword ptr fs:[eax], eax

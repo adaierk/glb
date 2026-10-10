@@ -1,0 +1,47 @@
+004ff005  inc      ebp
+004ff006  clc      
+004ff007  test     eax, eax
+004ff009  jne      0x4ff01a
+004ff00b  push     1
+004ff00d  push     0
+004ff00f  push     0
+004ff011  push     2
+004ff013  mov      ecx, edi
+004ff015  call     0x518280
+004ff01a  mov      eax, dword ptr [ebp - 0xc]
+004ff01d  test     eax, eax
+004ff01f  jne      0x4ff030
+004ff021  push     1
+004ff023  push     0
+004ff025  push     0
+004ff027  push     3
+004ff029  mov      ecx, edi
+004ff02b  call     0x518280
+004ff030  mov      eax, dword ptr [ebp - 0x10]
+004ff033  test     eax, eax
+004ff035  jne      0x4ff046
+004ff037  push     1
+004ff039  push     0
+004ff03b  push     0
+004ff03d  push     4
+004ff03f  mov      ecx, edi
+004ff041  call     0x518280
+004ff046  mov      ecx, edi
+004ff048  call     0x518ac0
+004ff04d  pop      edi
+004ff04e  mov      esp, ebp
+004ff050  pop      ebp
+004ff051  ret      
+004ff052  mov      edi, edi
+004ff054  shr      edi, 1
+004ff056  dec      edi
+004ff057  add      dh, dl
+004ff059  out      dx, eax
+004ff05a  dec      edi
+004ff05b  add      bl, bl
+004ff05d  out      dx, eax
+004ff05e  dec      edi
+004ff05f  add      al, ah
+004ff061  out      dx, eax
+004ff062  dec      edi
+004ff063  .byte    0x00

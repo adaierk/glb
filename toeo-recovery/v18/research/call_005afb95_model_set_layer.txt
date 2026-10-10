@@ -1,0 +1,36 @@
+005afb59  add      byte ptr [eax], al
+005afb5b  jmp      0x5afb8d
+005afb5d  push     1
+005afb5f  push     ebx
+005afb60  push     0x10b4
+005afb65  jmp      0x5afb8d
+005afb67  push     1
+005afb69  push     ebx
+005afb6a  push     0x1144
+005afb6f  jmp      0x5afb8d
+005afb71  push     1
+005afb73  push     ebx
+005afb74  push     0x11d4
+005afb79  jmp      0x5afb8d
+005afb7b  push     1
+005afb7d  push     ebx
+005afb7e  push     0x1264
+005afb83  jmp      0x5afb8d
+005afb85  push     1
+005afb87  push     ebx
+005afb88  push     0xc8
+005afb8d  mov      ecx, dword ptr [esi + 0xf0]
+005afb93  push     1
+005afb95  call     0x518280
+005afb9a  mov      ecx, dword ptr [esi + 0xf0]
+005afba0  push     1
+005afba2  push     ebx
+005afba3  push     ebx
+005afba4  push     2
+005afba6  call     0x518280
+005afbab  mov      ecx, dword ptr [esi + 0xf0]
+005afbb1  push     1
+005afbb3  push     ebx
+005afbb4  push     ebx
+005afbb5  push     3
+005afbb7  .byte    0xe8

@@ -32,3 +32,6 @@
 00538412  pop      ebp
 00538413  ret      8
 00538416  mov      ecx, ebx
+00538418  .byte    0xe8
+00538419  .byte    0x83
+0053841a  push     esp

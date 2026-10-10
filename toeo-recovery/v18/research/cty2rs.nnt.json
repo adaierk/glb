@@ -1,0 +1,1175 @@
+{
+  "metadata": {
+    "file": "cty2rs.nnt",
+    "bytes": 5964,
+    "sha256": "ef4a57044bb10415a531ec58443933a832c8775c72f395b055de3214de8dcd0e",
+    "format": "NNTB",
+    "original_unchanged": true,
+    "count": 290,
+    "encrypted_strings": 291,
+    "original_sha1_verified": true,
+    "scope": "Model/resource symbolic names; not verified NPC spawn or item template data"
+  },
+  "rows": [
+    {
+      "name": "ZMK_S01",
+      "resource_name": "ZMK_S00"
+    },
+    {
+      "name": "ZMK_S02",
+      "resource_name": "ZMK_S00"
+    },
+    {
+      "name": "ZMK_S03",
+      "resource_name": "ZMK_S00"
+    },
+    {
+      "name": "ZMK_S04",
+      "resource_name": "ZMK_S00"
+    },
+    {
+      "name": "ZMK_S05",
+      "resource_name": "ZMK_S00"
+    },
+    {
+      "name": "SLIME",
+      "resource_name": "SLIME"
+    },
+    {
+      "name": "MAGICBOT",
+      "resource_name": "MAGICBOT"
+    },
+    {
+      "name": "GHOST",
+      "resource_name": "GHOST"
+    },
+    {
+      "name": "ZOMBIE",
+      "resource_name": "ZOMBIE"
+    },
+    {
+      "name": "TWOWALKBEAST",
+      "resource_name": "TWOWALKBEAST"
+    },
+    {
+      "name": "FOURWALKBEAST",
+      "resource_name": "FOURWALKBEAST"
+    },
+    {
+      "name": "SUBSPECIES_MAN",
+      "resource_name": "SUBSPECIES_MAN"
+    },
+    {
+      "name": "TREE",
+      "resource_name": "TREE"
+    },
+    {
+      "name": "MUSHROOM",
+      "resource_name": "MUSHROOM"
+    },
+    {
+      "name": "LARGEPLANT",
+      "resource_name": "LARGEPLANT"
+    },
+    {
+      "name": "WAR",
+      "resource_name": "WAR"
+    },
+    {
+      "name": "MAGE",
+      "resource_name": "MAGE"
+    },
+    {
+      "name": "SPECIALTYPE",
+      "resource_name": "SPECIALTYPE"
+    },
+    {
+      "name": "HITODE",
+      "resource_name": "HITODE"
+    },
+    {
+      "name": "KAME",
+      "resource_name": "KAME"
+    },
+    {
+      "name": "TAKO",
+      "resource_name": "TAKO"
+    },
+    {
+      "name": "CATERPILLAR",
+      "resource_name": "CATERPILLAR"
+    },
+    {
+      "name": "INSECTSMALL",
+      "resource_name": "INSECTSMALL"
+    },
+    {
+      "name": "INSECTLARGE",
+      "resource_name": "INSECTLARGE"
+    },
+    {
+      "name": "INSECTFLY",
+      "resource_name": "INSECTFLY"
+    },
+    {
+      "name": "BIRD",
+      "resource_name": "BIRD"
+    },
+    {
+      "name": "DRAGON",
+      "resource_name": "DRAGON"
+    },
+    {
+      "name": "GAS",
+      "resource_name": "GAS"
+    },
+    {
+      "name": "MIMIC",
+      "resource_name": "MIMIC"
+    },
+    {
+      "name": "ELEMENTAL",
+      "resource_name": "ELEMENTAL"
+    },
+    {
+      "name": "TRANSPARENT",
+      "resource_name": "TRANSPARENT"
+    },
+    {
+      "name": "NM001",
+      "resource_name": "NM001"
+    },
+    {
+      "name": "NM002",
+      "resource_name": "NM002"
+    },
+    {
+      "name": "NM003",
+      "resource_name": "NM003"
+    },
+    {
+      "name": "NM004",
+      "resource_name": "NM004"
+    },
+    {
+      "name": "NM006",
+      "resource_name": "NM006"
+    },
+    {
+      "name": "NM007",
+      "resource_name": "NM007"
+    },
+    {
+      "name": "NM009",
+      "resource_name": "NM009"
+    },
+    {
+      "name": "NM010",
+      "resource_name": "NM010"
+    },
+    {
+      "name": "NM011",
+      "resource_name": "NM011"
+    },
+    {
+      "name": "NM012",
+      "resource_name": "NM012"
+    },
+    {
+      "name": "NM013",
+      "resource_name": "NM013"
+    },
+    {
+      "name": "NM014",
+      "resource_name": "NM014"
+    },
+    {
+      "name": "NM015",
+      "resource_name": "NM015"
+    },
+    {
+      "name": "NM016",
+      "resource_name": "NM016"
+    },
+    {
+      "name": "NM018",
+      "resource_name": "NM018"
+    },
+    {
+      "name": "NM019",
+      "resource_name": "NM019"
+    },
+    {
+      "name": "NM020",
+      "resource_name": "NM020"
+    },
+    {
+      "name": "NM023",
+      "resource_name": "NM023"
+    },
+    {
+      "name": "NM024",
+      "resource_name": "NM024"
+    },
+    {
+      "name": "NM025",
+      "resource_name": "NM025"
+    },
+    {
+      "name": "NM026",
+      "resource_name": "NM026"
+    },
+    {
+      "name": "NM027",
+      "resource_name": "NM027"
+    },
+    {
+      "name": "NM028",
+      "resource_name": "NM028"
+    },
+    {
+      "name": "NM029",
+      "resource_name": "NM029"
+    },
+    {
+      "name": "NM030",
+      "resource_name": "NM030"
+    },
+    {
+      "name": "NM033",
+      "resource_name": "NM033"
+    },
+    {
+      "name": "NM034",
+      "resource_name": "NM034"
+    },
+    {
+      "name": "NM037",
+      "resource_name": "NM037"
+    },
+    {
+      "name": "NM038",
+      "resource_name": "NM038"
+    },
+    {
+      "name": "NM039",
+      "resource_name": "NM039"
+    },
+    {
+      "name": "NM041",
+      "resource_name": "NM041"
+    },
+    {
+      "name": "NM042",
+      "resource_name": "NM042"
+    },
+    {
+      "name": "NM043",
+      "resource_name": "NM043"
+    },
+    {
+      "name": "NM044",
+      "resource_name": "NM044"
+    },
+    {
+      "name": "NM045",
+      "resource_name": "NM045"
+    },
+    {
+      "name": "NM046",
+      "resource_name": "NM046"
+    },
+    {
+      "name": "NM047",
+      "resource_name": "NM047"
+    },
+    {
+      "name": "NM048",
+      "resource_name": "NM048"
+    },
+    {
+      "name": "NM049",
+      "resource_name": "NM049"
+    },
+    {
+      "name": "NM050",
+      "resource_name": "NM050"
+    },
+    {
+      "name": "NM051",
+      "resource_name": "NM051"
+    },
+    {
+      "name": "NM051B",
+      "resource_name": "NM051B"
+    },
+    {
+      "name": "NM051C",
+      "resource_name": "NM051C"
+    },
+    {
+      "name": "NM051D",
+      "resource_name": "NM051D"
+    },
+    {
+      "name": "NM053",
+      "resource_name": "NM053"
+    },
+    {
+      "name": "NM055",
+      "resource_name": "NM055"
+    },
+    {
+      "name": "NM057",
+      "resource_name": "NM057"
+    },
+    {
+      "name": "NM059",
+      "resource_name": "NM059"
+    },
+    {
+      "name": "NM067",
+      "resource_name": "NM067"
+    },
+    {
+      "name": "NM068",
+      "resource_name": "NM068"
+    },
+    {
+      "name": "NM069",
+      "resource_name": "NM069"
+    },
+    {
+      "name": "NM070",
+      "resource_name": "NM070"
+    },
+    {
+      "name": "NM072",
+      "resource_name": "NM072"
+    },
+    {
+      "name": "NM073",
+      "resource_name": "NM073"
+    },
+    {
+      "name": "NN001",
+      "resource_name": "NN001"
+    },
+    {
+      "name": "NN002",
+      "resource_name": "NN002"
+    },
+    {
+      "name": "NN003",
+      "resource_name": "NN003"
+    },
+    {
+      "name": "NN004",
+      "resource_name": "NN004"
+    },
+    {
+      "name": "NN005",
+      "resource_name": "NN005"
+    },
+    {
+      "name": "NN006",
+      "resource_name": "NN006"
+    },
+    {
+      "name": "NN007",
+      "resource_name": "NN007"
+    },
+    {
+      "name": "NN008",
+      "resource_name": "NN008"
+    },
+    {
+      "name": "NN009",
+      "resource_name": "NN009"
+    },
+    {
+      "name": "NN010",
+      "resource_name": "NN010"
+    },
+    {
+      "name": "NN011",
+      "resource_name": "NN011"
+    },
+    {
+      "name": "NN012",
+      "resource_name": "NN012"
+    },
+    {
+      "name": "NN013",
+      "resource_name": "NN013"
+    },
+    {
+      "name": "NN014",
+      "resource_name": "NN014"
+    },
+    {
+      "name": "NN015",
+      "resource_name": "NN015"
+    },
+    {
+      "name": "NN016",
+      "resource_name": "NN016"
+    },
+    {
+      "name": "NN017",
+      "resource_name": "NN017"
+    },
+    {
+      "name": "NN018",
+      "resource_name": "NN018"
+    },
+    {
+      "name": "NN019",
+      "resource_name": "NN019"
+    },
+    {
+      "name": "NN020",
+      "resource_name": "NN020"
+    },
+    {
+      "name": "NN021",
+      "resource_name": "NN021"
+    },
+    {
+      "name": "NN022",
+      "resource_name": "NN022"
+    },
+    {
+      "name": "NN023",
+      "resource_name": "NN023"
+    },
+    {
+      "name": "NN024",
+      "resource_name": "NN024"
+    },
+    {
+      "name": "NN025",
+      "resource_name": "NN025"
+    },
+    {
+      "name": "NN026",
+      "resource_name": "NN026"
+    },
+    {
+      "name": "NN027",
+      "resource_name": "NN027"
+    },
+    {
+      "name": "NN028",
+      "resource_name": "NN028"
+    },
+    {
+      "name": "NN029",
+      "resource_name": "NN029"
+    },
+    {
+      "name": "NN030",
+      "resource_name": "NN030"
+    },
+    {
+      "name": "NN031",
+      "resource_name": "NN031"
+    },
+    {
+      "name": "NN032",
+      "resource_name": "NN032"
+    },
+    {
+      "name": "NN033",
+      "resource_name": "NN033"
+    },
+    {
+      "name": "NN034",
+      "resource_name": "NN034"
+    },
+    {
+      "name": "NN035",
+      "resource_name": "NN035"
+    },
+    {
+      "name": "NN036",
+      "resource_name": "NN036"
+    },
+    {
+      "name": "NN037",
+      "resource_name": "NN037"
+    },
+    {
+      "name": "NN038",
+      "resource_name": "NN038"
+    },
+    {
+      "name": "NN039",
+      "resource_name": "NN039"
+    },
+    {
+      "name": "NN040",
+      "resource_name": "NN040"
+    },
+    {
+      "name": "NN041",
+      "resource_name": "NN041"
+    },
+    {
+      "name": "NN042",
+      "resource_name": "NN042"
+    },
+    {
+      "name": "NN043",
+      "resource_name": "NN043"
+    },
+    {
+      "name": "NN044",
+      "resource_name": "NN044"
+    },
+    {
+      "name": "NN045A",
+      "resource_name": "NN045A"
+    },
+    {
+      "name": "NN046",
+      "resource_name": "NN046"
+    },
+    {
+      "name": "NN047",
+      "resource_name": "NN047"
+    },
+    {
+      "name": "NN048",
+      "resource_name": "NN048"
+    },
+    {
+      "name": "NN049",
+      "resource_name": "NN049"
+    },
+    {
+      "name": "NN050",
+      "resource_name": "NN050"
+    },
+    {
+      "name": "NN051",
+      "resource_name": "NN051"
+    },
+    {
+      "name": "NN052",
+      "resource_name": "NN052"
+    },
+    {
+      "name": "NN053",
+      "resource_name": "NN053"
+    },
+    {
+      "name": "NN054A",
+      "resource_name": "NN054A"
+    },
+    {
+      "name": "NN055A",
+      "resource_name": "NN055A"
+    },
+    {
+      "name": "NN056",
+      "resource_name": "NN056"
+    },
+    {
+      "name": "NN057",
+      "resource_name": "NN057"
+    },
+    {
+      "name": "NN058",
+      "resource_name": "NN058"
+    },
+    {
+      "name": "NN059",
+      "resource_name": "NN059"
+    },
+    {
+      "name": "NN060",
+      "resource_name": "NN060"
+    },
+    {
+      "name": "NN061",
+      "resource_name": "NN061"
+    },
+    {
+      "name": "NN062",
+      "resource_name": "NN062"
+    },
+    {
+      "name": "NN063A",
+      "resource_name": "NN063A"
+    },
+    {
+      "name": "NN063B",
+      "resource_name": "NN063B"
+    },
+    {
+      "name": "NN063C",
+      "resource_name": "NN063C"
+    },
+    {
+      "name": "NN063D",
+      "resource_name": "NN063D"
+    },
+    {
+      "name": "NN063E",
+      "resource_name": "NN063E"
+    },
+    {
+      "name": "NN063F",
+      "resource_name": "NN063F"
+    },
+    {
+      "name": "NN064",
+      "resource_name": "NN064"
+    },
+    {
+      "name": "NN065A",
+      "resource_name": "NN065A"
+    },
+    {
+      "name": "NN066",
+      "resource_name": "NN066"
+    },
+    {
+      "name": "NN067",
+      "resource_name": "NN067"
+    },
+    {
+      "name": "NN068",
+      "resource_name": "NN068"
+    },
+    {
+      "name": "NN069",
+      "resource_name": "NN069"
+    },
+    {
+      "name": "NN070",
+      "resource_name": "NN070"
+    },
+    {
+      "name": "NN071",
+      "resource_name": "NN071"
+    },
+    {
+      "name": "NN072A",
+      "resource_name": "NN072A"
+    },
+    {
+      "name": "NN073A",
+      "resource_name": "NN073A"
+    },
+    {
+      "name": "NN074A",
+      "resource_name": "NN074A"
+    },
+    {
+      "name": "NN075A",
+      "resource_name": "NN075A"
+    },
+    {
+      "name": "NN076A",
+      "resource_name": "NN076A"
+    },
+    {
+      "name": "NN077",
+      "resource_name": "NN077"
+    },
+    {
+      "name": "NN078",
+      "resource_name": "NN078"
+    },
+    {
+      "name": "NN079",
+      "resource_name": "NN079"
+    },
+    {
+      "name": "NN080",
+      "resource_name": "NN080"
+    },
+    {
+      "name": "NN081",
+      "resource_name": "NN081"
+    },
+    {
+      "name": "NN082",
+      "resource_name": "NN082"
+    },
+    {
+      "name": "NN083",
+      "resource_name": "NN083"
+    },
+    {
+      "name": "NN084",
+      "resource_name": "NN084"
+    },
+    {
+      "name": "NN085A",
+      "resource_name": "NN085A"
+    },
+    {
+      "name": "NN086",
+      "resource_name": "NN086"
+    },
+    {
+      "name": "NN087",
+      "resource_name": "NN087"
+    },
+    {
+      "name": "NN088",
+      "resource_name": "NN088"
+    },
+    {
+      "name": "NN089",
+      "resource_name": "NN089"
+    },
+    {
+      "name": "NN090",
+      "resource_name": "NN090"
+    },
+    {
+      "name": "NN091",
+      "resource_name": "NN091"
+    },
+    {
+      "name": "NN092",
+      "resource_name": "NN092"
+    },
+    {
+      "name": "NN093",
+      "resource_name": "NN093"
+    },
+    {
+      "name": "NN094",
+      "resource_name": "NN094"
+    },
+    {
+      "name": "NN095",
+      "resource_name": "NN095"
+    },
+    {
+      "name": "NN096",
+      "resource_name": "NN096"
+    },
+    {
+      "name": "NN097",
+      "resource_name": "NN097"
+    },
+    {
+      "name": "NN098",
+      "resource_name": "NN098"
+    },
+    {
+      "name": "NN099",
+      "resource_name": "NN099"
+    },
+    {
+      "name": "NN101",
+      "resource_name": "NN101"
+    },
+    {
+      "name": "NN102",
+      "resource_name": "NN102"
+    },
+    {
+      "name": "NN103",
+      "resource_name": "NN103"
+    },
+    {
+      "name": "NN104",
+      "resource_name": "NN104"
+    },
+    {
+      "name": "NN105",
+      "resource_name": "NN105"
+    },
+    {
+      "name": "NN106",
+      "resource_name": "NN106"
+    },
+    {
+      "name": "NN107",
+      "resource_name": "NN107"
+    },
+    {
+      "name": "NN108",
+      "resource_name": "NN108"
+    },
+    {
+      "name": "NN109",
+      "resource_name": "NN109"
+    },
+    {
+      "name": "NN111",
+      "resource_name": "NN111"
+    },
+    {
+      "name": "NN112A",
+      "resource_name": "NN112A"
+    },
+    {
+      "name": "NN113",
+      "resource_name": "NN113"
+    },
+    {
+      "name": "NN114A",
+      "resource_name": "NN114A"
+    },
+    {
+      "name": "NN116",
+      "resource_name": "NN116"
+    },
+    {
+      "name": "NN118",
+      "resource_name": "NN118"
+    },
+    {
+      "name": "NN119",
+      "resource_name": "NN119"
+    },
+    {
+      "name": "NN120A",
+      "resource_name": "NN120A"
+    },
+    {
+      "name": "NN121",
+      "resource_name": "NN121"
+    },
+    {
+      "name": "NN123",
+      "resource_name": "NN123"
+    },
+    {
+      "name": "NN124",
+      "resource_name": "NN124"
+    },
+    {
+      "name": "NN125",
+      "resource_name": "NN125"
+    },
+    {
+      "name": "NN126",
+      "resource_name": "NN126"
+    },
+    {
+      "name": "NN127",
+      "resource_name": "NN127"
+    },
+    {
+      "name": "NN128",
+      "resource_name": "NN128"
+    },
+    {
+      "name": "NN129",
+      "resource_name": "NN129"
+    },
+    {
+      "name": "NN130",
+      "resource_name": "NN130"
+    },
+    {
+      "name": "NN131",
+      "resource_name": "NN131"
+    },
+    {
+      "name": "NN132",
+      "resource_name": "NN132"
+    },
+    {
+      "name": "NN133",
+      "resource_name": "NN133"
+    },
+    {
+      "name": "NN134",
+      "resource_name": "NN134"
+    },
+    {
+      "name": "NN135",
+      "resource_name": "NN135"
+    },
+    {
+      "name": "NN136A",
+      "resource_name": "NN136A"
+    },
+    {
+      "name": "NN137",
+      "resource_name": "NN137"
+    },
+    {
+      "name": "NN138",
+      "resource_name": "NN138"
+    },
+    {
+      "name": "NN139",
+      "resource_name": "NN139"
+    },
+    {
+      "name": "NN145",
+      "resource_name": "NN145"
+    },
+    {
+      "name": "NN148A",
+      "resource_name": "NN148A"
+    },
+    {
+      "name": "NN149",
+      "resource_name": "NN149"
+    },
+    {
+      "name": "NN150",
+      "resource_name": "NN150"
+    },
+    {
+      "name": "NN151",
+      "resource_name": "NN151"
+    },
+    {
+      "name": "NN152",
+      "resource_name": "NN152"
+    },
+    {
+      "name": "NN153",
+      "resource_name": "NN153"
+    },
+    {
+      "name": "NN154",
+      "resource_name": "NN154"
+    },
+    {
+      "name": "NN155",
+      "resource_name": "NN155"
+    },
+    {
+      "name": "NN156",
+      "resource_name": "NN156"
+    },
+    {
+      "name": "NN158A",
+      "resource_name": "NN158A"
+    },
+    {
+      "name": "NN159",
+      "resource_name": "NN159"
+    },
+    {
+      "name": "NN160",
+      "resource_name": "NN160"
+    },
+    {
+      "name": "NN161A",
+      "resource_name": "NN161A"
+    },
+    {
+      "name": "NN162",
+      "resource_name": "NN162"
+    },
+    {
+      "name": "NN163",
+      "resource_name": "NN163"
+    },
+    {
+      "name": "NN164A",
+      "resource_name": "NN164A"
+    },
+    {
+      "name": "NN165",
+      "resource_name": "NN165"
+    },
+    {
+      "name": "NN166",
+      "resource_name": "NN166"
+    },
+    {
+      "name": "NN167",
+      "resource_name": "NN167"
+    },
+    {
+      "name": "NN168",
+      "resource_name": "NN168"
+    },
+    {
+      "name": "NN169",
+      "resource_name": "NN169"
+    },
+    {
+      "name": "NN170",
+      "resource_name": "NN170"
+    },
+    {
+      "name": "NN171",
+      "resource_name": "NN171"
+    },
+    {
+      "name": "NN172A",
+      "resource_name": "NN172A"
+    },
+    {
+      "name": "NN172B",
+      "resource_name": "NN172B"
+    },
+    {
+      "name": "NN173",
+      "resource_name": "NN173"
+    },
+    {
+      "name": "NN175",
+      "resource_name": "NN175"
+    },
+    {
+      "name": "NN176",
+      "resource_name": "NN176"
+    },
+    {
+      "name": "NN177",
+      "resource_name": "NN177"
+    },
+    {
+      "name": "NN178",
+      "resource_name": "NN178"
+    },
+    {
+      "name": "NN179",
+      "resource_name": "NN179"
+    },
+    {
+      "name": "NN180",
+      "resource_name": "NN180"
+    },
+    {
+      "name": "NN181",
+      "resource_name": "NN181"
+    },
+    {
+      "name": "NN182",
+      "resource_name": "NN182"
+    },
+    {
+      "name": "NN183",
+      "resource_name": "NN183"
+    },
+    {
+      "name": "NN184",
+      "resource_name": "NN184"
+    },
+    {
+      "name": "NN185",
+      "resource_name": "NN185"
+    },
+    {
+      "name": "NN186",
+      "resource_name": "NN186"
+    },
+    {
+      "name": "NN187",
+      "resource_name": "NN187"
+    },
+    {
+      "name": "NN188",
+      "resource_name": "NN188"
+    },
+    {
+      "name": "FO001",
+      "resource_name": "FO001"
+    },
+    {
+      "name": "KD001",
+      "resource_name": "KD001"
+    },
+    {
+      "name": "KD002",
+      "resource_name": "KD002"
+    },
+    {
+      "name": "KD003",
+      "resource_name": "KD003"
+    },
+    {
+      "name": "MO001",
+      "resource_name": "MO001"
+    },
+    {
+      "name": "MO002",
+      "resource_name": "MO002"
+    },
+    {
+      "name": "MO003",
+      "resource_name": "MO003"
+    },
+    {
+      "name": "MO004",
+      "resource_name": "MO004"
+    },
+    {
+      "name": "MO005",
+      "resource_name": "MO005"
+    },
+    {
+      "name": "MO006",
+      "resource_name": "MO006"
+    },
+    {
+      "name": "MO007",
+      "resource_name": "MO007"
+    },
+    {
+      "name": "MO008",
+      "resource_name": "MO008"
+    },
+    {
+      "name": "MO009",
+      "resource_name": "MO009"
+    },
+    {
+      "name": "MO010",
+      "resource_name": "MO010"
+    },
+    {
+      "name": "MO011",
+      "resource_name": "MO011"
+    },
+    {
+      "name": "MO012",
+      "resource_name": "MO012"
+    },
+    {
+      "name": "MO013",
+      "resource_name": "MO013"
+    },
+    {
+      "name": "MO014",
+      "resource_name": "MO014"
+    },
+    {
+      "name": "MO015",
+      "resource_name": "MO015"
+    },
+    {
+      "name": "MO016",
+      "resource_name": "MO016"
+    },
+    {
+      "name": "MO017",
+      "resource_name": "MO017"
+    },
+    {
+      "name": "MO018",
+      "resource_name": "MO018"
+    },
+    {
+      "name": "NE001",
+      "resource_name": "NE001"
+    },
+    {
+      "name": "NE002",
+      "resource_name": "NE002"
+    },
+    {
+      "name": "NE003",
+      "resource_name": "NE003"
+    }
+  ]
+}

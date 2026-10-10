@@ -1,1 +1,72 @@
-0052ca70  enter    0x1ae8, 0x65
+0052ca9b  push     ebx
+0052ca9c  call     0x430df0
+0052caa1  mov      ecx, dword ptr [eax + 0x48]
+0052caa4  call     0x526610
+0052caa9  jmp      0x52fee4
+0052caae  mov      eax, dword ptr [ebx + 5]
+0052cab1  push     0x48
+0052cab3  push     ebx
+0052cab4  push     eax
+0052cab5  call     0x430df0
+0052caba  mov      ecx, eax
+0052cabc  call     0x43a440
+0052cac1  mov      ecx, eax
+0052cac3  call     0x522280
+0052cac8  push     ebx
+0052cac9  call     0x401210
+0052cace  mov      ecx, dword ptr [eax + 0x9c]
+0052cad4  call     0x4e9470
+0052cad9  jmp      0x52fee4
+0052cade  mov      ecx, dword ptr [ebx + 5]
+0052cae1  push     0x1c
+0052cae3  push     ebx
+0052cae4  push     ecx
+0052cae5  call     0x430df0
+0052caea  mov      ecx, eax
+0052caec  call     0x43a440
+0052caf1  mov      ecx, eax
+0052caf3  call     0x522280
+0052caf8  push     ebx
+0052caf9  call     0x401210
+0052cafe  mov      ecx, dword ptr [eax + 0x9c]
+0052cb04  call     0x4e9bc0
+0052cb09  jmp      0x52fee4
+0052cb0e  mov      edx, dword ptr [ebx + 5]
+0052cb11  push     0x64
+0052cb13  push     ebx
+0052cb14  push     edx
+0052cb15  call     0x430df0
+0052cb1a  mov      ecx, eax
+0052cb1c  call     0x43a440
+0052cb21  mov      ecx, eax
+0052cb23  call     0x522280
+0052cb28  push     ebx
+0052cb29  call     0x401210
+0052cb2e  mov      ecx, dword ptr [eax + 0x9c]
+0052cb34  call     0x4e5790
+0052cb39  jmp      0x52fee4
+0052cb3e  push     ebx
+0052cb3f  call     0x401210
+0052cb44  mov      ecx, dword ptr [eax + 0x9c]
+0052cb4a  call     0x4e60d0
+0052cb4f  jmp      0x52fee4
+0052cb54  push     ebx
+0052cb55  call     0x401210
+0052cb5a  mov      ecx, dword ptr [eax + 0x9c]
+0052cb60  call     0x4e5980
+0052cb65  jmp      0x52fee4
+0052cb6a  mov      eax, dword ptr [ebx + 5]
+0052cb6d  push     0x2c
+0052cb6f  push     ebx
+0052cb70  push     eax
+0052cb71  call     0x430df0
+0052cb76  mov      ecx, eax
+0052cb78  call     0x43a440
+0052cb7d  mov      ecx, eax
+0052cb7f  call     0x522280
+0052cb84  push     ebx
+0052cb85  call     0x401210
+0052cb8a  mov      ecx, dword ptr [eax + 0x9c]
+0052cb90  call     0x4e7f50
+0052cb95  jmp      0x52fee4
+0052cb9a  .byte    0x8b

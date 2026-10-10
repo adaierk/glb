@@ -1,0 +1,35 @@
+0058708a  inc      dword ptr [ebx + 0x197703f9]
+00587090  jmp      dword ptr [ecx*4 + 0x587164]
+00587097  mov      dword ptr [ebp - 0x18], eax
+0058709a  jmp      0x5870a9
+0058709c  mov      dword ptr [ebp - 0x24], eax
+0058709f  jmp      0x5870a9
+005870a1  mov      dword ptr [ebp - 0x28], eax
+005870a4  jmp      0x5870a9
+005870a6  mov      dword ptr [ebp - 0x20], eax
+005870a9  inc      ebx
+005870aa  add      esi, 0xc
+005870ad  cmp      ebx, 8
+005870b0  jl       0x587060
+005870b2  mov      eax, dword ptr [ebp - 0x18]
+005870b5  test     eax, eax
+005870b7  jne      0x5870cb
+005870b9  push     1
+005870bb  push     0
+005870bd  push     0xc8
+005870c2  push     1
+005870c4  mov      ecx, edi
+005870c6  call     0x518280
+005870cb  mov      eax, dword ptr [ebp - 0x24]
+005870ce  test     eax, eax
+005870d0  jne      0x5870e1
+005870d2  push     1
+005870d4  push     0
+005870d6  push     0
+005870d8  push     2
+005870da  mov      ecx, edi
+005870dc  call     0x518280
+005870e1  mov      eax, dword ptr [ebp - 0x28]
+005870e4  test     eax, eax
+005870e6  jne      0x5870f7
+005870e8  .byte    0x6a

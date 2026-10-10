@@ -27,3 +27,5 @@
 00434cc5  push     0x12c
 00434cca  push     1
 00434ccc  call     0x518280
+00434cd1  .byte    0x8b
+00434cd2  mov      ss, word ptr [ecx + eax]

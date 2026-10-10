@@ -1,0 +1,30 @@
+00501cb1  int1     
+00501cb2  .byte    0xff
+00501cb3  cmp      edi, eax
+00501cb5  jg       0x501d20
+00501cb7  mov      ecx, dword ptr [esi + 0x110]
+00501cbd  call     0x405e70
+00501cc2  test     al, al
+00501cc4  je       0x501d18
+00501cc6  mov      eax, dword ptr [esi + 0x114]
+00501ccc  cmp      dword ptr [eax + 0x1ac], edi
+00501cd2  je       0x501d18
+00501cd4  mov      dword ptr [eax + 0x1ac], edi
+00501cda  mov      eax, dword ptr [esi + 0x158]
+00501ce0  test     eax, eax
+00501ce2  je       0x501cf9
+00501ce4  mov      ecx, esi
+00501ce6  call     0x500dd0
+00501ceb  mov      ecx, esi
+00501ced  call     0x501470
+00501cf2  mov      ecx, esi
+00501cf4  call     0x4fef50
+00501cf9  mov      eax, dword ptr [esi + 0x15c]
+00501cff  test     eax, eax
+00501d01  je       0x501d18
+00501d03  mov      ecx, esi
+00501d05  call     0x5004b0
+00501d0a  mov      ecx, esi
+00501d0c  .byte    0xe8
+00501d0d  das      
+00501d0e  out      0xff, al

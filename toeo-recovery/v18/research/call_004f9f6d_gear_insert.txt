@@ -24,3 +24,7 @@
 004f9f7f  add      eax, 0x1468
 004f9f84  je       0x4fa6bc
 004f9f8a  xor      ecx, ecx
+004f9f8c  .byte    0x89
+004f9f8d  .byte    0x8d
+004f9f8e  .byte    0x64
+004f9f8f  .byte    0xff

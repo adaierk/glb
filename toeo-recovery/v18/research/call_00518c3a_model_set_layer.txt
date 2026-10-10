@@ -1,0 +1,35 @@
+00518bfe  mov      ecx, esi
+00518c00  call     0x518280
+00518c05  lea      ecx, [ebp + 8]
+00518c08  push     ecx
+00518c09  lea      edx, [ebp - 4]
+00518c0c  push     edx
+00518c0d  mov      ecx, ebx
+00518c0f  mov      dword ptr [ebp + 8], 2
+00518c16  call     0x4ba100
+00518c1b  mov      eax, dword ptr [ebp - 4]
+00518c1e  cmp      eax, dword ptr [edi + 0xa8]
+00518c24  je       0x518c3f
+00518c26  mov      eax, dword ptr [eax + 0x10]
+00518c29  test     eax, eax
+00518c2b  je       0x518c3f
+00518c2d  mov      ecx, dword ptr [eax]
+00518c2f  mov      edx, dword ptr [eax + 4]
+00518c32  push     1
+00518c34  push     ecx
+00518c35  push     edx
+00518c36  push     2
+00518c38  mov      ecx, esi
+00518c3a  call     0x518280
+00518c3f  lea      eax, [ebp + 8]
+00518c42  push     eax
+00518c43  lea      ecx, [ebp - 4]
+00518c46  push     ecx
+00518c47  mov      ecx, ebx
+00518c49  mov      dword ptr [ebp + 8], 3
+00518c50  call     0x4ba100
+00518c55  mov      eax, dword ptr [ebp - 4]
+00518c58  .byte    0x3b
+00518c59  .byte    0x87
+00518c5a  test     al, 0
+00518c5c  .byte    0x00

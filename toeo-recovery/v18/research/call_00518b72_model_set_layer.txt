@@ -1,0 +1,35 @@
+00518b36  xor      al, 0x89
+00518b38  dec      esi
+00518b39  xor      al, 0x8b
+00518b3b  push     edi
+00518b3c  inc      esp
+00518b3d  mov      dword ptr [esi + 0x44], edx
+00518b40  mov      al, byte ptr [edi + 0xc4]
+00518b46  mov      byte ptr [esi + 0xc4], al
+00518b4c  mov      ecx, dword ptr [edi + 0xc]
+00518b4f  push     1
+00518b51  mov      dword ptr [esi + 0xc], ecx
+00518b54  mov      edx, dword ptr [edi + 0x10]
+00518b57  push     0
+00518b59  mov      dword ptr [esi + 0x10], edx
+00518b5c  mov      eax, dword ptr [edi + 0x14]
+00518b5f  push     1
+00518b61  push     6
+00518b63  mov      ecx, esi
+00518b65  mov      dword ptr [esi + 0x14], eax
+00518b68  mov      dword ptr [esi + 0xc0], 0
+00518b72  call     0x518280
+00518b77  mov      ecx, dword ptr [esi + 0x24]
+00518b7a  push     1
+00518b7c  push     0
+00518b7e  add      ecx, 0xa
+00518b81  push     ecx
+00518b82  push     5
+00518b84  mov      ecx, esi
+00518b86  call     0x518280
+00518b8b  lea      edx, [ebp + 8]
+00518b8e  push     edx
+00518b8f  lea      eax, [ebp - 4]
+00518b92  .byte    0x8d
+00518b93  lahf     
+00518b94  movsb    byte ptr es:[edi], byte ptr [esi]

@@ -1,0 +1,35 @@
+00587045  mov      dword ptr [ebp - 0x18], esi
+00587048  mov      dword ptr [ebp - 0x24], esi
+0058704b  mov      dword ptr [ebp - 0x28], esi
+0058704e  mov      dword ptr [ebp - 0x20], esi
+00587051  mov      esi, dword ptr [ebp - 0x1c]
+00587054  xor      ebx, ebx
+00587056  add      esi, 0x50
+00587059  lea      esp, [esp]
+00587060  mov      ecx, dword ptr [esi]
+00587062  test     ecx, ecx
+00587064  je       0x5870a9
+00587066  mov      eax, dword ptr [esi + 4]
+00587069  test     eax, eax
+0058706b  je       0x5870a9
+0058706d  cmp      ebx, 7
+00587070  je       0x5870a9
+00587072  cmp      ebx, 6
+00587075  je       0x5870a9
+00587077  mov      edx, dword ptr [esi + 8]
+0058707a  push     1
+0058707c  push     edx
+0058707d  push     eax
+0058707e  push     ecx
+0058707f  mov      ecx, edi
+00587081  call     0x518280
+00587086  mov      eax, dword ptr [esi]
+00587088  lea      ecx, [eax - 1]
+0058708b  cmp      ecx, 3
+0058708e  ja       0x5870a9
+00587090  jmp      dword ptr [ecx*4 + 0x587164]
+00587097  mov      dword ptr [ebp - 0x18], eax
+0058709a  jmp      0x5870a9
+0058709c  mov      dword ptr [ebp - 0x24], eax
+0058709f  jmp      0x5870a9
+005870a1  mov      dword ptr [ebp - 0x28], eax

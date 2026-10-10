@@ -28,3 +28,7 @@
 004f9b41  add      eax, 0x1468
 004f9b46  je       0x4fa6bc
 004f9b4c  xor      ecx, ecx
+004f9b4e  .byte    0x89
+004f9b4f  .byte    0x8d
+004f9b50  push     esp
+004f9b51  .byte    0xff

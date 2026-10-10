@@ -25,3 +25,5 @@
 0052ecff  mov      ecx, dword ptr [esi + 0x1dc]
 0052ed05  lea      eax, [ebp - 0x218]
 0052ed0b  push     eax
+0052ed0c  .byte    0xe8
+0052ed0d  fild     word ptr [eax]

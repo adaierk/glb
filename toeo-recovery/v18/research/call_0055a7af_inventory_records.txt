@@ -36,3 +36,5 @@
 0055a7c7  jmp      0x55a7da
 0055a7c9  movzx    edx, word ptr [eax + 2]
 0055a7cd  lea      ecx, [eax + edx*4]
+0055a7d0  .byte    0x66
+0055a7d1  .byte    0x8b

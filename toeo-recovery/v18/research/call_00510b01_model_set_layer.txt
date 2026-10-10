@@ -1,0 +1,33 @@
+00510ac5  mov      ecx, dword ptr [esi + 0xc0]
+00510acb  push     edi
+00510acc  push     edx
+00510acd  call     0x518ed0
+00510ad2  test     al, al
+00510ad4  pop      edi
+00510ad5  jne      0x510ae9
+00510ad7  pop      esi
+00510ad8  xor      al, al
+00510ada  pop      ebx
+00510adb  mov      ecx, dword ptr [ebp - 0xc]
+00510ade  mov      dword ptr fs:[0], ecx
+00510ae5  mov      esp, ebp
+00510ae7  pop      ebp
+00510ae8  ret      
+00510ae9  mov      al, byte ptr [ebp - 0xd]
+00510aec  test     al, al
+00510aee  je       0x510b29
+00510af0  mov      ecx, dword ptr [esi + 0xc0]
+00510af6  push     1
+00510af8  push     0
+00510afa  push     0xc8
+00510aff  push     1
+00510b01  call     0x518280
+00510b06  mov      ecx, dword ptr [esi + 0xc0]
+00510b0c  push     1
+00510b0e  push     0
+00510b10  push     0xfa
+00510b15  push     2
+00510b17  call     0x518280
+00510b1c  mov      edx, dword ptr [esi + 0xc0]
+00510b22  .byte    0xc6
+00510b23  .byte    0x82

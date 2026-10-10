@@ -1,0 +1,26 @@
+00503fa2  add      dh, byte ptr [ebx]
+00503fa4  leave    
+00503fa5  push     ebx
+00503fa6  mov      dword ptr [ebx + 0x23c], ecx
+00503fac  mov      dword ptr [ebp - 4], 0xffffffff
+00503fb3  call     0x4a7f60
+00503fb8  mov      al, byte ptr [esi + 0x14]
+00503fbb  test     al, al
+00503fbd  je       0x504006
+00503fbf  test     dword ptr [ebx + 0xa8], 0x4000000
+00503fc9  mov      byte ptr [ebx + 0x154], 1
+00503fd0  jne      0x503fff
+00503fd2  mov      al, byte ptr [ebx + 0x155]
+00503fd8  test     al, al
+00503fda  jne      0x503fff
+00503fdc  mov      ecx, ebx
+00503fde  call     0x501470
+00503fe3  mov      ecx, ebx
+00503fe5  call     0x4fef50
+00503fea  mov      ecx, ebx
+00503fec  call     0x500340
+00503ff1  mov      ecx, ebx
+00503ff3  call     0x4ff070
+00503ff8  mov      byte ptr [ebx + 0x155], 1
+00503fff  .byte    0xc6
+00504000  .byte    0x83

@@ -514,3 +514,6 @@
 0050193d  mov      dword ptr [esi + 0x7c], ebx
 00501940  mov      word ptr [esi + 0xa4], bx
 00501947  mov      dword ptr [esi + 0x11c], ebx
+0050194d  .byte    0x66
+0050194e  .byte    0x89
+0050194f  sahf     

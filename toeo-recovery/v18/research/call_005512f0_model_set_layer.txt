@@ -1,0 +1,37 @@
+005512b4  sal      byte ptr [ebp + 0x10], 0x8b
+005512b8  dec      esi
+005512b9  dec      eax
+005512ba  push     1
+005512bc  push     0
+005512be  push     0
+005512c0  push     2
+005512c2  call     0x518280
+005512c7  mov      eax, dword ptr [ebp + 8]
+005512ca  test     eax, eax
+005512cc  jne      0x5512de
+005512ce  mov      ecx, dword ptr [esi + 0x48]
+005512d1  push     1
+005512d3  push     0
+005512d5  push     0
+005512d7  push     3
+005512d9  call     0x518280
+005512de  mov      eax, dword ptr [ebp - 0x18]
+005512e1  test     eax, eax
+005512e3  jne      0x5512f5
+005512e5  mov      ecx, dword ptr [esi + 0x48]
+005512e8  push     1
+005512ea  push     0
+005512ec  push     0
+005512ee  push     4
+005512f0  call     0x518280
+005512f5  mov      ecx, dword ptr [esi + 0x48]
+005512f8  call     0x518ac0
+005512fd  mov      ecx, dword ptr [ebp - 0xc]
+00551300  mov      al, byte ptr [ebp - 0x11]
+00551303  pop      edi
+00551304  pop      esi
+00551305  mov      dword ptr fs:[0], ecx
+0055130c  pop      ebx
+0055130d  mov      esp, ebp
+0055130f  pop      ebp
+00551310  ret      0xc

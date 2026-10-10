@@ -33,3 +33,4 @@
 005b473e  xor      eax, eax
 005b4740  jmp      0x5b4753
 005b4742  movzx    edx, word ptr [eax + 2]
+005b4746  .byte    0x8d

@@ -25,3 +25,4 @@
 004f9e5c  je       0x4f9f1b
 004f9e62  xor      ecx, ecx
 004f9e64  mov      dword ptr [ebp - 0x5c], ecx
+004f9e67  .byte    0x89

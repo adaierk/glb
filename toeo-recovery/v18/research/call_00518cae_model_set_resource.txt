@@ -1,0 +1,35 @@
+00518c72  mov      ecx, esi
+00518c74  call     0x518280
+00518c79  mov      eax, dword ptr [esi + 0x28]
+00518c7c  test     eax, eax
+00518c7e  jl       0x518c9f
+00518c80  push     0
+00518c82  add      eax, 0xc9
+00518c87  push     eax
+00518c88  mov      ecx, esi
+00518c8a  call     0x517f70
+00518c8f  mov      ecx, dword ptr [esi + 0x28]
+00518c92  add      ecx, 2
+00518c95  push     0
+00518c97  push     ecx
+00518c98  mov      ecx, esi
+00518c9a  call     0x517f70
+00518c9f  mov      eax, dword ptr [esi + 0x2c]
+00518ca2  test     eax, eax
+00518ca4  jl       0x518cb3
+00518ca6  push     0
+00518ca8  add      eax, 0x32
+00518cab  push     eax
+00518cac  mov      ecx, esi
+00518cae  call     0x517f70
+00518cb3  mov      eax, dword ptr [esi + 0x30]
+00518cb6  test     eax, eax
+00518cb8  jl       0x518cc7
+00518cba  push     0
+00518cbc  add      eax, 0x64
+00518cbf  push     eax
+00518cc0  mov      ecx, esi
+00518cc2  call     0x517f70
+00518cc7  mov      ecx, esi
+00518cc9  call     0x517ef0
+00518cce  mov      edx, dword ptr [edi + 0x38]

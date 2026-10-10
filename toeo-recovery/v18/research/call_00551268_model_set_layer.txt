@@ -1,0 +1,33 @@
+0055122c  mov      ecx, dword ptr [esi + 0x48]
+0055122f  push     1
+00551231  je       0x550feb
+00551237  push     1
+00551239  call     0x5190f0
+0055123e  jmp      0x550ffc
+00551243  mov      eax, 0x551101
+00551248  ret      
+00551249  jmp      0x551101
+0055124e  xor      edx, edx
+00551250  mov      ecx, dword ptr [edi]
+00551252  cmp      ecx, edx
+00551254  je       0x551290
+00551256  mov      eax, dword ptr [edi + 4]
+00551259  cmp      eax, edx
+0055125b  je       0x551290
+0055125d  mov      edx, dword ptr [edi + 8]
+00551260  push     1
+00551262  push     edx
+00551263  push     eax
+00551264  push     ecx
+00551265  mov      ecx, dword ptr [esi + 0x48]
+00551268  call     0x518280
+0055126d  mov      eax, dword ptr [edi]
+0055126f  lea      ecx, [eax - 1]
+00551272  cmp      ecx, 3
+00551275  ja       0x551290
+00551277  jmp      dword ptr [ecx*4 + 0x551314]
+0055127e  mov      dword ptr [ebp + 0x10], eax
+00551281  jmp      0x551290
+00551283  mov      dword ptr [ebp + 0xc], eax
+00551286  jmp      0x551290
+00551288  mov      dword ptr [ebp + 8], eax

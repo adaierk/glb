@@ -1,0 +1,72 @@
+00501c86  mov      ecx, esi
+00501c88  call     0x4ff9c0
+00501c8d  mov      ecx, esi
+00501c8f  call     0x501400
+00501c94  pop      edi
+00501c95  pop      esi
+00501c96  mov      esp, ebp
+00501c98  pop      ebp
+00501c99  ret      4
+00501c9c  int3     
+00501c9d  int3     
+00501c9e  int3     
+00501c9f  int3     
+00501ca0  push     ebp
+00501ca1  mov      ebp, esp
+00501ca3  push     esi
+00501ca4  push     edi
+00501ca5  mov      edi, dword ptr [ebp + 8]
+00501ca8  test     edi, edi
+00501caa  mov      esi, ecx
+00501cac  jl       0x501d20
+00501cae  call     0x41a7d0
+00501cb3  cmp      edi, eax
+00501cb5  jg       0x501d20
+00501cb7  mov      ecx, dword ptr [esi + 0x110]
+00501cbd  call     0x405e70
+00501cc2  test     al, al
+00501cc4  je       0x501d18
+00501cc6  mov      eax, dword ptr [esi + 0x114]
+00501ccc  cmp      dword ptr [eax + 0x1ac], edi
+00501cd2  je       0x501d18
+00501cd4  mov      dword ptr [eax + 0x1ac], edi
+00501cda  mov      eax, dword ptr [esi + 0x158]
+00501ce0  test     eax, eax
+00501ce2  je       0x501cf9
+00501ce4  mov      ecx, esi
+00501ce6  call     0x500dd0
+00501ceb  mov      ecx, esi
+00501ced  call     0x501470
+00501cf2  mov      ecx, esi
+00501cf4  call     0x4fef50
+00501cf9  mov      eax, dword ptr [esi + 0x15c]
+00501cff  test     eax, eax
+00501d01  je       0x501d18
+00501d03  mov      ecx, esi
+00501d05  call     0x5004b0
+00501d0a  mov      ecx, esi
+00501d0c  call     0x500340
+00501d11  mov      ecx, esi
+00501d13  call     0x4ff070
+00501d18  pop      edi
+00501d19  mov      al, 1
+00501d1b  pop      esi
+00501d1c  pop      ebp
+00501d1d  ret      4
+00501d20  pop      edi
+00501d21  xor      al, al
+00501d23  pop      esi
+00501d24  pop      ebp
+00501d25  ret      4
+00501d28  int3     
+00501d29  int3     
+00501d2a  int3     
+00501d2b  int3     
+00501d2c  int3     
+00501d2d  int3     
+00501d2e  int3     
+00501d2f  int3     
+00501d30  push     esi
+00501d31  mov      esi, ecx
+00501d33  mov      al, byte ptr [esi + 0x154]
+00501d39  .byte    0x84

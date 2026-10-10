@@ -1,0 +1,39 @@
+0050f5e9  mov      al, byte ptr [0x890050f6]
+0050f5ee  jne      0x50f5ec
+0050f5f0  jmp      0x50f5ff
+0050f5f2  mov      dword ptr [ebp - 8], esi
+0050f5f5  jmp      0x50f5ff
+0050f5f7  mov      dword ptr [ebp - 0xc], esi
+0050f5fa  jmp      0x50f5ff
+0050f5fc  mov      dword ptr [ebp - 0x10], esi
+0050f5ff  inc      ebx
+0050f600  cmp      ebx, 0x11
+0050f603  jl       0x50f59f
+0050f605  mov      al, byte ptr [edi + 0xc4]
+0050f60b  pop      esi
+0050f60c  test     al, al
+0050f60e  mov      eax, dword ptr [ebp - 4]
+0050f611  pop      ebx
+0050f612  je       0x50f63c
+0050f614  test     eax, eax
+0050f616  jne      0x50f62a
+0050f618  push     1
+0050f61a  push     0
+0050f61c  push     0xc8
+0050f621  push     1
+0050f623  mov      ecx, edi
+0050f625  call     0x518280
+0050f62a  mov      eax, dword ptr [ebp - 8]
+0050f62d  test     eax, eax
+0050f62f  jne      0x50f668
+0050f631  push     1
+0050f633  push     0
+0050f635  push     0xfa
+0050f63a  jmp      0x50f65f
+0050f63c  test     eax, eax
+0050f63e  jne      0x50f652
+0050f640  push     1
+0050f642  push     0
+0050f644  .byte    0x68
+0050f645  .byte    0xc8
+0050f646  add      byte ptr [eax], al

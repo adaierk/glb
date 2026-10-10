@@ -1,0 +1,37 @@
+004fef7e  inc      ebp
+004fef7f  clc      
+004fef80  mov      dword ptr [ebp - 0xc], eax
+004fef83  mov      dword ptr [ebp - 0x10], eax
+004fef86  mov      ebx, 1
+004fef8b  jmp      0x4fef90
+004fef8d  mov      ecx, dword ptr [ebp - 0x14]
+004fef90  mov      ecx, dword ptr [ecx + 0x1e0]
+004fef96  push     ebx
+004fef97  call     0x51d3a0
+004fef9c  mov      esi, eax
+004fef9e  test     esi, esi
+004fefa0  je       0x4fefe3
+004fefa2  mov      ecx, dword ptr [esi + 0x18]
+004fefa5  test     ecx, ecx
+004fefa7  je       0x4fefe3
+004fefa9  mov      eax, dword ptr [esi + 0x14]
+004fefac  test     eax, eax
+004fefae  je       0x4fefe3
+004fefb0  mov      edx, dword ptr [esi + 0x10]
+004fefb3  push     1
+004fefb5  push     edx
+004fefb6  push     eax
+004fefb7  push     ecx
+004fefb8  mov      ecx, edi
+004fefba  call     0x518280
+004fefbf  mov      esi, dword ptr [esi + 0x18]
+004fefc2  lea      eax, [esi - 1]
+004fefc5  cmp      eax, 3
+004fefc8  ja       0x4fefe3
+004fefca  jmp      dword ptr [eax*4 + 0x4ff054]
+004fefd1  mov      dword ptr [ebp - 4], esi
+004fefd4  jmp      0x4fefe3
+004fefd6  mov      dword ptr [ebp - 8], esi
+004fefd9  jmp      0x4fefe3
+004fefdb  .byte    0x89
+004fefdc  .byte    0x75

@@ -1,0 +1,39 @@
+00518da4  fdiv     st(4)
+00518da6  .byte    0xff
+00518da7  call     ptr [ebp - 0x3e]
+00518daa  add      al, 0
+00518dac  mov      eax, dword ptr [ecx + 0x24]
+00518daf  push     1
+00518db1  push     0
+00518db3  add      eax, 0x1c
+00518db6  push     eax
+00518db7  push     5
+00518db9  call     0x518280
+00518dbe  pop      ebp
+00518dbf  ret      4
+00518dc2  push     1
+00518dc4  push     0
+00518dc6  push     0x24
+00518dc8  push     5
+00518dca  call     0x518280
+00518dcf  pop      ebp
+00518dd0  ret      4
+00518dd3  mov      edx, dword ptr [ecx + 0x24]
+00518dd6  push     0
+00518dd8  push     0
+00518dda  add      edx, 0x1c
+00518ddd  push     edx
+00518dde  push     5
+00518de0  call     0x518280
+00518de5  pop      ebp
+00518de6  ret      4
+00518de9  lea      ecx, [ecx]
+00518dec  xor      cl, byte ptr [ebp - 0x72b7ffaf]
+00518df2  push     ecx
+00518df3  add      byte ptr [ecx - 0x73], bl
+00518df6  push     ecx
+00518df7  add      byte ptr [edi - 0x73], ch
+00518dfa  push     ecx
+00518dfb  add      byte ptr [ebp - 0x69ffae73], al
+00518e01  .byte    0x8d
+00518e02  push     ecx

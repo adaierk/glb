@@ -1,0 +1,31 @@
+005af38f  add      byte ptr [edx + 1], ch
+005af392  call     0x518280
+005af397  mov      ecx, dword ptr [esi + 0x17ec]
+005af39d  push     1
+005af39f  push     0
+005af3a1  push     0
+005af3a3  push     2
+005af3a5  call     0x518280
+005af3aa  mov      ecx, dword ptr [esi + 0x17ec]
+005af3b0  push     1
+005af3b2  push     0
+005af3b4  push     0
+005af3b6  push     3
+005af3b8  call     0x518280
+005af3bd  mov      ecx, dword ptr [esi + 0x17ec]
+005af3c3  push     1
+005af3c5  push     0
+005af3c7  push     0
+005af3c9  push     4
+005af3cb  call     0x518280
+005af3d0  add      edi, 0xcc
+005af3d6  mov      ebx, 4
+005af3db  jmp      0x5af3e0
+005af3dd  lea      ecx, [ecx]
+005af3e0  mov      ecx, dword ptr [edi - 4]
+005af3e3  test     ecx, ecx
+005af3e5  je       0x5af400
+005af3e7  mov      eax, dword ptr [edi]
+005af3e9  test     eax, eax
+005af3eb  je       0x5af400
+005af3ed  .byte    0x8b

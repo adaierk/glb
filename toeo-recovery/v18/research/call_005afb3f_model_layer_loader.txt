@@ -32,3 +32,5 @@
 005afb5b  jmp      0x5afb8d
 005afb5d  push     1
 005afb5f  push     ebx
+005afb60  .byte    0x68
+005afb61  .byte    0xb4

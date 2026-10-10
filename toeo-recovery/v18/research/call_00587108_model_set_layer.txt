@@ -1,0 +1,33 @@
+005870cc  inc      ebp
+005870cd  fadd     qword ptr [ebp + 0x6a0f75c0]
+005870d3  add      dword ptr [edx], ebp
+005870d6  push     0
+005870d8  push     2
+005870da  mov      ecx, edi
+005870dc  call     0x518280
+005870e1  mov      eax, dword ptr [ebp - 0x28]
+005870e4  test     eax, eax
+005870e6  jne      0x5870f7
+005870e8  push     1
+005870ea  push     0
+005870ec  push     0
+005870ee  push     3
+005870f0  mov      ecx, edi
+005870f2  call     0x518280
+005870f7  mov      eax, dword ptr [ebp - 0x20]
+005870fa  test     eax, eax
+005870fc  jne      0x58710d
+005870fe  push     1
+00587100  push     0
+00587102  push     0
+00587104  push     4
+00587106  mov      ecx, edi
+00587108  call     0x518280
+0058710d  mov      ecx, edi
+0058710f  call     0x518ac0
+00587114  mov      ebx, dword ptr [ebp - 0x1c]
+00587117  mov      eax, dword ptr [ebp - 0x14]
+0058711a  mov      ebx, dword ptr [ebx]
+0058711c  cmp      ebx, dword ptr [eax + 0x104]
+00587122  mov      dword ptr [ebp - 0x1c], ebx
+00587125  jne      0x586eda

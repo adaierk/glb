@@ -37,3 +37,4 @@
 00551110  mov      esp, ebp
 00551112  pop      ebp
 00551113  ret      0xc
+00551116  .byte    0x85

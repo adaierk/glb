@@ -1,0 +1,36 @@
+005afbf7  add      byte ptr [eax], al
+005afbf9  lea      eax, [ecx + ecx*4]
+005afbfc  shl      eax, 5
+005afbff  mov      ecx, dword ptr [eax + edx]
+005afc02  add      eax, edx
+005afc04  cmp      ecx, edi
+005afc06  jne      0x5afc3e
+005afc08  cmp      dword ptr [ebx + 0x50], 1
+005afc0c  jne      0x5afc13
+005afc0e  add      eax, 0x20
+005afc11  jmp      0x5afc16
+005afc13  add      eax, 0x60
+005afc16  lea      edi, [eax + 0x14]
+005afc19  mov      ebx, 4
+005afc1e  mov      edi, edi
+005afc20  mov      ecx, dword ptr [edi + 4]
+005afc23  mov      edx, dword ptr [edi]
+005afc25  mov      eax, dword ptr [edi - 4]
+005afc28  push     1
+005afc2a  push     ecx
+005afc2b  mov      ecx, dword ptr [esi + 0xf0]
+005afc31  push     edx
+005afc32  push     eax
+005afc33  call     0x518280
+005afc38  add      edi, 0xc
+005afc3b  dec      ebx
+005afc3c  jne      0x5afc20
+005afc3e  mov      ecx, dword ptr [esi + 0xf0]
+005afc44  call     0x518ac0
+005afc49  mov      ecx, dword ptr [esi + 0xf8]
+005afc4f  push     1
+005afc51  push     ecx
+005afc52  .byte    0x8b
+005afc53  .byte    0x8e
+005afc54  .byte    0xf0
+005afc55  .byte    0x00

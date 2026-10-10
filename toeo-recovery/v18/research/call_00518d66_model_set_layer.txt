@@ -1,0 +1,40 @@
+00518d2a  add      bh, bh
+00518d2c  and      al, 0x85
+00518d2e  in       al, dx
+00518d2f  lea      edx, [ecx]
+00518d32  mov      eax, dword ptr [ecx + 0x24]
+00518d35  push     1
+00518d37  push     0
+00518d39  add      eax, 0xa
+00518d3c  push     eax
+00518d3d  push     5
+00518d3f  call     0x518280
+00518d44  pop      ebp
+00518d45  ret      4
+00518d48  push     1
+00518d4a  push     0
+00518d4c  push     0x12
+00518d4e  push     5
+00518d50  call     0x518280
+00518d55  pop      ebp
+00518d56  ret      4
+00518d59  mov      edx, dword ptr [ecx + 0x24]
+00518d5c  push     0
+00518d5e  push     0
+00518d60  add      edx, 0xa
+00518d63  push     edx
+00518d64  push     5
+00518d66  call     0x518280
+00518d6b  pop      ebp
+00518d6c  ret      4
+00518d6f  mov      eax, dword ptr [ecx + 0x24]
+00518d72  push     1
+00518d74  push     0
+00518d76  add      eax, 0x13
+00518d79  push     eax
+00518d7a  push     5
+00518d7c  call     0x518280
+00518d81  pop      ebp
+00518d82  ret      4
+00518d85  push     1
+00518d87  push     0

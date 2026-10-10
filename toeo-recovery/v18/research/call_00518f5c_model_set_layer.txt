@@ -1,0 +1,28 @@
+00518f20  add      dword ptr [ecx + 0x66a344e], ecx
+00518f26  mov      ecx, esi
+00518f28  mov      dword ptr [esi], edi
+00518f2a  mov      dword ptr [esi + 0x30], eax
+00518f2d  mov      dword ptr [esi + 0xc0], 0
+00518f37  mov      dword ptr [esi + 0x38], 0
+00518f3e  mov      dword ptr [esi + 0x44], edx
+00518f41  mov      byte ptr [esi + 0xc4], 0
+00518f48  call     0x518280
+00518f4d  mov      eax, dword ptr [esi + 0x24]
+00518f50  push     1
+00518f52  push     0
+00518f54  add      eax, 0xa
+00518f57  push     eax
+00518f58  push     5
+00518f5a  mov      ecx, esi
+00518f5c  call     0x518280
+00518f61  mov      eax, dword ptr [esi + 0x28]
+00518f64  test     eax, eax
+00518f66  jl       0x518f87
+00518f68  push     0
+00518f6a  add      eax, 0xc9
+00518f6f  push     eax
+00518f70  mov      ecx, esi
+00518f72  call     0x517f70
+00518f77  mov      ecx, dword ptr [esi + 0x28]
+00518f7a  add      ecx, 2
+00518f7d  push     0
