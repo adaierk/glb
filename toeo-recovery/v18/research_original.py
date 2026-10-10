@@ -172,7 +172,7 @@ for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
  for index in range(count):
   size=struct.unpack_from('<I',body,offset)[0];offset+=4
   value=decrypt_blocks(body[offset:offset+size],b'cpd text');plain[offset:offset+size]=value
-  string_map[offset]=value.split(b'\\0',1)[0].decode('cp932');offset+=size
+  string_map[offset]=value.split(bytes(1),1)[0].decode('cp932');offset+=size
  assert offset==len(body)
  rows=[]
  for index in range(row_count):
@@ -197,7 +197,7 @@ for index in range(row_count):
 (OUT/'crs_decoded.json').write_text(json.dumps(decoded_crs,ensure_ascii=False,indent=2))
 kinds=[]
 for index in range(21):
- ptr,value=struct.unpack('<II',pe.get_data(0x7a2d60-base+8*index,8))
+ value,ptr=struct.unpack('<II',pe.get_data(0x7a2d60-base+8*index,8))
  text=pe.get_data(ptr-base,100).split(bytes(1),1)[0].decode('cp932') if base<=ptr<0x800000 else None
  kinds.append({'name':text,'value':value})
 (OUT/'cpd_kind_ids.json').write_text(json.dumps(kinds,indent=2))
