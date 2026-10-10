@@ -11,6 +11,11 @@ binary=raw/'DefaultComponent/ToEO_CL.dat';data=binary.read_bytes()
 assert hashlib.sha256(data).hexdigest()=='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 pe=pefile.PE(data=data);base=pe.OPTIONAL_HEADER.ImageBase;cs=Cs(CS_ARCH_X86,CS_MODE_32);cs.skipdata=True
 ranges={
+ 'crs_lookup_init':(0x4d9e00,0xc00),
+ 'crs_decoder_setup':(0x41b480,0x500),
+ 'crs_table_load':(0x430680,0x1400),
+ 'battle_visual_apply':(0x4ff070,0x160),
+ 'cpd_bank_registration':(0x4d7000,0xe00),
  'cpd_component_parse':(0x42da22,0x280),
  'weapon_resource_setup':(0x4d8000,0x190),
  'component_resource_lookup':(0x42bbf0,0x100),
@@ -147,7 +152,7 @@ for encoding in ('ascii','utf-16le'):
  pattern=rb'[\x20-\x7e]{5,}' if encoding=='ascii' else rb'(?:[\x20-\x7e]\x00){5,}'
  for m in re.finditer(pattern,data):
   value=m.group().decode(encoding)
-  if any(k in value.lower() for k in ('cpd','pc_weapon','pc_hat','crsid','cpdt','cpdtable','clut')):
+  if any(k in value.lower() for k in ('cpd','pc_weapon','pc_hat','crsid','cpdt','cpdtable','clut','crs')):
    va=base+pe.get_rva_from_offset(m.start());refs=[]
    for section in pe.sections:
     if not section.Characteristics&0x20000000:continue
@@ -175,3 +180,6 @@ for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
   rows.append({'index':index,'words':words,'labels':[string_map.get(w) for w in words]})
  cpd_decoded.append({'file':name,'strings':list(string_map.values()),'rows':rows})
 (OUT/'cpd_decoded_records.json').write_text(json.dumps(cpd_decoded,ensure_ascii=False,indent=2))
+
+crs=(resources/'crsid.crs').read_bytes()
+(OUT/'crs_header.json').write_text(json.dumps({'bytes':len(crs),'sha256':hashlib.sha256(crs).hexdigest(),'header':crs[:1024].hex(),'ascii':[m.group().decode() for m in re.finditer(rb'[\\x20-\\x7e]{4,}',crs)]},indent=2))
