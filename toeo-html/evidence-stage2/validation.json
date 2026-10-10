@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "runtime": "Chromium file://, offline single HTML",
+  "external_requests": [],
+  "browser_errors": [],
+  "checks": [
+    "complete native map data loads",
+    "native grid conversion",
+    "blocked terrain rejected",
+    "mouse path planner and movement",
+    "save survives reload",
+    "UI purchase and sale",
+    "insufficient funds rejected atomically",
+    "invalid and fractional quantities rejected atomically",
+    "inventory preserved after rejection",
+    "invalid saves rejected",
+    "full-map camera inspection",
+    "mobile viewport fits",
+    "schema 1 save migrates to combat progression",
+    "skill consumes TP and deals damage",
+    "enemy counterattack damages player",
+    "healing item is consumed and restores HP",
+    "victory awards currency, EXP and item",
+    "combat progression survives reload",
+    "retreat grants no rewards"
+  ],
+  "initial": {
+    "schema": 2,
+    "map": "1120108",
+    "grid": [
+      139,
+      313
+    ],
+    "name": "Archive",
+    "gald": 2000,
+    "hp": 100,
+    "tp": 30,
+    "level": 1,
+    "exp": 0,
+    "inventory": {}
+  },
+  "final": {
+    "schema": 2,
+    "map": "1120108",
+    "grid": [
+      143,
+      313
+    ],
+    "name": "Archive",
+    "gald": 1540,
+    "hp": 82,
+    "tp": 22,
+    "level": 1,
+    "exp": 25,
+    "inventory": {
+      "1": 1
+    }
+  },
+  "textures_ready": 29,
+  "limitations": [
+    "Enemy model, official enemy spawn/stat data, original skill animations, plot, map transitions and equipment progression remain pending"
+  ]
+}
