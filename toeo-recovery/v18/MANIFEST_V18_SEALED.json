@@ -1,0 +1,83 @@
+{
+  "version": "v18",
+  "sha256": "7a6201571e010914a302f397dc51b711a0c596989126651ae166edaa8bd737fa",
+  "bytes": 7139715,
+  "entries": 166,
+  "crc_check": "PASS",
+  "archive_source_consistency": "PASS",
+  "user_database_included": false,
+  "checkpoint_commit": "312991c81bd23bb5d7170c0bfac6ae0c8c1bae96",
+  "windows_run_id": 38021208178,
+  "windows_tested_commit": "7d956edef4c1713c388c04c7b5ff7df005011d7e",
+  "windows_artifact_id": 11658687321,
+  "windows_artifact_sha256": "3d7011690f6514c7036631a24e464521c3a712b971bdd841140660883f836db6",
+  "local_checks_passed": 61,
+  "source_files_verified": 118,
+  "images": [
+    {
+      "file": "TOEO_Rashuan_Equipment_20261010_v18.png",
+      "source": "first/original_desktop_170s.png",
+      "source_sha256": "edd089540cafaeb45b05f3d0ea7ee619f4a3f4913cc85534350a172cc70aec44",
+      "sha256": "236be68ebced4e905769bf75782e6a44d897024566a48805098e74a5638dabf5",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_Unequip_20261010_v18.png",
+      "source": "first/original_desktop_210s.png",
+      "source_sha256": "02f6f27a709e63b649709862bb441482e87727c84b00649ac3ceee8eede5337f",
+      "sha256": "8a46dd9d1f6640510328e80abb9293648a00afb506e98e27f43fbdb9849fb014",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_Reequip_20261010_v18.png",
+      "source": "first/original_desktop_230s.png",
+      "source_sha256": "02772b34eaac5fbb67f70159712199596392858f4b5b725d718b975a07a9db14",
+      "sha256": "7c5b1257cb03129390c141b9117375b73dc75ac30c4a4ebe2b2f989202d6d6e8",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_Equipment_Restored_20261010_v18.png",
+      "source": "reentered/original_desktop_150s.png",
+      "source_sha256": "d82b970279f8b6a26fc8f2a412ef32503959bde6636f8c7bb690dc1a94b97620",
+      "sha256": "1bd2a4a68461db5b6057d119d29d7fa158ae2aa86a9937b9cb0ccafac7ef1e08",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; original game pixels unchanged"
+    },
+    {
+      "file": "TOEO_Rashuan_Map_20261010_v18.png",
+      "source": "first/original_desktop_260s.png",
+      "source_sha256": "68b8bb8a26f072d7dc62591c39c50a45f9a1d0c328c0c3ca315c0c71f4febbdf",
+      "sha256": "8b7caf035416aeaac41ee089542c638b74df7c5efdfdeece274e0e4e5cd96360",
+      "crop": [
+        8,
+        32,
+        808,
+        632
+      ],
+      "alterations": "Desktop crop only; original game pixels unchanged"
+    }
+  ]
+}

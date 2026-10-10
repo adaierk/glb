@@ -1,7 +1,7 @@
 {
   "version": "v18",
   "passed": true,
-  "visual_reviewed": false,
+  "visual_reviewed": true,
   "tested_commit": "7d956edef4c1713c388c04c7b5ff7df005011d7e",
   "windows_run_id": 38021208178,
   "artifact_id": 11658687321,
@@ -52,9 +52,13 @@
   "source_files_verified": 118,
   "equipment_fixture_provenance": "Explicit Local Test Sword / Local Test Body, provisional local maxHP+10; official item masters unresolved",
   "appearance_restored": true,
-  "native_exceptions": {
+  "native_exception_samples": {
     "first": 21,
     "reentered": 18
+  },
+  "native_exception_last_observed_count": {
+    "first": 65536,
+    "reentered": 8192
   },
   "limitations": [
     "Official gear stats, job/level rules and starter gear unresolved",
