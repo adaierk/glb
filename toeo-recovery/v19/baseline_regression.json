@@ -1,8 +1,8 @@
 {
-  "windows_run_id": 38025678125,
-  "tested_commit": "121ac86ac87d8b24ab18f80b96bc13323b89ac07",
-  "artifact_id": 11660420391,
-  "artifact_sha256": "510ee447f540080c1142b3d2adf736ef296c8c23930d5cd760c6b5f16f5f718b",
+  "run": 38026848766,
+  "tested_commit": "7c83363bc5c1c8c7e6f3a8790c884282278f9dbc",
+  "artifact": 11660975736,
+  "sha256": "1f62a91e60d403c343b2c5ddab0a6f0f8fe2daaf623579be0f14f9002f651f89",
   "passed": true,
   "first": {
     "native_session_created": true,
@@ -292,8 +292,12 @@
         5024
       ],
       [
-        4370.2265625,
-        5078.88671875
+        4306.2265625,
+        5110.88671875
+      ],
+      [
+        4224,
+        5152
       ],
       [
         4224,
@@ -326,92 +330,91 @@
         "event": "native_exception",
         "count": 1,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f990",
           "ebx": "0x0",
           "ecx": "0x2",
           "edx": "0x0",
           "esi": "0x19fe8c",
-          "edi": "0x75f8d600",
+          "edi": "0x75dcd600",
           "ebp": "0x19f9ec",
           "esp": "0x19f990",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0x40010006",
-          "0x75e02154",
-          "0x75edcc20",
+          "0x76132154",
+          "0x7620cc20",
           "0x40479e",
           "0x405e19",
           "0x6baf8b",
-          "0x75f85d49",
-          "0x77ddd7eb",
-          "0x77ddd771"
+          "0x75dc5d49",
+          "0x7722d7eb",
+          "0x7722d771"
         ],
-        "host_time": 1791608121.939339
+        "host_time": 1791609343.100156
       },
       {
         "event": "native_exception",
         "count": 2,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x467fa78",
+          "eax": "0x471fa78",
           "ebx": "0x19930520",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x467fbf8",
-          "edi": "0x72d7cb98",
-          "ebp": "0x467fad4",
-          "esp": "0x467fa78",
-          "eip": "0x75e02154"
+          "esi": "0x471fbf8",
+          "edi": "0x721ccb98",
+          "ebp": "0x471fad4",
+          "esp": "0x471fa78",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x767848d9",
-          "0x72d5a0f5",
-          "0x72d5a51e",
-          "0x72d5a3b5",
-          "0x72d5d8eb",
-          "0x72d60a1c",
-          "0x7676e9eb",
-          "0x75f85d49",
-          "0x77ddd7eb",
-          "0x77ddd771",
-          "0x77a2ac36"
+          "0x76132154",
+          "0x75f448d9",
+          "0x721aa0f5",
+          "0x721aa51e",
+          "0x721aa3b5",
+          "0x721ad8eb",
+          "0x721b0a1c",
+          "0x75f2e9eb",
+          "0x75dc5d49",
+          "0x7722d7eb",
+          "0x7722d771"
         ],
-        "host_time": 1791608123.635072
+        "host_time": 1791609344.8185356
       },
       {
         "event": "native_exception",
         "count": 3,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f538",
           "ebx": "0x19f604",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
           "ebp": "0x19f594",
           "esp": "0x19f538",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -421,34 +424,34 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608269.7917504
+        "host_time": 1791609489.9071224
       },
       {
         "event": "native_exception",
         "count": 4,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -458,33 +461,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608269.796744
+        "host_time": 1791609489.9101224
       },
       {
         "event": "native_exception",
         "count": 5,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -495,34 +498,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608269.8007443
+        "host_time": 1791609489.9127002
       },
       {
         "event": "native_exception",
         "count": 6,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f538",
           "ebx": "0x19f604",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
           "ebp": "0x19f594",
           "esp": "0x19f538",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -532,34 +535,34 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608269.805744
+        "host_time": 1791609489.915701
       },
       {
         "event": "native_exception",
         "count": 7,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -569,33 +572,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608269.8107553
+        "host_time": 1791609489.918123
       },
       {
         "event": "native_exception",
         "count": 8,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -606,34 +609,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608269.814744
+        "host_time": 1791609489.9207003
       },
       {
         "event": "native_exception",
         "count": 16,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19eb78",
+          "eax": "0x19e538",
           "ebx": "0x19f4a4",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ebd4",
-          "esp": "0x19eb78",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -643,33 +646,33 @@
           "0x5c4587",
           "0x5c7fc3"
         ],
-        "host_time": 1791608269.8207607
+        "host_time": 1791609489.9241323
       },
       {
         "event": "native_exception",
         "count": 32,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -680,34 +683,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608269.9073193
+        "host_time": 1791609489.9697013
       },
       {
         "event": "native_exception",
         "count": 64,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -717,33 +720,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608270.068917
+        "host_time": 1791609490.0557075
       },
       {
         "event": "native_exception",
         "count": 128,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19daa8",
+          "eax": "0x19ce28",
           "ebx": "0x19ec84",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19db04",
-          "esp": "0x19daa8",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -754,34 +757,34 @@
           "0x5d48d0",
           "0x5eba08"
         ],
-        "host_time": 1791608270.2931583
+        "host_time": 1791609490.1710334
       },
       {
         "event": "native_exception",
         "count": 256,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -791,33 +794,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608270.8547084
+        "host_time": 1791609490.4692066
       },
       {
         "event": "native_exception",
         "count": 512,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -828,34 +831,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608271.8549042
+        "host_time": 1791609490.9847562
       },
       {
         "event": "native_exception",
         "count": 1024,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19eb78",
+          "eax": "0x19e538",
           "ebx": "0x19f4a4",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ebd4",
-          "esp": "0x19eb78",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -865,33 +868,33 @@
           "0x5c4587",
           "0x5c7fc3"
         ],
-        "host_time": 1791608273.8444498
+        "host_time": 1791609491.998113
       },
       {
         "event": "native_exception",
         "count": 2048,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -902,34 +905,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608277.8656044
+        "host_time": 1791609494.1135435
       },
       {
         "event": "native_exception",
         "count": 4096,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -939,33 +942,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608285.9883692
+        "host_time": 1791609498.1967306
       },
       {
         "event": "native_exception",
         "count": 8192,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19daa8",
+          "eax": "0x19ce28",
           "ebx": "0x19ec84",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19db04",
-          "esp": "0x19daa8",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -976,34 +979,34 @@
           "0x5d48d0",
           "0x5eba08"
         ],
-        "host_time": 1791608304.684938
+        "host_time": 1791609506.205724
       },
       {
         "event": "native_exception",
         "count": 16384,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x75243468",
-          "0x751b8fbb",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74693468",
+          "0x74608fbb",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -1013,33 +1016,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608343.532629
+        "host_time": 1791609525.6271327
       },
       {
         "event": "native_exception",
         "count": 32768,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7527b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x746cb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x751b9078",
-          "0x7525f762",
-          "0x7524b9c1",
-          "0x7523dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x74609078",
+          "0x746af762",
+          "0x7469b9c1",
+          "0x7468dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -1050,7 +1053,7 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608419.971476
+        "host_time": 1791609568.063121
       }
     ],
     "npc_selected_native": false,
@@ -1097,7 +1100,7 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608269.9773576
+        "host_time": 1791609490.1826935
       },
       {
         "event": "native_player_inventory_state",
@@ -1117,7 +1120,7 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608297.0001185
+        "host_time": 1791609517.2046385
       },
       {
         "event": "native_player_inventory_state",
@@ -1125,7 +1128,7 @@
         "items": 0,
         "capacity": 32,
         "order": [],
-        "host_time": 1791608315.016167
+        "host_time": 1791609535.2192953
       },
       {
         "event": "native_player_inventory_state",
@@ -1145,7 +1148,7 @@
             "icon_id": 1
           }
         ],
-        "host_time": 1791608332.0291235
+        "host_time": 1791609552.236768
       },
       {
         "event": "native_player_inventory_state",
@@ -1153,7 +1156,7 @@
         "items": 0,
         "capacity": 32,
         "order": [],
-        "host_time": 1791608350.0416832
+        "host_time": 1791609569.2490306
       },
       {
         "event": "native_player_inventory_state",
@@ -1173,7 +1176,7 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608367.052215
+        "host_time": 1791609587.263978
       },
       {
         "event": "native_player_inventory_state",
@@ -1181,7 +1184,7 @@
         "items": 0,
         "capacity": 32,
         "order": [],
-        "host_time": 1791608384.0616095
+        "host_time": 1791609604.2808332
       }
     ],
     "saved_inventory": {
@@ -1235,7 +1238,7 @@
       {
         "event": "native_player_equipment_state",
         "order": [],
-        "host_time": 1791608270.0819232
+        "host_time": 1791609490.2632012
       },
       {
         "event": "native_player_equipment_state",
@@ -1251,49 +1254,7 @@
             "icon_id": 1
           }
         ],
-        "host_time": 1791608297.1178443
-      },
-      {
-        "event": "native_player_equipment_state",
-        "order": [
-          {
-            "slot": 1,
-            "identity": [
-              1895825409,
-              1,
-              1,
-              0
-            ],
-            "icon_id": 1
-          },
-          {
-            "slot": 2,
-            "identity": [
-              1895825410,
-              1,
-              1,
-              0
-            ],
-            "icon_id": 857
-          }
-        ],
-        "host_time": 1791608314.642386
-      },
-      {
-        "event": "native_player_equipment_state",
-        "order": [
-          {
-            "slot": 2,
-            "identity": [
-              1895825410,
-              1,
-              1,
-              0
-            ],
-            "icon_id": 857
-          }
-        ],
-        "host_time": 1791608331.667001
+        "host_time": 1791609517.2996416
       },
       {
         "event": "native_player_equipment_state",
@@ -1319,23 +1280,23 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608349.1945097
+        "host_time": 1791609534.3207555
       },
       {
         "event": "native_player_equipment_state",
         "order": [
           {
-            "slot": 1,
+            "slot": 2,
             "identity": [
-              1895825409,
+              1895825410,
               1,
               1,
               0
             ],
-            "icon_id": 1
+            "icon_id": 857
           }
         ],
-        "host_time": 1791608366.7199879
+        "host_time": 1791609551.8486638
       },
       {
         "event": "native_player_equipment_state",
@@ -1361,7 +1322,49 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608384.2501469
+        "host_time": 1791609569.374566
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          }
+        ],
+        "host_time": 1791609586.3993452
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791609603.9198194
       }
     ],
     "equipment_matches_database_native": true,
@@ -1375,7 +1378,7 @@
         "tp": 30,
         "max_hp": 100,
         "max_tp": 30,
-        "host_time": 1791608270.0819232
+        "host_time": 1791609490.2632012
       },
       {
         "event": "native_player_vitals_state",
@@ -1383,7 +1386,7 @@
         "tp": 30,
         "max_hp": 110,
         "max_tp": 30,
-        "host_time": 1791608314.642386
+        "host_time": 1791609534.3207555
       },
       {
         "event": "native_player_vitals_state",
@@ -1391,7 +1394,7 @@
         "tp": 30,
         "max_hp": 100,
         "max_tp": 30,
-        "host_time": 1791608366.7199879
+        "host_time": 1791609586.3993452
       },
       {
         "event": "native_player_vitals_state",
@@ -1399,7 +1402,7 @@
         "tp": 30,
         "max_hp": 110,
         "max_tp": 30,
-        "host_time": 1791608384.251148
+        "host_time": 1791609603.9198194
       }
     ],
     "equipment_hp_bonus_native": true,
@@ -1413,7 +1416,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 200,
-            "native_component": "0xae4a0f4",
+            "native_component": "0xae360e4",
             "descriptor": {
               "symbol": "ID_BODY",
               "map_amd": "m_body.amd",
@@ -1421,14 +1424,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_11.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1436,11 +1439,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608270.0829215
+        "host_time": 1791609490.2632012
       },
       {
         "event": "native_player_visual_state",
@@ -1463,7 +1466,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 200,
-            "native_component": "0xae4a0f4",
+            "native_component": "0xae360e4",
             "descriptor": {
               "symbol": "ID_BODY",
               "map_amd": "m_body.amd",
@@ -1471,14 +1474,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_11.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc19bc14",
+            "native_component": "0xc19aa54",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -1486,14 +1489,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0x106b2918",
+            "render_node": "0x103b68f0",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1501,11 +1504,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608297.1178443
+        "host_time": 1791609517.3036375
       },
       {
         "event": "native_player_visual_state",
@@ -1540,7 +1543,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 4000,
-            "native_component": "0xae4ac1c",
+            "native_component": "0xae36c0c",
             "descriptor": {
               "symbol": "ID_BODY_A000",
               "map_amd": "m_body.amd",
@@ -1548,14 +1551,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_00.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc19bc14",
+            "native_component": "0xc19aa54",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -1563,14 +1566,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0x106b2918",
+            "render_node": "0x103b68f0",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1578,11 +1581,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608314.6433873
+        "host_time": 1791609534.3217597
       },
       {
         "event": "native_player_visual_state",
@@ -1605,7 +1608,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 4000,
-            "native_component": "0xae4ac1c",
+            "native_component": "0xae36c0c",
             "descriptor": {
               "symbol": "ID_BODY_A000",
               "map_amd": "m_body.amd",
@@ -1613,14 +1616,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_00.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1628,11 +1631,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608331.6680076
+        "host_time": 1791609551.849243
       },
       {
         "event": "native_player_visual_state",
@@ -1667,7 +1670,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 4000,
-            "native_component": "0xae4ac1c",
+            "native_component": "0xae36c0c",
             "descriptor": {
               "symbol": "ID_BODY_A000",
               "map_amd": "m_body.amd",
@@ -1675,14 +1678,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_00.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc19bc14",
+            "native_component": "0xc19aa54",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -1690,14 +1693,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0x106b00c8",
+            "render_node": "0x103b7508",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1705,11 +1708,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608349.1955094
+        "host_time": 1791609569.375571
       },
       {
         "event": "native_player_visual_state",
@@ -1732,7 +1735,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 200,
-            "native_component": "0xae4a0f4",
+            "native_component": "0xae360e4",
             "descriptor": {
               "symbol": "ID_BODY",
               "map_amd": "m_body.amd",
@@ -1740,14 +1743,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_11.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc19bc14",
+            "native_component": "0xc19aa54",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -1755,14 +1758,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0x106b00c8",
+            "render_node": "0x103b7508",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1770,11 +1773,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608366.7199879
+        "host_time": 1791609586.3993452
       },
       {
         "event": "native_player_visual_state",
@@ -1809,7 +1812,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 4000,
-            "native_component": "0xae4ac1c",
+            "native_component": "0xae36c0c",
             "descriptor": {
               "symbol": "ID_BODY_A000",
               "map_amd": "m_body.amd",
@@ -1817,14 +1820,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_00.bnd"
             },
-            "render_node": "0xce627f0",
+            "render_node": "0xce37be8",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc19bc14",
+            "native_component": "0xc19aa54",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -1832,14 +1835,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0x106b00c8",
+            "render_node": "0x103b7508",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xae49524",
+            "native_component": "0xae35514",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -1847,11 +1850,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xce613c8",
+            "render_node": "0xce3ac48",
             "enabled": 1
           }
         ],
-        "host_time": 1791608384.251148
+        "host_time": 1791609603.920825
       }
     ],
     "visual_components_match_database_native": true,
@@ -1936,10 +1939,6 @@
       [
         4224,
         5152
-      ],
-      [
-        4224,
-        5152
       ]
     ],
     "expected_reentry_position": [
@@ -1951,92 +1950,92 @@
         "event": "native_exception",
         "count": 1,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f990",
           "ebx": "0x0",
           "ecx": "0x2",
           "edx": "0x0",
           "esi": "0x19fe8c",
-          "edi": "0x75f8d600",
+          "edi": "0x75dcd600",
           "ebp": "0x19f9ec",
           "esp": "0x19f990",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0x40010006",
-          "0x75e02154",
-          "0x75edcc20",
+          "0x76132154",
+          "0x7620cc20",
           "0x40479e",
           "0x405e19",
           "0x6baf8b",
-          "0x75f85d49",
-          "0x77ddd7eb",
-          "0x77ddd771"
+          "0x75dc5d49",
+          "0x7722d7eb",
+          "0x7722d771"
         ],
-        "host_time": 1791608429.7090523
+        "host_time": 1791609649.112038
       },
       {
         "event": "native_exception",
         "count": 2,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x462fa78",
+          "eax": "0x3f3fa78",
           "ebx": "0x19930520",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x462fbf8",
-          "edi": "0x72d7cb98",
-          "ebp": "0x462fad4",
-          "esp": "0x462fa78",
-          "eip": "0x75e02154"
+          "esi": "0x3f3fbf8",
+          "edi": "0x721ccb98",
+          "ebp": "0x3f3fad4",
+          "esp": "0x3f3fa78",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x767848d9",
-          "0x72d5a0f5",
-          "0x72d5a51e",
-          "0x72d5a3b5",
-          "0x72d5d8eb",
-          "0x72d60a1c",
-          "0x7676e9eb",
-          "0x75f85d49",
-          "0x77ddd7eb",
-          "0x77ddd771",
-          "0x77a2ac36"
+          "0x76132154",
+          "0x75f448d9",
+          "0x721aa0f5",
+          "0x721aa51e",
+          "0x721aa3b5",
+          "0x721ad8eb",
+          "0x721b0a1c",
+          "0x75f2e9eb",
+          "0x75dc5d49",
+          "0x7722d7eb",
+          "0x7722d771",
+          "0x7529ac36"
         ],
-        "host_time": 1791608430.8027463
+        "host_time": 1791609650.3090713
       },
       {
         "event": "native_exception",
         "count": 3,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f538",
           "ebx": "0x19f604",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
           "ebp": "0x19f594",
           "esp": "0x19f538",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2046,34 +2045,34 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608577.3859847
+        "host_time": 1791609795.7064164
       },
       {
         "event": "native_exception",
         "count": 4,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2083,33 +2082,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608577.3899834
+        "host_time": 1791609795.7094193
       },
       {
         "event": "native_exception",
         "count": 5,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2120,34 +2119,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608577.3949938
+        "host_time": 1791609795.7118585
       },
       {
         "event": "native_exception",
         "count": 6,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
           "eax": "0x19f538",
           "ebx": "0x19f604",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
           "ebp": "0x19f594",
           "esp": "0x19f538",
-          "eip": "0x75e02154"
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2157,34 +2156,34 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608577.3999906
+        "host_time": 1791609795.7144156
       },
       {
         "event": "native_exception",
         "count": 7,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2194,33 +2193,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608577.4039843
+        "host_time": 1791609795.7174175
       },
       {
         "event": "native_exception",
         "count": 8,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2231,34 +2230,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608577.407979
+        "host_time": 1791609795.7198575
       },
       {
         "event": "native_exception",
         "count": 16,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19eb78",
+          "eax": "0x19e538",
           "ebx": "0x19f4a4",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ebd4",
-          "esp": "0x19eb78",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2268,33 +2267,33 @@
           "0x5c4587",
           "0x5c7fc3"
         ],
-        "host_time": 1791608577.4149854
+        "host_time": 1791609795.7228577
       },
       {
         "event": "native_exception",
         "count": 32,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2305,34 +2304,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608577.5049803
+        "host_time": 1791609795.7729583
       },
       {
         "event": "native_exception",
         "count": 64,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2342,33 +2341,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608577.6805284
+        "host_time": 1791609795.868961
       },
       {
         "event": "native_exception",
         "count": 128,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19daa8",
+          "eax": "0x19ce28",
           "ebx": "0x19ec84",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19db04",
-          "esp": "0x19daa8",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2379,34 +2378,34 @@
           "0x5d48d0",
           "0x5eba08"
         ],
-        "host_time": 1791608577.9225235
+        "host_time": 1791609796.003966
       },
       {
         "event": "native_exception",
         "count": 256,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2416,33 +2415,33 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608578.5362663
+        "host_time": 1791609796.3415108
       },
       {
         "event": "native_exception",
         "count": 512,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2453,34 +2452,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608579.608982
+        "host_time": 1791609796.9377456
       },
       {
         "event": "native_exception",
         "count": 1024,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19eb78",
+          "eax": "0x19e538",
           "ebx": "0x19f4a4",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ebd4",
-          "esp": "0x19eb78",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2490,33 +2489,33 @@
           "0x5c4587",
           "0x5c7fc3"
         ],
-        "host_time": 1791608581.776534
+        "host_time": 1791609798.118955
       },
       {
         "event": "native_exception",
         "count": 2048,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19e468",
+          "eax": "0x19d7e8",
           "ebx": "0x19f644",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19e4c4",
-          "esp": "0x19e468",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x748b9078",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2527,34 +2526,34 @@
           "0x430de2",
           "0x402919"
         ],
-        "host_time": 1791608586.1167436
+        "host_time": 1791609800.5032587
       },
       {
         "event": "native_exception",
         "count": 4096,
         "type": "system",
-        "address": "0x75e02154",
+        "address": "0x76132154",
         "registers": {
-          "eax": "0x19ecd0",
+          "eax": "0x19e690",
           "ebx": "0x19f5fc",
           "ecx": "0x3",
           "edx": "0x0",
-          "esi": "0x77c03f34",
-          "edi": "0x7497b4d8",
-          "ebp": "0x19ed2c",
-          "esp": "0x19ecd0",
-          "eip": "0x75e02154"
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x76132154"
         },
         "memory": null,
         "stack": [
           "0xe06d7363",
-          "0x75e02154",
-          "0x77c3b34d",
-          "0x74943468",
-          "0x748b8fbb",
-          "0x7495f762",
-          "0x7494b9c1",
-          "0x7493dae8",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d93468",
+          "0x73d08fbb",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
           "0x623497",
           "0x5e6c90",
           "0x5e87a1",
@@ -2564,7 +2563,44 @@
           "0x4453c8",
           "0x430de2"
         ],
-        "host_time": 1791608594.9467747
+        "host_time": 1791609805.322641
+      },
+      {
+        "event": "native_exception",
+        "count": 8192,
+        "type": "system",
+        "address": "0x76132154",
+        "registers": {
+          "eax": "0x19ce28",
+          "ebx": "0x19ec84",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x76613f34",
+          "edi": "0x73dcb4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x76132154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x76132154",
+          "0x7664b34d",
+          "0x73d09078",
+          "0x73daf762",
+          "0x73d9b9c1",
+          "0x73d8dae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541849",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5d48d0",
+          "0x5eba08"
+        ],
+        "host_time": 1791609814.665919
       }
     ],
     "npc_selected_native": false,
@@ -2588,7 +2624,7 @@
         "items": 0,
         "capacity": 32,
         "order": [],
-        "host_time": 1791608577.7875328
+        "host_time": 1791609796.2099843
       }
     ],
     "saved_inventory": {
@@ -2663,7 +2699,7 @@
             "icon_id": 857
           }
         ],
-        "host_time": 1791608577.4089887
+        "host_time": 1791609795.7969646
       }
     ],
     "equipment_matches_database_native": true,
@@ -2677,7 +2713,7 @@
         "tp": 30,
         "max_hp": 110,
         "max_tp": 30,
-        "host_time": 1791608577.4089887
+        "host_time": 1791609795.7979643
       }
     ],
     "equipment_hp_bonus_native": true,
@@ -2716,7 +2752,7 @@
             "layer": 1,
             "source_bank": 0,
             "resource": 4000,
-            "native_component": "0xadfbc14",
+            "native_component": "0xae45c1c",
             "descriptor": {
               "symbol": "ID_BODY_A000",
               "map_amd": "m_body.amd",
@@ -2724,14 +2760,14 @@
               "battle_amd": "b_body.amd",
               "battle_bnd": "B_body_a_m_00.bnd"
             },
-            "render_node": "0xcdfe6c0",
+            "render_node": "0xcde1cf0",
             "enabled": 1
           },
           {
             "layer": 4,
             "source_bank": 500,
             "resource": 10000,
-            "native_component": "0xc16b28c",
+            "native_component": "0xc15cc84",
             "descriptor": {
               "symbol": "ID_SWORD_000",
               "map_amd": "",
@@ -2739,14 +2775,14 @@
               "battle_amd": "b_sword.amd",
               "battle_bnd": "b_sword_000.bnd"
             },
-            "render_node": "0xcdfa238",
+            "render_node": "0xcde2500",
             "enabled": 1
           },
           {
             "layer": 5,
             "source_bank": 0,
             "resource": 10,
-            "native_component": "0xadfa51c",
+            "native_component": "0xae44524",
             "descriptor": {
               "symbol": "ID_FACE0_1",
               "map_amd": "m_head00.amd",
@@ -2754,11 +2790,11 @@
               "battle_amd": "b_head00.amd",
               "battle_bnd": "B_head_a_m_00.bnd"
             },
-            "render_node": "0xcdf8a08",
+            "render_node": "0xcde14e0",
             "enabled": 1
           }
         ],
-        "host_time": 1791608577.409987
+        "host_time": 1791609795.7979643
       }
     ],
     "visual_components_match_database_native": true,

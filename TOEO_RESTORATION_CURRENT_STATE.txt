@@ -36,7 +36,8 @@ Run_TOEO_Encounter_Test.cmd：新增 --combat-preview，进入本地遭遇测试
 继续保留 v16 的无损 TGA 兼容缓存。
 
 本轮最终验证源提交：7c83363bc5c1c8c7e6f3a8790c884282278f9dbc
-Windows 遭遇实机 run：38026848724
+Windows 遭遇实机 run：38026848724；artifact11660731760，SHA256 4712322dd7c51dcb4940b263464989d00eb067409b137a6df6d76996416c3ee9
+同一源提交的装备/存档/重进地图回归 run：38026848766（通过）
 证据：toeo-recovery/v19/evidence/38026848724/
 源文件验证和原生解析证据：toeo-recovery/v19/verification/7c83363bc5c1c8c7e6f3a8790c884282278f9dbc/
 封包：toeo-recovery/v19/TOEO_Local_World_Recovery_20261010_v19.zip

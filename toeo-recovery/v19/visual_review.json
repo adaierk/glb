@@ -1,0 +1,16 @@
+{
+  "approved": true,
+  "run": 38026848724,
+  "artifact_sha256": "4712322dd7c51dcb4940b263464989d00eb067409b137a6df6d76996416c3ee9",
+  "images_sha256": {
+    "original_desktop_140s.png": "23c3309bcdd43562d0eb4816550384fe34b024174ab3778923030df8d2783ce3",
+    "original_desktop_150s.png": "bc88ccf5ac3cff8022e698f2383432a6cc09f850435dcc8fc3a2b10babd1cf4e",
+    "original_desktop_170s.png": "f87ae4540644e2096c68ba518eea361151e9729cb5f760b22376e0529b214d64"
+  },
+  "notes": [
+    "Actual original Windows pixels, exact 800x600 desktop crop only.",
+    "Map enemy field encounter symbol and native actor state verified; official placement/statistics remain unknown.",
+    "Original battle background and native UI visible, player label and HP bar visible after entity kind field supplied.",
+    "Player and enemy sprites still invisible; no attack, damage, outcome or return-to-map gameplay claimed."
+  ]
+}
