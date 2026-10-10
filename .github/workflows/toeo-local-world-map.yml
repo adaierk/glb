@@ -50,7 +50,7 @@ jobs:
           if('${{ matrix.pump }}' -eq 'original_worker'){$extra=@('--pump')}
           $first=Join-Path $report 'first'
           $second=Join-Path $report 'reentered'
-          & python -u toeo-tests/ci_original_client.py $game $first --duration 245 --use-check --move-check @extra 2>&1 | Tee-Object (Join-Path $report 'first_driver.txt')
+          & python -u toeo-tests/ci_original_client.py $game $first --duration 145 --use-check --move-check @extra 2>&1 | Tee-Object (Join-Path $report 'first_driver.txt')
           if($LASTEXITCODE -ne 0){throw 'First original-client run failed'}
           & python -u toeo-tests/ci_original_client.py $game $second --duration 155 --database (Join-Path $first 'local_accounts.sqlite') --reenter-check --use-check --move-check @extra 2>&1 | Tee-Object (Join-Path $report 'reentry_driver.txt')
           if($LASTEXITCODE -ne 0){throw 'Original-client reentry failed'}

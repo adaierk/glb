@@ -479,7 +479,37 @@
         eax:this.context.eax.toString(),font:phase==='number_font_resource' && !this.context.eax.isNull()?{
           object:this.context.eax.toString(),vtable:this.context.eax.readPointer().toString()}:null})));}});
   }
-  const graphicsMethods=new Set();let hudApiReturns=0;
+  const graphicsMethods=new Set();let hudApiReturns=0,hudStateSamples=0;
+  function graphicsState(device,drawArgs){
+    const vtable=device.readPointer(),out=Memory.alloc(64),state={};
+    function get(offset,values){
+      out.writeByteArray(new Uint8Array(64));
+      const fn=new NativeFunction(vtable.add(offset).readPointer(),'int',
+        ['pointer',...values.map(()=> 'uint'),'pointer'],'stdcall');
+      const hr=fn(device,...values,out);return {hr:'0x'+(hr>>>0).toString(16),value:out.readU32()};
+    }
+    state.fvf=get(0x168,[]);state.render={};
+    for(const id of [7,8,9,14,19,20,22,27,28,52,137,171])state.render[id]=get(0xe8,[id]);
+    state.texture_stages=[];
+    for(let stage=0;stage<2;stage++){
+      const item={stage,states:{}};
+      for(const id of [1,2,3,4,5,6,11,24,28])item.states[id]=get(0x108,[stage,id]);
+      const got=get(0x100,[stage]),texture=out.readPointer();item.texture_result=got.hr;item.texture=texture.toString();
+      if(got.hr==='0x0' && !texture.isNull()){
+        const table=texture.readPointer(),desc=Memory.alloc(32);
+        const fn=new NativeFunction(table.add(0x44).readPointer(),'int',['pointer','uint','pointer'],'stdcall');
+        const hr=fn(texture,0,desc);item.description={hr:'0x'+(hr>>>0).toString(16),fields:[0,4,8,12,16,20,24,28].map(x=>desc.add(x).readU32())};
+        new NativeFunction(table.add(8).readPointer(),'uint',['pointer'],'stdcall')(texture);
+      }
+      state.texture_stages.push(item);
+    }
+    const ptr=drawArgs[3],stride=drawArgs[4].toUInt32();state.vertices=[];
+    if(stride===32)for(let vertex=0;vertex<4;vertex++){
+      const p=ptr.add(vertex*stride);state.vertices.push({xyzw:[0,4,8,12].map(x=>p.add(x).readFloat()),
+        diffuse:p.add(16).readU32(),specular:p.add(20).readU32(),uv:[p.add(24).readFloat(),p.add(28).readFloat()]});
+    }
+    return state;
+  }
   Interceptor.attach(address(0x623410),{onEnter(args){
     const device=args[0];
     if(!device.isNull())for(const [offset,name] of [[0x0c,'TestCooperativeLevel'],[0x118,'ValidateDevice'],[0x14c,'DrawPrimitiveUP']]){
@@ -488,6 +518,8 @@
       Interceptor.attach(method,{onEnter(apiArgs){
         this.hud=activeHud;this.caller=this.returnAddress.toString();
         this.drawArgs=name==='DrawPrimitiveUP'?[1,2,3,4].map(i=>apiArgs[i].toString()):null;
+        if(name==='DrawPrimitiveUP' && this.hud!==null && ++hudStateSamples<=12)
+          emit(safely(()=>({event:'native_hud_graphics_state',frame:this.hud.toString(),...graphicsState(apiArgs[0],apiArgs)})));
       },onLeave(ret){
         if(this.hud===null || ++hudApiReturns>100)return;
         emit({event:'native_hud_d3d_method_result',method:name,caller:this.caller,
