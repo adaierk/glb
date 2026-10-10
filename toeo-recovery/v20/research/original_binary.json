@@ -1,0 +1,33 @@
+{
+  "sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "ranges": {
+    "battle_main_draw": [
+      4406080,
+      656
+    ],
+    "battle_main_tick_complete": [
+      4406736,
+      2560
+    ],
+    "battle_actor_update_and_draw": [
+      5307984,
+      6992
+    ],
+    "battle_pool_update_and_draw": [
+      5331056,
+      3328
+    ],
+    "model_animation_and_draw": [
+      5345600,
+      8192
+    ],
+    "model_resource_ctor": [
+      5344976,
+      624
+    ],
+    "battle_abilities_a3_handler": [
+      5425472,
+      2128
+    ]
+  }
+}
