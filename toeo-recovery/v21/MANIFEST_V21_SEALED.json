@@ -1,0 +1,53 @@
+{
+  "version": "v21",
+  "sha256": "989dcb4f0718e74593bc86d0ffb155c881fbd05d580261f83812f1ae0dc4dc52",
+  "bytes": 384321,
+  "entries": 152,
+  "crc_check": "PASS",
+  "source_consistency": "PASS",
+  "tested_commit": "b5bbf820b2f74d9d04784a268b0439faaed4ddb8",
+  "windows_run_id": 38034331623,
+  "windows_artifact_sha256": "54bedbf64fe6e0c33a6303b748f81d5c0ccd5e9b204b035d91aafc05835dd8c8",
+  "source_files_verified": 126,
+  "local_checks_passed": 66,
+  "complete_combat": false,
+  "images": [
+    {
+      "file": "original_desktop_142s.png",
+      "sha256": "cc24ad56f22c0cb97e37015a6a718fbaa42582a70b2604a7dcd40cf3719893df",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_149s.png",
+      "sha256": "d454a4cdd537c38a6a23fe2cfe28ef0637149c20b3998452fdae3b8bd14ae05d",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_171s.png",
+      "sha256": "76f4672ef8660810b6a3b83a496425dbee4ee85e699dbd91ca978d850258207c",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_battle_attack_001.png",
+      "sha256": "6bc89ad48939128cee571a67c84006087c05e54264f6991eeb3c7212a65be110",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_175s.png",
+      "sha256": "4327ad8cdf4586f02075e75ff439e21a3129615ad12cbf54b15f24fb15f6b071",
+      "alterations": "Exact original desktop crop only"
+    }
+  ],
+  "limitations": [
+    "伤害、技能、敌人AI、胜负、奖励和返回地图仍未完成。",
+    "怪物、速度1.0、接近距离48及HP100为明确的本地测试设定；正式实例、范围与数值尚未恢复。",
+    "仍是原客户端加localhost服务的阶段修复包，不是完整单机游戏。"
+  ],
+  "screenshots_archive": {
+    "file": "TOEO_Screenshots_20261010_v21.zip",
+    "sha256": "8d6303fa83e8af8be71557d0f9af7226b1de855cd561e1dbb125a72385b2f206",
+    "bytes": 1284343,
+    "entries": 7,
+    "crc_check": "PASS"
+  }
+}

@@ -1,0 +1,2872 @@
+{
+  "passed": true,
+  "tested_commit": "b5bbf820b2f74d9d04784a268b0439faaed4ddb8",
+  "run": 38034331623,
+  "movement_records": [
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          264.4310607910156,
+          0
+        ],
+        "direction": 6,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617367.912886
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          264.4310607910156,
+          0
+        ],
+        "direction": 6,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617368.1085174
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          752.3580322265625,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617397.4194605
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          758.3580322265625,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617397.5685558
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          964.5489501953125,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617403.4433153
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          986.5463256835938,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617403.8802714
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          1011.5488891601562,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617404.2775283
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          1100.3411865234375,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617409.8290553
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          1100.34130859375,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617410.2625933
+    },
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          1108.3043212890625,
+          0
+        ],
+        "direction": 2,
+        "command": 1,
+        "target": [
+          0,
+          0
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617410.6565945
+    }
+  ],
+  "attack_records": [
+    {
+      "event": "native_battle_actor_action_applied",
+      "from_input": 0,
+      "action": {
+        "position": [
+          532,
+          0
+        ],
+        "direction": 2,
+        "command": 10004,
+        "target": [
+          1912602625,
+          1
+        ]
+      },
+      "result": 1,
+      "identity": [
+        1,
+        1
+      ],
+      "host_time": 1791617390.674418
+    }
+  ],
+  "attack_animations": [
+    {
+      "event": "native_model_animation_select",
+      "object": "0xc41c450",
+      "args": [
+        114,
+        2,
+        1,
+        284184728
+      ],
+      "result": 1,
+      "caller": "0x51918a",
+      "host_time": 1791617395.105398
+    }
+  ],
+  "position_changes": [
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 11,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617369.0617173
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 12,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617370.0637095
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 13,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617371.064026
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 14,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617372.0631483
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 15,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617373.0638053
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 16,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617374.0639255
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 17,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617375.0651543
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 18,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617376.0668662
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 19,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617377.0681443
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 20,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617378.0677812
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 21,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617379.0703957
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 22,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617380.068497
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 23,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617381.0696743
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 24,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617382.0694008
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 25,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617383.0712268
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 26,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617384.0695257
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 27,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617385.0713062
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 28,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617386.0725534
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 29,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617387.072685
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 30,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617388.0740833
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 31,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617389.0761948
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 32,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        264.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617390.077305
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 33,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        291.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617391.0772104
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 34,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        349.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617392.0764954
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 35,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        411.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617393.0767045
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 36,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        469.4310607910156,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617394.0776522
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 37,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        530.4310302734375,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617395.079391
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 38,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        532,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617396.0802152
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 39,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        532,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617397.08133
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 40,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        571,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617398.0910234
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 41,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        630,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617399.083563
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 42,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        692,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617400.0826697
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 43,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        751,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617401.0845265
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 44,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        758.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617402.0866907
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 45,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        758.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617403.0861666
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 46,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        797.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617404.086841
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 47,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        856.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617405.0874267
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 48,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        917.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617406.0881233
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 49,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        975.3580322265625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617407.088212
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 50,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1011.5488891601562,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617408.0898592
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 51,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1011.5488891601562,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617409.0909684
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 52,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1026.548828125,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617410.0895886
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 53,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1085.548828125,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 110,
+      "direction": 6,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 110,
+        "direction": 6,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 28,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617411.0904338
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 54,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617412.0919766
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 55,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617413.0937371
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 56,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617414.0932364
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 57,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617415.0969193
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 58,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617416.0975811
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 59,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617417.098625
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 60,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617418.0979154
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 61,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617419.100246
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 62,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617420.0983598
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 63,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617421.1010299
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 64,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617422.1008062
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 65,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617423.1020176
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 66,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617424.1024792
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 67,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617425.1042585
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 68,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617426.104057
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 69,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617427.1066587
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 70,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617428.1078382
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 71,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617429.1089363
+    },
+    {
+      "event": "native_battle_render_actor_snapshot",
+      "phase": "tick",
+      "sample": 72,
+      "identity": [
+        1,
+        1
+      ],
+      "position": [
+        1108.3043212890625,
+        0
+      ],
+      "entity_kind": 1,
+      "category": 1,
+      "controlled": 1,
+      "readiness": 0,
+      "movement_speed": 1,
+      "action": 100,
+      "direction": 2,
+      "dimensions": [
+        0,
+        0
+      ],
+      "flags": [
+        1,
+        1,
+        0
+      ],
+      "model": "0xc41c450",
+      "model_state": {
+        "bank": 1,
+        "resource": "0xaea5008",
+        "animation": 100,
+        "direction": 2,
+        "fallback": 100,
+        "drawable": 1,
+        "animation_clock": 36,
+        "color": 4294967295,
+        "layers": 2
+      },
+      "host_time": 1791617430.1110625
+    }
+  ]
+}
