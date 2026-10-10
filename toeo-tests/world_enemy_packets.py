@@ -11,7 +11,7 @@ ENEMY_NAME='E000 Local Test'
 ENEMY_MODEL_BANK=100
 def enemy_grid(profile):
     x,y=profile.spawn_grid
-    grid=(x-4,y)
+    grid=(x-2,y)
     if not profile.walkable(grid):raise ValueError('Encounter fixture requires an original walkable cell')
     return grid
 def enemy_actor_records(profile):
