@@ -150,9 +150,8 @@ def main():
             if args.combat_check:
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
-                schedule.update({145:lambda:click(344,341),155:lambda:double_click(344,341),
-                                 165:lambda:click(344,327),175:lambda:double_click(344,327),
-                                 185:lambda:click(344,350,right=True)})
+                schedule.update({145:lambda:click(344,341),148:lambda:click(344,350),
+                                 151:lambda:click(344,350,right=True),154:lambda:double_click(344,350)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
