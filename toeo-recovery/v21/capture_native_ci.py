@@ -10,7 +10,7 @@ headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'TOEO-nat
 def api(path):
  return json.loads(urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/adaierk/glb/'+path,headers=headers),timeout=60).read())
 artifacts=api('actions/runs/'+str(config['run'])+'/artifacts')['artifacts']
-a=next(x for x in artifacts if x['name']==config.get('artifact_name','toeo-v21-native-initialization'))
+a=next(x for x in artifacts if x['name']==config.get('artifact_name','toeo-v21-native-initialization') and (not config.get('artifact_id') or x['id']==config['artifact_id']))
 request=urllib.request.Request(a['archive_download_url'],headers=headers)
 try:data=urllib.request.build_opener(NoRedirect()).open(request,timeout=90).read()
 except urllib.error.HTTPError as e:
@@ -23,7 +23,7 @@ z=zipfile.ZipFile(io.BytesIO(data));assert z.testzip() is None
 for n in ['first/runtime_result.json','first/server.jsonl']:
  (OUT/Path(n).name).write_bytes(z.read(n))
 events=[json.loads(line) for line in z.read('first/runtime.jsonl').decode().splitlines() if line.strip()]
-names=('enemy','battle','pick','target','npc','command','network','model','action')
+names=('enemy','battle','pick','target','npc','command','network','model','action','request','actual_ui')
 kept=[e for e in events if any(n in str(e.get('event','')).lower() for n in names)]
 counts={}
 for e in events:counts[e.get('event','?')]=counts.get(e.get('event','?'),0)+1
