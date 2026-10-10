@@ -13,7 +13,7 @@ async def main():
   external=[]
   page.on('request',lambda r:external.append(r.url) if r.url.startswith(('http:','https:')) else None)
   await page.goto((D/'index.html').resolve().as_uri(),wait_until='load')
-  await page.wait_for_function('window.TOEO && TOEO.ready',{ } if False else None,timeout=120000)
+  await page.wait_for_function('window.TOEO && TOEO.ready',timeout=120000)
   await page.wait_for_timeout(500)
   assert not errors,errors
   assert not await page.evaluate('TOEO.errors')

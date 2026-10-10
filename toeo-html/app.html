@@ -58,7 +58,7 @@ function label(text,x,y){ctx.font="12px 'MS Gothic','Microsoft YaHei',sans-serif
 function actor(point,merchant=false){const x=Math.round(point[0]-camera[0]),y=Math.round(point[1]-camera[1]);ctx.fillStyle="#21473844";ctx.beginPath();ctx.ellipse(x,y-2,14,5,0,0,Math.PI*2);ctx.fill();const im=merchant?images.npc:(images.avatar||images.npc);if(im){const rect=merchant?[6,12,35,82]:(ASSETS.avatarRect||[6,12,35,82]);ctx.drawImage(im,...rect,x-rect[2]/2,y-rect[3],rect[2],rect[3])}label(merchant?"行商人＜道具屋＞":state.name,x,y+16)}
 function render(time){frame++;const dt=Math.min(.05,last?(time-last)/1000:0);last=time;if(!motion&&path.length){const to=path.shift();motion={from:[...playerPoint],to:gridToPoint(to),grid:to,t:0,d:Math.hypot(...gridToPoint(to).map((x,i)=>x-playerPoint[i]))/120}}
 if(motion){motion.t+=dt;const f=Math.min(1,motion.t/motion.d);playerPoint=motion.from.map((x,i)=>x+(motion.to[i]-x)*f);if(f===1){state.grid=motion.grid;motion=null;persist();status()}}
-if(!inspectMode){camera[0]=Math.round(playerPoint[0]-W/2);camera[1]=Math.round(playerPoint[1]-H/2)}
+if(!inspectMode){camera[0]=Math.round(playerPoint[0]-W/2);camera[1]=Math.round(playerPoint[1]-H/2-48)}
 camera[0]=Math.max(0,Math.min(MAP.pixel_width-W,camera[0]));camera[1]=Math.max(0,Math.min(MAP.pixel_height-H,camera[1]));
 ctx.fillStyle="#69b9de";ctx.fillRect(0,0,W,H);const sx=Math.max(0,Math.floor(camera[0]/64)),ex=Math.min(224,Math.floor((camera[0]+W)/64)),sy=Math.max(0,Math.floor(camera[1]/32)),ey=Math.min(319,Math.floor((camera[1]+H)/32));
 for(const l of MAP.ground)for(let y=sy;y<=ey;y++)for(let x=sx;x<=ex;x++){const id=l.data[y*225+x];if(id!==65535)tile(id,x*64,y*32)}
@@ -91,7 +91,7 @@ const menu=[["icon_01","アイテム","bag"],["icon_02","クエスト","story"],
 menu.forEach(([image,title,id])=>{const b=document.createElement("button");b.className="round";b.title=title;const im=document.createElement("img");im.src=ASSETS.ui[image];b.append(im);b.onclick=()=>open(id);$("menu").append(b)});
 for(let i=1;i<=10;i++){const b=document.createElement("button");b.className="slot";b.textContent="F"+i;b.onclick=()=>open(i===1?"bag":"system");$("hotbar").append(b)}
 try{images.npc=await getImage(ASSETS.npc);if(ASSETS.avatar)images.avatar=await getImage(ASSETS.avatar);
-const px=playerPoint[0],py=playerPoint[1];camera=[px-W/2,py-H/2];requestAnimationFrame(render);await new Promise(resolve=>{let n=0;const timer=setInterval(()=>{const pending=[...textureCache.values()].some(x=>!x.ready&&!x.error);$("loadmessage").textContent="原版贴图 "+textureCache.size+" 张";if(!pending&&textureCache.size>0||++n>120){clearInterval(timer);resolve()}},100)});
+const px=playerPoint[0],py=playerPoint[1];camera=[px-W/2,py-H/2-48];requestAnimationFrame(render);await new Promise(resolve=>{let n=0;const timer=setInterval(()=>{const pending=[...textureCache.values()].some(x=>!x.ready&&!x.error);$("loadmessage").textContent="原版贴图 "+textureCache.size+" 张";if(!pending&&textureCache.size>0||++n>120){clearInterval(timer);resolve()}},100)});
 ready=true;$("loading").hidden=true;status();persist();log("ラシュアン河の河口");log("行商人に話しかけると取引できます。");if(!saveOk)log("请导出存档保存进度。");
 }catch(e){errors.push(e.message);$("loadmessage").textContent="读取失败："+e.message}
 }

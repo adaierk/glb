@@ -113,3 +113,16 @@ for j in range(n):
  name=bytes(plain[nameptr:]).split(bytes(1),1)[0].decode('cp932')
  if name in wanted:colors.append({'name':name,'data_b64':base64.b64encode(pk[off:off+size]).decode(),'header_hex':pk[off:off+min(size,300)].hex()})
 (R/'original_color_lookups.json').write_text(json.dumps(colors,indent=2))
+
+# Apply preserved BGR555 color lookup tables to indexed component pixels.
+lookups={x['name']:struct.unpack('<256H',base64.b64decode(x['data_b64'])[20:]) for x in colors}
+head_palette=list(lookups['head_m_00.clt']);baseline=list(head_palette)
+for clt in ('hair_00.clt','eye_00.clt'):
+ for i,v in enumerate(lookups[clt]):
+  if v!=0x0be2 and v!=baseline[i]:head_palette[i]=v
+for name,lookup in [('M_body_a_m_00',lookups['body_a_m_A_00.clt']),('M_head_m_00',head_palette)]:
+ d=(RAW/'NewComponent1/resource'/f'{name}.bnd').read_bytes()
+ length,off=struct.unpack_from('<II',d,12);w,h,depth,fmt,size,compression,reserved=struct.unpack_from('<HHIIIII',d,off)
+ palette=d[off+24:off+1048];indices=lz2_decode(d[off+1048:off+1048+size],w*h)
+ rgba=[((v&31)*255//31,((v>>5)&31)*255//31,((v>>10)&31)*255//31,palette[i*4+3]) for i,v in enumerate(lookup)]
+ im=Image.new('RGBA',(w,h));im.putdata([rgba[i] for i in indices]);im.save(R/(name+'_default.png'))

@@ -9,7 +9,7 @@ for name in ('icon_01','icon_02','icon_03','icon_04','itemslot'):
 sheet=Image.open(R/'ui_ui_004.png').convert('RGBA');paper=sheet.crop((11,11,299,49));o=io.BytesIO();paper.save(o,format='PNG');assets['paper']='data:image/png;base64,'+base64.b64encode(o.getvalue()).decode()
 for n in range(605):assets['tiles'][n]=uri(R/f'1120108_{n:03}.png')
 # Component geometry will replace this temporary first atlas frame.
-body=Image.open(R/'M_body_a_m_00_000.png').convert('RGBA');head=Image.open(R/'M_head_m_00_000.png').convert('RGBA')
+body=Image.open(R/'M_body_a_m_00_default.png').convert('RGBA');head=Image.open(R/'M_head_m_00_default.png').convert('RGBA')
 avatar=Image.new('RGBA',(64,100));avatar.alpha_composite(body.crop((0,0,48,72)),(8,28));avatar.alpha_composite(head.crop((0,0,64,64)),(0,0));o=io.BytesIO();avatar.save(o,format='PNG')
 assets['avatar']='data:image/png;base64,'+base64.b64encode(o.getvalue()).decode();assets['avatarRect']=[0,0,64,100]
 catalog=json.loads(Path('toeo-tests/historical_shops.json').read_text());stock=next(s['stock'] for s in catalog['shops'] if s['key']=='wikihouse-u392bcdb')
