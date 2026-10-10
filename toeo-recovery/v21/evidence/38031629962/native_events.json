@@ -1,0 +1,201 @@
+[
+  {
+    "event": "native_player_model_load",
+    "object": "0x1142fb58",
+    "paths": [],
+    "host_time": 1791614531.0485702
+  },
+  {
+    "event": "native_player_model_load_returned",
+    "object": "0x1142fb58",
+    "result": 1,
+    "result_low_byte": 1,
+    "host_time": 1791614531.0485702
+  },
+  {
+    "event": "native_player_model_load",
+    "object": "0x11bf8958",
+    "paths": [],
+    "host_time": 1791614531.4272084
+  },
+  {
+    "event": "native_player_model_load_returned",
+    "object": "0x11bf8958",
+    "result": 1,
+    "result_low_byte": 1,
+    "host_time": 1791614531.4272084
+  },
+  {
+    "event": "native_player_model_load",
+    "object": "0x11bf8c98",
+    "paths": [],
+    "host_time": 1791614531.4272084
+  },
+  {
+    "event": "native_player_model_load_returned",
+    "object": "0x11bf8c98",
+    "result": 1,
+    "result_low_byte": 1,
+    "host_time": 1791614531.4282157
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4416,
+      4994
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791614549.9258373
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 1,
+    "count": 1,
+    "actors": [
+      {
+        "identity": [
+          1912602625,
+          1
+        ],
+        "category": 2
+      }
+    ],
+    "host_time": 1791614549.9258373
+  },
+  {
+    "event": "native_actor_target_set",
+    "actor": [
+      1,
+      1
+    ],
+    "target": [
+      1912602625,
+      1
+    ],
+    "host_time": 1791614549.9288385
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4416,
+      5003
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791614554.5136073
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 1,
+    "count": 1,
+    "actors": [
+      {
+        "identity": [
+          1912602625,
+          1
+        ],
+        "category": 2
+      }
+    ],
+    "host_time": 1791614554.5136073
+  },
+  {
+    "event": "native_npc_actions",
+    "identity": [
+      1912602625,
+      1
+    ],
+    "permissions": 1,
+    "extra": 0,
+    "host_time": 1791614554.5176091
+  },
+  {
+    "event": "native_actor_target_set",
+    "actor": [
+      1,
+      1
+    ],
+    "target": [
+      0,
+      0
+    ],
+    "host_time": 1791614555.1076045
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x50585e",
+    "point": [
+      4416,
+      5003
+    ],
+    "options": [
+      0,
+      1,
+      1
+    ],
+    "host_time": 1791614559.1477582
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x50585e",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791614559.1477582
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4416,
+      5003
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791614563.6632392
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791614563.6632392
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4389,
+      5003
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791614563.8243635
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791614563.8243635
+  }
+]
