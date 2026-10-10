@@ -1,0 +1,63 @@
+name: TOEO v21 original battle initialization verification
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [.github/workflows/toeo-v21-native.yml, toeo-tests/world_battle_initialization.py, toeo-tests/test_battle_initialization.py, toeo-tests/local_account_server.py, toeo-tests/combat_runtime.js, toeo-tests/ci_original_client.py]
+  workflow_dispatch:
+jobs:
+  original-client:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    permissions:
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        pump: [baseline]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37899580886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-original-client-preserved
+          path: ${{ runner.temp }}/TOEO_LOCAL
+      - name: Restore original data layout and exercise original GUI
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $env:PYTHONIOENCODING='utf-8'
+          $base=Join-Path $env:RUNNER_TEMP 'TOEO_LOCAL'
+          $raw=Join-Path $base 'raw'
+          $game=Join-Path $base 'game'
+          $report=Join-Path $base 'report'
+          New-Item -ItemType Directory -Force $raw,$game,$report | Out-Null
+          & "${env:ProgramFiles}\7-Zip\7z.exe" x -y "-o$raw" (Join-Path $base 'client_pack.7z') | Out-Null
+          if($LASTEXITCODE -ne 0){throw 'Original client extraction failed'}
+          foreach($n in @('NewComponent1','DefaultComponent')){
+            if(Test-Path (Join-Path $raw $n)){Copy-Item (Join-Path $raw $n '*') -Destination $game -Recurse -Force}
+          }
+          $data=Join-Path $game 'data'
+          New-Item -ItemType Directory -Force $data,(Join-Path $game 'log'),(Join-Path $game 'userdata') | Out-Null
+          foreach($n in @('resource','map','ui','help')){
+            if(Test-Path (Join-Path $game $n)){Move-Item (Join-Path $game $n) -Destination $data -Force}
+          }
+          Get-ChildItem $game -Recurse -File | Select-Object FullName,Length | Out-File (Join-Path $report 'original_files.txt')
+          & python -m pip install -q frida pillow
+          if($LASTEXITCODE -ne 0){throw 'Runtime dependencies failed'}
+          $extra=@()
+          if('${{ matrix.pump }}' -eq 'original_worker'){$extra=@('--pump')}
+          & python -m unittest discover -s toeo-tests 2>&1 | Tee-Object (Join-Path $report 'unit_tests.txt')
+          if($LASTEXITCODE -ne 0){throw 'Recovered server regression tests failed'}
+          $first=Join-Path $report 'first'
+          $second=Join-Path $report 'reentered'
+          & python -u toeo-tests/ci_original_client.py $game $first --duration 210 --combat-check @extra 2>&1 | Tee-Object (Join-Path $report 'first_driver.txt')
+          if($LASTEXITCODE -ne 0){throw 'First original-client run failed'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-v21-native-initialization
+          path: ${{ runner.temp }}/TOEO_LOCAL/report
+          retention-days: 90
+
