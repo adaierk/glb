@@ -73,3 +73,6 @@ for name in ('pc1a.atd','e000.atd'):
   rows.append({'row':n,'words':list(words),'serialized_direction_labels':[chr(b[off+16*i]) for i in range(num)],'direction_entries_hex':[b[off+16*i:off+16*(i+1)].hex() for i in range(num)]})
  animation_assets.append({'file':name,'sha256':hashlib.sha256(b).hexdigest(),'rows':rows})
 (OUT/'original_battle_animation_directions.json').write_text(json.dumps(animation_assets,indent=2))
+
+for index,va in enumerate(struct.unpack('<8I',pe.get_data(0x6e8e40-base,32))):
+ if 0x400000<=va<0x6bc000:(OUT/('actor_reference_virtual_'+str(index)+'.txt')).write_text(dis(va,0x300))

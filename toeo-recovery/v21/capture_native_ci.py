@@ -10,7 +10,7 @@ headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'User-Agent':'TOEO-nat
 def api(path):
  return json.loads(urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/adaierk/glb/'+path,headers=headers),timeout=60).read())
 artifacts=api('actions/runs/'+str(config['run'])+'/artifacts')['artifacts']
-a=next(x for x in artifacts if x['name']=='toeo-v21-native-initialization')
+a=next(x for x in artifacts if x['name']==config.get('artifact_name','toeo-v21-native-initialization'))
 request=urllib.request.Request(a['archive_download_url'],headers=headers)
 try:data=urllib.request.build_opener(NoRedirect()).open(request,timeout=90).read()
 except urllib.error.HTTPError as e:
