@@ -238,7 +238,11 @@ class WorldInventoryStore:
             if definition is None or source['quantity']!=1:raise TradeRejected('Item is not supported equipment')
             target_location=request['destination_location'];slot=request['destination_slot']
             if target_location==4:
-                if slot!=definition['slot']:raise TradeRejected('Equipment body slot does not match')
+                # Original 5C2100 returns 1 for equipment-area mouse drops.
+                # Resolve that native automatic-placement request using this
+                # explicit definition; /equip may pass a concrete body slot.
+                if slot not in (1,definition['slot']):raise TradeRejected('Equipment body slot does not match')
+                slot=definition['slot']
             elif not -1<=slot<len(before['items']):raise TradeRejected('Destination outside native packed bag')
             target=next((x for x in all_items if x['location']==target_location and x['slot']==slot),None)
             expected=(0,0,0,0) if target is None else target['identity']
