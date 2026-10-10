@@ -1,0 +1,40 @@
+0041a800  mov      eax, dword ptr [0x7db8fc]
+0041a805  test     eax, eax
+0041a807  jne      0x41a80a
+0041a809  ret      
+0041a80a  add      eax, 0x84
+0041a80f  ret      
+0041a810  push     ebp
+0041a811  mov      ebp, esp
+0041a813  push     ebx
+0041a814  push     esi
+0041a815  push     edi
+0041a816  mov      edi, dword ptr [ebp + 8]
+0041a819  mov      al, byte ptr [edi + 0x15]
+0041a81c  test     al, al
+0041a81e  mov      ebx, ecx
+0041a820  mov      esi, edi
+0041a822  jne      0x41a843
+0041a824  mov      eax, dword ptr [esi + 8]
+0041a827  push     eax
+0041a828  mov      ecx, ebx
+0041a82a  call     0x41a810
+0041a82f  mov      esi, dword ptr [esi]
+0041a831  push     edi
+0041a832  call     0x6ba9d0
+0041a837  mov      al, byte ptr [esi + 0x15]
+0041a83a  add      esp, 4
+0041a83d  test     al, al
+0041a83f  mov      edi, esi
+0041a841  je       0x41a824
+0041a843  pop      edi
+0041a844  pop      esi
+0041a845  pop      ebx
+0041a846  pop      ebp
+0041a847  ret      4
+0041a84a  int3     
+0041a84b  int3     
+0041a84c  int3     
+0041a84d  int3     
+0041a84e  int3     
+0041a84f  int3     
