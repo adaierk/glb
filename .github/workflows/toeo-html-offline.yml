@@ -20,9 +20,12 @@ jobs:
           name: toeo-original-client-preserved
           path: ${{ runner.temp }}/TOEO_ORIGINAL
       - name: Extract original map and graphics
+        if: hashFiles('toeo-html/research/resources.json') == ''
         run: |
           python -m pip install -q Pillow
           python toeo-html/extract_assets.py
+      - name: Split resources into bounded files
+        run: python toeo-html/split_resources.py
       - name: Retain offline research on isolated branch
         run: |
           git config user.name "TOEO HTML CI"
