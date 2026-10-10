@@ -18,6 +18,7 @@ async def main():
   assert not errors,errors
   assert not await page.evaluate('TOEO.errors')
   assert not external,external
+  assert await page.evaluate("Array.from(document.getElementById('miniimg').getContext('2d').getImageData(0,0,137,128).data).filter((v,i)=>i%4===3 && v>0).length")>10000
   initial=await page.evaluate('TOEO.state')
   assert initial['grid']==[139,313] and initial['gald']==2000
   assert await page.evaluate('TOEO.walkable([139,313]) && TOEO.walkable([141,313]) && !TOEO.walkable([141,312])')
