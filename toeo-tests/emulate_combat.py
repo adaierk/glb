@@ -23,8 +23,8 @@ class BattleRecordFixture(NpcFixture):
                 'group':[self.read32(p+0x228),self.read32(p+0x22c)],
                 'position':[self.read32(p+0x230),self.read32(p+0x234)],
                 'appearance_hex':bytes(uc.mem_read(p+0x34,24)).hex(),
-                'hp':[self.read32(p+0x54),self.read32(p+0xf8)],
-                'tp':[self.read32(p+0x58),self.read32(p+0x184)]}
+                'hp':[self.read32(p+0x54),self.read32(p+0xf4)],
+                'tp':[self.read32(p+0x58),self.read32(p+0xf8)]}
             uc.emu_stop()
         else:super().on_code(uc,va,size,context)
 def record_projections(binary):
