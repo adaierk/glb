@@ -457,10 +457,11 @@
         eax:this.context.eax.toString(),font:phase==='number_font_resource' && !this.context.eax.isNull()?{
           object:this.context.eax.toString(),vtable:this.context.eax.readPointer().toString()}:null})));}});
   }
-  Interceptor.attach(address(0x623497),{onEnter(){
-    if(activeHud===null || ++hudDrawReturns>30)return;
-    emit({event:'native_hud_graphics_result',frame:activeHud.toString(),hresult:this.context.eax.toString(),
-      stack:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString())});
+  Interceptor.attach(address(0x623410),{onEnter(){
+    this.hud=activeHud;this.trace=this.hud===null?[]:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString());
+  },onLeave(ret){
+    if(this.hud===null || ++hudDrawReturns>30)return;
+    emit({event:'native_hud_graphics_result',frame:this.hud.toString(),hresult:ret.toString(),stack:this.trace});
   }});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
