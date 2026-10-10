@@ -46,3 +46,53 @@ for sec in pe.sections:
   if dest in targets:refs.append({'address':hex(start+at),'target':hex(dest),'kind':targets[dest]})
 (OUT/'battle_call_refs.json').write_text(json.dumps(refs,indent=2))
 print(json.dumps({'unchanged_exe_sha256':hashlib.sha256(data).hexdigest(),'signals':len(signals),'ranges':len(ranges),'references':len(refs)}))
+
+def u32(va):return struct.unpack('<I',pe.get_data(va-base,4))[0]
+def jump_table(label,start,count,indices,table):
+ idx=pe.get_data(indices-base,count) if indices else bytes(range(count))
+ entries=[{'opcode':hex(start+n),'index':v,'handler':hex(u32(table+4*v))} for n,v in enumerate(idx)]
+ (OUT/(label+'.json')).write_text(json.dumps(entries,indent=2))
+ return entries
+ops=jump_table('world_opcodes',0x34,0x192,0x530174,0x52ff04)
+jump_table('actor_records',0x22,0xa2,0x51ceb0,0x51ce7c)
+jump_table('actor_extensions',0x2e,7,None,0x51cf54)
+for row in ops:
+ if row['handler']=='0x52fee4':continue
+ va=int(row['handler'],16)
+ successors=sorted(set(int(x['handler'],16) for x in ops if int(x['handler'],16)>va))
+ length=min((successors[0]-va if successors else 0x180),0x1500)
+ (OUT/('opcode_'+row['opcode'][2:]+'.txt')).write_text(dis(va,length))
+# MSVC TypeDescriptors and Complete Object Locators. These are original data, not inferred class names.
+readonly=[s for s in pe.sections if s.Characteristics&0x40000000 and not s.Characteristics&0x20000000]
+def pointer_refs(value,sections=None):
+ needle=struct.pack('<I',value);found=[]
+ for sec in sections or pe.sections:
+  b=sec.get_data();offset=0
+  while True:
+   p=b.find(needle,offset)
+   if p<0:break
+   found.append(base+sec.VirtualAddress+p);offset=p+1
+ return found
+rtti=[]
+for row in signals:
+ if not row['text'].startswith('.?AV'):continue
+ if not re.search('TaskBattle|BattleAction|CField|CEnemy|CMonster',row['text']):continue
+ descriptor=int(row['address'],16)-8
+ locators=[]
+ for ref in pointer_refs(descriptor,readonly):
+  col=ref-12
+  if u32(col)!=0:continue
+  for colref in pointer_refs(col,readonly):
+   vtable=colref+4
+   methods=[u32(vtable+4*n) for n in range(18)]
+   if not 0x400000<=methods[0]<0x6e0000:continue
+   locators.append({'locator':hex(col),'vtable':hex(vtable),'methods':[hex(v) for v in methods],'vtable_refs':[hex(r) for r in pointer_refs(vtable)]})
+   for n,fn in enumerate(methods[:8]):
+    if 0x400000<=fn<0x6e0000:(OUT/(f'rtti_{vtable:08x}_{n}_{fn:08x}.txt')).write_text(dis(fn,0x700))
+ rtti.append({'class':row['text'],'descriptor':hex(descriptor),'locators':locators})
+(OUT/'battle_rtti.json').write_text(json.dumps(rtti,indent=2))
+for name,va,size in [
+ ('enemy_component',0x50e050,0x220),('enemy_action_component',0x50d700,0x860),
+ ('battle_actor',0x50ee00,0x1b00),('npc_menu_dispatch',0x52cc40,0x580),
+ ('world_target',0x505900,0x1100),('command_queue',0x4f5700,0x820)
+ ]:(OUT/(name+'.txt')).write_text(dis(va,size))
