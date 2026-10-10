@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "native_projection": {
+    "identity": [
+      1912602625,
+      1
+    ],
+    "category": 2,
+    "controlled": 0,
+    "map_id": 17957128,
+    "grid": [
+      137,
+      313
+    ],
+    "animation_action": 1,
+    "appearance_hex": "000000000000000020030000000000000000000000000000",
+    "hp": [
+      100,
+      100
+    ],
+    "tp": [
+      0,
+      0
+    ]
+  },
+  "native_enemy_extension": {
+    "vtable": "0x6eebe4",
+    "actor": 17436672,
+    "kind": 1
+  },
+  "native_mode": {
+    "index": 2,
+    "vtable": "0x6eecb8"
+  },
+  "native_fields": {
+    "level": 4294967295,
+    "battle_group": 0,
+    "style": 2
+  },
+  "provenance": "Explicit local SLIME field-symbol test encounter; official spawn/stat configuration unresolved",
+  "substitutions": [
+    "Inherited map/resource/string/OS/renderer construction boundaries",
+    "Native mode and extension ownership boundaries; allocation and field parsing run unchanged"
+  ],
+  "windows_rendering_proven": false
+}
