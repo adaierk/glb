@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "projections": [
+    {
+      "identity": [
+        1912602625,
+        1
+      ],
+      "controlled": 0,
+      "battle_model_bank": 100,
+      "category": 2,
+      "map_id": 17957128,
+      "group": [
+        1929379841,
+        1
+      ],
+      "position": [
+        96,
+        0
+      ],
+      "appearance_hex": "0000000000000000b0040000000000000000000000000000",
+      "hp": [
+        100,
+        100
+      ],
+      "tp": [
+        30,
+        30
+      ]
+    },
+    {
+      "identity": [
+        1,
+        1
+      ],
+      "controlled": 1,
+      "battle_model_bank": 0,
+      "category": 1,
+      "map_id": 17957128,
+      "group": [
+        1929379841,
+        1
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "appearance_hex": "010000000100000000000000000000000000000001000000",
+      "hp": [
+        100,
+        100
+      ],
+      "tp": [
+        30,
+        30
+      ]
+    }
+  ],
+  "substitutions": [
+    "Inherited OS/string/temp-container boundaries",
+    "515650 renderer-registration boundary; preceding original name/identity/vitals/appearance parser executed unchanged"
+  ],
+  "does_not_prove": [
+    "Native Windows battle entry",
+    "Attack animations",
+    "Combat outcome"
+  ],
+  "original_encounter_action_request": {
+    "opcode": 200,
+    "request_id": 4294967295,
+    "action": 1,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17957128,
+    "target": [
+      1912602625,
+      1
+    ],
+    "extra": 0,
+    "option": 0
+  },
+  "native_encounter_menu_mask": 1
+}
