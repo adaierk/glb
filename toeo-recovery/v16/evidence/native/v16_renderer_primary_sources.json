@@ -1,0 +1,22 @@
+{
+  "topic": "Original client D3D9 immediate primitive wrapper investigation",
+  "primary_sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/d3d9/nf-d3d9-idirect3ddevice9-drawprimitiveup",
+      "supports": "DrawPrimitiveUP uses supplied vertex data, requires a vertex declaration/FVF, and resets stream 0 after the call."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/d3d9/nf-d3d9-idirect3ddevice9-validatedevice",
+      "supports": "ValidateDevice checks current render state; Microsoft recommends validation during initialization rather than each frame."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dformat",
+      "supports": "Format41 is D3DFMT_P8; Format21 is D3DFMT_A8R8G8B8."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/direct3d9/texture-palettes",
+      "supports": "Texture palette rendering depends on palette support and alpha-palette capability."
+    }
+  ],
+  "source_inference_boundary": "The documents do not prove this client failure. Native HRESULT probes and real screenshots must establish the actual error and restoration. A missing stream after UP calls is only a possible explanation, not a confirmed root cause."
+}

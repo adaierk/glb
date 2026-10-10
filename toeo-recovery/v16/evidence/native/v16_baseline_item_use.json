@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "native_request": {
+    "opcode": 85,
+    "request_id": 4294967295,
+    "sequence": 1,
+    "map_id": 17891585,
+    "identity": [
+      1,
+      1
+    ],
+    "item": [
+      1895825409,
+      1,
+      1,
+      0
+    ],
+    "location": 2,
+    "slot": 0,
+    "count": 0,
+    "target": [
+      1,
+      1
+    ]
+  },
+  "native_request_hex": "0055004c00ffffffff00000101000000e80300000280000000300001010111010100000001000000010000710100000001000000000000000200000000000000000000000100000001000000",
+  "native_vitals": {
+    "hp": 100,
+    "tp": 10,
+    "max_hp": 100,
+    "max_tp": 30
+  },
+  "native_quantity_after_use": 1,
+  "native_pending_command_released": true,
+  "native_shop_close_request": {
+    "opcode": 224,
+    "request_id": 4294967295,
+    "sequence": 1,
+    "identity": [
+      1,
+      1
+    ],
+    "map_id": 17891585,
+    "merchant": [
+      1879048193,
+      1
+    ]
+  },
+  "native_shop_close_ack_releases_use": true,
+  "assertions": [],
+  "substitutions": [
+    "OS clock",
+    "Initialized world-ready gate",
+    "Native transport enqueue capture",
+    "Inherited inventory fixture C++ strings, collection, resource manager and Windows graphical refresh boundaries"
+  ],
+  "limitations": [
+    "Does not establish mouse operation, cast animation or combat interruption"
+  ]
+}

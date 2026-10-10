@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "original_request": {
+    "opcode": 84,
+    "request_id": 4294967295,
+    "sequence": 1,
+    "map_id": 17891585,
+    "identity": [
+      1,
+      1
+    ],
+    "item": [
+      1895825409,
+      1,
+      1,
+      0
+    ],
+    "source_location": 2,
+    "source_slot": 0,
+    "count": -1,
+    "destination_location": 2,
+    "destination_slot": 1,
+    "destination_item": [
+      1895825410,
+      1,
+      1,
+      0
+    ],
+    "context": 0
+  },
+  "request_hex": "0054005400ffffffff00000001000000010111010100000001000000010000710100000001000000000000000200000000000000ffffffff02000000010000000200007101000000010000000000000000000000",
+  "native_receipt_insert_slot": 1,
+  "native_notice_uses_packed_order": true,
+  "native_quantity": 1,
+  "pending_released": true,
+  "assertions": [],
+  "substitutions": [
+    "Inherited item-use fixture OS/transport/C++ strings/container and UI lifetime boundaries"
+  ],
+  "limitations": [
+    "Does not establish Windows drag/drop; equipment, stack splitting and merging remain separate"
+  ]
+}

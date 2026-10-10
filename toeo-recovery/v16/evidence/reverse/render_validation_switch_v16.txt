@@ -1,0 +1,97 @@
+006231a0 adc      edi, dword ptr [eax]
+006231a2 dec      eax
+006231a3 add      dh, byte ptr [ebp + 0x74]
+006231a6 mov      ecx, dword ptr [esi]
+006231a8 xor      ecx, edx
+006231aa mov      dword ptr [ebp], ecx
+006231ad jmp      0x62321a
+006231af cmp      cx, 2
+006231b3 jne      0x62321a
+006231b5 mov      dl, byte ptr [eax + 2]
+006231b8 mov      cl, byte ptr [esi + 6]
+006231bb shr      dl, cl
+006231bd mov      cl, byte ptr [esi + 0xc]
+006231c0 movzx    di, dl
+006231c4 mov      dl, byte ptr [eax]
+006231c6 shl      edi, cl
+006231c8 mov      cl, byte ptr [esi + 0xa]
+006231cb shr      dl, cl
+006231cd mov      cl, byte ptr [esi + 0x10]
+006231d0 movzx    dx, dl
+006231d4 shl      edx, cl
+006231d6 mov      cl, byte ptr [esi + 8]
+006231d9 or       edi, edx
+006231db mov      dl, byte ptr [eax + 1]
+006231de shr      dl, cl
+006231e0 mov      cl, byte ptr [esi + 0xe]
+006231e3 movzx    dx, dl
+006231e7 shl      edx, cl
+006231e9 or       edi, edx
+006231eb or       di, word ptr [esi]
+006231ee test     bl, bl
+006231f0 mov      word ptr [ebp], di
+006231f4 je       0x62321a
+006231f6 mov      cl, byte ptr [esp + 0x70]
+006231fa cmp      byte ptr [eax], cl
+006231fc jne      0x62321a
+006231fe mov      dl, byte ptr [esp + 0x12]
+00623202 cmp      byte ptr [eax + 1], dl
+00623205 jne      0x62321a
+00623207 mov      cl, byte ptr [esp + 0x13]
+0062320b cmp      byte ptr [eax + 2], cl
+0062320e jne      0x62321a
+00623210 mov      dx, word ptr [esi]
+00623213 xor      dx, di
+00623216 mov      word ptr [ebp], dx
+0062321a movzx    ecx, word ptr [esi + 4]
+0062321e add      ebp, ecx
+00623220 mov      ecx, dword ptr [esp + 0x1c]
+00623224 add      eax, 3
+00623227 dec      ecx
+00623228 mov      dword ptr [esp + 0x1c], ecx
+0062322c jne      0x623140
+00623232 mov      edi, dword ptr [esp + 0x14]
+00623236 mov      ecx, dword ptr [esp + 0x20]
+0062323a mov      edx, dword ptr [esp + 0x24]
+0062323e add      ecx, dword ptr [esp + 0x28]
+00623242 mov      eax, dword ptr [esp + 0x18]
+00623246 inc      edx
+00623247 cmp      edx, eax
+00623249 mov      dword ptr [esp + 0x20], ecx
+0062324d mov      dword ptr [esp + 0x24], edx
+00623251 jl       0x623120
+00623257 mov      ebp, dword ptr [esp + 0x6c]
+0062325b mov      edx, dword ptr [ebp]
+0062325e push     0
+00623260 push     ebp
+00623261 call     dword ptr [edx + 0x50]
+00623264 xor      ecx, ecx
+00623266 test     eax, eax
+00623268 setge    cl
+0062326b dec      ecx
+0062326c and      ecx, 0x80004005
+00623272 mov      eax, ecx
+00623274 pop      ebx
+00623275 pop      edi
+00623276 pop      esi
+00623277 pop      ebp
+00623278 add      esp, 0x58
+0062327b ret      
+0062327c int3     
+0062327d int3     
+0062327e int3     
+0062327f int3     
+00623280 mov      eax, dword ptr [esp + 8]
+00623284 cmp      eax, 7
+00623287 push     esi
+00623288 ja       0x6233a8
+0062328e jmp      dword ptr [eax*4 + 0x6233dc]
+00623295 mov      esi, dword ptr [esp + 8]
+00623299 push     1
+0062329b push     0xab
+006232a0 push     esi
+006232a1 call     0x62b130
+006232a6 push     5
+006232a8 push     0x13
+006232aa push     esi
+006232ab call     0x62b130

@@ -1,0 +1,48 @@
+{
+  "version": "v16",
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "status": "Static original-code findings; real bag movement verified separately. Equipment gameplay pending.",
+  "native_builder": {
+    "address": "0x4F6BA0",
+    "opcode": "0x54",
+    "bytes": 84,
+    "arguments": [
+      "item_identity_pointer",
+      "source_location",
+      "source_slot",
+      "count_signed",
+      "destination_location",
+      "destination_slot",
+      "destination_identity_pointer",
+      "context"
+    ]
+  },
+  "locations": {
+    "bag": 2,
+    "equipment": 4
+  },
+  "unequip_call": {
+    "site": "0x551C15",
+    "builder": "0x4F6BA0",
+    "source_location": 4,
+    "source_slot_expression": "control_id - 0xBB7"
+  },
+  "inventory_decoder": {
+    "address": "0x51F030",
+    "bag_insert": "0x51EA20 with -1, packed list order",
+    "equipment_insert": "0x51EE00 with record group slot"
+  },
+  "correction": "4F6E20 builds opcode56 from bag discard path at564400; it is not evidence of the equipment protocol.",
+  "pending": [
+    "Official item templates and equip restrictions",
+    "Body-slot meaning, stats and native visual appearance",
+    "Native equip/unequip Windows UI and persistence acceptance",
+    "Combat and attack calculations"
+  ],
+  "evidence": [
+    "equipment_remove_v16.txt",
+    "item_move_request_v16.txt",
+    "inventory_slot_decoder_v16.txt",
+    "bag_insert_slots_v16.txt"
+  ]
+}

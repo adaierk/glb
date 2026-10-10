@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "count": 4,
+  "original_header": "Uncompressed type1, 8-bit index, 256-entry 32-bit BGRA palette; descriptor0",
+  "converted_header": "Uncompressed type2, 32-bit BGRA, same origin, explicit 8-bit alpha",
+  "files": [
+    {
+      "file": "ui/image/statusbar.tga",
+      "original_sha256": "e4411dde62a6266993358123341c77608fb338efac2afe8112a835d6b6a7c295",
+      "converted_sha256": "4d580b7757740669e880d6a7b065c87d025bc4b4cf1ea8d2a0b51ba79a896e37",
+      "independent_pillow_rgba_sha256": "1887fd22e85b38510df5725c25b2835ebc07446c1978ff0f70c4b023e95716c7",
+      "same_pixel_colors_alpha_and_orientation": true,
+      "width": 512,
+      "height": 256,
+      "bgra_pixels_sha256": "1180ad36ad2b6974366ada0ea5141edb1f845feeff582c338a562495e3a44e3b",
+      "pixel_count": 131072,
+      "alpha_preserved": true,
+      "origin_preserved": true
+    },
+    {
+      "file": "ui/image/statusbar2.tga",
+      "original_sha256": "19a6998cf42879149be41280fde7734747e418a26dcc37cd4655c6df1a1847d5",
+      "converted_sha256": "a895425d086cc7fcb146ad0c1392c78c29bee243362020c2fea1040e13c63ae5",
+      "independent_pillow_rgba_sha256": "6fc5c68772967ce7991518ce128be91a760c3e1a41478ff529260cb738ab8f3c",
+      "same_pixel_colors_alpha_and_orientation": true,
+      "width": 256,
+      "height": 32,
+      "bgra_pixels_sha256": "94745fbbce5e3ab5501bbe871bdc3abb8934057e38158e698d39e502b5e6cd0e",
+      "pixel_count": 8192,
+      "alpha_preserved": true,
+      "origin_preserved": true
+    },
+    {
+      "file": "ui/image/statusbar3.tga",
+      "original_sha256": "25de2dedec1aff42229e3501d6a8b3c0b3557a8322802fa190664e5bc3893850",
+      "converted_sha256": "e5c09f805f793d16d77492cf0b4d67769acba0c6fcf7b45236fccc93a71b4b24",
+      "independent_pillow_rgba_sha256": "ced93bd1599c12e921a8b98318ae3ca2e2c93aa0c8d8ea3ed2074ae3cdce7318",
+      "same_pixel_colors_alpha_and_orientation": true,
+      "width": 512,
+      "height": 256,
+      "bgra_pixels_sha256": "598033e6f2aef9a2540c77520f1b1461644dc8e2072c7d89573943d7dc976001",
+      "pixel_count": 131072,
+      "alpha_preserved": true,
+      "origin_preserved": true
+    },
+    {
+      "file": "resource/battlefont.tga",
+      "original_sha256": "46e6069913f02b4a4f51b4a7576e0492d214c36fb1788ca2e415176f08a64d59",
+      "converted_sha256": "ba40afe917e902ad038c26501f0f20d4bc8af3f63e9935b50f5a5e4a26b0712c",
+      "independent_pillow_rgba_sha256": "ebf8dcfc8896501d1b20636a00f35491be2d730cdf72bb4bdc9ee8cfead8a00d",
+      "same_pixel_colors_alpha_and_orientation": true,
+      "width": 512,
+      "height": 512,
+      "bgra_pixels_sha256": "c9a2f0a7c03931f4acf83eb3a074467f8050746f8ac9e7cd9b05510fbf6f9ad5",
+      "pixel_count": 262144,
+      "alpha_preserved": true,
+      "origin_preserved": true
+    }
+  ],
+  "verification": "Independent Pillow decoder of converted true-color TGA matches every original palette-derived RGBA pixel in display order; original files only read."
+}

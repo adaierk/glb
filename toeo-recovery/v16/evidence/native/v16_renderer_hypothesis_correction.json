@@ -1,0 +1,21 @@
+{
+  "original_validation_flag_initial_byte": 0,
+  "actual_d3d_results": {
+    "TestCooperativeLevel": "0x0",
+    "ValidateDevice": "Not called, original validation flag0",
+    "DrawPrimitiveUP_HP_TP": "0x8876086c"
+  },
+  "rejected_hypothesis": "Optional ValidateDevice preflight caused the missing HUD. The flag was already0 and disabling it has no effect.",
+  "runs": [
+    38013085361,
+    38013319994
+  ],
+  "graphics_state_capture_run": 38013845064,
+  "next_step": "Read actual texture descriptions, FVF, vertices and fixed-function states before choosing a repair.",
+  "resolved_by": {
+    "actual_p8_texture_probe_run": 38013845064,
+    "final_windows_run": 38014388401,
+    "repair": "Lossless expansion of four palette TGAs in a separate runtime, actual D3D9 draw results unchanged.",
+    "actual_hp_tp_draw_passed": true
+  }
+}

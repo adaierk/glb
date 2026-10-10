@@ -1,0 +1,78 @@
+永恒传说 Online 本地恢复 v16 接续记录
+最终 Windows 结果、被测提交、artifact 和截图以 v16_actual_bag_hud_milestone.json 为准。
+原 EXE SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
+继续原客户端 + 本地服务路线；完整游戏尚未恢复。旧 v15 状态和协议说明保存在 history。
+
+一、原 HP/TP 控件和图形问题
+自己的左上栏来自 ui\statusinfobox.bcv，绘制回调 5A0380，更新 5A0290。
+v15 提到的 538870 是另一类状态栏，本轮实机未用它显示自己状态，不可沿用入口误读。
+5A0542 时 frame+2F8/2FC 为当前/最大 HP，+300/304 为 TP，+2EC/2F0 是平滑值；
++308/30C 为经验/最大经验。实际 40/100、10/30，使用后 100/100、10/30，数值和比率正常。
+角色 actor+114 profile、+8/+0C 当前 HP/TP、+A8/+AC 上限；+298/+29C 平滑值。
+HP 经 5CE850 返回 5A0605；TP 返回 5A0675。原动态数字使用资源 key19。
+原包装 623410 是六参数 cdecl：device、校验 pass 初值、primitiveType、count、vertices、stride。
+vtable+0C TestCooperativeLevel；+118 ValidateDevice；+14C DrawPrimitiveUP。
+不能把第二参数 1 当 FVF，也不能把 +118 当 SetFVF。
+80B782 是可选验证字节，原初始化为 0，只找到五处读取。预验证根因假设已排除。
+Run38013085361 实际 TestCooperativeLevel 成功，ValidateDevice 未调用，DrawPrimitiveUP 失败。
+Run38013845064 获取实际 D3D9 只读状态：FVF=1C4，stride32，四顶点和 UV 有限，
+stage0 MODULATE texture/diffuse、stage1 禁用；绑定 512×256、D3DFMT_P8=41、managed 纹理。
+原 statusbar.tga 为 type1、8位索引、256色、32位 BGRA 调色板；不是16位调色板。
+不能从旧 Pillow 加载错误反推资源损坏。
+
+二、图形兼容实现的边界
+legacy_graphics_assets.py 只接受四张原纹理的精确 SHA256：statusbar、statusbar2、
+statusbar3 和 resource/battlefont。转换为 type2、32位 BGRA，保留全部颜色、alpha、方向。
+四张共 532480 像素，通过独立 Pillow 真彩色解码与原 palette/index 逐像素比较。
+转换写入独立 toeo_runtime_cache_v16；原 client/data 不被覆盖，原 EXE 不修改。
+不可直接写共享硬链接！代码写临时文件再 os.replace，断开链接后替换运行副本。
+其他 data 文件可只读硬链接，不能修改原资源；跨盘/无硬链接时复制。
+CI 缓存放在 report 外，避免上传整个原客户端。交付不打包缓存或用户数据库。
+offline_graphics_compat.js 已撤掉原未生效的验证 flag 写入，只发准备完成说明。
+account_runtime.js 验收为只读，图形诊断仅调用 GetFVF/GetRenderState/GetTextureStageState/
+GetTexture/GetLevelDesc，释放 GetTexture 增加的临时引用，不调用 setter、不替换 HRESULT。
+最终应看到纹理 Format21 A8R8G8B8、原 HP/TP DrawPrimitiveUP 成功及真实截图。
+实际绘制和像素证明必须看最终里程碑，不从转换或仿真单独推断 Windows 成功。
+原程序仍记录到其他被捕获的系统/C++异常；HP/TP绘制成功不等于整个客户端无异常。
+其他旧纹理和绘图路径的兼容性继续按实际HRESULT和原截图核对，不伪造成功返回。
+经验上限仍为0，经验/等级成长待恢复；不要声称经验系统已完成。
+
+三、原 54 物品移动协议
+4F6BA0 构包 84字节：+0C序列、+10地图、+14/+18角色、+1C..2B源物品四DWORD，
++2C源位置类型、+30有符号源索引、+34有符号数量、+38目标类型、+3C目标索引，
++40..4F目标物品四DWORD、+50上下文。原背包全堆拖动数量 -1；空目标索引 -1。
+背包类型2，装备类型4。source/destination identity 必须按本人的当前实例验证。
+本地服务只接入 2→2、数量-1、上下文0；装备和分堆暂拒绝，不消费或断线。
+成功67回执和6B通知；67释放共享 pending 后刷新 UI。
+SQLite world_inventory_items 新 slot 字段，按角色唯一；完整连续排列，删除后补位。
+两件物品交换是同一事务；拖到空目标则移到末尾。临时负值仅在事务内重新编号。
+与买卖/使用共享 world_trade_ledger，重放返回当前状态，不重复操作；冲突序列回滚。
+旧 v15 库按原 ID 顺序迁移，不改物品实例、数量或钱包；重复迁移安全。
+51F030 的37分组对背包忽略分组索引，调用51EA20(-1,item)连续追加。
+装备则调用51EE00明确索引。67的4D会给显式位置，6B重建仍须按记录顺序。
+所以“任意固定空格”是错误模型；不要恢复那版早期实现或补发无 pending 的67。
+重启34/6B触发565210参数-1并不代表显示在负格；需检查原链表顺序和真实图标。
+actor+1D8 背包，+4为哨兵，+8为长度，node+0 next、node+8 item。
+实机原54序列5交换 source slot0/destination slot1，Mix在0、Lemon在1，各1。
+emulate_item_move.py 原构包/原67与6B解码通过，但UI/集合边界已声明；实际拖动看Windows。
+
+四、装备下一阶段
+551C15 调用4F6BA0，源位置4，sourceSlot=控件ID-0xBB7；装备面板16个格子。
+actor+1DC 是装备容器，原初始世界数据有独立装备列表。
+4F6E20 的 opcode56 从564400丢弃路径进入，不是已证实的装备请求！
+先追 bag→gear 的原拖动/双击参数、装备位置意义、item类型/等级/职业掩码，
+再接入装备实例持久化与回执、初始 world gear 恢复，以及属性和原角色外观。
+不能把软糖当装备展示或伪造装备截图；不能猜填官方道具 master ID。
+历史目录已有多地区武器/防具货品，但不得把别的地区商人库存随意放到河口。
+shop NPC 必须与原地图位置/史料对应；未定位的商人/地图暂不部署。
+之后恢复原战斗请求、目标怪物、伤害和 HP/TP，再逐步恢复经验、任务和出口换图。
+咏唱、受击中断、增益草药、复活瓶、酒瓶/烈焰瓶效果仍未实现。
+
+五、验收和持久交付
+53 项本地检查；112 源文件逐一验证 Git blob，不包含 __pycache__ 或测试数据库。
+最终真实鼠标流程：买Lemon3/Mix1→卖Lemon1→/target本人→双击使用Lemon1→拖动交换。
+金币5000→3560→3740；HP测试40→100，TP10不变。重启恢复相同状态及位置。
+HP40/TP10仅隔离CI种入，交付没有受伤存档或用户数据库，新角色暂定满100/30。
+旧森林入口保留；河口地图0x1120108、史料商人格子141/313、11件商品、178保守通行单元。
+官方商人模型/实例、官方物品master、完整碰撞、主支线任务和其他地图仍待恢复。
+截图只裁去桌面，不生成/重绘游戏画面。所有未完成项应在最终记录中明确保留。

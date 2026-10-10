@@ -1,0 +1,403 @@
+{
+  "passed": true,
+  "tested_commit": "fc9f4712d17d95afd1848fd68c1f7cdba2ab889b",
+  "windows_run_id": 38014388401,
+  "artifact_id": 11655124827,
+  "artifact_sha256": "82c037ee1ebf9bcf105171e6be406ee082bfdfa5f16c5def0065a8900846fa8f",
+  "checks": {
+    "map_entered": true,
+    "npc_selected_native": true,
+    "shop_catalog_parsed_native": true,
+    "shop_frame_shown_native": true,
+    "shop_historical_names_native": true,
+    "shop_historical_prices_native": true,
+    "shop_historical_item_count_native": true,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "shop_closed_native": true,
+    "movement_after_shop_close_native": true,
+    "buy_request_built_native": true,
+    "sell_request_built_native": true,
+    "buy_money_quantity_native": true,
+    "sell_money_quantity_native": true,
+    "shop_quantity_refreshed_native": true,
+    "inventory_window_open_native": true,
+    "original_lemon_icon_native": true,
+    "item_used_native": true,
+    "hp_recovered_native": true,
+    "bag_order_native": true,
+    "bag_slot1_saved": true,
+    "bag_move_request_native": true,
+    "hp_gauge_draw_succeeded_native": true,
+    "tp_gauge_draw_succeeded_native": true,
+    "hud_actual_d3d_draw_succeeded_native": true
+  },
+  "restart_checks": {
+    "map_entered": true,
+    "position_restored_without_movement": true,
+    "inventory_restored_native": true,
+    "vitals_restored_native": true,
+    "inventory_window_open_native": true,
+    "bag_order_native": true,
+    "bag_slot1_saved": true,
+    "hp_gauge_draw_succeeded_native": true,
+    "tp_gauge_draw_succeeded_native": true,
+    "hud_actual_d3d_draw_succeeded_native": true
+  },
+  "native_move": {
+    "time": "2026-10-10T01:50:21.972868+00:00",
+    "event": "item_move_committed",
+    "connection": 3,
+    "opcode": 84,
+    "request_id": 50,
+    "sequence": 5,
+    "map_id": 17957128,
+    "identity": [
+      1,
+      1
+    ],
+    "item": [
+      1895825409,
+      1,
+      1,
+      0
+    ],
+    "source_location": 2,
+    "source_slot": 0,
+    "count": -1,
+    "destination_location": 2,
+    "destination_slot": 1,
+    "destination_item": [
+      1895825410,
+      1,
+      1,
+      0
+    ],
+    "context": 0,
+    "status": 0,
+    "reason": null,
+    "replayed": false,
+    "snapshot": {
+      "money": 3740,
+      "capacity": 32,
+      "items": [
+        {
+          "identity": [
+            1895825410,
+            1,
+            1,
+            0
+          ],
+          "source_key": "wikihouse-u392bcdb",
+          "catalog_index": 1,
+          "name": "ミックスグミ",
+          "buy_price": 360,
+          "sell_price": 180,
+          "quantity": 1,
+          "slot": 0
+        },
+        {
+          "identity": [
+            1895825409,
+            1,
+            1,
+            0
+          ],
+          "source_key": "wikihouse-u392bcdb",
+          "catalog_index": 0,
+          "name": "レモングミ",
+          "buy_price": 360,
+          "sell_price": 180,
+          "quantity": 1,
+          "slot": 1
+        }
+      ]
+    },
+    "request_hex": "005400540032000000e03b6d05000000080112010100000001000000010000710100000001000000000000000200000000000000ffffffff02000000010000000200007101000000010000000000000000000000",
+    "answer_hex": "0067001402320000000000000500000014020000000000000000000000000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000002000071010000000100000000000000380015000200007101000000010000000000000002000000010000000000000000000000010000000100140009000000000000000800000068010000b4000000000000000000000000000000000000000000000039000e000200007101000000010000000000000000000000000000004e0041004d0045003a00df30c330af30b930b030df303b00000000003c00010037000b0002000000010000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000100140006000000000000000800000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c0001003d00010050000300020000009c0e00004d000b00020000000000000000000000000000000000000000000000020000710100000001000000000000004d000b000200000001000000000000000000000000000000000000000100007101000000010000000000000000000000"
+  },
+  "native_use": {
+    "time": "2026-10-10T01:50:17.859203+00:00",
+    "event": "item_use_committed",
+    "connection": 3,
+    "opcode": 85,
+    "request_id": 49,
+    "sequence": 4,
+    "map_id": 17957128,
+    "identity": [
+      1,
+      1
+    ],
+    "item": [
+      1895825409,
+      1,
+      1,
+      0
+    ],
+    "location": 2,
+    "slot": 0,
+    "count": 0,
+    "target": [
+      1,
+      1
+    ],
+    "status": 0,
+    "reason": null,
+    "replayed": false,
+    "snapshot": {
+      "money": 3740,
+      "capacity": 32,
+      "items": [
+        {
+          "identity": [
+            1895825409,
+            1,
+            1,
+            0
+          ],
+          "source_key": "wikihouse-u392bcdb",
+          "catalog_index": 0,
+          "name": "レモングミ",
+          "buy_price": 360,
+          "sell_price": 180,
+          "quantity": 1,
+          "slot": 0
+        },
+        {
+          "identity": [
+            1895825410,
+            1,
+            1,
+            0
+          ],
+          "source_key": "wikihouse-u392bcdb",
+          "catalog_index": 1,
+          "name": "ミックスグミ",
+          "buy_price": 360,
+          "sell_price": 180,
+          "quantity": 1,
+          "slot": 1
+        }
+      ]
+    },
+    "vitals": {
+      "hp": 100,
+      "tp": 10,
+      "max_hp": 100,
+      "max_tp": 30
+    },
+    "request_hex": "0055004c003100000000000004000000ad100700f0088bb35958dd01080112010100000001000000010000710100000001000000000000000200000000000000000000000100000001000000",
+    "answer_hex": "0067001402310000000000000400000014020000000000000000000000000000000000003600040001000000000000002000000037000b0002000000000000000000000000000000000000000000000001000071010000000100000000000000380015000100007101000000010000000000000001000000010000000000000000000000010000000100140006000000000000000800000068010000b4000000000000000000000000000000000000000000000039000d000100007101000000010000000000000000000000000000004e0041004d0045003a00ec30e230f330b030df303b0000003c00010037000b0002000000010000000000000000000000000000000000000002000071010000000100000000000000380015000200007101000000010000000000000002000000010000000000000000000000010000000100140009000000000000000800000068010000b4000000000000000000000000000000000000000000000039000e000200007101000000010000000000000000000000000000004e0041004d0045003a00df30c330af30b930b030df303b00000000003c0001003d00010050000300020000009c0e00004d000b00020000000000000000000000000000000000000000000000010000710100000001000000000000004d000b000200000001000000000000000000000000000000000000000200007101000000010000000000000000000000",
+    "limitation": "Historical recovery amounts; casting, interrupted use and battle targeting still pending"
+  },
+  "saved_inventory": {
+    "money": 3740,
+    "capacity": 32,
+    "items": [
+      {
+        "identity": [
+          1895825410,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 1,
+        "name": "ミックスグミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 1,
+        "slot": 0
+      },
+      {
+        "identity": [
+          1895825409,
+          1,
+          1,
+          0
+        ],
+        "source_key": "wikihouse-u392bcdb",
+        "catalog_index": 0,
+        "name": "レモングミ",
+        "buy_price": 360,
+        "sell_price": 180,
+        "quantity": 1,
+        "slot": 1
+      }
+    ]
+  },
+  "saved_vitals": {
+    "hp": 100,
+    "tp": 10,
+    "max_hp": 100,
+    "max_tp": 30
+  },
+  "database_items": [
+    [
+      "ミックスグミ",
+      1,
+      0
+    ],
+    [
+      "レモングミ",
+      1,
+      1
+    ]
+  ],
+  "database_vitals": [
+    [
+      100,
+      10,
+      100,
+      30
+    ]
+  ],
+  "database_ledger": [
+    [
+      222,
+      1
+    ],
+    [
+      223,
+      2
+    ],
+    [
+      85,
+      4
+    ],
+    [
+      84,
+      5
+    ]
+  ],
+  "final_pixel": [
+    4480,
+    5152
+  ],
+  "renderer_asset_manifests": {
+    "first": {
+      "version": "v16",
+      "original_directory": "D:\\a\\_temp\\TOEO_LOCAL\\game",
+      "runtime_directory": "D:\\a\\_temp\\TOEO_LOCAL\\game_runtime_v16",
+      "original_assets_unchanged": true,
+      "changes": "Four palette TGAs expanded losslessly in isolated runtime only",
+      "files": [
+        {
+          "file": "ui/image/statusbar.tga",
+          "original_sha256": "e4411dde62a6266993358123341c77608fb338efac2afe8112a835d6b6a7c295",
+          "converted_sha256": "4d580b7757740669e880d6a7b065c87d025bc4b4cf1ea8d2a0b51ba79a896e37",
+          "width": 512,
+          "height": 256,
+          "bgra_pixels_sha256": "1180ad36ad2b6974366ada0ea5141edb1f845feeff582c338a562495e3a44e3b",
+          "pixel_count": 131072,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "ui/image/statusbar2.tga",
+          "original_sha256": "19a6998cf42879149be41280fde7734747e418a26dcc37cd4655c6df1a1847d5",
+          "converted_sha256": "a895425d086cc7fcb146ad0c1392c78c29bee243362020c2fea1040e13c63ae5",
+          "width": 256,
+          "height": 32,
+          "bgra_pixels_sha256": "94745fbbce5e3ab5501bbe871bdc3abb8934057e38158e698d39e502b5e6cd0e",
+          "pixel_count": 8192,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "ui/image/statusbar3.tga",
+          "original_sha256": "25de2dedec1aff42229e3501d6a8b3c0b3557a8322802fa190664e5bc3893850",
+          "converted_sha256": "e5c09f805f793d16d77492cf0b4d67769acba0c6fcf7b45236fccc93a71b4b24",
+          "width": 512,
+          "height": 256,
+          "bgra_pixels_sha256": "598033e6f2aef9a2540c77520f1b1461644dc8e2072c7d89573943d7dc976001",
+          "pixel_count": 131072,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "resource/battlefont.tga",
+          "original_sha256": "46e6069913f02b4a4f51b4a7576e0492d214c36fb1788ca2e415176f08a64d59",
+          "converted_sha256": "ba40afe917e902ad038c26501f0f20d4bc8af3f63e9935b50f5a5e4a26b0712c",
+          "width": 512,
+          "height": 512,
+          "bgra_pixels_sha256": "c9a2f0a7c03931f4acf83eb3a074467f8050746f8ac9e7cd9b05510fbf6f9ad5",
+          "pixel_count": 262144,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        }
+      ]
+    },
+    "reentered": {
+      "version": "v16",
+      "original_directory": "D:\\a\\_temp\\TOEO_LOCAL\\game",
+      "runtime_directory": "D:\\a\\_temp\\TOEO_LOCAL\\game_runtime_v16",
+      "original_assets_unchanged": true,
+      "changes": "Four palette TGAs expanded losslessly in isolated runtime only",
+      "files": [
+        {
+          "file": "ui/image/statusbar.tga",
+          "original_sha256": "e4411dde62a6266993358123341c77608fb338efac2afe8112a835d6b6a7c295",
+          "converted_sha256": "4d580b7757740669e880d6a7b065c87d025bc4b4cf1ea8d2a0b51ba79a896e37",
+          "width": 512,
+          "height": 256,
+          "bgra_pixels_sha256": "1180ad36ad2b6974366ada0ea5141edb1f845feeff582c338a562495e3a44e3b",
+          "pixel_count": 131072,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "ui/image/statusbar2.tga",
+          "original_sha256": "19a6998cf42879149be41280fde7734747e418a26dcc37cd4655c6df1a1847d5",
+          "converted_sha256": "a895425d086cc7fcb146ad0c1392c78c29bee243362020c2fea1040e13c63ae5",
+          "width": 256,
+          "height": 32,
+          "bgra_pixels_sha256": "94745fbbce5e3ab5501bbe871bdc3abb8934057e38158e698d39e502b5e6cd0e",
+          "pixel_count": 8192,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "ui/image/statusbar3.tga",
+          "original_sha256": "25de2dedec1aff42229e3501d6a8b3c0b3557a8322802fa190664e5bc3893850",
+          "converted_sha256": "e5c09f805f793d16d77492cf0b4d67769acba0c6fcf7b45236fccc93a71b4b24",
+          "width": 512,
+          "height": 256,
+          "bgra_pixels_sha256": "598033e6f2aef9a2540c77520f1b1461644dc8e2072c7d89573943d7dc976001",
+          "pixel_count": 131072,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        },
+        {
+          "file": "resource/battlefont.tga",
+          "original_sha256": "46e6069913f02b4a4f51b4a7576e0492d214c36fb1788ca2e415176f08a64d59",
+          "converted_sha256": "ba40afe917e902ad038c26501f0f20d4bc8af3f63e9935b50f5a5e4a26b0712c",
+          "width": 512,
+          "height": 512,
+          "bgra_pixels_sha256": "c9a2f0a7c03931f4acf83eb3a074467f8050746f8ac9e7cd9b05510fbf6f9ad5",
+          "pixel_count": 262144,
+          "alpha_preserved": true,
+          "origin_preserved": true
+        }
+      ]
+    }
+  },
+  "native_exception_counts": {
+    "first": 20,
+    "reentered": 17
+  },
+  "visual_reviewed": true,
+  "local_checks_passed": 53,
+  "source_files_verified": 112,
+  "complete_gameplay": false,
+  "original_binary_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "fixture_note": "Only the isolated CI character starts HP40/TP10; delivery includes no user database.",
+  "renderer_scope": "Four original palette TGAs expand losslessly to 32-bit BGRA in a separate runtime directory. Original exe/assets retained; original D3D9 drawing and HRESULTs unchanged. Native probes only observe state.",
+  "limitations": [
+    "Casting, interrupted use, buffs, revival and battle targeting pending",
+    "Equipment, combat, quests, map transitions and complete collision pending",
+    "Experience/level progression and official item masters pending",
+    "Other caught native system/C++ exceptions remain recorded; broader renderer compatibility pending",
+    "Provisional level-one stat limits, wallet, stack capacity, merchant identity/model and walkable cells"
+  ]
+}

@@ -1,0 +1,121 @@
+004f6ba0 push     ebp
+004f6ba1 mov      ebp, esp
+004f6ba3 sub      esp, 0x54
+004f6ba6 mov      eax, dword ptr [0x80dbf4]
+004f6bab mov      edx, dword ptr [eax + 0x28]
+004f6bae mov      eax, dword ptr [edx + 0x28]
+004f6bb1 test     eax, eax
+004f6bb3 jne      0x4f6bb9
+004f6bb5 xor      edx, edx
+004f6bb7 jmp      0x4f6bbc
+004f6bb9 mov      edx, dword ptr [eax + 0x2c]
+004f6bbc push     esi
+004f6bbd mov      esi, dword ptr [edx + 0x78]
+004f6bc0 test     esi, esi
+004f6bc2 je       0x4f6cc3
+004f6bc8 test     eax, eax
+004f6bca je       0x4f6bcf
+004f6bcc mov      eax, dword ptr [eax + 0x2c]
+004f6bcf mov      eax, dword ptr [eax + 0x78]
+004f6bd2 test     eax, eax
+004f6bd4 je       0x4f6cc3
+004f6bda mov      eax, dword ptr [eax + 0xc]
+004f6bdd test     eax, eax
+004f6bdf je       0x4f6cc3
+004f6be5 mov      edx, dword ptr [ecx + 0x10]
+004f6be8 test     edx, edx
+004f6bea jne      0x4f6cc3
+004f6bf0 mov      esi, dword ptr [ecx]
+004f6bf2 inc      esi
+004f6bf3 mov      dword ptr [ecx], esi
+004f6bf5 mov      edx, esi
+004f6bf7 mov      dword ptr [ebp - 0x48], edx
+004f6bfa mov      edx, dword ptr [eax + 0x14]
+004f6bfd mov      dword ptr [ebp - 0x44], edx
+004f6c00 mov      edx, dword ptr [eax + 0x68]
+004f6c03 mov      dword ptr [ebp - 0x40], edx
+004f6c06 mov      eax, dword ptr [eax + 0x6c]
+004f6c09 mov      dword ptr [ebp - 0x3c], eax
+004f6c0c mov      eax, dword ptr [ebp + 8]
+004f6c0f mov      edx, dword ptr [eax]
+004f6c11 mov      dword ptr [ebp - 0x38], edx
+004f6c14 mov      edx, dword ptr [eax + 4]
+004f6c17 mov      dword ptr [ebp - 0x34], edx
+004f6c1a mov      edx, dword ptr [eax + 8]
+004f6c1d mov      eax, dword ptr [eax + 0xc]
+004f6c20 mov      dword ptr [ebp - 0x30], edx
+004f6c23 mov      edx, dword ptr [ebp + 0xc]
+004f6c26 mov      dword ptr [ebp - 0x2c], eax
+004f6c29 mov      eax, dword ptr [ebp + 0x10]
+004f6c2c mov      dword ptr [ebp - 0x28], edx
+004f6c2f mov      edx, dword ptr [ebp + 0x14]
+004f6c32 mov      dword ptr [ebp - 0x24], eax
+004f6c35 mov      eax, dword ptr [ebp + 0x18]
+004f6c38 mov      dword ptr [ebp - 0x20], edx
+004f6c3b mov      edx, dword ptr [ebp + 0x1c]
+004f6c3e mov      dword ptr [ebp - 0x1c], eax
+004f6c41 mov      eax, dword ptr [ebp + 0x20]
+004f6c44 mov      dword ptr [ebp - 0x18], edx
+004f6c47 mov      edx, dword ptr [eax]
+004f6c49 mov      dword ptr [ebp - 0x14], edx
+004f6c4c mov      edx, dword ptr [eax + 4]
+004f6c4f mov      dword ptr [ebp - 0x10], edx
+004f6c52 mov      edx, dword ptr [eax + 8]
+004f6c55 mov      eax, dword ptr [eax + 0xc]
+004f6c58 mov      dword ptr [ebp - 8], eax
+004f6c5b mov      eax, 0x54
+004f6c60 mov      dword ptr [ebp - 0xc], edx
+004f6c63 mov      edx, dword ptr [ebp + 0x24]
+004f6c66 mov      word ptr [ebp - 0x53], ax
+004f6c6a mov      word ptr [ebp - 0x51], ax
+004f6c6e mov      eax, dword ptr [0x80dbf4]
+004f6c73 mov      dword ptr [ebp - 4], edx
+004f6c76 mov      byte ptr [ebp - 0x54], 0
+004f6c7a mov      dword ptr [ebp - 0x4f], 0xffffffff
+004f6c81 mov      edx, dword ptr [eax + 0x28]
+004f6c84 mov      eax, dword ptr [edx + 0x28]
+004f6c87 test     eax, eax
+004f6c89 je       0x4f6c8e
+004f6c8b mov      eax, dword ptr [eax + 0x30]
+004f6c8e mov      eax, dword ptr [eax + 0x38]
+004f6c91 test     eax, eax
+004f6c93 je       0x4f6cc3
+004f6c95 mov      esi, dword ptr [eax + 4]
+004f6c98 test     esi, esi
+004f6c9a je       0x4f6cc3
+004f6c9c mov      eax, dword ptr [esi + 8]
+004f6c9f test     eax, eax
+004f6ca1 je       0x4f6cbc
+004f6ca3 push     1
+004f6ca5 add      ecx, 8
+004f6ca8 push     ecx
+004f6ca9 lea      ecx, [ebp - 0x54]
+004f6cac push     ecx
+004f6cad push     4
+004f6caf push     -0x11
+004f6cb1 mov      ecx, eax
+004f6cb3 call     0x60a3e0
+004f6cb8 test     eax, eax
+004f6cba jne      0x4f6ccc
+004f6cbc mov      dword ptr [esi + 0xc], 1
+004f6cc3 xor      al, al
+004f6cc5 pop      esi
+004f6cc6 mov      esp, ebp
+004f6cc8 pop      ebp
+004f6cc9 ret      0x20
+004f6ccc mov      al, 1
+004f6cce pop      esi
+004f6ccf mov      esp, ebp
+004f6cd1 pop      ebp
+004f6cd2 ret      0x20
+004f6cd5 int3     
+004f6cd6 int3     
+004f6cd7 int3     
+004f6cd8 int3     
+004f6cd9 int3     
+004f6cda int3     
+004f6cdb int3     
+004f6cdc int3     
+004f6cdd int3     
+004f6cde int3     
+004f6cdf int3     

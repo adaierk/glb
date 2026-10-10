@@ -1,0 +1,74 @@
+00623280 mov      eax, dword ptr [esp + 8]
+00623284 cmp      eax, 7
+00623287 push     esi
+00623288 ja       0x6233a8
+0062328e jmp      dword ptr [eax*4 + 0x6233dc]
+00623295 mov      esi, dword ptr [esp + 8]
+00623299 push     1
+0062329b push     0xab
+006232a0 push     esi
+006232a1 call     0x62b130
+006232a6 push     5
+006232a8 push     0x13
+006232aa push     esi
+006232ab call     0x62b130
+006232b0 push     6
+006232b2 push     0x14
+006232b4 push     esi
+006232b5 call     0x62b130
+006232ba add      esp, 0x24
+006232bd pop      esi
+006232be ret      
+006232bf push     1
+006232c1 mov      esi, dword ptr [esp + 0xc]
+006232c5 push     0xab
+006232ca push     esi
+006232cb call     0x62b130
+006232d0 push     5
+006232d2 push     0x13
+006232d4 push     esi
+006232d5 call     0x62b130
+006232da push     2
+006232dc push     0x14
+006232de push     esi
+006232df call     0x62b130
+006232e4 add      esp, 0x24
+006232e7 pop      esi
+006232e8 ret      
+006232e9 push     3
+006232eb jmp      0x6232c1
+006232ed mov      esi, dword ptr [esp + 8]
+006232f1 push     1
+006232f3 push     0xab
+006232f8 push     esi
+006232f9 call     0x62b130
+006232fe push     1
+00623300 push     0x13
+00623302 push     esi
+00623303 call     0x62b130
+00623308 push     3
+0062330a push     0x14
+0062330c push     esi
+0062330d call     0x62b130
+00623312 add      esp, 0x24
+00623315 pop      esi
+00623316 ret      
+00623317 mov      esi, dword ptr [esp + 8]
+0062331b push     1
+0062331d push     0xab
+00623322 push     esi
+00623323 call     0x62b130
+00623328 push     2
+0062332a jmp      0x623369
+0062332c mov      esi, dword ptr [esp + 8]
+00623330 push     1
+00623332 push     0xab
+00623337 push     esi
+00623338 call     0x62b130
+0062333d push     2
+0062333f push     0x13
+00623341 push     esi
+00623342 call     0x62b130
+00623347 push     2
+00623349 push     0x14
+0062334b push     esi

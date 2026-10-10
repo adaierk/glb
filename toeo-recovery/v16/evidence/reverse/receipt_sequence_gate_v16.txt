@@ -1,0 +1,109 @@
+004fab30 push     ebp
+004fab31 mov      ebp, esp
+004fab33 push     esi
+004fab34 mov      esi, ecx
+004fab36 mov      eax, dword ptr [esi + 0x10]
+004fab39 test     eax, eax
+004fab3b je       0x4fab79
+004fab3d mov      eax, dword ptr [ebp + 8]
+004fab40 push     eax
+004fab41 call     0x4f9720
+004fab46 mov      ecx, dword ptr [0x80dbf4]
+004fab4c mov      edx, dword ptr [ecx + 0x28]
+004fab4f mov      eax, dword ptr [edx + 0x28]
+004fab52 test     eax, eax
+004fab54 je       0x4fab59
+004fab56 mov      eax, dword ptr [eax + 0x30]
+004fab59 mov      eax, dword ptr [eax + 0x38]
+004fab5c test     eax, eax
+004fab5e je       0x4fab79
+004fab60 mov      eax, dword ptr [eax + 4]
+004fab63 test     eax, eax
+004fab65 je       0x4fab79
+004fab67 mov      eax, dword ptr [eax + 8]
+004fab6a test     eax, eax
+004fab6c je       0x4fab79
+004fab6e add      esi, 8
+004fab71 push     esi
+004fab72 mov      ecx, eax
+004fab74 call     0x609c50
+004fab79 pop      esi
+004fab7a pop      ebp
+004fab7b ret      4
+004fab7e int3     
+004fab7f int3     
+004fab80 push     ebp
+004fab81 mov      ebp, esp
+004fab83 push     ecx
+004fab84 mov      eax, dword ptr [0x80dbf4]
+004fab89 mov      ecx, dword ptr [eax + 0x28]
+004fab8c mov      eax, dword ptr [ecx + 0x28]
+004fab8f test     eax, eax
+004fab91 mov      dword ptr [ebp - 4], 0
+004fab98 je       0x4fab9d
+004fab9a mov      eax, dword ptr [eax + 0x2c]
+004fab9d mov      eax, dword ptr [eax + 0x78]
+004faba0 test     eax, eax
+004faba2 push     esi
+004faba3 push     edi
+004faba4 je       0x4fabf6
+004faba6 mov      esi, dword ptr [eax + 0xc]
+004faba9 test     esi, esi
+004fabab je       0x4fabf6
+004fabad mov      ecx, esi
+004fabaf call     0x4ffc20
+004fabb4 mov      edi, eax
+004fabb6 test     edi, edi
+004fabb8 je       0x4fabf6
+004fabba mov      eax, dword ptr [esi + 0x68]
+004fabbd mov      edx, dword ptr [ebp + 8]
+004fabc0 mov      esi, dword ptr [esi + 0x6c]
+004fabc3 push     edx
+004fabc4 push     esi
+004fabc5 push     eax
+004fabc6 mov      ecx, edi
+004fabc8 call     0x4e5dd0
+004fabcd mov      ecx, eax
+004fabcf or       ecx, edx
+004fabd1 je       0x4fabf6
+004fabd3 push     edx
+004fabd4 push     eax
+004fabd5 mov      ecx, edi
+004fabd7 call     0x4e5d10
+004fabdc lea      ecx, [eax + 0xc]
+004fabdf call     dword ptr [0x6e2338]
+004fabe5 push     eax
+004fabe6 mov      ecx, ebx
+004fabe8 call     dword ptr [0x6e23b8]
+004fabee pop      edi
+004fabef mov      eax, ebx
+004fabf1 pop      esi
+004fabf2 mov      esp, ebp
+004fabf4 pop      ebp
+004fabf5 ret      
+004fabf6 mov      ecx, ebx
+004fabf8 call     dword ptr [0x6e2350]
+004fabfe pop      edi
+004fabff mov      eax, ebx
+004fac01 pop      esi
+004fac02 mov      esp, ebp
+004fac04 pop      ebp
+004fac05 ret      
+004fac06 int3     
+004fac07 int3     
+004fac08 int3     
+004fac09 int3     
+004fac0a int3     
+004fac0b int3     
+004fac0c int3     
+004fac0d int3     
+004fac0e int3     
+004fac0f int3     
+004fac10 push     ebp
+004fac11 mov      ebp, esp
+004fac13 push     -1
+004fac15 push     0x6d1925
+004fac1a mov      eax, dword ptr fs:[0]
+004fac20 push     eax
+004fac21 mov      dword ptr fs:[0], esp
+004fac28 sub      esp, 0x1a8
