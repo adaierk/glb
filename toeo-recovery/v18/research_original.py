@@ -128,7 +128,7 @@ for section in pe.sections:
 cpd_records=[]
 for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
  body=(resources/name).read_bytes()
- cpd_records.append({'file':name,'start':body[:512].hex(),'id10000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',10000)),body)],'id4000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',4000)),body)],'strings':[x.group().decode() for x in re.finditer(rb'[\\x20-\\x7e]{5,}',body)][:60]})
+ cpd_records.append({'file':name,'start':body[:512].hex(),'id10000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',10000)),body)],'id4000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',4000)),body)],'strings':[x.group().decode() for x in re.finditer(rb'[\x20-\x7e]{5,}',body)][:60]})
 (OUT/'weapon_cpd_references.json').write_text(json.dumps(cpd_records,indent=2))
 # String references to the independent weapon descriptor.
 needle=b'pc_weapon';pos=data.find(needle)
@@ -140,3 +140,18 @@ if pos>=0:
    left=max(0,m.start()-70);at=start+left
    refs.append({'address':hex(start+m.start()),'instructions':[f'{i.address:08x} {i.mnemonic} {i.op_str}' for i in cs.disasm(body[left:m.start()+120],at)]})
  (OUT/'weapon_descriptor_refs.json').write_text(json.dumps({'string_address':hex(va),'refs':refs},indent=2))
+
+all_symbols=[]
+for encoding in ('ascii','utf-16le'):
+ pattern=rb'[\x20-\x7e]{5,}' if encoding=='ascii' else rb'(?:[\x20-\x7e]\x00){5,}'
+ for m in re.finditer(pattern,data):
+  value=m.group().decode(encoding)
+  if any(k in value.lower() for k in ('cpd','pc_weapon','pc_hat','crsid','cpdt','cpdtable','clut')):
+   va=base+pe.get_rva_from_offset(m.start());refs=[]
+   for section in pe.sections:
+    if not section.Characteristics&0x20000000:continue
+    body=section.get_data();start=base+section.VirtualAddress
+    for ref in re.finditer(re.escape(struct.pack('<I',va)),body):
+     left=max(0,ref.start()-60);refs.append({'address':hex(start+ref.start()),'instructions':[f'{i.address:08x} {i.mnemonic} {i.op_str}' for i in cs.disasm(body[left:ref.start()+120],start+left)]})
+   all_symbols.append({'text':value,'address':hex(va),'refs':refs})
+(OUT/'cpd_symbols.json').write_text(json.dumps(all_symbols,indent=2))
