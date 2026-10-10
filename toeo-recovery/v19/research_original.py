@@ -227,3 +227,13 @@ for sec in pe.sections:
    refs_request.append(hex(start+at))
    (OUT/f'request_model_call_{start+at:x}.txt').write_text(dis(start+max(0,at-0x100),0x280))
 (OUT/'world_request_model_calls.json').write_text(json.dumps(refs_request,indent=2))
+
+refs154=[]
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ for ins in cs.disasm(sec.get_data(),base+sec.VirtualAddress):
+  if '0x154]' in ins.op_str or '0x155]' in ins.op_str:
+   refs154.append({'va':hex(ins.address),'op':ins.mnemonic+' '+ins.op_str})
+   if ins.mnemonic=='mov' and ins.op_str.startswith('byte ptr ['):
+    (OUT/f'actor_load_flag_{ins.address:x}.txt').write_text(dis(max(base+sec.VirtualAddress,ins.address-0x120),0x270))
+(OUT/'actor_load_flag_references.json').write_text(json.dumps(refs154,indent=2))
