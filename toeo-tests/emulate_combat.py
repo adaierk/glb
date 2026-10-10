@@ -19,7 +19,7 @@ class BattleRecordFixture(NpcFixture):
         if va==0x515650:
             p=self.read32(uc.reg_read(UC_X86_REG_ESP)+4)
             self.projected={'identity':[self.read32(p),self.read32(p+4)],'controlled':uc.mem_read(p+0xc,1)[0],
-                'battle_model_bank':self.read32(p+0x24c),'category':self.read32(p+0x244),'map_id':self.read32(p+0x220),
+                'entity_kind':self.read32(p+8),'battle_model_bank':self.read32(p+0x24c),'category':self.read32(p+0x244),'map_id':self.read32(p+0x220),
                 'group':[self.read32(p+0x228),self.read32(p+0x22c)],
                 'position':[self.read32(p+0x230),self.read32(p+0x234)],
                 'appearance_hex':bytes(uc.mem_read(p+0x34,24)).hex(),
@@ -39,7 +39,7 @@ def record_projections(binary):
             if f.projected is None or f.uc.reg_read(UC_X86_REG_EIP)!=0x515650:raise RuntimeError(f'{e}; PC={hex(f.uc.reg_read(UC_X86_REG_EIP))}') from e
             # invoke requires a return; this fixture intentionally stops at the declared renderer boundary.
         actual=f.projected
-        assert actual and actual['identity']==list(identity) and actual['category']==category
+        assert actual and actual['identity']==list(identity) and actual['category']==category and actual['entity_kind']==category
         assert actual['map_id']==RASHUAN.map_id and actual['group']==list(BATTLE_GROUP)
         assert actual['position']==list(position) and actual['appearance_hex']==appearance.hex()
         assert actual['controlled']==int(controlled) and actual['hp']==[100,100] and actual['tp']==[30,30]

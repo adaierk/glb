@@ -19,6 +19,8 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     b[0x3c:0x80]=encode_name(name)
     b[0x80:0x98]=appearance
     struct.pack_into('<IIIII',b,0x98,max_hp,hp,max_tp,tp,0)
+    # Original529919 copies B4 -> state+8 -> actor+60; model/body and battle routines branch on kind1/2.
+    struct.pack_into('<I',b,0xb4,category)
     b[0xc0:0xc5]=bytes((1,1,1,0,1))
     struct.pack_into('<HHH',b,0xc6,1,1,2)
     # Original 529840 -> state+24C -> actor+16C; 5109A0 uses the CRSD bank directly.
