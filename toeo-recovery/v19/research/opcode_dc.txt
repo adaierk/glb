@@ -1,0 +1,18 @@
+0052d6a1  xor      esi, esi
+0052d6a3  call     0x401210
+0052d6a8  mov      ecx, dword ptr [eax + 0x44]
+0052d6ab  call     0x5b5370
+0052d6b0  mov      ecx, dword ptr [eax + 0x100]
+0052d6b6  or       ecx, dword ptr [eax + 0x104]
+0052d6bc  je       0x52d6d6
+0052d6be  call     0x401210
+0052d6c3  mov      ecx, dword ptr [eax + 0x44]
+0052d6c6  call     0x5b5370
+0052d6cb  mov      ecx, eax
+0052d6cd  call     0x536d40
+0052d6d2  test     al, al
+0052d6d4  je       0x52d6db
+0052d6d6  mov      esi, 1
+0052d6db  mov      dword ptr [ebp - 0x34], esi
+0052d6de  mov      word ptr [ebp - 0x53], 0xdd
+0052d6e4  jmp      0x52d59d

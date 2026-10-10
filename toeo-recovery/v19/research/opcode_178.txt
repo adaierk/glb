@@ -1,0 +1,13 @@
+0052e394  call     0x401210
+0052e399  mov      edx, dword ptr [ebx + 0x10]
+0052e39c  mov      eax, dword ptr [eax + 0x44]
+0052e39f  lea      ecx, [ebx + 0x1c]
+0052e3a2  push     ecx
+0052e3a3  mov      ecx, dword ptr [ebx + 0xc]
+0052e3a6  push     edx
+0052e3a7  push     ecx
+0052e3a8  mov      ecx, eax
+0052e3aa  call     0x5b5360
+0052e3af  mov      ecx, eax
+0052e3b1  call     0x567760
+0052e3b6  jmp      0x52fee4

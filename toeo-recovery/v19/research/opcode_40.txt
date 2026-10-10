@@ -1,0 +1,68 @@
+0052aa1a  call     0x430df0
+0052aa1f  mov      ecx, dword ptr [ebx + 0x14]
+0052aa22  mov      edx, dword ptr [ebx + 0x10]
+0052aa25  mov      eax, dword ptr [eax + 0x48]
+0052aa28  push     1
+0052aa2a  push     ecx
+0052aa2b  mov      ecx, dword ptr [ebx + 0xc]
+0052aa2e  push     edx
+0052aa2f  push     ecx
+0052aa30  mov      ecx, eax
+0052aa32  call     0x526340
+0052aa37  mov      esi, eax
+0052aa39  cmp      esi, edi
+0052aa3b  je       0x52fee4
+0052aa41  add      ebx, 0x18
+0052aa44  call     dword ptr [0x6e27fc]
+0052aa4a  test     ebx, ebx
+0052aa4c  mov      edi, eax
+0052aa4e  mov      dword ptr [ebp + 0xc], 0
+0052aa55  je       0x52fee4
+0052aa5b  jmp      0x52aa60
+0052aa5d  lea      ecx, [ecx]
+0052aa60  push     0x29d
+0052aa65  push     0x6ef070
+0052aa6a  push     0xf4240
+0052aa6f  lea      ecx, [ebp + 0xc]
+0052aa72  call     0x40d150
+0052aa77  movzx    eax, word ptr [ebx]
+0052aa7a  add      eax, 0xffffff6c
+0052aa7f  cmp      eax, 5
+0052aa82  ja       0x52aac8
+0052aa84  jmp      dword ptr [eax*4 + 0x530308]
+0052aa8b  push     edi
+0052aa8c  push     ebx
+0052aa8d  push     esi
+0052aa8e  call     0x50aee0
+0052aa93  jmp      0x52aac5
+0052aa95  push     edi
+0052aa96  push     ebx
+0052aa97  push     esi
+0052aa98  call     0x50b030
+0052aa9d  jmp      0x52aac5
+0052aa9f  push     edi
+0052aaa0  push     ebx
+0052aaa1  push     esi
+0052aaa2  call     0x50b1a0
+0052aaa7  jmp      0x52aac5
+0052aaa9  push     edi
+0052aaaa  push     ebx
+0052aaab  push     esi
+0052aaac  call     0x50b2d0
+0052aab1  jmp      0x52aac5
+0052aab3  push     edi
+0052aab4  push     ebx
+0052aab5  push     esi
+0052aab6  call     0x50bbf0
+0052aabb  jmp      0x52aac5
+0052aabd  push     edi
+0052aabe  push     ebx
+0052aabf  push     esi
+0052aac0  call     0x50d5c0
+0052aac5  add      esp, 0xc
+0052aac8  mov      ecx, ebx
+0052aaca  call     0x434680
+0052aacf  mov      ebx, eax
+0052aad1  test     ebx, ebx
+0052aad3  jne      0x52aa60
+0052aad5  jmp      0x52fee4

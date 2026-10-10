@@ -1,0 +1,21 @@
+0052a9da  mov      eax, dword ptr [ebx + 0x1c]
+0052a9dd  xor      esi, esi
+0052a9df  cmp      eax, edi
+0052a9e1  jle      0x52fee4
+0052a9e7  jmp      0x52a9f0
+0052a9e9  lea      esp, [esp]
+0052a9f0  mov      eax, dword ptr [ebx + 0x18]
+0052a9f3  mov      ecx, dword ptr [ebx + esi*8 + 0x24]
+0052a9f7  mov      edx, dword ptr [ebx + esi*8 + 0x20]
+0052a9fb  push     1
+0052a9fd  push     eax
+0052a9fe  push     ecx
+0052a9ff  push     edx
+0052aa00  call     0x430df0
+0052aa05  mov      ecx, dword ptr [eax + 0x48]
+0052aa08  call     0x526340
+0052aa0d  mov      eax, dword ptr [ebx + 0x1c]
+0052aa10  inc      esi
+0052aa11  cmp      esi, eax
+0052aa13  jl       0x52a9f0
+0052aa15  jmp      0x52fee4

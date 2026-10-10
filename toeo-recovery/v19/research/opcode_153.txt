@@ -1,0 +1,5 @@
+0052f135  push     ebx
+0052f136  call     0x430df0
+0052f13b  mov      ecx, dword ptr [eax + 0x48]
+0052f13e  call     0x526400
+0052f143  jmp      0x52fee4

@@ -1,0 +1,5 @@
+0052ca9b  push     ebx
+0052ca9c  call     0x430df0
+0052caa1  mov      ecx, dword ptr [eax + 0x48]
+0052caa4  call     0x526610
+0052caa9  jmp      0x52fee4

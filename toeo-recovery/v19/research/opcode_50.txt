@@ -1,0 +1,63 @@
+0052b77a  call     0x430df0
+0052b77f  mov      ecx, dword ptr [ebx + 0xc]
+0052b782  mov      edx, dword ptr [ebx + 0x14]
+0052b785  mov      eax, dword ptr [eax + 0x48]
+0052b788  push     1
+0052b78a  push     ecx
+0052b78b  mov      ecx, dword ptr [ebx + 0x10]
+0052b78e  push     edx
+0052b78f  push     ecx
+0052b790  mov      ecx, eax
+0052b792  call     0x526340
+0052b797  mov      esi, eax
+0052b799  cmp      esi, edi
+0052b79b  je       0x52fee4
+0052b7a1  mov      ecx, esi
+0052b7a3  call     0x4ff1f0
+0052b7a8  mov      ecx, dword ptr [esi + 0x12c]
+0052b7ae  call     0x424c70
+0052b7b3  mov      ecx, esi
+0052b7b5  call     0x501200
+0052b7ba  movsx    edx, word ptr [ebx + 0x20]
+0052b7be  movsx    eax, word ptr [ebx + 0x22]
+0052b7c2  lea      ecx, [ebp - 0x248]
+0052b7c8  push     ecx
+0052b7c9  mov      ecx, esi
+0052b7cb  mov      dword ptr [ebp - 0x248], edx
+0052b7d1  mov      dword ptr [ebp - 0x244], eax
+0052b7d7  call     0x4ff9c0
+0052b7dc  movsx    edx, byte ptr [ebx + 0x2a]
+0052b7e0  push     edi
+0052b7e1  push     edx
+0052b7e2  mov      ecx, esi
+0052b7e4  call     0x4ffad0
+0052b7e9  movsx    ecx, word ptr [ebx + 0x24]
+0052b7ed  xor      eax, eax
+0052b7ef  mov      ax, word ptr [ebx + 0x26]
+0052b7f3  push     edi
+0052b7f4  push     eax
+0052b7f5  push     ecx
+0052b7f6  mov      ecx, esi
+0052b7f8  call     0x4fe620
+0052b7fd  mov      ecx, esi
+0052b7ff  call     0x501400
+0052b804  mov      dx, word ptr [ebx + 0x28]
+0052b808  push     edi
+0052b809  mov      ecx, esi
+0052b80b  mov      word ptr [esi + 0x202], dx
+0052b812  call     0x4ff1e0
+0052b817  mov      al, byte ptr [esi + 0x80]
+0052b81d  test     al, al
+0052b81f  je       0x52b837
+0052b821  push     edi
+0052b822  mov      eax, dword ptr [esi + 0x6c]
+0052b825  mov      ecx, dword ptr [esi + 0x68]
+0052b828  push     eax
+0052b829  push     ecx
+0052b82a  call     0x430df0
+0052b82f  mov      ecx, dword ptr [eax + 0x48]
+0052b832  call     0x529e60
+0052b837  push     esi
+0052b838  call     0x5222a0
+0052b83d  add      esp, 4
+0052b840  jmp      0x52fee4

@@ -1,0 +1,16 @@
+0052f3a4  call     0x401210
+0052f3a9  mov      esi, dword ptr [eax + 0xdc]
+0052f3af  cmp      esi, edi
+0052f3b1  je       0x52fee4
+0052f3b7  mov      eax, dword ptr [ebx + 0x10]
+0052f3ba  mov      ecx, dword ptr [ebx + 0x14]
+0052f3bd  mov      edx, dword ptr [ebx + 0xc]
+0052f3c0  push     eax
+0052f3c1  push     ecx
+0052f3c2  push     edx
+0052f3c3  mov      ecx, esi
+0052f3c5  call     0x4eac80
+0052f3ca  cmp      word ptr [ebx + 0x18], 1
+0052f3cf  sete     al
+0052f3d2  mov      byte ptr [esi + 0x14], al
+0052f3d5  jmp      0x52fee4

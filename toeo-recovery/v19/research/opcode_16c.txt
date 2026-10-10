@@ -1,0 +1,9 @@
+0052f343  mov      edx, dword ptr [ebx + 0x20]
+0052f346  push     1
+0052f348  push     edx
+0052f349  add      ebx, 0x14
+0052f34c  push     ebx
+0052f34d  call     0x401210
+0052f352  mov      ecx, dword ptr [eax + 0xc4]
+0052f358  call     0x4f5280
+0052f35d  jmp      0x52fee4

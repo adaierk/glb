@@ -1,0 +1,15 @@
+0052ed7e  cmp      dword ptr [ebx + 0xc], 0x1c
+0052ed82  jbe      0x52fee4
+0052ed88  xor      ecx, ecx
+0052ed8a  mov      cl, byte ptr [ebx + 0x18]
+0052ed8d  lea      edx, [ebp - 0x208]
+0052ed93  lea      eax, [ebx + 0x1c]
+0052ed96  mov      dword ptr [ebp - 0x208], eax
+0052ed9c  push     ecx
+0052ed9d  mov      ecx, dword ptr [ebx + 0x14]
+0052eda0  push     edx
+0052eda1  push     ecx
+0052eda2  push     eax
+0052eda3  call     0x521270
+0052eda8  add      esp, 0x10
+0052edab  jmp      0x52fee4

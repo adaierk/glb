@@ -1,0 +1,21 @@
+0052a99b  mov      esi, dword ptr [ebx + 5]
+0052a99e  call     0x430df0
+0052a9a3  mov      eax, dword ptr [eax + 0x38]
+0052a9a6  cmp      eax, edi
+0052a9a8  je       0x52a9af
+0052a9aa  mov      eax, dword ptr [eax + 4]
+0052a9ad  jmp      0x52a9b1
+0052a9af  xor      eax, eax
+0052a9b1  mov      edx, dword ptr [ebx + 0xc]
+0052a9b4  mov      ecx, dword ptr [eax + 8]
+0052a9b7  push     edx
+0052a9b8  push     ebx
+0052a9b9  push     esi
+0052a9ba  call     0x6095d0
+0052a9bf  test     eax, eax
+0052a9c1  je       0x52fee4
+0052a9c7  push     ebx
+0052a9c8  call     0x430df0
+0052a9cd  mov      ecx, dword ptr [eax + 0x48]
+0052a9d0  call     0x52a200
+0052a9d5  jmp      0x52fee4

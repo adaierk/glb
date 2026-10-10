@@ -1,0 +1,8 @@
+0052d99e  call     0x401210
+0052d9a3  cmp      dword ptr [eax + 0xbc], edi
+0052d9a9  je       0x52fee4
+0052d9af  push     ebx
+0052d9b0  call     0x401210
+0052d9b5  mov      ecx, dword ptr [eax + 0xbc]
+0052d9bb  call     0x4bf1c0
+0052d9c0  jmp      0x52fee4

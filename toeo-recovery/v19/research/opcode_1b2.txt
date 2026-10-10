@@ -1,0 +1,17 @@
+0052fdb8  mov      eax, dword ptr [ebx + 5]
+0052fdbb  push     0x7c
+0052fdbd  push     ebx
+0052fdbe  push     eax
+0052fdbf  call     0x430df0
+0052fdc4  mov      ecx, eax
+0052fdc6  call     0x43a440
+0052fdcb  mov      ecx, eax
+0052fdcd  call     0x522280
+0052fdd2  call     0x401210
+0052fdd7  cmp      dword ptr [eax + 0xd8], edi
+0052fddd  je       0x52fee4
+0052fde3  push     ebx
+0052fde4  call     0x401210
+0052fde9  mov      ecx, dword ptr [eax + 0xd8]
+0052fdef  call     0x4a8500
+0052fdf4  jmp      0x52fee4

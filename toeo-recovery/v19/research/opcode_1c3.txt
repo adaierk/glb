@@ -1,0 +1,18 @@
+0052fe92  call     0x430df0
+0052fe97  mov      ecx, dword ptr [ebx + 0xc]
+0052fe9a  mov      edx, dword ptr [ebx + 0x24]
+0052fe9d  mov      eax, dword ptr [eax + 0x48]
+0052fea0  push     1
+0052fea2  push     ecx
+0052fea3  mov      ecx, dword ptr [ebx + 0x20]
+0052fea6  push     edx
+0052fea7  push     ecx
+0052fea8  mov      ecx, eax
+0052feaa  call     0x526340
+0052feaf  test     eax, eax
+0052feb1  je       0x52fee4
+0052feb3  push     ebx
+0052feb4  call     0x401210
+0052feb9  mov      ecx, dword ptr [eax + 0xe0]
+0052febf  call     0x4f6460
+0052fec4  jmp      0x52fee4

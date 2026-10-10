@@ -1,0 +1,193 @@
+0050e050  push     ebp
+0050e051  mov      ebp, esp
+0050e053  mov      eax, ecx
+0050e055  mov      ecx, dword ptr [ebp + 8]
+0050e058  mov      dword ptr [eax + 4], ecx
+0050e05b  xor      ecx, ecx
+0050e05d  mov      dword ptr [eax + 8], 1
+0050e064  mov      dword ptr [eax], 0x6eebe4
+0050e06a  mov      dword ptr [eax + 0xc], 0xffffffff
+0050e071  mov      dword ptr [eax + 0x10], ecx
+0050e074  mov      dword ptr [eax + 0x14], ecx
+0050e077  mov      dword ptr [eax + 0x1c], ecx
+0050e07a  mov      byte ptr [eax + 0x30], cl
+0050e07d  mov      dword ptr [eax + 0x20], ecx
+0050e080  mov      dword ptr [eax + 0x24], ecx
+0050e083  mov      dword ptr [eax + 0x28], ecx
+0050e086  mov      dword ptr [eax + 0x34], ecx
+0050e089  mov      dword ptr [eax + 0x38], ecx
+0050e08c  mov      dword ptr [eax + 0x2c], ecx
+0050e08f  pop      ebp
+0050e090  ret      4
+0050e093  int3     
+0050e094  int3     
+0050e095  int3     
+0050e096  int3     
+0050e097  int3     
+0050e098  int3     
+0050e099  int3     
+0050e09a  int3     
+0050e09b  int3     
+0050e09c  int3     
+0050e09d  int3     
+0050e09e  int3     
+0050e09f  int3     
+0050e0a0  push     ebp
+0050e0a1  mov      ebp, esp
+0050e0a3  sub      esp, 0x18
+0050e0a6  push     edi
+0050e0a7  mov      edi, dword ptr [ebp + 8]
+0050e0aa  mov      eax, dword ptr [edi + 0x64]
+0050e0ad  test     eax, eax
+0050e0af  je       0x50e0d2
+0050e0b1  cmp      dword ptr [eax + 8], 1
+0050e0b5  jne      0x50e0d2
+0050e0b7  push     0
+0050e0b9  push     0x7a8b9c
+0050e0be  push     0x7a8b30
+0050e0c3  push     0
+0050e0c5  push     eax
+0050e0c6  call     0x6bad7c
+0050e0cb  add      esp, 0x14
+0050e0ce  test     eax, eax
+0050e0d0  jne      0x50e0dc
+0050e0d2  or       eax, 0xffffffff
+0050e0d5  pop      edi
+0050e0d6  mov      esp, ebp
+0050e0d8  pop      ebp
+0050e0d9  ret      8
+0050e0dc  mov      cl, byte ptr [eax + 0x30]
+0050e0df  test     cl, cl
+0050e0e1  je       0x50e0e9
+0050e0e3  call     dword ptr [0x6e27fc]
+0050e0e9  push     ebx
+0050e0ea  mov      ebx, dword ptr [edi + 0x32c]
+0050e0f0  test     ebx, ebx
+0050e0f2  push     esi
+0050e0f3  je       0x50e266
+0050e0f9  mov      eax, dword ptr [0x80dbf4]
+0050e0fe  mov      ecx, dword ptr [eax + 0x28]
+0050e101  mov      eax, dword ptr [ecx + 0x28]
+0050e104  test     eax, eax
+0050e106  je       0x50e10b
+0050e108  mov      eax, dword ptr [eax + 0x2c]
+0050e10b  mov      eax, dword ptr [eax + 0x78]
+0050e10e  test     eax, eax
+0050e110  je       0x50e16d
+0050e112  mov      eax, dword ptr [eax + 0xc]
+0050e115  test     eax, eax
+0050e117  je       0x50e16d
+0050e119  fld      dword ptr [edi + 0xc]
+0050e11c  mov      esi, dword ptr [edi + 0x164]
+0050e122  fsub     dword ptr [eax + 0xc]
+0050e125  lea      edx, [ebp - 8]
+0050e128  push     edx
+0050e129  fstp     dword ptr [ebp - 8]
+0050e12c  fld      dword ptr [edi + 0x10]
+0050e12f  fsub     dword ptr [eax + 0x10]
+0050e132  fstp     dword ptr [ebp - 4]
+0050e135  call     0x4238e0
+0050e13a  fld      dword ptr [esi + 0xc]
+0050e13d  fadd     dword ptr [0x6e6934]
+0050e143  add      esp, 4
+0050e146  fcompp   
+0050e148  fnstsw   ax
+0050e14a  test     ah, 1
+0050e14d  jne      0x50e16d
+0050e14f  lea      eax, [ebp - 4]
+0050e152  push     eax
+0050e153  call     0x4238e0
+0050e158  fld      dword ptr [esi + 0xc]
+0050e15b  fadd     dword ptr [0x6eeb80]
+0050e161  add      esp, 4
+0050e164  fcompp   
+0050e166  fnstsw   ax
+0050e168  test     ah, 1
+0050e16b  je       0x50e17f
+0050e16d  mov      ecx, ebx
+0050e16f  call     0x4110a0
+0050e174  pop      esi
+0050e175  pop      ebx
+0050e176  xor      eax, eax
+0050e178  pop      edi
+0050e179  mov      esp, ebp
+0050e17b  pop      ebp
+0050e17c  ret      8
+0050e17f  mov      ecx, ebx
+0050e181  call     0x4119f0
+0050e186  mov      ecx, ebx
+0050e188  call     0x410b70
+0050e18d  test     al, al
+0050e18f  je       0x50e266
+0050e195  mov      eax, dword ptr [edi + 0x64]
+0050e198  fld      dword ptr [eax + 0x18]
+0050e19b  mov      eax, dword ptr [eax + 0x14]
+0050e19e  dec      eax
+0050e19f  cmp      eax, 0xf
+0050e1a2  ja       0x50e264
+0050e1a8  jmp      dword ptr [eax*4 + 0x50e274]
+0050e1af  mov      eax, 0x16e360
+0050e1b4  jmp      0x50e21d
+0050e1b6  mov      eax, 0x16e361
+0050e1bb  jmp      0x50e21d
+0050e1bd  mov      eax, 0x16e362
+0050e1c2  jmp      0x50e21d
+0050e1c4  mov      eax, 0x16e363
+0050e1c9  jmp      0x50e21d
+0050e1cb  mov      eax, 0x16e364
+0050e1d0  jmp      0x50e21d
+0050e1d2  mov      eax, 0x16e365
+0050e1d7  jmp      0x50e21d
+0050e1d9  mov      eax, 0x16e366
+0050e1de  jmp      0x50e21d
+0050e1e0  mov      eax, 0x16e3c1
+0050e1e5  jmp      0x50e21d
+0050e1e7  mov      eax, 0x16e3c2
+0050e1ec  jmp      0x50e21d
+0050e1ee  mov      eax, 0x16e3c3
+0050e1f3  jmp      0x50e21d
+0050e1f5  mov      eax, 0x16e3c4
+0050e1fa  jmp      0x50e21d
+0050e1fc  mov      eax, 0x16e3c5
+0050e201  jmp      0x50e21d
+0050e203  mov      eax, 0x16e3c6
+0050e208  jmp      0x50e21d
+0050e20a  mov      eax, 0x16e426
+0050e20f  jmp      0x50e21d
+0050e211  mov      eax, 0x16e5b8
+0050e216  jmp      0x50e21d
+0050e218  mov      eax, 0x16e427
+0050e21d  push     1
+0050e21f  fst      dword ptr [ebp - 0xc]
+0050e222  lea      ecx, [ebp - 0xc]
+0050e225  fstp     dword ptr [ebp - 4]
+0050e228  push     ecx
+0050e229  lea      edx, [ebp - 0x18]
+0050e22c  push     edx
+0050e22d  push     0
+0050e22f  push     1
+0050e231  push     0
+0050e233  push     eax
+0050e234  push     0
+0050e236  mov      ecx, edi
+0050e238  mov      dword ptr [ebp - 8], 0x3f800000
+0050e23f  mov      dword ptr [ebp - 0x18], 0
+0050e246  mov      dword ptr [ebp - 0x14], 0x41c00000
+0050e24d  mov      dword ptr [ebp - 0x10], 0
+0050e254  call     0x501080
+0050e259  pop      esi
+0050e25a  pop      ebx
+0050e25b  xor      eax, eax
+0050e25d  pop      edi
+0050e25e  mov      esp, ebp
+0050e260  pop      ebp
+0050e261  ret      8
+0050e264  fstp     st(0)
+0050e266  pop      esi
+0050e267  pop      ebx
+0050e268  xor      eax, eax
+0050e26a  pop      edi
+0050e26b  mov      esp, ebp
+0050e26d  pop      ebp
+0050e26e  .byte    0xc2
+0050e26f  .byte    0x08

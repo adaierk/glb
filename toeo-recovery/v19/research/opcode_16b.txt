@@ -1,0 +1,11 @@
+0052f323  mov      edx, dword ptr [ebx + 0x1c]
+0052f326  mov      eax, dword ptr [ebx + 0x18]
+0052f329  mov      ecx, dword ptr [ebx + 0x14]
+0052f32c  push     1
+0052f32e  push     edx
+0052f32f  push     eax
+0052f330  push     ecx
+0052f331  call     0x430df0
+0052f336  mov      ecx, dword ptr [eax + 0x48]
+0052f339  call     0x526340
+0052f33e  jmp      0x52fee4

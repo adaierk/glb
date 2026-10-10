@@ -1,0 +1,20 @@
+0052ae50  call     0x430df0
+0052ae55  mov      ecx, dword ptr [ebx + 0x14]
+0052ae58  mov      edx, dword ptr [ebx + 0x10]
+0052ae5b  mov      eax, dword ptr [eax + 0x48]
+0052ae5e  push     1
+0052ae60  push     ecx
+0052ae61  mov      ecx, dword ptr [ebx + 0xc]
+0052ae64  push     edx
+0052ae65  push     ecx
+0052ae66  mov      ecx, eax
+0052ae68  call     0x526340
+0052ae6d  cmp      eax, edi
+0052ae6f  je       0x52fee4
+0052ae75  mov      dl, byte ptr [ebx + 0x18]
+0052ae78  test     dl, dl
+0052ae7a  setne    dl
+0052ae7d  mov      ecx, eax
+0052ae7f  push     edx
+0052ae80  call     0x4fe6c0
+0052ae85  jmp      0x52fee4

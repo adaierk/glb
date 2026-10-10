@@ -1,0 +1,14 @@
+0052cbfa  mov      eax, dword ptr [ebx + 5]
+0052cbfd  push     0x1c
+0052cbff  push     ebx
+0052cc00  push     eax
+0052cc01  call     0x430df0
+0052cc06  mov      ecx, eax
+0052cc08  call     0x43a440
+0052cc0d  mov      ecx, eax
+0052cc0f  call     0x522280
+0052cc14  push     ebx
+0052cc15  call     0x401210
+0052cc1a  mov      ecx, dword ptr [eax + 0x9c]
+0052cc20  call     0x4e5c40
+0052cc25  jmp      0x52fee4

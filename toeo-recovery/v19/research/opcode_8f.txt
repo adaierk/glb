@@ -1,0 +1,16 @@
+0052bbfc  call     0x401210
+0052bc01  cmp      dword ptr [eax + 0x7c], edi
+0052bc04  je       0x52fee4
+0052bc0a  call     0x401210
+0052bc0f  mov      eax, dword ptr [eax + 0x7c]
+0052bc12  mov      edx, dword ptr [ebx + 0xc]
+0052bc15  push     edx
+0052bc16  mov      ecx, eax
+0052bc18  call     0x4db420
+0052bc1d  cmp      eax, edi
+0052bc1f  je       0x52fee4
+0052bc25  mov      ecx, dword ptr [ebx + 0x10]
+0052bc28  push     ecx
+0052bc29  mov      ecx, eax
+0052bc2b  call     0x4bfba0
+0052bc30  jmp      0x52fee4

@@ -1,0 +1,8 @@
+0052e779  call     0x401210
+0052e77e  mov      eax, dword ptr [eax + 0x44]
+0052e781  push     ebx
+0052e782  mov      ecx, eax
+0052e784  call     0x5b5340
+0052e789  mov      ecx, eax
+0052e78b  call     0x5882b0
+0052e790  jmp      0x52fee4

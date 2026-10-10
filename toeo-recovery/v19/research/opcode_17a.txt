@@ -1,0 +1,16 @@
+0052f362  call     0x401210
+0052f367  mov      ecx, dword ptr [eax + 0x78]
+0052f36a  call     0x430c30
+0052f36f  test     eax, eax
+0052f371  je       0x52fee4
+0052f377  mov      ebx, dword ptr [ebx + 0xc]
+0052f37a  cmp      ebx, 0x1b58
+0052f380  jl       0x52fee4
+0052f386  cmp      ebx, 0x1b5f
+0052f38c  jg       0x52fee4
+0052f392  push     ebx
+0052f393  push     4
+0052f395  push     0xe
+0052f397  call     0x4fd040
+0052f39c  add      esp, 0xc
+0052f39f  jmp      0x52fee4
