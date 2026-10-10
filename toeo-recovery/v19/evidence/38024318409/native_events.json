@@ -1,0 +1,229 @@
+[
+  {
+    "event": "native_player_model_load",
+    "object": "0x11077518",
+    "paths": [],
+    "host_time": 1791606833.7917573
+  },
+  {
+    "event": "native_player_model_load_returned",
+    "object": "0x11077518",
+    "result": 1,
+    "result_low_byte": 1,
+    "host_time": 1791606833.792756
+  },
+  {
+    "event": "native_local_enemy_created",
+    "actor": "0x11103020",
+    "identity": [
+      1912602625,
+      1
+    ],
+    "category": 2,
+    "position": [
+      4416,
+      5024
+    ],
+    "world_model": "0x0",
+    "battle_model": "0x0",
+    "appearance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      32,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "extension": {
+      "vtable": "0x6eebe4",
+      "kind": 1
+    },
+    "hp": 100,
+    "host_time": 1791606833.977325
+  },
+  {
+    "event": "native_player_model_load",
+    "object": "0x11078408",
+    "paths": [],
+    "host_time": 1791606834.1600926
+  },
+  {
+    "event": "native_player_model_load_returned",
+    "object": "0x11078408",
+    "result": 1,
+    "result_low_byte": 1,
+    "host_time": 1791606834.1600926
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4416,
+      4994
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606852.6682985
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606852.6682985
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4320,
+      4978
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606864.5253258
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606864.5253258
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4320,
+      4978
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606864.7444422
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606864.7444422
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4320,
+      4964
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606875.7043447
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606875.7043447
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4320,
+      4964
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606887.2509344
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606887.2509344
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x5059d4",
+    "point": [
+      4320,
+      4964
+    ],
+    "options": [
+      0,
+      1,
+      0
+    ],
+    "host_time": 1791606887.462051
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x5059d4",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606887.462051
+  },
+  {
+    "event": "native_player_pick_enter",
+    "caller": "0x50585e",
+    "point": [
+      4320,
+      4987
+    ],
+    "options": [
+      0,
+      1,
+      1
+    ],
+    "host_time": 1791606898.3818471
+  },
+  {
+    "event": "native_player_pick_result",
+    "caller": "0x50585e",
+    "result": 0,
+    "count": 0,
+    "actors": [],
+    "host_time": 1791606898.3818471
+  }
+]
