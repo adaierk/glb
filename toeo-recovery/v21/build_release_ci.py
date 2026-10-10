@@ -112,7 +112,7 @@ metadata={'version':'v21','tested_commit':TESTED,'windows_run_id':RUN,'windows_a
  'windows_artifact_sha256':proof['sha256'],'source_files_verified':len(rows),'local_checks_passed':unit_count,
  'native_battle_target_attack_requests_verified':True,'native_battle_movement_action_records_verified':True,'native_basic_attack_animation_verified':True,'native_map_enemy_verified':True,'native_battle_actors_visually_verified':True,'screenshots_delivered_separately':True,'native_encounter_entry':config.get('encounter_entry',False),
  'complete_combat':False,'complete_gameplay':False,'original_exe_changed':False,'original_exe_sha256':'635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55',
- 'original_assets_included':False,'user_database_included':False,'enemy_provenance':'Explicit local SLIME test; official spawn/stat configuration unresolved',
+ 'original_assets_included':False,'user_database_included':False,'enemy_provenance':'Explicit local field SLIME classification and original E000 battle resource; official mapping/stats unresolved',
  'limitations':config['limitations'],'images':images,
  'files_sha256':{n:sha(b) for n,b in sorted(files.items())}}
 files['RELEASE_METADATA.json']=json.dumps(metadata,ensure_ascii=False,indent=2).encode()
@@ -130,7 +130,7 @@ manifest={'version':'v21','sha256':sha(dest.read_bytes()),'bytes':dest.stat().st
 print('V21_NATIVE_RELEASE_SEALED',json.dumps(manifest,ensure_ascii=False))
 
 screenshot_files={name:(EVIDENCE/name).read_bytes() for name in review['images_sha256']}
-screenshot_files['SCREENSHOTS_CN.txt']=('永恒传说 OL v21 原客户端实机截图\n来源：Windows run '+str(RUN)+'，源提交 '+TESTED+'\n仅裁切游戏窗口；没有重绘、生成或修改游戏内容。\n原生选敌和普通攻击请求已接通；完整伤害、AI、结算及返回地图仍未完成。\n').encode('utf-8')
+screenshot_files['SCREENSHOTS_CN.txt']=('永恒传说 OL v21 原客户端实机截图\n来源：Windows run '+str(RUN)+'，源提交 '+TESTED+'\n仅裁切游戏窗口；没有重绘、生成或修改游戏内容。\n原生选敌、实际行走和普通攻击动画已接通；伤害、AI、结算及返回地图仍未完成。\n').encode('utf-8')
 screenshot_files['SCREENSHOT_METADATA.json']=json.dumps({'version':'v21','tested_commit':TESTED,'windows_run_id':RUN,'artifact_sha256':proof['sha256'],'files_sha256':{name:sha(body) for name,body in screenshot_files.items()}},ensure_ascii=False,indent=2).encode()
 screenshot_dest=META/'TOEO_Screenshots_20261010_v21.zip'
 with zipfile.ZipFile(screenshot_dest,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:

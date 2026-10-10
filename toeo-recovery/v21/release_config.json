@@ -1,0 +1,12 @@
+{
+  "run": 38034331623,
+  "tested_commit": "b5bbf820b2f74d9d04784a268b0439faaed4ddb8",
+  "baseline_run": 38034331649,
+  "protocol_tested_commit": "7703da27088a6c907d9c2820d052f4634942dfae",
+  "encounter_entry": true,
+  "limitations": [
+    "伤害、技能、敌人AI、胜负、奖励和返回地图仍未完成。",
+    "怪物、速度1.0、接近距离48及HP100为明确的本地测试设定；正式实例、范围与数值尚未恢复。",
+    "仍是原客户端加localhost服务的阶段修复包，不是完整单机游戏。"
+  ]
+}
