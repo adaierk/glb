@@ -28,6 +28,9 @@ def enemy_actor_records(profile):
     struct.pack_into('<IIII',b,0x8c,100,100,0,0)
     ext=record(0x2e,0x34)
     struct.pack_into('<i',ext,4,-1)
+    # Original enemy mode50E0A0/51CA04: symbol selector1 -> resource1500000, scale1.
+    # Original5051E0: ext+10 must be >=1 for native encounter-cell picking.
+    struct.pack_into('<II f',ext,8,2,1,1.0)
     struct.pack_into('<h',ext,0x16,2)
     # Original 51C89C -> 50E050 creates kind1 at vtable6EEBE4.
     return bytes(b)+bytes(ext)+bytes(4)

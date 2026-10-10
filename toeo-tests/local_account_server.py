@@ -316,7 +316,9 @@ class LocalAccountServer(BootstrapServer):
                             self.log('enemy_request_rejected',connection=conn_id,reason='Selected character missing');continue
                         self.send_answer(c,enemy_action_reply(npc),state)
                         notice_id=0x73001001
-                        notice=encounter_notice(role['identity'],role['name'],role['native_fields'],self.profile,notice_id,background_id=15)
+                        notice=encounter_notice(role['identity'],role['name'],role['native_fields'],self.profile,notice_id,background_id=15,
+                            vitals=self.inventory.load_vitals(control['account_id'],role['identity']),
+                            equipment=self.inventory.load(control['account_id'],role['identity']).get('equipment',[]))
                         state['local_battle_group']=BATTLE_GROUP
                         state['local_encounter_notice_id']=notice_id
                         self.send_answer(c,notice,state)
@@ -348,6 +350,14 @@ class LocalAccountServer(BootstrapServer):
                                  'placement_basis': 'Original minimap/Wiki visual match plus Wiki XY' if self.profile.stock_key else 'Local diagnostic placement',
                                  'world_profile':self.profile.key,'merchant_grid':self.shop_grid,'native_templates_and_icons_verified':False} if self.shop_preview else {}))
                 else:self.log('npc_request_rejected',connection=conn_id,reason='Unsupported or unselected NPC action')
+                continue
+            if op==0x9e and port==11101 and self.combat_preview:
+                control=state.get('world_account_control')
+                expected=(*control['character_id'],self.map_id,*state['local_battle_group']) if control and state.get('local_battle_group') else None
+                if len(payload)!=32 or expected is None or req!=state.get('local_encounter_notice_id') or struct.unpack_from('<5I',payload,12)!=expected:
+                    self.log('encounter_ack_rejected',connection=conn_id,request_hex=payload.hex());continue
+                state['local_encounter_ack']=True
+                self.log('encounter_ack_native',connection=conn_id,request_id=req,group=state['local_battle_group'],request_hex=payload.hex())
                 continue
             if op==0xd7 and port==11101:
                 control=state.get('world_account_control')

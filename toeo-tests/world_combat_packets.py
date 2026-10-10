@@ -7,7 +7,7 @@ from world_enemy_packets import ENEMY_IDENTITY,ENEMY_NAME,enemy_grid
 BATTLE_GROUP=(0x73000001,1)
 BATTLE_ENEMY_BANK=1200
 BATTLE_ENEMY_RESOURCE_BANK=100
-def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False,battle_model_bank=0):
+def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False,battle_model_bank=0,equipment=()):
     if len(appearance)!=24:raise ValueError('Original battle appearance requires 24 bytes')
     b=record(0x59,0x158)
     struct.pack_into('<II',b,4,*identity)
@@ -23,6 +23,15 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     struct.pack_into('<HHH',b,0xc6,1,1,2)
     # Original 529840 -> state+24C -> actor+16C; 5109A0 uses the CRSD bank directly.
     struct.pack_into('<I',b,0xcc,battle_model_bank)
+    from world_equipment_definitions import equipment_definition
+    components=[]
+    for item in equipment:
+        definition=equipment_definition(item)
+        if definition and definition.get('visual_resource'):components.append((item,definition))
+    if len(components)>4:raise ValueError('Original battle record has four visual component rows')
+    if components:b[0xd4]=1
+    for index,(item,definition) in enumerate(components):
+        struct.pack_into('<8I',b,0xd8+index*32,definition['slot'],*item['identity'],definition.get('visual_source_bank',0),definition['visual_resource'],definition['visual_layer'])
     return bytes(b)
 def battle_group_record(profile,background_id):
     b=record(0x58,0x2c)
@@ -30,12 +39,13 @@ def battle_group_record(profile,background_id):
     struct.pack_into('<IIii',b,0x10,background_id,0,800,600)
     struct.pack_into('<hh',b,0x20,*profile.spawn_grid)
     return bytes(b)
-def encounter_notice(identity,name,selector_fields,profile,request_id,background_id=15):
+def encounter_notice(identity,name,selector_fields,profile,request_id,background_id=15,vitals=None,equipment=()):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
+    vitals=vitals or {'hp':100,'max_hp':100,'tp':30,'max_tp':30}
     player_appearance=selector_fields[0x30:0x48]
     appearance=bytearray(24);struct.pack_into('<I',appearance,8,BATTLE_ENEMY_BANK)
     tail=battle_group_record(profile,background_id)
-    tail+=battle_actor_record(identity,name,player_appearance,1,(-96,0),profile.spawn_grid,profile.map_id,tp=30,max_tp=30,controlled=True)
+    tail+=battle_actor_record(identity,name,player_appearance,1,(-96,0),profile.spawn_grid,profile.map_id,**vitals,controlled=True,equipment=equipment)
     tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(96,0),enemy_grid(profile),profile.map_id,battle_model_bank=BATTLE_ENEMY_RESOURCE_BANK)
     tail+=bytes(4)
     b=bytearray(message(0x9d,bytes(35+len(tail)),request_id)[:44])

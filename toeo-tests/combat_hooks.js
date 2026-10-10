@@ -1,0 +1,48 @@
+'use strict';
+// v19 read-only probes. Never write state, redirect native returns or drive UI.
+(function(){
+ const emit=x=>send(x),address=va=>Process.mainModule.base.add(va-0x400000);
+ function safely(f){try{return f();}catch(e){return {error:String(e)};}}
+ let enemy=null,previous='',samples=0,enemyLoad=0;
+ function enemyState(){
+  if(enemy===null||enemy.isNull())return null;
+  const model=enemy.add(0x158).readPointer(),extension=enemy.add(0x64).readPointer();
+  return {identity:[enemy.add(0x68).readU32(),enemy.add(0x6c).readU32()],
+   flags:enemy.add(0xa8).readU32(),load_requested:enemy.add(0x154).readU8(),load_done:enemy.add(0x155).readU8(),
+   category:enemy.add(0x70).readU32(),position:[enemy.add(12).readFloat(),enemy.add(16).readFloat()],
+   world_model:model.toString(),battle_model:enemy.add(0x15c).readPointer().toString(),
+   appearance:Array.from(new Uint8Array(enemy.add(0x110).readPointer().readByteArray(24))),
+   extension:extension.isNull()?null:{vtable:extension.readPointer().toString(),kind:extension.add(8).readU32(),pick_range:extension.add(0x10).readU32(),symbol:extension.add(0x14).readU32(),symbol_scale:extension.add(0x18).readFloat()},
+   hp:enemy.add(0x114).readPointer().add(8).readU32()};
+ }
+ Interceptor.attach(address(0x51c1e0),{onEnter(args){this.keep=args[1].toUInt32()===0x72000001;},
+  onLeave(ret){if(this.keep){enemy=ptr(ret.toString());emit(safely(()=>({event:'native_local_enemy_created',actor:ret.toString(),...enemyState()})));}}});
+ setInterval(()=>{const s=safely(enemyState);if(!s)return;const key=JSON.stringify(s);if(key!==previous){previous=key;emit({event:'native_local_enemy_state',...s});}},500);
+ for(const [va,event] of [[0x501470,'native_enemy_model_load'],[0x4fe5c0,'native_enemy_action']]){
+  Interceptor.attach(address(va),{onEnter(args){this.keep=safely(()=>this.context.ecx.add(0x68).readU32())===0x72000001;this.actor=this.context.ecx;this.args=[args[0].toString(),args[1].toString()];},
+   onLeave(ret){if(this.keep){enemy=this.actor;}if(this.keep && ++samples<=32)emit({event,result:ret.toInt32()&255,args:this.args,state:safely(enemyState)});}});
+ }
+ for(const [va,event] of [[0x49d2f0,'native_battle_group_created'],[0x529840,'native_battle_actor_created'],[0x430e50,'native_battle_init'],[0x431920,'native_battle_init_tick'],[0x5231b0,'native_battle_request_9f'],[0x522fd0,'native_battle_request_a8']]){
+  Interceptor.attach(address(va),{onEnter(args){this.keep=++samples<=150;this.args=[args[0].toString(),args[1].toString(),args[2].toString()];if(this.keep)emit({event,object:this.context.ecx.toString(),args:this.args});},
+   onLeave(ret){if(this.keep)emit({event:event+'_returned',result:ret.toString()});}});
+ }
+
+ for(const [va,event] of [[0x4d9b90,'native_whole_model_bank_lookup'],[0x518ed0,'native_actor_model_resource_init']]){
+  let n=0;
+  Interceptor.attach(address(va),{onEnter(args){
+   this.keep=++n<=80;this.args=Array.from({length:9},(_,i)=>args[i].toUInt32());this.object=this.context.ecx.toString();
+   if(this.keep)emit({event,object:this.object,args:this.args});
+  },onLeave(ret){if(this.keep)emit({event:event+'_returned',object:this.object,result:ret.toUInt32(),args:this.args});}});
+ }
+ for(const [va,event] of [[0x5109a0,'native_battle_actor_model_load'],[0x50fcf0,'native_battle_actor_collision_load']]){
+  let n=0;
+  Interceptor.attach(address(va),{onEnter(args){this.actor=this.context.ecx;this.keep=++n<=16;},
+   onLeave(ret){if(this.keep)emit(safely(()=>({event,result:ret.toInt32()&255,identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()],model:this.actor.add(0xc0).readPointer().toString(),collision_model:this.actor.add(0xc4).readPointer().toString(),resource_bank:this.actor.add(0x16c).readU32()})));}});
+ }
+
+ Interceptor.attach(address(0x501080),{onEnter(args){
+  this.keep=safely(()=>this.context.ecx.add(0x68).readU32())===0x72000001;
+  this.resource=args[1].toUInt32();this.actor=this.context.ecx;
+ },onLeave(ret){if(this.keep)emit({event:'native_enemy_symbol_created',resource:this.resource,result:ret.toString()});}});
+ emit({event:'combat_probe_ready',mode:'Read-only original enemy and encounter observations'});
+})();
