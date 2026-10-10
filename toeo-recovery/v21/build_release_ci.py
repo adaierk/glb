@@ -69,7 +69,14 @@ for name,digest in review['images_sha256'].items():
  images.append({'file':name,'sha256':digest,'alterations':'Exact original desktop crop only'})
 files['evidence/v21/next_battle_protocol_notes.json']=(META/'next_battle_protocol_notes.json').read_bytes()
 files['evidence/v21/original_enemy_resource_basis.json']=(ROOT/'toeo-recovery/v20/original_enemy_resource_basis.json').read_bytes()
-protocol=ROOT/'toeo-recovery/v19/verification'/TESTED
+PROTOCOL_TESTED=config.get('protocol_tested_commit',TESTED)
+protocol=ROOT/'toeo-recovery/v19/verification'/PROTOCOL_TESTED
+if PROTOCOL_TESTED!=TESTED:
+    # Only observation/GUI-test files changed after these native x86 checks.
+    comparable=[row for row in rows if row['local'] not in ('ci_original_client.py','combat_runtime.js')]
+    for row in comparable:
+        assert source_at(row['git_path'])==subprocess.check_output(['git','show',PROTOCOL_TESTED+':'+row['git_path']]),row['git_path']
+    files['evidence/v21/protocol_source_equivalence.json']=json.dumps({'passed':True,'native_protocol_tested_commit':PROTOCOL_TESTED,'runtime_tested_commit':TESTED,'matched_source_files':len(comparable),'observation_only_changes':['ci_original_client.py','combat_runtime.js']},indent=2).encode()
 assert json.loads((protocol/'native_battle_record.json').read_text())['passed']
 for name in ('native_battle_record.json','native_enemy.json','unit_checks.txt'):
  files['evidence/v21/protocol/'+name]=(protocol/name).read_bytes()
