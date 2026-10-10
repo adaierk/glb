@@ -1,0 +1,922 @@
+{
+  "native_session_created": true,
+  "account_authenticated": true,
+  "game_prelogin_accepted": true,
+  "character_list_accepted": true,
+  "character_selection_accepted": true,
+  "world_admission_accepted": true,
+  "world_controller_completed": true,
+  "map_entered": true,
+  "playable": null,
+  "observed_positions": [
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4480,
+      5024
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ],
+    [
+      4384,
+      5008
+    ]
+  ],
+  "expected_reentry_position": null,
+  "native_exceptions": [
+    {
+      "event": "native_exception",
+      "count": 1,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19f990",
+        "ebx": "0x0",
+        "ecx": "0x2",
+        "edx": "0x0",
+        "esi": "0x19fe8c",
+        "edi": "0x7505d600",
+        "ebp": "0x19f9ec",
+        "esp": "0x19f990",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0x40010006",
+        "0x75702154",
+        "0x757dcc20",
+        "0x40479e",
+        "0x405e19",
+        "0x6baf8b",
+        "0x75055d49",
+        "0x7716d7eb",
+        "0x7716d771"
+      ],
+      "host_time": 1791606328.6866765
+    },
+    {
+      "event": "native_exception",
+      "count": 2,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x464fa78",
+        "ebx": "0x19930520",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x464fbf8",
+        "edi": "0x7210cb98",
+        "ebp": "0x464fad4",
+        "esp": "0x464fa78",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x767548d9",
+        "0x720ea0f5",
+        "0x720ea51e",
+        "0x720ea3b5",
+        "0x720ed8eb",
+        "0x720f0a1c",
+        "0x7673e9eb",
+        "0x75055d49",
+        "0x7716d7eb",
+        "0x7716d771",
+        "0x74e6ac36"
+      ],
+      "host_time": 1791606330.425088
+    },
+    {
+      "event": "native_exception",
+      "count": 3,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19f538",
+        "ebx": "0x19f604",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19f594",
+        "esp": "0x19f538",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a56",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606476.227063
+    },
+    {
+      "event": "native_exception",
+      "count": 4,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a56",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606476.2310624
+    },
+    {
+      "event": "native_exception",
+      "count": 5,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19d7e8",
+        "ebx": "0x19f644",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19d844",
+        "esp": "0x19d7e8",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a56",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2",
+        "0x402919"
+      ],
+      "host_time": 1791606476.235077
+    },
+    {
+      "event": "native_exception",
+      "count": 6,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19f538",
+        "ebx": "0x19f604",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19f594",
+        "esp": "0x19f538",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a95",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606476.2390842
+    },
+    {
+      "event": "native_exception",
+      "count": 7,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a95",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606476.24208
+    },
+    {
+      "event": "native_exception",
+      "count": 8,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19d7e8",
+        "ebx": "0x19f644",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19d844",
+        "esp": "0x19d7e8",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a95",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2",
+        "0x402919"
+      ],
+      "host_time": 1791606476.2460766
+    },
+    {
+      "event": "native_exception",
+      "count": 16,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e538",
+        "ebx": "0x19f4a4",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e594",
+        "esp": "0x19e538",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x5419ee",
+        "0x543bea",
+        "0x5c525b",
+        "0x5c4587",
+        "0x5c7fc3"
+      ],
+      "host_time": 1791606476.2505949
+    },
+    {
+      "event": "native_exception",
+      "count": 32,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19d7e8",
+        "ebx": "0x19f644",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19d844",
+        "esp": "0x19d7e8",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541b63",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2",
+        "0x402919"
+      ],
+      "host_time": 1791606476.3225915
+    },
+    {
+      "event": "native_exception",
+      "count": 64,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541acb",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606476.4465873
+    },
+    {
+      "event": "native_exception",
+      "count": 128,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19ce28",
+        "ebx": "0x19ec84",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19ce84",
+        "esp": "0x19ce28",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541849",
+        "0x543bea",
+        "0x5c525b",
+        "0x5c4587",
+        "0x5d48d0",
+        "0x5eba08"
+      ],
+      "host_time": 1791606476.6111195
+    },
+    {
+      "event": "native_exception",
+      "count": 256,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a56",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606477.0288026
+    },
+    {
+      "event": "native_exception",
+      "count": 512,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19d7e8",
+        "ebx": "0x19f644",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19d844",
+        "esp": "0x19d7e8",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a95",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2",
+        "0x402919"
+      ],
+      "host_time": 1791606477.7531319
+    },
+    {
+      "event": "native_exception",
+      "count": 1024,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e538",
+        "ebx": "0x19f4a4",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e594",
+        "esp": "0x19e538",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x5419ee",
+        "0x543bea",
+        "0x5c525b",
+        "0x5c4587",
+        "0x5c7fc3"
+      ],
+      "host_time": 1791606479.1945577
+    },
+    {
+      "event": "native_exception",
+      "count": 2048,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19d7e8",
+        "ebx": "0x19f644",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19d844",
+        "esp": "0x19d7e8",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541b63",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2",
+        "0x402919"
+      ],
+      "host_time": 1791606482.1498413
+    },
+    {
+      "event": "native_exception",
+      "count": 4096,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541acb",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606488.096338
+    },
+    {
+      "event": "native_exception",
+      "count": 8192,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19ce28",
+        "ebx": "0x19ec84",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19ce84",
+        "esp": "0x19ce28",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x74549078",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541849",
+        "0x543bea",
+        "0x5c525b",
+        "0x5c4587",
+        "0x5d48d0",
+        "0x5eba08"
+      ],
+      "host_time": 1791606500.5057933
+    },
+    {
+      "event": "native_exception",
+      "count": 16384,
+      "type": "system",
+      "address": "0x75702154",
+      "registers": {
+        "eax": "0x19e690",
+        "ebx": "0x19f5fc",
+        "ecx": "0x3",
+        "edx": "0x0",
+        "esi": "0x76583f34",
+        "edi": "0x7460b4d8",
+        "ebp": "0x19e6ec",
+        "esp": "0x19e690",
+        "eip": "0x75702154"
+      },
+      "memory": null,
+      "stack": [
+        "0xe06d7363",
+        "0x75702154",
+        "0x765bb34d",
+        "0x745d3468",
+        "0x74548fbb",
+        "0x745ef762",
+        "0x745db9c1",
+        "0x745cdae8",
+        "0x623497",
+        "0x5e6c90",
+        "0x5e87a1",
+        "0x541a56",
+        "0x5eba08",
+        "0x5eca81",
+        "0x4453c8",
+        "0x430de2"
+      ],
+      "host_time": 1791606525.0294538
+    }
+  ],
+  "npc_selected_native": false,
+  "shop_catalog_parsed_native": false,
+  "shop_frame_shown_native": false,
+  "shop_historical_names_native": false,
+  "shop_historical_prices_native": false,
+  "shop_historical_item_count_native": false,
+  "historical_merchant_position_native": true,
+  "historical_map_id_native": true,
+  "historical_placement_basis": "Original minimap visually matches Wiki named map; Wiki XY reproduced by native actor grid conversion",
+  "shop_display_price_text_native": false,
+  "visible_prices_verified": null,
+  "official_item_master_ids_verified": false,
+  "original_lemon_icon_native": false,
+  "icon_name_association_basis": "Visual match against unchanged original ICND sprites",
+  "native_inventory_samples": [
+    {
+      "event": "native_player_inventory_state",
+      "money": 5000,
+      "items": 0,
+      "capacity": 32,
+      "order": [],
+      "host_time": 1791606476.762816
+    }
+  ],
+  "saved_inventory": {
+    "money": 5000,
+    "capacity": 32,
+    "items": [],
+    "equipment": []
+  },
+  "enemy_created_native": true,
+  "enemy_component_native": true,
+  "enemy_world_model_native": false,
+  "enemy_target_selected_native": false,
+  "enemy_mouse_pick_native": false,
+  "encounter_fixture_provenance": "Original CRSD E000 model bank100, explicit local entity, HP100 and spawn",
+  "combat_flow_complete": false
+}
