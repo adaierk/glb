@@ -27,7 +27,7 @@ ranges={
 'model_resource_ctor':(0x518ed0,0x270),
 'animation_direction_lookup':(0x44d400,0xe00),
 'animation_object_state':(0x461a00,0x1900),
-'battle_abilities_a3_handler':(0x52c940,0x850),
+'battle_abilities_a3_handler':(0x52c2f8,0x1fd),
 }
 for name,(va,size) in ranges.items():(OUT/(name+'.txt')).write_text(dis(va,size))
 targets={0x515710:'pool_tick',0x515870:'pool_walk',0x519140:'model_orientation',0x518ed0:'model_ctor'}
@@ -56,6 +56,6 @@ for name in ('pc1a.atd','e000.atd'):
  for n in range(count):
   words=struct.unpack_from('<7I',b,start+n*28);num,off=words[5:7]
   assert num<=8 and off+16*num<=len(b)
-  rows.append({'row':n,'words':list(words),'directions':[b[off+16*i+3] for i in range(num)],'direction_entries_hex':[b[off+16*i:off+16*(i+1)].hex() for i in range(num)]})
+  rows.append({'row':n,'words':list(words),'serialized_direction_labels':[chr(b[off+16*i]) for i in range(num)],'direction_entries_hex':[b[off+16*i:off+16*(i+1)].hex() for i in range(num)]})
  animation_assets.append({'file':name,'sha256':hashlib.sha256(b).hexdigest(),'rows':rows})
 (OUT/'original_battle_animation_directions.json').write_text(json.dumps(animation_assets,indent=2))
