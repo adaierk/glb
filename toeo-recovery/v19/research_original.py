@@ -192,3 +192,16 @@ files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
 
 for name,va,size in [('battle_model_resource',0x50fcf0,0x5e0),('battle_field_model_load',0x4ff070,0x360),('battle_actor_model_start',0x5109a0,0x640),('model_id_map_accessor',0x41a800,0x50)]:
  (OUT/(name+'.txt')).write_text(dis(va,size))
+
+for name,va,size in [('world_actor_pool_construct',0x509db0,0x420),('world_actor_initialize',0x502350,0x1000),('world_model_load_calls',0x4fe3f0,0x660)]:
+ (OUT/(name+'.txt')).write_text(dis(va,size))
+refs_model=[]
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ body=sec.get_data();start=base+sec.VirtualAddress
+ for m in re.finditer(b'\xe8',body):
+  at=m.start()
+  if at+5<=len(body) and (start+at+5+struct.unpack_from('<i',body,at+1)[0])&0xffffffff==0x501470:
+   refs_model.append(hex(start+at))
+   (OUT/f'model_call_{start+at:x}.txt').write_text(dis(start+max(0,at-0x100),0x220))
+(OUT/'world_model_calls.json').write_text(json.dumps(refs_model,indent=2))

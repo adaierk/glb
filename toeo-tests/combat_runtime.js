@@ -15,7 +15,7 @@
    hp:enemy.add(0x114).readPointer().add(8).readU32()};
  }
  Interceptor.attach(address(0x51c1e0),{onEnter(args){this.keep=args[1].toUInt32()===0x72000001;},
-  onLeave(ret){if(this.keep){enemy=ret;emit(safely(()=>({event:'native_local_enemy_created',actor:ret.toString(),...enemyState()})));}}});
+  onLeave(ret){if(this.keep){enemy=ptr(ret.toString());emit(safely(()=>({event:'native_local_enemy_created',actor:ret.toString(),...enemyState()})));}}});
  setInterval(()=>{const s=safely(enemyState);if(!s)return;const key=JSON.stringify(s);if(key!==previous){previous=key;emit({event:'native_local_enemy_state',...s});}},500);
  for(const [va,event] of [[0x501470,'native_enemy_model_load'],[0x4fe5c0,'native_enemy_action']]){
   Interceptor.attach(address(va),{onEnter(args){this.keep=safely(()=>this.context.ecx.add(0x68).readU32())===0x72000001;this.actor=this.context.ecx;this.args=[args[0].toString(),args[1].toString()];},
