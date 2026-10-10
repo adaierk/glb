@@ -1,0 +1,39 @@
+{
+  "version": "v19",
+  "sha256": "c11a6c81320e0fa2cbafbcdeaa042b754b1a4d36f79ac598d917b1e3a9e9ff72",
+  "bytes": 1114312,
+  "entries": 146,
+  "crc_check": "PASS",
+  "source_consistency": "PASS",
+  "tested_commit": "7c83363bc5c1c8c7e6f3a8790c884282278f9dbc",
+  "windows_run_id": 38026848724,
+  "windows_artifact_sha256": "4712322dd7c51dcb4940b263464989d00eb067409b137a6df6d76996416c3ee9",
+  "source_files_verified": 124,
+  "local_checks_passed": 61,
+  "complete_combat": false,
+  "images": [
+    {
+      "file": "original_desktop_140s.png",
+      "sha256": "23c3309bcdd43562d0eb4816550384fe34b024174ab3778923030df8d2783ce3",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_150s.png",
+      "sha256": "bc88ccf5ac3cff8022e698f2383432a6cc09f850435dcc8fc3a2b10babd1cf4e",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_170s.png",
+      "sha256": "f87ae4540644e2096c68ba518eea361151e9729cb5f760b22376e0529b214d64",
+      "alterations": "Exact original desktop crop only"
+    }
+  ],
+  "limitations": [
+    "战斗场景已进入，玩家编号和血条可见；人物与怪物精灵仍未显示。",
+    "攻击、技能、怪物 AI、伤害及胜负结算尚未实现，完整战斗不可游玩。",
+    "遭遇后返回地图尚未闭环，目前可能需退出并重新启动。",
+    "SLIME 的地图生成点、HP 和范围为本地测试配置，未还原官方刷怪数据。",
+    "BBg0015 为原客户端资源，官方地图与战斗背景对应关系尚未验证。",
+    "全部地图、NPC、主支线任务和正式装备数据仍未完整还原。"
+  ]
+}
