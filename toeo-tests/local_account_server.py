@@ -274,7 +274,7 @@ class LocalAccountServer(BootstrapServer):
                     state['local_enemy_announced']=True
                     self.log('local_enemy_actor_announced',connection=conn_id,identity=ENEMY_IDENTITY,
                              grid=enemy_grid(self.profile),map_id=self.map_id,
-                             provenance='Explicit offline E000 encounter fixture; original model, local HP and placement')
+                             provenance='Original SLIME CID0 ID1200 and field resource; explicit local HP and placement')
                 continue
             if op==0x4e and port==11101:
                 from world_npc_packets import actor_target_reply
@@ -293,9 +293,38 @@ class LocalAccountServer(BootstrapServer):
                 try:npc=parse_npc_request(payload)
                 except ValueError as error:
                     self.log('npc_request_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or npc['identity']!=tuple(control['character_id']) or npc['map_id']!=self.map_id or npc['target']!=SHOP_IDENTITY:
+                is_enemy=self.combat_preview and state.get('local_enemy_announced') and npc['target']==(0x72000001,1)
+                if not control or not state.get('world_map_ready') or npc['identity']!=tuple(control['character_id']) or npc['map_id']!=self.map_id or not (npc['target']==SHOP_IDENTITY or is_enemy):
                     self.log('npc_request_rejected',connection=conn_id,reason='Character, ready map or target mismatch');continue
                 self.log('native_npc_request',connection=conn_id,request_hex=payload.hex(),**npc)
+                if is_enemy:
+                    from world_enemy_packets import ENEMY_IDENTITY,enemy_grid
+                    from world_combat_packets import enemy_selection_reply,enemy_action_reply,encounter_notice,BATTLE_GROUP
+                    if state.get('local_battle_group'):
+                        self.log('enemy_request_rejected',connection=conn_id,reason='Encounter already active');continue
+                    if op==0xc6:
+                        if npc['grid']!=enemy_grid(self.profile):
+                            self.log('enemy_request_rejected',connection=conn_id,reason='Enemy grid mismatch');continue
+                        state['enemy_selected']=ENEMY_IDENTITY
+                        answer=enemy_selection_reply(npc,self.profile)
+                        self.send_answer(c,answer,state)
+                        self.log('enemy_selection_answer',connection=conn_id,request_id=req,answer_hex=answer.hex())
+                    elif npc['action']==1 and state.get('enemy_selected')==ENEMY_IDENTITY:
+                        roles=self.characters.list(control['account_id'])
+                        role=next((r for r in roles if r['identity']==tuple(control['character_id'])),None)
+                        if role is None:
+                            self.log('enemy_request_rejected',connection=conn_id,reason='Selected character missing');continue
+                        self.send_answer(c,enemy_action_reply(npc),state)
+                        notice_id=0x73001001
+                        notice=encounter_notice(role['identity'],role['name'],role['native_fields'],self.profile,notice_id,background_id=15)
+                        state['local_battle_group']=BATTLE_GROUP
+                        state['local_encounter_notice_id']=notice_id
+                        self.send_answer(c,notice,state)
+                        self.log('local_encounter_notice_sent',connection=conn_id,group=BATTLE_GROUP,background_id=15,
+                                 request_id=notice_id,notice_hex=notice.hex(),
+                                 provenance='Explicit offline SLIME encounter; original BBg0015 asset, local arena and stats')
+                    else:self.log('enemy_request_rejected',connection=conn_id,reason='Unsupported or unselected enemy action')
+                    continue
                 if op==0xc6:
                     if npc['grid']!=self.shop_grid:
                         self.log('npc_request_rejected',connection=conn_id,reason='NPC grid mismatch');continue

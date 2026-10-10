@@ -5,7 +5,7 @@ from world_map_packets import record
 from character_mutation_packets import encode_name
 from world_enemy_packets import ENEMY_IDENTITY,ENEMY_NAME,enemy_grid
 BATTLE_GROUP=(0x73000001,1)
-BATTLE_ENEMY_BANK=100
+BATTLE_ENEMY_BANK=1200
 def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False):
     if len(appearance)!=24:raise ValueError('Original battle appearance requires 24 bytes')
     b=record(0x59,0x158)
@@ -27,7 +27,7 @@ def battle_group_record(profile,background_id):
     struct.pack_into('<IIii',b,0x10,background_id,0,800,600)
     struct.pack_into('<hh',b,0x20,*profile.spawn_grid)
     return bytes(b)
-def encounter_notice(identity,name,selector_fields,profile,request_id,background_id=0):
+def encounter_notice(identity,name,selector_fields,profile,request_id,background_id=15):
     if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
     player_appearance=selector_fields[0x30:0x48]
     appearance=bytearray(24);struct.pack_into('<I',appearance,8,BATTLE_ENEMY_BANK)

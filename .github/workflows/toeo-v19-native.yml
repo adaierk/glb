@@ -2,7 +2,7 @@ name: TOEO v19 original enemy encounter verification
 on:
   push:
     branches: [toeo-local-world-recovery-20261009]
-    paths: [.github/workflows/toeo-v19-native.yml, toeo-tests/world_enemy_packets.py, toeo-tests/combat_runtime.js, toeo-tests/combat_ci_acceptance.py]
+    paths: [.github/workflows/toeo-v19-native.yml, toeo-tests/world_enemy_packets.py, toeo-tests/combat_runtime.js, toeo-tests/combat_ci_acceptance.py, toeo-tests/world_combat_packets.py, toeo-tests/local_account_server.py, toeo-tests/ci_original_client.py]
   workflow_dispatch:
 jobs:
   original-client:

@@ -38,8 +38,11 @@ jobs:
           git add toeo-recovery/v19/verification
           if ! git diff --cached --quiet; then
             git commit -m "Record original v19 encounter protocol checks [skip ci]"
-            git pull --rebase origin toeo-local-world-recovery-20261009
-            git push origin HEAD:toeo-local-world-recovery-20261009
+            for attempt in 1 2 3 4; do
+              git pull --rebase origin toeo-local-world-recovery-20261009
+              if git push origin HEAD:toeo-local-world-recovery-20261009; then break; fi
+              if [ "$attempt" = 4 ]; then exit 1; fi
+            done
           fi
       - uses: actions/upload-artifact@v4
         if: always()

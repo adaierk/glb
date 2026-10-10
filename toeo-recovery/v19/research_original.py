@@ -189,3 +189,6 @@ files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
 (OUT/'nntable_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(?i)(nnt|\.nnt|\.nn)',line[7:])],indent=2))
 
 (OUT/'model_id_map_constructor.txt').write_text(dis(0x41b050,0x3a0))
+
+for name,va,size in [('battle_model_resource',0x50fcf0,0x5e0),('battle_field_model_load',0x4ff070,0x360),('battle_actor_model_start',0x5109a0,0x640),('model_id_map_accessor',0x41a800,0x50)]:
+ (OUT/(name+'.txt')).write_text(dis(va,size))
