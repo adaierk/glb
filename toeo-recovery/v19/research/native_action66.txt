@@ -1,0 +1,103 @@
+004f7120  push     ebp
+004f7121  mov      ebp, esp
+004f7123  sub      esp, 0x34
+004f7126  mov      eax, dword ptr [0x80dbf4]
+004f712b  push     edi
+004f712c  mov      edi, ecx
+004f712e  mov      ecx, dword ptr [eax + 0x28]
+004f7131  mov      eax, dword ptr [ecx + 0x28]
+004f7134  test     eax, eax
+004f7136  jne      0x4f713c
+004f7138  xor      ecx, ecx
+004f713a  jmp      0x4f713f
+004f713c  mov      ecx, dword ptr [eax + 0x2c]
+004f713f  mov      edx, dword ptr [ecx + 0x78]
+004f7142  test     edx, edx
+004f7144  jne      0x4f714f
+004f7146  xor      al, al
+004f7148  pop      edi
+004f7149  mov      esp, ebp
+004f714b  pop      ebp
+004f714c  ret      0xc
+004f714f  test     eax, eax
+004f7151  je       0x4f7156
+004f7153  mov      eax, dword ptr [eax + 0x2c]
+004f7156  mov      eax, dword ptr [eax + 0x78]
+004f7159  test     eax, eax
+004f715b  push     esi
+004f715c  je       0x4f721a
+004f7162  mov      esi, dword ptr [eax + 0xc]
+004f7165  test     esi, esi
+004f7167  je       0x4f721a
+004f716d  mov      eax, dword ptr [edi + 0x10]
+004f7170  test     eax, eax
+004f7172  jne      0x4f721a
+004f7178  mov      eax, dword ptr [edi]
+004f717a  inc      eax
+004f717b  lea      ecx, [ebp - 0x24]
+004f717e  mov      dword ptr [edi], eax
+004f7180  mov      dword ptr [ebp - 0x28], eax
+004f7183  call     0x4407e0
+004f7188  mov      edx, dword ptr [esi + 0x14]
+004f718b  mov      dword ptr [ebp - 0x18], edx
+004f718e  mov      eax, dword ptr [esi + 0x68]
+004f7191  mov      edx, dword ptr [ebp + 8]
+004f7194  mov      dword ptr [ebp - 0x14], eax
+004f7197  mov      ecx, dword ptr [esi + 0x6c]
+004f719a  mov      eax, dword ptr [ebp + 0xc]
+004f719d  mov      dword ptr [ebp - 0xc], edx
+004f71a0  mov      dword ptr [ebp - 0x10], ecx
+004f71a3  mov      ecx, dword ptr [ebp + 0x10]
+004f71a6  mov      edx, eax
+004f71a8  or       edx, ecx
+004f71aa  je       0x4f71b1
+004f71ac  mov      dword ptr [ebp - 4], ecx
+004f71af  jmp      0x4f71bb
+004f71b1  mov      ecx, esi
+004f71b3  call     0x4feb90
+004f71b8  mov      dword ptr [ebp - 4], edx
+004f71bb  mov      dword ptr [ebp - 8], eax
+004f71be  mov      eax, dword ptr [0x80dbf4]
+004f71c3  mov      byte ptr [ebp - 0x34], 0
+004f71c7  mov      word ptr [ebp - 0x33], 0x66
+004f71cd  mov      word ptr [ebp - 0x31], 0x34
+004f71d3  mov      dword ptr [ebp - 0x2f], 0xffffffff
+004f71da  mov      ecx, dword ptr [eax + 0x28]
+004f71dd  mov      eax, dword ptr [ecx + 0x28]
+004f71e0  test     eax, eax
+004f71e2  je       0x4f71e7
+004f71e4  mov      eax, dword ptr [eax + 0x30]
+004f71e7  mov      eax, dword ptr [eax + 0x38]
+004f71ea  test     eax, eax
+004f71ec  je       0x4f721a
+004f71ee  mov      esi, dword ptr [eax + 4]
+004f71f1  test     esi, esi
+004f71f3  je       0x4f721a
+004f71f5  mov      ecx, dword ptr [esi + 8]
+004f71f8  test     ecx, ecx
+004f71fa  je       0x4f7213
+004f71fc  push     1
+004f71fe  add      edi, 8
+004f7201  push     edi
+004f7202  lea      edx, [ebp - 0x34]
+004f7205  push     edx
+004f7206  push     4
+004f7208  push     -0x11
+004f720a  call     0x60a3e0
+004f720f  test     eax, eax
+004f7211  jne      0x4f7224
+004f7213  mov      dword ptr [esi + 0xc], 1
+004f721a  pop      esi
+004f721b  xor      al, al
+004f721d  pop      edi
+004f721e  mov      esp, ebp
+004f7220  pop      ebp
+004f7221  ret      0xc
+004f7224  pop      esi
+004f7225  mov      al, 1
+004f7227  pop      edi
+004f7228  mov      esp, ebp
+004f722a  pop      ebp
+004f722b  ret      0xc
+004f722e  int3     
+004f722f  int3     
