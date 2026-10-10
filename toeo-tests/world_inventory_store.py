@@ -243,9 +243,10 @@ class WorldInventoryStore:
                 # explicit definition; /equip may pass a concrete body slot.
                 if slot not in (1,definition['slot']):raise TradeRejected('Equipment body slot does not match')
                 slot=definition['slot']
-            elif not -1<=slot<len(before['items']):raise TradeRejected('Destination outside native packed bag')
+            elif not -1<=slot<LOCAL_BAG_CAPACITY:raise TradeRejected('Destination outside native packed bag')
             target=next((x for x in all_items if x['location']==target_location and x['slot']==slot),None)
             expected=(0,0,0,0) if target is None else target['identity']
+            if target_location==2 and target is None:slot=len(before['items'])
             # Original drag to an occupied equipment cell may send zero target:
             # require explicit identity for replacement until that UI flow is verified.
             if request['destination_item']!=expected:raise TradeRejected('Equipment destination changed')

@@ -17,7 +17,13 @@ def verify_equipment(result,events,server,args,expected_position):
     result['hp_gauge_draw_succeeded_native']=any(e.get('event')=='native_hud_graphics_result' and e.get('hresult')=='0x0' and '0x5a0605' in e.get('stack',[]) for e in events)
     result['appearance_restored']=False
     if not result['map_entered'] or not result['equipment_matches_database_native'] or not result['equipment_hp_bonus_native'] or not result['hp_gauge_draw_succeeded_native']:return 'Native equipment map/state/HP/render acceptance failed'
-    if not args.reenter_check and not (result['equip_request_native'] and result['unequip_request_native']):return 'Real mouse equip and unequip did not both occur'
+    if not args.reenter_check:
+        states=[tuple(x['slot'] for x in e['order']) for e in samples];position=-1
+        try:
+            for expected in ((1,),(1,2),(2,),(1,2)):position=states.index(expected,position+1)
+        except ValueError:return 'Actual native equip, unequip and re-equip state sequence missing'
+        result['native_equip_unequip_reequip_transitions']=True
+        if not (result['equip_request_native'] and result['unequip_request_native']):return 'Real mouse equip and unequip did not both occur'
     if args.reenter_check:
         result['position_restored_without_movement']=all(tuple(x)==expected_position for x in result['observed_positions'])
         if not result['position_restored_without_movement']:return 'Equipment restart position mismatch'

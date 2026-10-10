@@ -64,6 +64,12 @@ class EquipmentTests(unittest.TestCase):
         with self.assertRaises(TradeRejected):self.move(equipment_packet(self.identity,self.sword,4,1,2,-1,sequence=3))
         with self.assertRaises(TradeRejected):self.move(equipment_packet(self.identity,before['items'][0]['identity'],destination_slot=3,sequence=3))
         self.assertEqual(self.store.load(1,self.identity),before)
+    def test_native_unequip_to_empty_bag_cell_zero(self):
+        self.equip_both()
+        result,_=self.move(equipment_packet(self.identity,self.sword,4,1,2,0,sequence=3))
+        self.assertEqual(result['items'][0]['slot'],0);self.assertEqual(result['items'][0]['identity'],self.sword)
+        self.assertEqual([x['slot'] for x in result['equipment']],[2])
+
     def test_native_equipment_area_automatic_body_slot(self):
         p=bytearray(equipment_packet(self.identity,self.body,source_slot=1,destination_slot=1));struct.pack_into('<i',p,52,1)
         result,_=self.move(bytes(p));self.assertEqual(result['equipment'][0]['slot'],2)
