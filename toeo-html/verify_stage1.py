@@ -62,7 +62,7 @@ async def main():
   result={'passed':True,'runtime':'Chromium file://, offline single HTML','external_requests':external,'browser_errors':errors,
    'checks':['complete native map data loads','native grid conversion','blocked terrain rejected','mouse path planner and movement','save survives reload','UI purchase and sale','insufficient funds rejected atomically','invalid and fractional quantities rejected atomically','inventory preserved after rejection','invalid saves rejected','full-map camera inspection','mobile viewport fits'],
    'initial':initial,'final':await page.evaluate('TOEO.state'),'textures_ready':await page.evaluate('TOEO.texturesReady'),
-   'limitations':['Character palette recoloring, walk animation, map transitions, official battle and plot are pending']}
+   'limitations':['Character customization, walk animation, merchant appearance, map transitions, official battle and plot are pending']}
   (Q/'validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
   await browser.close()
  # Package only actual validated output.

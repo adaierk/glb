@@ -3,10 +3,11 @@ from pathlib import Path
 from PIL import Image
 R=Path('toeo-html/research');D=Path('toeo-html/dist');D.mkdir(parents=True,exist_ok=True)
 uri=lambda p:'data:image/png;base64,'+base64.b64encode(p.read_bytes()).decode()
-assets=json.loads(Path('toeo-html/source_assets.json').read_text());assets['ui']={};assets['items']={};assets['tiles']={}
+assets=json.loads(Path('toeo-html/source_assets.json').read_text());assets['ui']={};assets.setdefault('items',{});assets['tiles']={}
 for name in ('icon_01','icon_02','icon_03','icon_04','itemslot'):
  assets['ui'][name]=uri(R/('ui_'+name+'.png'))
 sheet=Image.open(R/'ui_ui_004.png').convert('RGBA');paper=sheet.crop((11,11,299,49));o=io.BytesIO();paper.save(o,format='PNG');assets['paper']='data:image/png;base64,'+base64.b64encode(o.getvalue()).decode()
+empty=Image.new('RGBA',(32,32));o=io.BytesIO();empty.save(o,format='PNG');assets['empty']='data:image/png;base64,'+base64.b64encode(o.getvalue()).decode()
 for n in range(605):assets['tiles'][n]=uri(R/f'1120108_{n:03}.png')
 # Component geometry will replace this temporary first atlas frame.
 body=Image.open(R/'M_body_a_m_00_default.png').convert('RGBA');head=Image.open(R/'M_head_m_00_default.png').convert('RGBA')
@@ -27,4 +28,5 @@ readme='''永恒传说OL HTML 离线移植 · 阶段 1
 源代码分支：toeo-html-offline-20261010
 '''
 (D/'说明.txt').write_text(readme,encoding='utf-8')
+shutil.copyfile('toeo-html/vendor/LICENSE.txt',D/'UZIP_License.txt')
 print('TOEO_HTML_BUILT',len(app.encode()),hashlib.sha256(app.encode()).hexdigest())
