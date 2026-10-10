@@ -11,6 +11,7 @@ binary=raw/'DefaultComponent/ToEO_CL.dat';data=binary.read_bytes()
 assert hashlib.sha256(data).hexdigest()=='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 pe=pefile.PE(data=data);base=pe.OPTIONAL_HEADER.ImageBase;cs=Cs(CS_ARCH_X86,CS_MODE_32);cs.skipdata=True
 ranges={
+ 'cpd_component_parse':(0x42da22,0x280),
  'weapon_resource_setup':(0x4d8000,0x190),
  'component_resource_lookup':(0x42bbf0,0x100),
  'world_network_dispatch_head':(0x529f00,0x1c0),
@@ -155,3 +156,22 @@ for encoding in ('ascii','utf-16le'):
      left=max(0,ref.start()-60);refs.append({'address':hex(start+ref.start()),'instructions':[f'{i.address:08x} {i.mnemonic} {i.op_str}' for i in cs.disasm(body[left:ref.start()+120],start+left)]})
    all_symbols.append({'text':value,'address':hex(va),'refs':refs})
 (OUT/'cpd_symbols.json').write_text(json.dumps(all_symbols,indent=2))
+
+from decode_client_tables import decrypt_blocks
+cpd_decoded=[]
+for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
+ body=(resources/name).read_bytes();plain=bytearray(body)
+ count,offset,row_count,row_offset=struct.unpack_from('<IIII',body,12)
+ # CPDT +0C strings/+10 offset/+14 record count/+18 offset.
+ string_map={}
+ for index in range(count):
+  size=struct.unpack_from('<I',body,offset)[0];offset+=4
+  value=decrypt_blocks(body[offset:offset+size],b'cpd text');plain[offset:offset+size]=value
+  string_map[offset]=value.split(b'\\0',1)[0].decode('cp932');offset+=size
+ assert offset==len(body)
+ rows=[]
+ for index in range(row_count):
+  words=list(struct.unpack_from('<14I',plain,row_offset+index*56))
+  rows.append({'index':index,'words':words,'labels':[string_map.get(w) for w in words]})
+ cpd_decoded.append({'file':name,'strings':list(string_map.values()),'rows':rows})
+(OUT/'cpd_decoded_records.json').write_text(json.dumps(cpd_decoded,ensure_ascii=False,indent=2))
