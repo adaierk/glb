@@ -30,6 +30,7 @@ jobs:
           git add toeo-recovery/v18/research
           if ! git diff --cached --quiet; then
             git commit -m "Record original v18 equipment appearance research [skip ci]"
+            git pull --rebase origin toeo-local-world-recovery-20261009
             git push origin HEAD:toeo-local-world-recovery-20261009
           fi
       - uses: actions/upload-artifact@v4
