@@ -179,3 +179,7 @@ files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
 (OUT/'battle_background_loader.txt').write_text(dis(0x45e280,0x1d00))
 (OUT/'battle_background_strings.json').write_text(json.dumps([{'address':hex(i),'bytes':pe.get_data(i-base,100).split(bytes(1),1)[0].decode('cp932','replace')} for i in (0x6e7f94,0x6e7f7c,0x6e96a0,0x6e9690)],indent=2))
 (OUT/'battle_data_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(?i)(bg|btl|bmf|battle|/bmap|/bfield)|\.(bmi|bmt|bmd|bpd|bpi|tmd|tmi)$',line[7:])],indent=2))
+
+(OUT/'whole_actor_model_bank_lookup.txt').write_text(dis(0x4d9b90,0x270))
+(OUT/'appearance_humanoid_predicate.txt').write_text(dis(0x405e70,0x20))
+(OUT/'battle_background_format.json').write_text(json.dumps([{'address':hex(i),'text':pe.get_data(i-base,90).split(bytes(1),1)[0].decode('cp932','replace')} for i in (0x6e820c,0x6e8200)],indent=2))
