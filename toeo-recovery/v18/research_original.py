@@ -17,7 +17,11 @@ ranges={
  'item_constructor_copy':(0x51c800,0x1000),
  'equipment_move_receipt':(0x4f9720,0x750),
  'world_b2_callback':(0x52ca9b,0x100),
- 'world_attribute_records':(0x526610,0x1300),
+ 'world_attribute_records':(0x526610,0x2a00),
+ 'visual_record_decoder':(0x51d5c0,0x140),
+ 'actor_visual_components':(0x4fed50,0x340),
+ 'model_layer_setter':(0x518280,0x3c0),
+ 'actor_model_refresh':(0x500280,0x350),
  'equipment_visual_preview':(0x550e00,0x1000),
  'model_class_lookup':(0x4d81f0,0x450),
  'model_body_change_lookup':(0x4d9b90,0x200),
@@ -90,3 +94,13 @@ for row in field_refs:
   left=va-70
   text='\n'.join(f'{i.address:08x}  {i.mnemonic:8s} {i.op_str}' for i in cs.disasm(pe.get_data(left-base,180),left))
   (OUT/f'field_{va:08x}.txt').write_text(text)
+
+switch=[]
+indices=pe.get_data(0x528f20-base,0x9d)
+for index,handler_index in enumerate(indices):
+ handler=struct.unpack('<I',pe.get_data(0x528e50-base+handler_index*4,4))[0]
+ code=pe.get_data(handler-base,160)
+ switch.append({'record':hex(index+0x49),'handler':hex(handler),'instructions':[i.mnemonic+' '+i.op_str for i in cs.disasm(code,handler)][:26]})
+(OUT/'world_attribute_switch.json').write_text(json.dumps(switch,indent=2))
+visual_switch=[{'record':hex(i+0x36),'handler':hex(struct.unpack('<I',pe.get_data(0x51f594-base+i*4,4))[0])} for i in range(13)]
+(OUT/'inventory_record_switch.json').write_text(json.dumps(visual_switch,indent=2))
