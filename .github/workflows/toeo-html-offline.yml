@@ -1,0 +1,41 @@
+name: TOEO HTML offline build
+on:
+  push:
+    branches: [toeo-html-offline-20261010]
+    paths: [toeo-html/**, .github/workflows/toeo-html-offline.yml]
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  html-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37899580886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-original-client-preserved
+          path: ${{ runner.temp }}/TOEO_ORIGINAL
+      - name: Extract original map and graphics
+        run: |
+          python -m pip install -q Pillow
+          python toeo-html/extract_assets.py
+      - name: Retain offline research on isolated branch
+        run: |
+          git config user.name "TOEO HTML CI"
+          git config user.email "toeo-html-ci@users.noreply.github.com"
+          git add toeo-html/research
+          if ! git diff --cached --quiet; then
+            git commit -m "Extract original resources for HTML port [skip ci]"
+            git pull --rebase origin toeo-html-offline-20261010
+            git push origin HEAD:toeo-html-offline-20261010
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-html-resource-research
+          path: toeo-html/research
+          retention-days: 90
