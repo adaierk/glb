@@ -1,0 +1,41 @@
+"""Recovered original encounter records; spawn/stats are explicit local fixtures."""
+import struct
+from account_packets import message
+from world_map_packets import record
+from character_mutation_packets import encode_name
+from world_enemy_packets import ENEMY_IDENTITY,ENEMY_NAME,enemy_grid
+BATTLE_GROUP=(0x73000001,1)
+BATTLE_ENEMY_BANK=100
+def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False):
+    if len(appearance)!=24:raise ValueError('Original battle appearance requires 24 bytes')
+    b=record(0x59,0x158)
+    struct.pack_into('<II',b,4,*identity)
+    struct.pack_into('<II',b,0xc,category,0)
+    struct.pack_into('<hh',b,0x14,*grid)
+    struct.pack_into('<I',b,0x18,map_id)
+    struct.pack_into('<II',b,0x24,*BATTLE_GROUP)
+    struct.pack_into('<iiii',b,0x2c,*position,0 if controlled else 1,1)
+    b[0x3c:0x80]=encode_name(name)
+    b[0x80:0x98]=appearance
+    struct.pack_into('<IIII',b,0x9c,hp,max_hp,tp,max_tp)
+    b[0xc0:0xc5]=bytes((1,1,1,0,1))
+    struct.pack_into('<HHH',b,0xc6,1,1,2)
+    return bytes(b)
+def battle_group_record(profile,background_id):
+    b=record(0x58,0x2c)
+    struct.pack_into('<II',b,8,*BATTLE_GROUP)
+    struct.pack_into('<IIii',b,0x10,background_id,0,800,600)
+    struct.pack_into('<hh',b,0x20,*profile.spawn_grid)
+    return bytes(b)
+def encounter_notice(identity,name,selector_fields,profile,request_id,background_id=0):
+    if len(selector_fields)!=248:raise ValueError('Expected preserved selector fields')
+    player_appearance=selector_fields[0x30:0x48]
+    appearance=bytearray(24);struct.pack_into('<I',appearance,8,BATTLE_ENEMY_BANK)
+    tail=battle_group_record(profile,background_id)
+    tail+=battle_actor_record(identity,name,player_appearance,1,(-96,0),profile.spawn_grid,profile.map_id,tp=30,max_tp=30,controlled=True)
+    tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(96,0),enemy_grid(profile),profile.map_id)
+    tail+=bytes(4)
+    b=bytearray(message(0x9d,bytes(35+len(tail)),request_id)[:44])
+    struct.pack_into('<I',b,12,44+len(tail))
+    struct.pack_into('<IIIII',b,16,*identity,profile.map_id,*BATTLE_GROUP)
+    return bytes(b)+tail
