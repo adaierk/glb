@@ -22,8 +22,9 @@ for f in sorted(RAW.rglob('*')):
   entry['layers']=[{'offset':v,'words':list(struct.unpack_from('<7I',d,v)),'sample_words':list(struct.unpack_from('<32I',d,v+28))} for v in offs]
  if d[:8]==b'BNKD\x02\x00\x00\x00':
   count=struct.unpack_from('<I',d,8)[0];images=[]
-  for i in range(count):
+  for i in range(min(count,512)):
    length,offset=struct.unpack_from('<II',d,12+i*8)
+   if offset==0xffffffff or offset+24>len(d) or length<24:continue
    w,h,depth,fmt,size,compression,reserved=struct.unpack_from('<HHIIIII',d,offset)
    e={'index':i,'offset':offset,'length':length,'width':w,'height':h,'depth':depth,'format':fmt,'size':size,'compression':compression}
    if (depth,fmt,compression)==(16,25,2):
