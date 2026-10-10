@@ -1,55 +1,59 @@
-永恒传说 OL 本地服务恢复进度（v19，2026-10-10）
-恢复仓库：adaierk/glb
-工作分支：toeo-local-world-recovery-20261009；继续在此分支工作，main 未修改。
-方向：保留原版 Windows 客户端，重建 localhost 服务；不是另做网页或替代单机客户端。
-最终目标仍为全部地图、NPC、主支线任务、战斗、商店和装备；本文件记录阶段事实。
+永恒传说 OL 本地服务恢复进度（v20，2026-10-10）
+仓库：adaierk/glb；分支：toeo-local-world-recovery-20261009，main未修改。
+方向：保留原版Windows客户端，重建localhost服务。
+最终目标：全部地图、NPC、主支线任务、战斗、商店和装备；本文件只记阶段事实。
 
-已经验证：
-- 原客户端进入 Rashuan 河口地图、NPC 商店、交易及存档流程。
-- v18 原生装备：短剑和服装穿脱、外观、HP 上限与重新登录保存。站立剑图缺失，不能宣称攻击已恢复。
-- v19 原生敌人对象、字段解析、地图资源、鼠标选中、名称和血条。
-- 地图中的紫色遭遇标记是原资源实际渲染，不是另画精灵。
-- 本地 C6/C7/C8/C9/9D 遭遇流程进入原版战斗背景 BBg0015 和战斗 UI。
-- 原客户端发送 9E 遭遇确认、9F 资源就绪请求；服务端验证角色/地图/组号后回复 A0，原生待处理请求完成。
-- 战斗玩家及怪物的模型、碰撞资源加载返回成功；玩家1P编号和血条可见，有效指针不等于精灵已经显示。
-- 当前战斗人物和怪物精灵尚未显示，攻击、AI、胜负、经验掉落和返回地图尚未恢复。
+已验证的阶段成果：
+- 原客户端进入Rashuan河口地图，保留NPC商店、交易及存档流程。
+- 原生装备穿脱、服装外观、HP上限与重新登录保存继续通过回归。
+- 原生地图敌人、遭遇符号、鼠标选择、名称和血条。
+- C6/C7/C8/C9/9D进入原版BBg0015战斗背景及UI；9E/9F/A0确认和资源就绪。
+- v20修复战斗动画加载失败：59+34应传原生朝向2/6，之前0/1让动画100返回失败。
+- 清除59+C2→actor+168的测试冻结标志，恢复不透明显示及原版常规更新路径。
+- 将本地测试战斗出生点设为玩家(220,0)、敌人(580,0)，避免玩家被夹到边界20并被窗口裁切。
+- 原版人物和E000怪物精灵在战场内实际可见；动画资源选择及516750原生绘制返回成功。
+- 战斗显示是原客户端绘制；原始EXE未改写，战斗Frida脚本只读取对象和返回值。
 
-原生数据定位：
-地图 enemy 22/2E：CID0 ID1200 -> SLIME -> CRSD field bank800/se000。
-2E+8 pick_range=2，+C symbol=1，+10 float scale=1.0，+16 short style=2。
-symbol=0 会使 actor+A8 的 08000000 位阻止模型请求；scale=1.0 触发资源1500000。
-地图敌人来自本地测试配置：identity=(0x72000001,1)，HP100，spawn(137,313)；官方刷怪点和数值未验证。
-地图0x1120108，玩家(139,313)，NPC(141,313)；坐标转换由原生对象验证。
-战斗59记录：B4 entity_kind 玩家1/敌人2 -> state+8 -> actor+60。
-record+C 阵营/类别 -> state+244；CC -> state+24C -> actor+16C 资源bank，敌人battle bank100/e000。
-native529840/529919 建立状态；native511DD0 创建actor；5109A0和50FCF0加载模型/碰撞。
-A3/511030 -> 50F800/50F820 -> 50F7F0 为能力表初始化，不是位置更新。
-不要用猜测的 A3 包模拟位置、伤害或胜利。
+本地测试数据与限制：
+敌人名称：Original Enemy Test；identity=(0x72000001,1)，HP100、位置和遭遇范围是测试设定。
+地图CID0分类1200名SLIME→field bank800/se000；战斗bank100名E000→e000。
+实际E000精灵是类人怪物；不能把它当作已还原的官方SLIME实例。
+官方怪物分类/实例/战斗资源对应表、刷怪点、数值、掉落与战斗背景对应关系仍未验证。
+人物actor readiness仍为0；A1/A3战斗控制和能力初始化没有接通。
+攻击、技能、受伤、敌人AI、胜负、经验掉落及返回地图仍未完成。
+测试战斗目前需要退出重启回到地图；本版本还不是完整单机游戏。
 
-启动与存档：
-Run_TOEO_Rashuan.cmd：普通地图/商店。
-Run_TOEO_Equipment_Test.cmd：装备预览。
-Run_TOEO_Encounter_Test.cmd：新增 --combat-preview，进入本地遭遇测试。
-账号 archive001 / local123；沿用 local_world_userdata。升级不得覆盖用户数据库。
-本包不带原游戏资源或玩家数据库。原始客户端 EXE SHA256：
-635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55
-继续保留 v16 的无损 TGA 兼容缓存。
+下一步：
+按原版52C1A4恢复A1/A2，按52C2F8恢复A3/A4能力初始化。
+A3调用511030→50F800/50F820→50F7F0，不是位置或伤害包。
+继续恢复战斗选取尺寸、原生攻击输入和动作广播，再做AI、结算、回地图及存档一致性。
+优先从客户端读取NPC/地图/任务；缺失的正式配置按有出处的历史资料补全。
+详见toeo-recovery/v20/next_battle_protocol_notes.json与NEXT_RECOVERY_V20.txt。
+不得用Frida写角色状态、强制调用/返回、伪造HP或伪造战斗完成。
 
-本轮最终验证源提交：7c83363bc5c1c8c7e6f3a8790c884282278f9dbc
-Windows 遭遇实机 run：38026848724；artifact11660731760，SHA256 4712322dd7c51dcb4940b263464989d00eb067409b137a6df6d76996416c3ee9
-同一源提交的装备/存档/重进地图回归 run：38026848766（通过）
-证据：toeo-recovery/v19/evidence/38026848724/
-源文件验证和原生解析证据：toeo-recovery/v19/verification/7c83363bc5c1c8c7e6f3a8790c884282278f9dbc/
-封包：toeo-recovery/v19/TOEO_Local_World_Recovery_20261010_v19.zip
-封包校验：toeo-recovery/v19/MANIFEST_V19_SEALED.json
-封包使用同一实测提交的124份源文件，打包后重跑61项检查并逐文件验证。
-截图只从原 Windows 桌面精确裁切800x600，不补画、不合成。
-模型/协议 Frida 观测只读；不写actor/HP，不强制返回或绕过进度。
-客户端仍有被捕获的D3D/C++异常；不能宣称异常清零或完整稳定。
+启动与保存：
+Run_TOEO_Rashuan.cmd：地图/商店；Run_TOEO_Equipment_Test.cmd：装备测试。
+Run_TOEO_Encounter_Test.cmd：--combat-preview原生遭遇/战斗显示测试。
+账号archive001 / local123；沿用local_world_userdata，升级不得覆盖玩家数据库。
+修复包不带原游戏资源和玩家数据库；保留v16无损TGA兼容缓存。
+原始EXE SHA256：635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55
 
-下一步顺序：
-1. 修复战斗演员实际显示：跟踪 BattleMain、投影、原生生成动画100、初始化后状态；保留已通遭遇和资源就绪链路。
-2. 原生输入 -> 攻击/技能协议 -> 怪物AI -> HP变化；不靠观测脚本强制演示。
-3. 结算、奖励、存档和返回地图完整闭环。
-4. 再扩展正式刷怪、地图/传送和NPC主支线；客户端缺失内容按有出处的Wiki/历史资料还原。
-每个阶段用实机截图和原生事件验证，同时回归装备、商店和角色存档。
+本轮验证：
+实机测试源提交：53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9
+Windows遭遇run：38029546220，artifact11661711616
+artifact SHA256：b2d38fc7bf5c5fe3ceaca9972d99ba2cf7b90cfacd73c6a655827f7647c251c2
+同一源提交装备/存档/重进地图回归run：38029546328（通过）
+回归artifact11661786930，SHA256：7d1ef5c1a95d49c25ee9af3d53368b4e443641eeee44d82d6f62082b8a2a1bcd
+原版解析证据：toeo-recovery/v19/verification/53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9/
+实机与截图证据：toeo-recovery/v20/evidence/38029546220/
+发布封存验证124个源文件来自实机测试提交，执行61项打包回归，ZIP解压与CRC校验。
+包：toeo-recovery/v20/TOEO_Local_World_Recovery_20261010_v20.zip
+单独截图包：toeo-recovery/v20/TOEO_Screenshots_20261010_v20.zip
+用户要求：后续阶段实机截图单独ZIP交付，不混入修复包；持续推进到实质成果再交付。
+
+观测字段说明：model_state.animation_clock实际读取model+74动画长度上限，并非当前帧；不要据此误判动画停住。
+
+封存校验：124源文件一致、61项打包回归、两个ZIP的CRC和下载SHA256均通过。
+修复包SHA256：109b78d2c4df0ea4e985dfcf43f0fe749de0d26ada356ff6a52ce667a45032a1
+独立截图包SHA256：61878e020e452f1c473757eecf84dcc035ce917553d3718b77ea00a39c128c3b
+下载索引：toeo-recovery/v20/DELIVERY_V20.json（固定封存提交的原始文件URL）。
