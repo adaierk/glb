@@ -1,0 +1,43 @@
+name: TOEO v21 seal verified native recovery checkpoint
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [toeo-recovery/v21/visual_review.json, toeo-recovery/v21/release_config.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Seal exact native-tested source and separate original screenshots
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python -m pip install -q frida pillow
+          python toeo-recovery/v21/build_release_ci.py
+      - name: Save verified checkpoint on recovery branch
+        run: |
+          git config user.name "TOEO Recovery CI"
+          git config user.email "toeo-recovery-ci@users.noreply.github.com"
+          git add toeo-recovery/v21
+          if ! git diff --cached --quiet; then
+            git commit -m "Seal v21 native enemy recovery package [skip ci]"
+            for attempt in 1 2 3 4; do
+              git pull --rebase origin toeo-local-world-recovery-20261009
+              if git push origin HEAD:toeo-local-world-recovery-20261009; then break; fi
+              if [ "$attempt" = 4 ]; then exit 1; fi
+            done
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: toeo-v21-verified-release
+          path: |
+            toeo-recovery/v21/TOEO_Local_World_Recovery_20261010_v21.zip
+            toeo-recovery/v21/TOEO_Screenshots_20261010_v21.zip
+            toeo-recovery/v21/MANIFEST_V21_SEALED.json

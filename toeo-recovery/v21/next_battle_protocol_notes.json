@@ -1,0 +1,45 @@
+{
+  "original_exe_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "base": "v20",
+  "corrected_protocol_roles": {
+    "AA": {
+      "handler": "0x52c8aa",
+      "consumer": "0x5146a0",
+      "meaning": "Battle group start"
+    },
+    "A1": {
+      "handler": "0x52c1a4",
+      "meaning": "Battle end control; clears own group and sets scene+1D0=2"
+    },
+    "A3": {
+      "handler": "0x52c2f8",
+      "meaning": "Results/rewards; sets result counters/list and readiness2"
+    },
+    "A7": {
+      "builder": "0x510090",
+      "meaning": "Outgoing movement actor action record; no incoming echo handler"
+    },
+    "A8": {
+      "builder": "0x522fd0",
+      "meaning": "Original command request10004 with own identity and selected battle target"
+    },
+    "B2": {
+      "consumer": "0x526610",
+      "record_5a_handler": "0x528357",
+      "action_consumer": "0x510090",
+      "meaning": "Incoming actor delta; record5A deserializes original action state"
+    },
+    "A9": {
+      "consumer": "0x49c510",
+      "meaning": "Positional effect/script references; payload coordinates are floats"
+    }
+  },
+  "pending": [
+    "Damage and hit timing",
+    "Skills",
+    "Enemy AI",
+    "Results/rewards",
+    "Return to map and persistent battle vitals"
+  ],
+  "observation_boundary": "Read-only battle probes; no writes, forced calls or forced returns."
+}
