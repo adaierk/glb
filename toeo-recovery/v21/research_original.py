@@ -42,7 +42,7 @@ ranges={
 'action_actor_reference':(0x4916d0,0x390),
 'action_classify_full':(0x48d860,0x450),
 'command_script_factory':(0x4707a0,0x790),
-'actor_delta_b2':(0x526610,0x760),
+'actor_delta_b2':(0x526610,0x2820),
 'battle_actor_update':(0x512330,0x650),
 'battle_action_serialize':(0x406af0,0xc0),
 'battle_attack_builders':(0x522fd0,0xc0),
@@ -81,3 +81,10 @@ for name in ('pc1a.atd','e000.atd'):
 
 for index,va in enumerate(struct.unpack('<8I',pe.get_data(0x6e8e40-base,32))):
  if 0x400000<=va<0x6bc000:(OUT/('actor_reference_virtual_'+str(index)+'.txt')).write_text(dis(va,0x300))
+
+mapping={}
+for code in range(0x49,0xe6):
+ index=pe.get_data(0x528f20-base+code-0x49,1)[0]
+ target=struct.unpack('<I',pe.get_data(0x528e50-base+index*4,4))[0]
+ mapping[hex(code)]={'index':index,'handler':hex(target)}
+(OUT/'actor_delta_record_dispatch.json').write_text(json.dumps(mapping,indent=2))
