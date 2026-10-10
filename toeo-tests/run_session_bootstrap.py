@@ -55,6 +55,10 @@ def main():
     missing=[n for n in required if not (game/'data'/n).is_file()]
     if missing:raise SystemExit('Corrected original data directory is missing required files: '+str(missing))
     out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=True)
+    if args.local_account:
+        from legacy_graphics_assets import prepare_render_client
+        game=prepare_render_client(game,out.parent/'toeo_runtime_cache_v16',out/'graphics_assets_manifest.json')
+        binary=game/'ToEO_CL.dat'
     exe=game/('ToEO_CL_local_login_probe.exe' if args.local_account else 'ToEO_CL_session_probe.exe')
     if exe.exists():raise SystemExit('Temporary probe EXE already exists; use a directory without that filename.')
     shutil.copyfile(binary,exe)

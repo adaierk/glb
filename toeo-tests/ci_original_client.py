@@ -26,6 +26,9 @@ def main():
     diagnostic=(out/'python_threads.txt').open('w',encoding='utf-8');faulthandler.enable(diagnostic);faulthandler.dump_traceback_later(45,repeat=True,file=diagnostic)
     original=game/'ToEO_CL.dat'
     if hashlib.sha256(original.read_bytes()).hexdigest()!=SHA:raise SystemExit('Original SHA mismatch')
+    from legacy_graphics_assets import prepare_render_client
+    game=prepare_render_client(game,game.parent/'game_runtime_v16',out/'graphics_assets_manifest.json')
+    original=game/'ToEO_CL.dat'
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
     server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True,world_profile='rashuan')
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
