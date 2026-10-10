@@ -1,8 +1,8 @@
-name: TOEO v21 original battle initialization verification
+name: TOEO v21 original battle target and attack request verification
 on:
   push:
     branches: [toeo-local-world-recovery-20261009]
-    paths: [.github/workflows/toeo-v21-native.yml, toeo-tests/world_battle_initialization.py, toeo-tests/test_battle_initialization.py, toeo-tests/local_account_server.py, toeo-tests/combat_runtime.js, toeo-tests/ci_original_client.py]
+    paths: [.github/workflows/toeo-v21-native.yml, toeo-tests/world_battle_commands.py, toeo-tests/test_battle_commands.py, toeo-tests/local_account_server.py, toeo-tests/combat_runtime.js, toeo-tests/ci_original_client.py]
   workflow_dispatch:
 jobs:
   original-client:
@@ -52,7 +52,7 @@ jobs:
           if($LASTEXITCODE -ne 0){throw 'Recovered server regression tests failed'}
           $first=Join-Path $report 'first'
           $second=Join-Path $report 'reentered'
-          & python -u toeo-tests/ci_original_client.py $game $first --duration 210 --combat-check @extra 2>&1 | Tee-Object (Join-Path $report 'first_driver.txt')
+          & python -u toeo-tests/ci_original_client.py $game $first --duration 210 --combat-check --battle-command-check @extra 2>&1 | Tee-Object (Join-Path $report 'first_driver.txt')
           if($LASTEXITCODE -ne 0){throw 'First original-client run failed'}
       - uses: actions/upload-artifact@v4
         if: always()

@@ -282,10 +282,11 @@ class LocalAccountServer(BootstrapServer):
                 try:target=parse_npc_request(payload)
                 except ValueError as error:
                     self.log('actor_target_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=self.map_id or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])) and not (self.combat_preview and state.get('local_enemy_announced') and target['target']==(0x72000001,1)):
+                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=self.map_id or target['group']!=((state.get('local_battle_group') or (0,0)) if self.combat_preview else (0,0)) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])) and not (self.combat_preview and state.get('local_enemy_announced') and target['target']==(0x72000001,1)):
                     self.log('actor_target_rejected',connection=conn_id,reason='Character, ready map, group or target mismatch');continue
                 answer=actor_target_reply(target)
                 self.send_answer(c,answer,state)
+                if target['group']!=(0,0):state['local_battle_target']=target['target']
                 self.log('actor_target_answer',connection=conn_id,request_hex=payload.hex(),answer_hex=answer.hex(),**target)
                 continue
             if op in (0xc6,0xc8) and port==11101:
@@ -360,39 +361,23 @@ class LocalAccountServer(BootstrapServer):
                 answer=message(0xa0,bytes(3)+struct.pack('<5I',*expected),req)
                 self.send_answer(c,answer,state)
                 self.log('battle_resource_reply_sent',connection=conn_id,request_id=req,request_hex=payload.hex(),answer_hex=answer.hex())
-                if 'local_battle_control_notice_id' not in state:
-                    from world_battle_initialization import battle_control_notice
-                    control_id=0x73001002
-                    state['local_battle_control_notice_id']=control_id
-                    notice=battle_control_notice(control['character_id'],self.map_id,control_id)
+                if not state.get('local_battle_started'):
+                    from world_battle_commands import battle_start_notice
+                    notice=battle_start_notice(self.map_id,state['local_battle_group'],0x73001002)
                     self.send_answer(c,notice,state)
-                    self.log('battle_control_notice_sent',connection=conn_id,request_id=control_id,answer_hex=notice.hex())
+                    state['local_battle_started']=True
+                    self.log('battle_start_notice_sent',connection=conn_id,answer_hex=notice.hex())
                 continue
-            if op in (0xa2,0xa4) and port==11101 and self.combat_preview:
-                from world_battle_initialization import validate_initialization_ack,battle_abilities_notice
+            if op==0xa8 and port==11101 and self.combat_preview:
+                from world_battle_commands import parse_attack_request,validate_attack_request
                 control=state.get('world_account_control')
-                notice_key='local_battle_control_notice_id' if op==0xa2 else 'local_battle_abilities_notice_id'
                 try:
-                    if not control or not state.get('local_battle_group') or notice_key not in state:
-                        raise ValueError('No active original initialization notice')
-                    if op==0xa4 and not state.get('local_battle_control_ack'):
-                        raise ValueError('Ability acknowledgement preceded control acknowledgement')
-                    validate_initialization_ack(payload,op,state[notice_key],control['character_id'],self.map_id,state['local_battle_group'])
+                    attack=parse_attack_request(payload)
+                    if not control or not state.get('local_battle_started'):raise ValueError('No active battle')
+                    validate_attack_request(attack,control['character_id'],self.map_id,state['local_battle_group'],state.get('local_battle_target'))
                 except ValueError as error:
-                    self.log('battle_initialization_ack_rejected',connection=conn_id,opcode=hex(op),reason=str(error),request_hex=payload.hex());continue
-                if op==0xa2:
-                    state['local_battle_control_ack']=True
-                    self.log('battle_control_ack_native',connection=conn_id,request_id=req,request_hex=payload.hex())
-                    if 'local_battle_abilities_notice_id' not in state:
-                        ability_id=0x73001003
-                        state['local_battle_abilities_notice_id']=ability_id
-                        answer=battle_abilities_notice(control['character_id'],self.map_id,ability_id)
-                        self.send_answer(c,answer,state)
-                        self.log('battle_abilities_notice_sent',connection=conn_id,request_id=ability_id,answer_hex=answer.hex(),ability_rows=0,
-                                 limitation='Original empty-list readiness path; actual attack and skill data still pending')
-                else:
-                    state['local_battle_abilities_ack']=True
-                    self.log('battle_abilities_ack_native',connection=conn_id,request_id=req,request_hex=payload.hex())
+                    self.log('battle_attack_rejected',connection=conn_id,reason=str(error),request_hex=payload.hex());continue
+                self.log('battle_attack_request_native',connection=conn_id,request_hex=payload.hex(),**attack)
                 continue
             if op==0x9e and port==11101 and self.combat_preview:
                 control=state.get('world_account_control')

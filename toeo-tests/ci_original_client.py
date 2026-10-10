@@ -19,6 +19,7 @@ def main():
     p.add_argument('--equipment-check',action='store_true',help='Real native equip/unequip and restart using explicitly local equipment fixtures')
     p.add_argument('--move-check',action='store_true',help='Require real two-item bag exchange and original client restart restoration')
     p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
+    p.add_argument('--battle-command-check',action='store_true',help='Require original battle target and attack packet from actual mouse clicks')
     p.add_argument('--combat-check',action='store_true',help='Original enemy encounter fixture through real mouse input')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
@@ -151,7 +152,10 @@ def main():
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
                 schedule.update({145:lambda:click(344,341),148:lambda:click(344,350),
-                                 151:lambda:click(344,350,right=True),154:lambda:double_click(344,350)})
+                                 151:lambda:click(344,350,right=True),154:lambda:double_click(344,350),
+                                 170:lambda:click(738,355),174:lambda:click(738,355),
+                                 180:lambda:double_click(738,355),185:lambda:click(720,380),
+                                 190:lambda:click(720,380)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
@@ -203,6 +207,14 @@ def main():
                 from combat_ci_acceptance import verify_combat
                 combat_failure=verify_combat(result,events,server,args,expected_position)
                 if combat_failure:failure=failure or combat_failure
+                if args.battle_command_check:
+                    wire=[json.loads(line) for line in (out/'server.jsonl').read_text().splitlines() if line.strip()]
+                    result['battle_pool_started_native']=any(e.get('event')=='native_battle_pool_started' and e.get('active')==1 for e in events)
+                    result['battle_target_selected_native']=any(e.get('event')=='native_battle_target_set' and e.get('target')==[0x72000001,1] for e in events)
+                    result['battle_attack_request_native']=any(e.get('event')=='battle_attack_request_native' for e in wire)
+                    result['battle_attack_command_native']=any(e.get('event')=='native_battle_attack_command' and e.get('command')==10004 for e in events)
+                    if not all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native')):
+                        failure=failure or 'Actual original battle target and A8 attack request did not pass'
             elif args.equipment_check:
                 from equipment_ci_acceptance import verify_equipment
                 equipment_failure=verify_equipment(result,events,server,args,expected_position)
