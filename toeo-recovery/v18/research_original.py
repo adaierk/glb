@@ -21,7 +21,10 @@ ranges={
  'visual_record_decoder':(0x51d2c0,0x460),
  'equipment_visual_collect':(0x550b10,0x2f0),
  'visual_network_handlers':(0x52b8ef,0x360),
- 'actor_visual_apply':(0x500000,0x210),
+ 'actor_visual_apply':(0x502ca0,0x1f0),
+ 'visual_component_constructor':(0x51d130,0x40),
+ 'world_network_switch_start':(0x52a650,0x300),
+ 'initial_visual_apply':(0x503f80,0xb0),
  'actor_visual_components':(0x4fed50,0x340),
  'model_layer_setter':(0x518280,0x3c0),
  'actor_model_refresh':(0x500280,0x350),
@@ -107,3 +110,13 @@ for index,handler_index in enumerate(indices):
 (OUT/'world_attribute_switch.json').write_text(json.dumps(switch,indent=2))
 visual_switch=[{'record':hex(i+0x36),'handler':hex(struct.unpack('<I',pe.get_data(0x51f594-base+i*4,4))[0])} for i in range(13)]
 (OUT/'inventory_record_switch.json').write_text(json.dumps(visual_switch,indent=2))
+
+# Identify the dispatcher jump-table entry from unchanged bytes.
+value=struct.pack('<I',0x52ba8d);table_refs=[]
+for section in pe.sections:
+ body=section.get_data();start=base+section.VirtualAddress;pos=0
+ while True:
+  pos=body.find(value,pos)
+  if pos<0:break
+  table_refs.append({'address':hex(start+pos),'words_before_after':[hex(v) for v in struct.unpack('<'+'I'*17,body[pos-32:pos+36])]});pos+=1
+(OUT/'visual_dispatch_table_refs.json').write_text(json.dumps(table_refs,indent=2))
