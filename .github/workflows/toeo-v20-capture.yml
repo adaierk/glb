@@ -1,0 +1,31 @@
+name: TOEO v20 preserve native screenshots and packet observations
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [.github/workflows/toeo-v20-capture.yml, toeo-recovery/v20/capture_config.json, toeo-recovery/v20/capture_native_ci.py]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  native-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify native artifact and preserve observations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python -m pip install -q pillow
+          python toeo-recovery/v20/capture_native_ci.py
+      - name: Commit bounded actual evidence to recovery branch
+        run: |
+          git config user.name "TOEO Recovery CI"
+          git config user.email "toeo-recovery-ci@users.noreply.github.com"
+          git add toeo-recovery/v20/evidence
+          if ! git diff --cached --quiet; then
+            git commit -m "Preserve real v20 native encounter evidence [skip ci]"
+            git pull --rebase origin toeo-local-world-recovery-20261009
+            git push origin HEAD:toeo-local-world-recovery-20261009
+          fi
