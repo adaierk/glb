@@ -436,6 +436,19 @@
   }));},500);
   // v16 HUD investigation: bounded, read-only observations of original callbacks.
   const hudFrames=new Map();let activeHud=null,hudLookups=0,hudDrawReturns=0;
+  let ownHudSamples=0;
+  Interceptor.attach(address(0x5a0380),{onEnter(){activeHud=this.context.ecx;},onLeave(){activeHud=null;}});
+  Interceptor.attach(address(0x5a0542),{onEnter(){if(++ownHudSamples%90!==1)return;const f=this.context.esi;
+    emit(safely(()=>({event:'native_own_hud_values',frame:f.toString(),hp:f.add(0x2f8).readU32(),
+      max_hp:f.add(0x2fc).readU32(),tp:f.add(0x300).readU32(),max_tp:f.add(0x304).readU32(),
+      smooth_hp:f.add(0x2ec).readU32(),smooth_tp:f.add(0x2f0).readU32(),
+      exp:f.add(0x308).readU32(),max_exp:f.add(0x30c).readU32()})));
+  }});
+  for(const [va,phase] of [[0x5a0605,'own_hp_gauge_return'],[0x5a0675,'own_tp_gauge_return']]){
+    let count=0;Interceptor.attach(address(va),{onEnter(){if(++count%90!==1)return;
+      emit({event:'native_hud_draw_phase',phase,frame:this.context.esi.toString()});}});
+  }
+
   Interceptor.attach(address(0x538870),{onEnter(){
     activeHud=this.context.ecx;const key=activeHud.toString(),now=Date.now();
     if(now-(hudFrames.get(key)||0)>3000){hudFrames.set(key,now);emit(safely(()=>({
@@ -457,11 +470,11 @@
         eax:this.context.eax.toString(),font:phase==='number_font_resource' && !this.context.eax.isNull()?{
           object:this.context.eax.toString(),vtable:this.context.eax.readPointer().toString()}:null})));}});
   }
-  Interceptor.attach(address(0x623410),{onEnter(){
-    this.hud=activeHud;this.trace=this.hud===null?[]:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString());
+  Interceptor.attach(address(0x623410),{onEnter(args){
+    this.hud=activeHud;this.drawArgs=[1,2,3,4,5].map(i=>args[i].toString());this.trace=this.hud===null?[]:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString());
   },onLeave(ret){
     if(this.hud===null || ++hudDrawReturns>30)return;
-    emit({event:'native_hud_graphics_result',frame:this.hud.toString(),hresult:ret.toString(),stack:this.trace});
+    emit({event:'native_hud_graphics_result',frame:this.hud.toString(),hresult:ret.toString(),draw_args:this.drawArgs,stack:this.trace});
   }});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
