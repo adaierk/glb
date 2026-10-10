@@ -9,6 +9,8 @@ proof=json.loads((EVIDENCE/'artifact.json').read_text())
 result=json.loads((EVIDENCE/'runtime_result.json').read_text())
 assert proof['tested_commit']==TESTED
 assert all(result.get(k) for k in ('map_entered','enemy_created_native','enemy_component_native','enemy_world_model_native','enemy_field_symbol_native','enemy_mouse_pick_native','enemy_target_selected_native'))
+if config.get('encounter_entry'):
+ assert all(result.get(k) for k in ('encounter_native_confirmed','battle_player_model_native','battle_enemy_model_native','battle_scene_initialized_native','battle_resource_ack_native'))
 review=json.loads((META/'visual_review.json').read_text())
 assert review['approved'] and review['run']==RUN and review['artifact_sha256']==proof['sha256']
 def sha(b):return hashlib.sha256(b).hexdigest()
@@ -50,6 +52,8 @@ for name,digest in review['images_sha256'].items():
  images.append({'file':name,'sha256':digest,'alterations':'Exact original desktop crop only'})
 files['evidence/v19/visual_review.json']=(META/'visual_review.json').read_bytes()
 files['evidence/v19/unit_tests.txt']=test.stdout.encode()
+baseline=json.loads((META/'baseline_regression.json').read_text());assert baseline['passed'] and baseline['tested_commit']==TESTED
+files['evidence/v19/baseline_regression.json']=(META/'baseline_regression.json').read_bytes()
 consistency={'passed':True,'tested_commit':TESTED,'count':len(rows),'files':rows}
 (META/'source_consistency.json').write_text(json.dumps(consistency,indent=2))
 files['evidence/v19/source_consistency.json']=json.dumps(consistency,indent=2).encode()

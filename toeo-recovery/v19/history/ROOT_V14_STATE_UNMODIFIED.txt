@@ -1,0 +1,56 @@
+永恒传说 Online 当前恢复状态 v14（2026-10-09）
+
+最终原Windows客户端购买、出售、物品窗口、关闭商店、行走与重启检查均通过。
+测试代码提交：f8812b9fb03839a325bc97e2fae17515030ab579
+Windows RUN52：37954385467；artifact：11627862123。
+Artifact SHA256：ea437039bd9c548e99efdbe766f421822453762841d846562089eb10e83a345a
+隔离分支：adaierk/glb / toeo-local-world-recovery-20261009。
+证据：evidence/native/v14_actual_trade_milestone.json、v14_source_consistency.json，
+以及evidence/windows_run52/first和reentered。截图已人工核对原游戏像素。
+
+实际原端交易
+初始5000，买3个レモングミ（购价360），余额3920、持有3个。
+卖出1个（暂定回收价180），余额4100、持有2个；原商店即时显示新数量。
+购买DE/出售DF由原4F8050/4F81B0构包。保留发送层改写的线上请求号。
+67回执解除原挂起请求，50更新原校验钱包，36..3D和4D/4C更新物品及可见商店。
+6B完整通知同步背包；初次及重登入图34均恢复持久化金币和物品。
+真实鼠标打开原物品窗口，565210只读观察确认窗口可见与数量2。
+未替换游戏界面、物品名称解码、数量解码或原渲染逻辑。
+
+持久化与校验
+world_wallets、world_inventory_items、world_trade_ledger按角色保存。
+一次SQLite事务完成订单；失败回滚，重复请求不重复交易，拒绝越权和超量出售。
+重启原端及本地服务后仍是4100金币、レモングミ2个；地图位置也恢复一致。
+删角色清理交易、物品、金币和位置。交付不含用户数据库。
+38项本地检查通过；原机码构包、背包名称/数量、钱包校验、67/6B处理、
+4D原物品克隆与刷新、4C售空删除通过。97个源文件与被测Git版本逐字节一致。
+
+商人与史料
+地图0x1120108，ラシュアン河の河口。地名由原小地图和Wiki地名图像对照推断。
+行商人＜道具屋＞：grid(141,313)，pixel(4544,5024)。11件商品购价沿用同地区史料。
+https://www.wikihouse.com/toeowiki/index.php?%C5%B9#u392bcdb
+历史库13组商店、140条商品、6组明确XY；仅1组完成定位并部署。
+NPC原官方实体编号与模型未找回，目前使用本地选择。
+河口只开放码头178个保守通行单元；森林与河口位置分别保存。
+
+明确暂定的离线规则
+初始金币5000（每角色一次）、单种20个堆叠、32格、回收购价一半。
+这些规则尚无可靠原服史料，不能当作官方机制。原钱包上限10000000。
+
+启动与下一阶段
+Run_TOEO_Rashuan.cmd进入河口；Run_TOEO_Local.cmd保留旧森林入口。
+沿用完整原资源包，升级复制local_world_userdata，账号archive001 / local123。
+ToEO_CL.dat不修改，SHA256：
+635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55。
+原道具模板/图标/使用效果、装备、战斗、任务、完整碰撞与换图尚未完成。
+物品右键详情曾触发原端断线，左键购物车为本版已验证操作。
+原资源/UI异常及HP/TP数值仍待恢复，完整游玩流程尚未完成。
+下一阶段优先恢复原ITEM模板及图标映射，再接道具使用、HP/TP效果与战斗。
+NEXT_RECOVERY_V14.txt保留接续入口和失败记录，旧v13状态保存在history中。
+
+V14 FINAL DELIVERY
+Package: TOEO_Local_World_Recovery_20261009_v14.zip
+SHA256: a6de2f32a16658a4bceb2b37824453c68430911d4c014e5e5365a54a8b44749b
+Archive: 199 entries, CRC PASS; source matches tested runtime.
+Source/evidence checkpoint: 88a65321cfcce1c9415bffd9b0e0273be1eea2ea
+All four deliverables saved successfully. Delivery receipts: toeo-recovery/v14/DELIVERY_V14.json
