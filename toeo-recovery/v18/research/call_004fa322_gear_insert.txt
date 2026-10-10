@@ -1,0 +1,30 @@
+004fa2e6  rol      byte ptr [ebx], cl
+004fa2e8  add      byte ptr [eax], al
+004fa2ea  push     0x128
+004fa2ef  call     0x5f0bbc
+004fa2f4  add      esp, 4
+004fa2f7  mov      dword ptr [ebp - 0x24], eax
+004fa2fa  test     eax, eax
+004fa2fc  mov      byte ptr [ebp - 4], 3
+004fa300  je       0x4fa30c
+004fa302  push     esi
+004fa303  mov      ecx, eax
+004fa305  call     0x51f5d0
+004fa30a  jmp      0x4fa30e
+004fa30c  xor      eax, eax
+004fa30e  mov      edx, dword ptr [ebp - 0x18]
+004fa311  mov      esi, dword ptr [ebp - 0x14]
+004fa314  mov      ecx, dword ptr [esi + 0x1dc]
+004fa31a  push     1
+004fa31c  push     eax
+004fa31d  push     edx
+004fa31e  mov      byte ptr [ebp - 4], 1
+004fa322  call     0x51ee00
+004fa327  mov      ecx, dword ptr [esi + 0x1dc]
+004fa32d  push     ebx
+004fa32e  call     0x51e470
+004fa333  mov      esi, eax
+004fa335  test     esi, esi
+004fa337  je       0x4fa6bc
+004fa33d  call     0x401210
+004fa342  mov      ecx, dword ptr [eax + 0x44]

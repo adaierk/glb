@@ -1,0 +1,34 @@
+005afb03  or       edi, dword ptr [eax + 0x5afc64]
+005afb09  ret      
+005afb0a  call     0x5172c0
+005afb0f  mov      eax, dword ptr [esi + 0xec]
+005afb15  mov      ecx, dword ptr [eax + 0x68]
+005afb18  mov      edx, dword ptr [eax + 0x5c]
+005afb1b  push     1
+005afb1d  push     ebx
+005afb1e  push     ecx
+005afb1f  mov      ecx, dword ptr [eax + 0x4c]
+005afb22  push     edx
+005afb23  mov      edx, dword ptr [eax + 0x58]
+005afb26  mov      eax, dword ptr [0x80dbf4]
+005afb2b  dec      ecx
+005afb2c  push     ecx
+005afb2d  mov      ecx, dword ptr [eax + 0x58]
+005afb30  push     edx
+005afb31  mov      edx, dword ptr [eax + 0x64]
+005afb34  mov      eax, dword ptr [edx]
+005afb36  push     edi
+005afb37  push     ecx
+005afb38  mov      ecx, dword ptr [esi + 0xf0]
+005afb3e  push     eax
+005afb3f  call     0x518ed0
+005afb44  lea      eax, [edi - 1]
+005afb47  cmp      eax, 0xd
+005afb4a  ja       0x5afb85
+005afb4c  jmp      dword ptr [eax*4 + 0x5afc78]
+005afb53  push     1
+005afb55  push     ebx
+005afb56  push     0x1024
+005afb5b  jmp      0x5afb8d
+005afb5d  push     1
+005afb5f  push     ebx

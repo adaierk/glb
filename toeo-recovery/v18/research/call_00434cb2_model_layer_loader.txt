@@ -1,0 +1,29 @@
+00434c76  mov      dword ptr [esi + 0x114], eax
+00434c7c  movsx    edx, byte ptr [esi + 0x40]
+00434c80  movsx    ecx, byte ptr [esi + 0x3d]
+00434c84  movsx    eax, byte ptr [esi + 0x3c]
+00434c88  mov      edi, dword ptr [0x80dbf4]
+00434c8e  mov      ebx, dword ptr [edi + 0x58]
+00434c91  mov      edi, dword ptr [edi + 0x64]
+00434c94  mov      edi, dword ptr [edi]
+00434c96  push     1
+00434c98  push     0
+00434c9a  push     edx
+00434c9b  mov      edx, dword ptr [ebp - 0x14]
+00434c9e  push     ecx
+00434c9f  mov      ecx, dword ptr [esi + 0x114]
+00434ca5  push     0
+00434ca7  push     eax
+00434ca8  push     edx
+00434ca9  push     ebx
+00434caa  push     edi
+00434cab  mov      dword ptr [ebp - 4], 0xffffffff
+00434cb2  call     0x518ed0
+00434cb7  test     al, al
+00434cb9  je       0x434ce0
+00434cbb  mov      ecx, dword ptr [esi + 0x114]
+00434cc1  push     1
+00434cc3  push     0
+00434cc5  push     0x12c
+00434cca  push     1
+00434ccc  call     0x518280

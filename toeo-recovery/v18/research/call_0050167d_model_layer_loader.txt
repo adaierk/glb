@@ -1,0 +1,33 @@
+00501641  mov      ecx, esi
+00501643  call     0x4fe550
+00501648  test     al, al
+0050164a  jne      0x501650
+0050164c  movsx    ebx, byte ptr [edx + 0x13]
+00501650  movsx    ecx, byte ptr [edx + 0x10]
+00501654  movsx    eax, byte ptr [edx + 0xd]
+00501658  mov      edx, dword ptr [0x80dbf4]
+0050165e  mov      edi, dword ptr [edx + 0x58]
+00501661  mov      edx, dword ptr [edx + 0x64]
+00501664  mov      edx, dword ptr [edx]
+00501666  push     1
+00501668  push     0
+0050166a  push     ecx
+0050166b  mov      ecx, dword ptr [ebp - 0x14]
+0050166e  push     eax
+0050166f  mov      eax, dword ptr [ebp - 0x18]
+00501672  push     ebx
+00501673  push     eax
+00501674  push     ecx
+00501675  mov      ecx, dword ptr [esi + 0x158]
+0050167b  push     edi
+0050167c  push     edx
+0050167d  call     0x518ed0
+00501682  test     al, al
+00501684  je       0x5014d3
+0050168a  mov      al, byte ptr [ebp - 0xd]
+0050168d  test     al, al
+0050168f  je       0x5016b4
+00501691  mov      ecx, dword ptr [esi + 0x158]
+00501697  push     1
+00501699  push     0
+0050169b  push     0xc8

@@ -1,0 +1,38 @@
+0055a773  lea      eax, [esi + 0x30]
+0055a776  xor      esi, esi
+0055a778  cmp      eax, ebx
+0055a77a  mov      dword ptr [ebp + 8], eax
+0055a77d  je       0x55a7e1
+0055a77f  nop      
+0055a780  inc      esi
+0055a781  cmp      esi, 0xf4240
+0055a787  jge      0x55a807
+0055a789  mov      dx, word ptr [eax]
+0055a78c  cmp      dx, 0x36
+0055a790  jne      0x55a7c0
+0055a792  mov      ecx, dword ptr [eax + 4]
+0055a795  cmp      ecx, 1
+0055a798  jne      0x55a79f
+0055a79a  lea      ecx, [ebp - 0x24]
+0055a79d  jmp      0x55a7a7
+0055a79f  cmp      ecx, 2
+0055a7a2  jne      0x55a7c0
+0055a7a4  lea      ecx, [ebp - 0x34]
+0055a7a7  lea      edx, [ebp + 8]
+0055a7aa  push     edx
+0055a7ab  push     ebx
+0055a7ac  push     ebx
+0055a7ad  push     ecx
+0055a7ae  push     eax
+0055a7af  call     0x51f030
+0055a7b4  add      esp, 0x14
+0055a7b7  test     al, al
+0055a7b9  je       0x55a831
+0055a7bb  mov      eax, dword ptr [ebp + 8]
+0055a7be  jmp      0x55a7dd
+0055a7c0  cmp      dx, bx
+0055a7c3  jne      0x55a7c9
+0055a7c5  xor      eax, eax
+0055a7c7  jmp      0x55a7da
+0055a7c9  movzx    edx, word ptr [eax + 2]
+0055a7cd  lea      ecx, [eax + edx*4]

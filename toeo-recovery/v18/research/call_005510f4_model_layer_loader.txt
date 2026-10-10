@@ -1,0 +1,39 @@
+005510b8  mov      eax, dword ptr [0x80dbf4]
+005510bd  mov      ecx, dword ptr [eax + 0x58]
+005510c0  mov      eax, dword ptr [eax + 0x64]
+005510c3  mov      eax, dword ptr [eax]
+005510c5  mov      dword ptr [ebp - 0x1c], eax
+005510c8  mov      al, byte ptr [ebp + 0xc]
+005510cb  mov      dl, al
+005510cd  neg      dl
+005510cf  sbb      edx, edx
+005510d1  and      edx, 0xffffff9d
+005510d4  add      edx, 0x64
+005510d7  push     edx
+005510d8  xor      edx, edx
+005510da  test     al, al
+005510dc  mov      eax, dword ptr [ebp + 8]
+005510df  sete     dl
+005510e2  push     edx
+005510e3  mov      edx, dword ptr [ebp + 0x10]
+005510e6  push     ebx
+005510e7  push     eax
+005510e8  mov      eax, dword ptr [ebp - 0x1c]
+005510eb  push     0
+005510ed  push     edi
+005510ee  push     edx
+005510ef  push     ecx
+005510f0  mov      ecx, dword ptr [esi + 0x48]
+005510f3  push     eax
+005510f4  call     0x518ed0
+005510f9  test     al, al
+005510fb  jne      0x551227
+00551101  xor      al, al
+00551103  mov      ecx, dword ptr [ebp - 0xc]
+00551106  mov      dword ptr fs:[0], ecx
+0055110d  pop      edi
+0055110e  pop      esi
+0055110f  pop      ebx
+00551110  mov      esp, ebp
+00551112  pop      ebp
+00551113  ret      0xc

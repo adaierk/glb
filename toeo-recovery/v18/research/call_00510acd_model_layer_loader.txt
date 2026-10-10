@@ -1,0 +1,38 @@
+00510a91  mov      al, 0
+00510a93  add      byte ptr [eax], al
+00510a95  movsx    ebx, byte ptr [eax + 0x13]
+00510a99  mov      eax, dword ptr [esi + 0xb0]
+00510a9f  movsx    ecx, byte ptr [eax + 0xd]
+00510aa3  movsx    eax, byte ptr [eax + 0x10]
+00510aa7  mov      edx, dword ptr [0x80dbf4]
+00510aad  push     edi
+00510aae  mov      edi, dword ptr [edx + 0x58]
+00510ab1  mov      edx, dword ptr [edx + 0x64]
+00510ab4  mov      edx, dword ptr [edx]
+00510ab6  push     0x64
+00510ab8  push     1
+00510aba  push     eax
+00510abb  mov      eax, dword ptr [ebp - 0x18]
+00510abe  push     ecx
+00510abf  mov      ecx, dword ptr [ebp - 0x14]
+00510ac2  push     ebx
+00510ac3  push     eax
+00510ac4  push     ecx
+00510ac5  mov      ecx, dword ptr [esi + 0xc0]
+00510acb  push     edi
+00510acc  push     edx
+00510acd  call     0x518ed0
+00510ad2  test     al, al
+00510ad4  pop      edi
+00510ad5  jne      0x510ae9
+00510ad7  pop      esi
+00510ad8  xor      al, al
+00510ada  pop      ebx
+00510adb  mov      ecx, dword ptr [ebp - 0xc]
+00510ade  mov      dword ptr fs:[0], ecx
+00510ae5  mov      esp, ebp
+00510ae7  pop      ebp
+00510ae8  ret      
+00510ae9  mov      al, byte ptr [ebp - 0xd]
+00510aec  test     al, al
+00510aee  je       0x510b29

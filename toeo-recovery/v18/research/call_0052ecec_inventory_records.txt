@@ -1,0 +1,27 @@
+0052ecb0  dec      ebp
+0052ecb1  or       al, 0xe8
+0052ecb3  cdq      
+0052ecb4  in       al, 0xed
+0052ecb6  dec      dword ptr [ebx - 0x20b7b]
+0052ecbc  jmp      dword ptr [esi - 0x7d]
+0052ecbf  cmp      byte ptr [esi], dh
+0052ecc1  jne      0x52ed37
+0052ecc7  lea      ecx, [ebp - 0x218]
+0052eccd  call     0x4db8f0
+0052ecd2  lea      ecx, [ebp - 0x20c]
+0052ecd8  push     ecx
+0052ecd9  push     0
+0052ecdb  lea      edx, [ebp - 0x218]
+0052ece1  push     edx
+0052ece2  push     0
+0052ece4  push     edi
+0052ece5  mov      dword ptr [ebp - 4], 0x20
+0052ecec  call     0x51f030
+0052ecf1  add      esp, 0x14
+0052ecf4  test     al, al
+0052ecf6  je       0x52ed25
+0052ecf8  mov      ecx, esi
+0052ecfa  call     0x4fee60
+0052ecff  mov      ecx, dword ptr [esi + 0x1dc]
+0052ed05  lea      eax, [ebp - 0x218]
+0052ed0b  push     eax

@@ -1,0 +1,39 @@
+005511da  add      byte ptr [eax], 0x8b
+005511dd  pop      ecx
+005511de  pop      eax
+005511df  mov      ecx, dword ptr [ecx + 0x64]
+005511e2  mov      ecx, dword ptr [ecx]
+005511e4  mov      dword ptr [ebp - 0x1c], ebx
+005511e7  mov      dword ptr [ebp - 0x18], ecx
+005511ea  mov      cl, byte ptr [ebp + 0xc]
+005511ed  mov      bl, cl
+005511ef  neg      bl
+005511f1  sbb      ebx, ebx
+005511f3  and      ebx, 0xffffff9d
+005511f6  add      ebx, 0x64
+005511f9  push     ebx
+005511fa  xor      ebx, ebx
+005511fc  test     cl, cl
+005511fe  mov      ecx, dword ptr [ebp - 0x18]
+00551201  sete     bl
+00551204  push     ebx
+00551205  push     edx
+00551206  mov      edx, dword ptr [ebp + 0x10]
+00551209  push     edi
+0055120a  push     0
+0055120c  push     eax
+0055120d  mov      eax, dword ptr [ebp - 0x1c]
+00551210  push     edx
+00551211  push     eax
+00551212  push     ecx
+00551213  mov      ecx, dword ptr [ebp + 8]
+00551216  call     0x518ed0
+0055121b  test     al, al
+0055121d  je       0x551101
+00551223  mov      byte ptr [ebp - 0x11], 1
+00551227  mov      al, byte ptr [ebp + 0xc]
+0055122a  test     al, al
+0055122c  mov      ecx, dword ptr [esi + 0x48]
+0055122f  push     1
+00551231  je       0x550feb
+00551237  push     1

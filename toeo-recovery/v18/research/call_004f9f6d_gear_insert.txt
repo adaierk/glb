@@ -1,0 +1,26 @@
+004f9f31  mov      ecx, dword ptr [ebp - 0x20]
+004f9f34  mov      eax, dword ptr [ecx]
+004f9f36  sub      eax, 2
+004f9f39  je       0x4f9fe9
+004f9f3f  sub      eax, 2
+004f9f42  jne      0x4fa6bc
+004f9f48  mov      ebx, dword ptr [ebp - 0x14]
+004f9f4b  mov      eax, dword ptr [ebx + 0x1dc]
+004f9f51  test     eax, eax
+004f9f53  jne      0x4f9f5c
+004f9f55  mov      ecx, ebx
+004f9f57  call     0x4fee60
+004f9f5c  mov      ecx, dword ptr [ebx + 0x1dc]
+004f9f62  test     ecx, ecx
+004f9f64  mov      edi, dword ptr [edi + 8]
+004f9f67  je       0x4f9f72
+004f9f69  push     1
+004f9f6b  push     esi
+004f9f6c  push     edi
+004f9f6d  call     0x51ee00
+004f9f72  call     0x401210
+004f9f77  mov      ecx, dword ptr [eax + 0x44]
+004f9f7a  call     0x5b52d0
+004f9f7f  add      eax, 0x1468
+004f9f84  je       0x4fa6bc
+004f9f8a  xor      ecx, ecx

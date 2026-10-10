@@ -1,0 +1,27 @@
+004f9e09  add      byte ptr [ebx - 0x177ce3b9], cl
+004f9e0f  add      cl, byte ptr [edi]
+004f9e11  test     byte ptr [ecx - 0x7d000000], bl
+004f9e17  call     0xfcd4ad1e
+004f9e1c  add      byte ptr [eax], al
+004f9e1e  add      byte ptr [ebx - 0x7e7413b3], cl
+004f9e24  fadd     qword ptr [ecx]
+004f9e26  add      byte ptr [eax], al
+004f9e28  test     eax, eax
+004f9e2a  jne      0x4f9e31
+004f9e2c  call     0x4fee60
+004f9e31  mov      ecx, dword ptr [ebp - 0x14]
+004f9e34  mov      ecx, dword ptr [ecx + 0x1dc]
+004f9e3a  test     ecx, ecx
+004f9e3c  mov      ebx, dword ptr [edi + 0x20]
+004f9e3f  je       0x4f9e4a
+004f9e41  push     1
+004f9e43  push     esi
+004f9e44  push     ebx
+004f9e45  call     0x51ee00
+004f9e4a  call     0x401210
+004f9e4f  mov      ecx, dword ptr [eax + 0x44]
+004f9e52  call     0x5b52d0
+004f9e57  add      eax, 0x1468
+004f9e5c  je       0x4f9f1b
+004f9e62  xor      ecx, ecx
+004f9e64  mov      dword ptr [ebp - 0x5c], ecx

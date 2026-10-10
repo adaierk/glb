@@ -1,0 +1,26 @@
+0052b987  mov      byte ptr [ebp + 0xf], 1
+0052b98b  jmp      0x52ba40
+0052b990  lea      ecx, [ebp - 0x24]
+0052b993  call     0x51ea00
+0052b998  lea      ecx, [ebp - 0x218]
+0052b99e  mov      dword ptr [ebp - 4], 6
+0052b9a5  call     0x4db8f0
+0052b9aa  lea      ecx, [ebp - 0x204]
+0052b9b0  push     ecx
+0052b9b1  push     0
+0052b9b3  lea      edx, [ebp - 0x218]
+0052b9b9  push     edx
+0052b9ba  lea      eax, [ebp - 0x24]
+0052b9bd  push     eax
+0052b9be  push     edi
+0052b9bf  mov      byte ptr [ebp - 4], 7
+0052b9c3  call     0x51f030
+0052b9c8  add      esp, 0x14
+0052b9cb  test     al, al
+0052b9cd  je       0x52ba22
+0052b9cf  mov      ecx, esi
+0052b9d1  call     0x4fedd0
+0052b9d6  mov      ecx, esi
+0052b9d8  call     0x4fee60
+0052b9dd  mov      ecx, dword ptr [esi + 0x1d8]
+0052b9e3  lea      edx, [ebp - 0x24]

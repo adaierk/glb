@@ -1,0 +1,30 @@
+0051f264  sbb      byte ptr [ebx - 0x367af3b3], cl
+0051f26a  je       0x51f27d
+0051f26c  push     edi
+0051f26d  push     -1
+0051f26f  call     0x51ea20
+0051f274  cmp      eax, -1
+0051f277  jne      0x51f548
+0051f27d  mov      ecx, edi
+0051f27f  call     0x4d7980
+0051f284  push     edi
+0051f285  call     0x6ba9d0
+0051f28a  add      esp, 4
+0051f28d  jmp      0x51f548
+0051f292  mov      ecx, dword ptr [ebp + 0x10]
+0051f295  test     ecx, ecx
+0051f297  je       0x51f27d
+0051f299  mov      edx, dword ptr [ebp - 0x40]
+0051f29c  push     1
+0051f29e  push     edi
+0051f29f  push     edx
+0051f2a0  call     0x51ee00
+0051f2a5  jmp      0x51f548
+0051f2aa  mov      eax, 0x51f511
+0051f2af  ret      
+0051f2b0  jmp      0x51f57b
+0051f2b5  lea      ebx, [esi + 4]
+0051f2b8  push     ebx
+0051f2b9  lea      ecx, [ebp - 0x50]
+0051f2bc  call     0x51d700
+0051f2c1  test     al, al

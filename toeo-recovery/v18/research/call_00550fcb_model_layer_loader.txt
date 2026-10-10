@@ -1,0 +1,41 @@
+00550f8f  add      byte ptr [eax], 0x8b
+00550f92  pop      ecx
+00550f93  pop      eax
+00550f94  mov      ecx, dword ptr [ecx + 0x64]
+00550f97  mov      ecx, dword ptr [ecx]
+00550f99  mov      dword ptr [ebp - 0x18], ebx
+00550f9c  mov      dword ptr [ebp - 0x1c], ecx
+00550f9f  mov      cl, byte ptr [ebp + 0xc]
+00550fa2  mov      bl, cl
+00550fa4  neg      bl
+00550fa6  sbb      ebx, ebx
+00550fa8  and      ebx, 0xffffff9d
+00550fab  add      ebx, 0x64
+00550fae  push     ebx
+00550faf  xor      ebx, ebx
+00550fb1  test     cl, cl
+00550fb3  mov      ecx, dword ptr [ebp - 0x1c]
+00550fb6  sete     bl
+00550fb9  push     ebx
+00550fba  push     edx
+00550fbb  mov      edx, dword ptr [ebp + 0x10]
+00550fbe  push     edi
+00550fbf  push     0
+00550fc1  push     eax
+00550fc2  mov      eax, dword ptr [ebp - 0x18]
+00550fc5  push     edx
+00550fc6  push     eax
+00550fc7  push     ecx
+00550fc8  mov      ecx, dword ptr [ebp + 8]
+00550fcb  call     0x518ed0
+00550fd0  test     al, al
+00550fd2  jne      0x551223
+00550fd8  mov      ecx, dword ptr [ebp - 0xc]
+00550fdb  mov      dword ptr fs:[0], ecx
+00550fe2  pop      edi
+00550fe3  pop      esi
+00550fe4  pop      ebx
+00550fe5  mov      esp, ebp
+00550fe7  pop      ebp
+00550fe8  ret      0xc
+00550feb  push     0x64

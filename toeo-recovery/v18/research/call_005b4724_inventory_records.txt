@@ -1,0 +1,35 @@
+005b46e8  xor      eax, eax
+005b46ea  jmp      0x5b4780
+005b46ef  mov      ecx, dword ptr [ebp - 0x10]
+005b46f2  inc      ecx
+005b46f3  cmp      ecx, 0xf4240
+005b46f9  mov      dword ptr [ebp - 0x10], ecx
+005b46fc  jge      0x5b475f
+005b46fe  mov      dx, word ptr [eax]
+005b4701  cmp      dx, 0x36
+005b4705  jne      0x5b4739
+005b4707  mov      ecx, dword ptr [eax + 4]
+005b470a  cmp      ecx, 1
+005b470d  jne      0x5b4714
+005b470f  lea      ecx, [ebp - 0x40]
+005b4712  jmp      0x5b471c
+005b4714  cmp      ecx, 2
+005b4717  jne      0x5b4739
+005b4719  lea      ecx, [ebp - 0x30]
+005b471c  lea      edx, [ebp + 8]
+005b471f  push     edx
+005b4720  push     ebx
+005b4721  push     ebx
+005b4722  push     ecx
+005b4723  push     eax
+005b4724  call     0x51f030
+005b4729  add      esp, 0x14
+005b472c  test     al, al
+005b472e  je       0x5b493c
+005b4734  mov      eax, dword ptr [ebp + 8]
+005b4737  jmp      0x5b4756
+005b4739  cmp      dx, bx
+005b473c  jne      0x5b4742
+005b473e  xor      eax, eax
+005b4740  jmp      0x5b4753
+005b4742  movzx    edx, word ptr [eax + 2]

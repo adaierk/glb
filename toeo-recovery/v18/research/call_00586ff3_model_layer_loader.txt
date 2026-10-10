@@ -1,0 +1,35 @@
+00586fb7  inc      esi
+00586fb9  inc      ebp
+00586fba  add      dword ptr [ebp - 0x17ba7640], eax
+00586fc1  je       0x587117
+00586fc7  mov      ecx, dword ptr [ebp - 0x3c]
+00586fca  movsx    esi, byte ptr [ebp - 0x38]
+00586fce  mov      eax, dword ptr [0x80dbf4]
+00586fd3  mov      ebx, dword ptr [eax + 0x58]
+00586fd6  mov      eax, dword ptr [eax + 0x64]
+00586fd9  mov      eax, dword ptr [eax]
+00586fdb  push     0x64
+00586fdd  push     1
+00586fdf  movsx    edx, cl
+00586fe2  push     esi
+00586fe3  movsx    ecx, ch
+00586fe6  push     ecx
+00586fe7  mov      ecx, dword ptr [ebp - 0x18]
+00586fea  xor      esi, esi
+00586fec  push     esi
+00586fed  push     edx
+00586fee  push     ecx
+00586fef  push     ebx
+00586ff0  push     eax
+00586ff1  mov      ecx, edi
+00586ff3  call     0x518ed0
+00586ff8  test     al, al
+00586ffa  je       0x587114
+00587000  mov      bl, byte ptr [ebp - 0xd]
+00587003  test     bl, bl
+00587005  je       0x587030
+00587007  push     1
+00587009  push     esi
+0058700a  push     0xc8
+0058700f  push     1
+00587011  mov      ecx, edi

@@ -1,0 +1,34 @@
+005383bc  add      byte ptr [eax], al
+005383be  mov      ecx, dword ptr [edi + 0x1c]
+005383c1  mov      dword ptr [esi + 0x104], ecx
+005383c7  mov      edx, dword ptr [edi + 0x24]
+005383ca  push     ebx
+005383cb  mov      dword ptr [esi + 0x158], edx
+005383d1  mov      eax, dword ptr [edi + 0x28]
+005383d4  lea      ebx, [esi + 0x150]
+005383da  push     eax
+005383db  mov      ecx, ebx
+005383dd  call     0x51d740
+005383e2  lea      ecx, [ebp + 0xc]
+005383e5  push     ecx
+005383e6  lea      eax, [edi + 0x2c]
+005383e9  push     0
+005383eb  push     0
+005383ed  lea      edi, [esi + 0x140]
+005383f3  push     edi
+005383f4  push     eax
+005383f5  mov      dword ptr [ebp + 0xc], eax
+005383f8  call     0x51f030
+005383fd  add      esp, 0x14
+00538400  test     al, al
+00538402  jne      0x538416
+00538404  mov      ecx, edi
+00538406  call     0x51ef30
+0053840b  pop      ebx
+0053840c  pop      edi
+0053840d  xor      al, al
+0053840f  pop      esi
+00538410  mov      esp, ebp
+00538412  pop      ebp
+00538413  ret      8
+00538416  mov      ecx, ebx
