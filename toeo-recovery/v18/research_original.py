@@ -18,7 +18,10 @@ ranges={
  'equipment_move_receipt':(0x4f9720,0x750),
  'world_b2_callback':(0x52ca9b,0x100),
  'world_attribute_records':(0x526610,0x2a00),
- 'visual_record_decoder':(0x51d5c0,0x140),
+ 'visual_record_decoder':(0x51d2c0,0x460),
+ 'equipment_visual_collect':(0x550b10,0x2f0),
+ 'visual_network_handlers':(0x52b8ef,0x360),
+ 'actor_visual_apply':(0x500000,0x210),
  'actor_visual_components':(0x4fed50,0x340),
  'model_layer_setter':(0x518280,0x3c0),
  'actor_model_refresh':(0x500280,0x350),
@@ -31,7 +34,7 @@ for name,(va,length) in ranges.items():
  code=pe.get_data(va-base,length)
  text='\n'.join(f'{i.address:08x}  {i.mnemonic:8s} {i.op_str}' for i in cs.disasm(code,va))
  (OUT/(name+'.txt')).write_text(text)
-targets={0x518ed0:'model_layer_loader',0x51f030:'inventory_records',0x51ee00:'gear_insert',0x501470:'world_model_initial_load',0x518280:'model_set_layer',0x517f70:'model_set_resource'}
+targets={0x51d5c0:'visual_record_decoder',0x51d530:'visual_insert',0x4fef50:'world_apply_visual',0x51d320:'visual_clear',0x518ed0:'model_layer_loader',0x51f030:'inventory_records',0x51ee00:'gear_insert',0x501470:'world_model_initial_load',0x518280:'model_set_layer',0x517f70:'model_set_resource'}
 refs=[]
 for section in pe.sections:
  if not section.Characteristics&0x20000000:continue
