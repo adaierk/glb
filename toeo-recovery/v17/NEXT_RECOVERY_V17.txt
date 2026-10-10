@@ -1,0 +1,9 @@
+接续 v17：原生装备穿脱与重登链路已验收，使用本地测试剑、防具，不能冒充官方 master。
+54：2 背包、4 装备；鼠标装备区目标索引 1 为自动选择部位；取下 count=-1，空背包索引可为0；服务验证真实物品归属和空格，按 packed bag 末尾落地。
+67 的临时定义必须为 location2；4D 最终移动到 location4；初始34和6B直接使用独立gear容器。
+原 icon registry：Weapon2、Body3；图标落地ID 1、857。
+当前 slot1 武器、slot2 身体；后续继续还原官方物品属性、等级/职业限制、装备外观、攻击防御和战斗动画。
+已有装备替换尚不支持。全地图、NPC、主支线任务、战斗和等级成长仍未完成。
+严格实机验收：gear (1)->(1,2)->(2)->(1,2)，第二次登录同实例、HP100/110、TP30/30、钱包5000和地图位置不变。
+测试提交8b3e32dbf74b9796e16408b8999b133ebf73cfd6，native run38017513763，artifact11657535463，SHA2562aa2cd5bbc42fad762b9f8260a2256a5c7547ae95ab825e6515d541ffe779775。
+源码与元数据仅在恢复分支保存，main不变。完整证据和未来接续字段见 v17_milestone.json / RELEASE_METADATA.json / MANIFEST_V17_SEALED.json。
