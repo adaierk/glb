@@ -2,7 +2,7 @@ name: TOEO v19 original encounter protocol checks
 on:
   push:
     branches: [toeo-local-world-recovery-20261009]
-    paths: [.github/workflows/toeo-v19-verify.yml, toeo-tests/emulate_enemy.py, toeo-tests/world_enemy_packets.py, toeo-tests/world_combat_packets.py, toeo-tests/emulate_combat.py]
+    paths: [.github/workflows/toeo-v19-verify.yml, toeo-tests/emulate_enemy.py, toeo-tests/world_enemy_packets.py, toeo-tests/world_combat_packets.py, toeo-tests/emulate_combat.py, toeo-tests/local_account_server.py]
   workflow_dispatch:
 permissions:
   actions: read
