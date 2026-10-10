@@ -1,0 +1,48 @@
+{
+  "implemented": [
+    "59+34 horizontal runtime animation directions 2/6",
+    "59+C2 inactive flag cleared for living local fixtures",
+    "Local test arena positions player(220,0),enemy(580,0)"
+  ],
+  "pending_controls": {
+    "A1": {
+      "handler": "0x52c1a4",
+      "checks": [
+        "Own character identity at C/10",
+        "Own map ID at14",
+        "Nonzero matching active battle group at18/1C",
+        "Own field actor group90/94 matches"
+      ],
+      "effects": [
+        "4FFCD0 called with four zero arguments",
+        "Battle scene+1D0 transitions 0->2",
+        "Battle scene+1F4 set from packet+20",
+        "Native A2 echo32 with original request ID"
+      ],
+      "implemented": false
+    },
+    "A3": {
+      "handler": "0x52c2f8",
+      "checks": [
+        "Own character/map and active group match",
+        "Own battle actor found in active group's pool"
+      ],
+      "effects": [
+        "511030 resets abilities/readiness to1",
+        "50F800/50F820 apply counters at20/24",
+        "28 count of16-byte ability rows; original46EAF0 and5112C0 create entries",
+        "50F7F0 sets readiness2",
+        "Native A4 echo32 with original request ID"
+      ],
+      "implemented": false,
+      "warning": "A3 is ability initialization, not a location, damage or victory packet."
+    }
+  },
+  "still_pending": [
+    "Formal battle width/height configuration",
+    "Basic attack input and action wire protocol",
+    "Damage, enemy AI and outcome",
+    "Return to original map and save consistency"
+  ],
+  "observation_boundary": "Original native functions and packet data only; never write game memory or drive native handlers through Frida."
+}

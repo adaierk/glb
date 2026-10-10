@@ -56,6 +56,7 @@ images=[]
 for name,digest in review['images_sha256'].items():
  body=(EVIDENCE/name).read_bytes();assert sha(body)==digest
  images.append({'file':name,'sha256':digest,'alterations':'Exact original desktop crop only'})
+files['evidence/v20/next_battle_protocol_notes.json']=(META/'next_battle_protocol_notes.json').read_bytes()
 files['evidence/v20/original_enemy_resource_basis.json']=(META/'original_enemy_resource_basis.json').read_bytes()
 protocol=ROOT/'toeo-recovery/v19/verification'/TESTED
 assert json.loads((protocol/'native_battle_record.json').read_text())['passed']
