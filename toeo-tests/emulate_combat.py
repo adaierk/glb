@@ -23,7 +23,7 @@ class BattleRecordFixture(NpcFixture):
                 'group':[self.read32(p+0x228),self.read32(p+0x22c)],
                 'position':[self.read32(p+0x230),self.read32(p+0x234)],
                 'appearance_hex':bytes(uc.mem_read(p+0x34,24)).hex(),
-                'hp':[self.read32(p+0x54),self.read32(p+0xf4)],
+                'hp':[self.read32(p+0x54),self.read32(p+0xf8)],
                 'tp':[self.read32(p+0x58),self.read32(p+0x184)]}
             uc.emu_stop()
         else:super().on_code(uc,va,size,context)
@@ -35,7 +35,9 @@ def record_projections(binary):
         else:struct.pack_into('<II',appearance,0,1,1);struct.pack_into('<I',appearance,20,1)
         f.uc.mem_write(f.packet,battle_actor_record(identity,name,bytes(appearance),category,position,enemy_grid(RASHUAN),RASHUAN.map_id,tp=30,max_tp=30,controlled=controlled))
         try:f.invoke(0x529840,(f.packet,RASHUAN.map_id,f.group),this=0x10d8000)
-        except Exception as e:raise RuntimeError(f'{e}; PC={hex(f.uc.reg_read(UC_X86_REG_EIP))}') from e
+        except RuntimeError as e:
+            if f.projected is None or f.uc.reg_read(UC_X86_REG_EIP)!=0x515650:raise RuntimeError(f'{e}; PC={hex(f.uc.reg_read(UC_X86_REG_EIP))}') from e
+            # invoke requires a return; this fixture intentionally stops at the declared renderer boundary.
         actual=f.projected
         assert actual and actual['identity']==list(identity) and actual['category']==category
         assert actual['map_id']==RASHUAN.map_id and actual['group']==list(BATTLE_GROUP)
