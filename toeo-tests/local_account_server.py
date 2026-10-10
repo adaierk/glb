@@ -78,11 +78,12 @@ class AccountStore:
 
 
 class LocalAccountServer(BootstrapServer):
-    def __init__(self,out,world_route_probe=False,account_database=None,shop_preview=False,world_profile='forest',**kwargs):
+    def __init__(self,out,world_route_probe=False,account_database=None,shop_preview=False,world_profile='forest',combat_preview=False,**kwargs):
         super().__init__(out,**kwargs)
         self.world_route_probe=world_route_probe
         from world_profiles import world_profile as get_world_profile
         self.profile=get_world_profile(world_profile)
+        self.combat_preview=combat_preview
         self.map_id=self.profile.map_id
         self.shop_grid=self.profile.merchant_grid
         self.shop_preview=shop_preview or self.profile.stock_key is not None
@@ -266,6 +267,14 @@ class LocalAccountServer(BootstrapServer):
                     state['local_shop_announced']=True
                     self.log('local_shop_actor_announced',connection=conn_id,identity=SHOP_IDENTITY,
                              grid=self.shop_grid,map_id=self.map_id,bytes=len(notice))
+                if self.combat_preview and not state.get('local_enemy_announced'):
+                    from world_enemy_packets import enemy_actor_notice,enemy_grid,ENEMY_IDENTITY
+                    notice=enemy_actor_notice(self.profile)
+                    self.send_answer(c,notice,state)
+                    state['local_enemy_announced']=True
+                    self.log('local_enemy_actor_announced',connection=conn_id,identity=ENEMY_IDENTITY,
+                             grid=enemy_grid(self.profile),map_id=self.map_id,
+                             provenance='Explicit offline E000 encounter fixture; original model, local HP and placement')
                 continue
             if op==0x4e and port==11101:
                 from world_npc_packets import actor_target_reply
@@ -273,7 +282,7 @@ class LocalAccountServer(BootstrapServer):
                 try:target=parse_npc_request(payload)
                 except ValueError as error:
                     self.log('actor_target_rejected',connection=conn_id,reason=str(error));continue
-                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=self.map_id or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])):
+                if not control or not state.get('world_map_ready') or target['identity']!=tuple(control['character_id']) or target['map_id']!=self.map_id or target['group']!=(0,0) or target['target'] not in ((0,0),SHOP_IDENTITY,tuple(control['character_id'])) and not (self.combat_preview and state.get('local_enemy_announced') and target['target']==(0x72000001,1)):
                     self.log('actor_target_rejected',connection=conn_id,reason='Character, ready map, group or target mismatch');continue
                 answer=actor_target_reply(target)
                 self.send_answer(c,answer,state)

@@ -19,6 +19,7 @@ def main():
     p.add_argument('--equipment-check',action='store_true',help='Real native equip/unequip and restart using explicitly local equipment fixtures')
     p.add_argument('--move-check',action='store_true',help='Require real two-item bag exchange and original client restart restoration')
     p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
+    p.add_argument('--combat-check',action='store_true',help='Original enemy encounter fixture through real mouse input')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
     import frida
@@ -31,7 +32,7 @@ def main():
     game=prepare_render_client(game,game.parent/'game_runtime_v16',out/'graphics_assets_manifest.json')
     original=game/'ToEO_CL.dat'
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
-    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True,world_profile='rashuan')
+    server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True,world_profile='rashuan',combat_preview=args.combat_check)
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
     if args.equipment_check and not args.reenter_check:server.inventory.grant_equipment_preview(1,server.characters.list(1)[0]['identity'])
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
@@ -99,6 +100,7 @@ def main():
             session.on('detached',lambda reason,crash: receive({'type':'send','payload':{'event':'detached','reason':reason,'crash':str(crash)}},None))
             source='\n'.join(Path(__file__).with_name(n).read_text(encoding='utf-8') for n in
                              ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js','offline_graphics_compat.js'))
+            if args.combat_check:source+='\n'+Path(__file__).with_name('combat_runtime.js').read_text(encoding='utf-8')
             if args.pump:source+='\n'+Path(__file__).with_name('native_gui_pump.js').read_text(encoding='utf-8')
             if args.resource_probe:source+='\n'+Path(__file__).with_name('resource_probe.js').read_text(encoding='utf-8')
             print('PHASE native_hooks_load',flush=True)
@@ -145,6 +147,12 @@ def main():
                     if t>=141:schedule.pop(t,None)
                 if args.reenter_check:schedule.update({145:lambda:click(28,84)})
                 else:schedule.update({145:lambda:click(28,84),150:lambda:drag(517,487,658,263),165:lambda:drag(517,487,706,263),180:lambda:drag(658,263,517,487),195:lambda:drag(517,487,658,263),210:lambda:drag(706,263,517,487),225:lambda:drag(517,487,706,263),245:lambda:click(28,84),250:lambda:click(360,410,hold=2)})
+            if args.combat_check:
+                for t in tuple(schedule):
+                    if t>=141:schedule.pop(t,None)
+                schedule.update({145:lambda:click(280,341),155:lambda:double_click(280,341),
+                                 165:lambda:click(280,327),175:lambda:double_click(280,327),
+                                 185:lambda:click(280,350,right=True)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
@@ -192,7 +200,11 @@ def main():
             result['native_inventory_samples']=inventory_samples
             saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
             result['saved_inventory']=saved_inventory
-            if args.equipment_check:
+            if args.combat_check:
+                from combat_ci_acceptance import verify_combat
+                combat_failure=verify_combat(result,events,server,args,expected_position)
+                if combat_failure:failure=failure or combat_failure
+            elif args.equipment_check:
                 from equipment_ci_acceptance import verify_equipment
                 equipment_failure=verify_equipment(result,events,server,args,expected_position)
                 (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
