@@ -13,7 +13,9 @@ binary=(RAW/'DefaultComponent/ToEO_CL.dat').read_bytes()
 keys=sorted(set(re.findall(rb'[a-zA-Z][a-zA-Z0-9 _.-]{2,30}text',binary)))
 (R/'original_text_keys.json').write_text(json.dumps([k.decode() for k in keys],indent=2))
 for name in ('M_body_a_m_00','M_head_m_00','nn001'):
- d=(RAW/'NewComponent1/resource'/f'{name}.bnd').read_bytes();n=struct.unpack_from('<I',d,8)[0]
+ f=RAW/'NewComponent1/resource'/f'{name}.bnd'
+ if not f.exists():continue
+ d=f.read_bytes();n=struct.unpack_from('<I',d,8)[0]
  for i in range(n):
   length,off=struct.unpack_from('<II',d,12+i*40);w,h,depth,fmt,size,compression,reserved=struct.unpack_from('<HHIIIII',d,off)
   if depth==8 and fmt==21 and compression==2:
