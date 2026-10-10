@@ -1,0 +1,32 @@
+0051d130  push     ebp
+0051d131  mov      ebp, esp
+0051d133  mov      eax, ecx
+0051d135  mov      ecx, dword ptr [ebp + 8]
+0051d138  mov      edx, dword ptr [ecx]
+0051d13a  mov      dword ptr [eax], edx
+0051d13c  mov      edx, dword ptr [ecx + 4]
+0051d13f  mov      dword ptr [eax + 4], edx
+0051d142  mov      edx, dword ptr [ecx + 8]
+0051d145  mov      dword ptr [eax + 8], edx
+0051d148  mov      edx, dword ptr [ecx + 0xc]
+0051d14b  mov      dword ptr [eax + 0xc], edx
+0051d14e  mov      edx, dword ptr [ecx + 0x10]
+0051d151  mov      dword ptr [eax + 0x10], edx
+0051d154  mov      edx, dword ptr [ecx + 0x14]
+0051d157  mov      dword ptr [eax + 0x14], edx
+0051d15a  mov      ecx, dword ptr [ecx + 0x18]
+0051d15d  mov      dword ptr [eax + 0x18], ecx
+0051d160  pop      ebp
+0051d161  ret      4
+0051d164  int3     
+0051d165  int3     
+0051d166  int3     
+0051d167  int3     
+0051d168  int3     
+0051d169  int3     
+0051d16a  int3     
+0051d16b  int3     
+0051d16c  int3     
+0051d16d  int3     
+0051d16e  int3     
+0051d16f  int3     
