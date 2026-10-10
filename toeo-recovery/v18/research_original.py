@@ -183,3 +183,21 @@ for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
 
 crs=(resources/'crsid.crs').read_bytes()
 (OUT/'crs_header.json').write_text(json.dumps({'bytes':len(crs),'sha256':hashlib.sha256(crs).hexdigest(),'header':crs[:1024].hex(),'ascii':[m.group().decode() for m in re.finditer(rb'[\\x20-\\x7e]{4,}',crs)]},indent=2))
+
+decoded_crs=[];crs_strings={}
+count,offset,row_count,row_offset=struct.unpack_from('<IIII',crs,8)
+for index in range(count):
+ size=struct.unpack_from('<I',crs,offset)[0];offset+=4
+ value=decrypt_blocks(crs[offset:offset+size],b'crs text').split(bytes(1),1)[0].decode('cp932')
+ crs_strings[offset]=value;offset+=size
+assert offset==len(crs)
+for index in range(row_count):
+ words=list(struct.unpack_from('<6I',crs,row_offset+index*24))
+ decoded_crs.append({'index':index,'words':words,'labels':[crs_strings.get(w) for w in words]})
+(OUT/'crs_decoded.json').write_text(json.dumps(decoded_crs,ensure_ascii=False,indent=2))
+kinds=[]
+for index in range(21):
+ ptr,value=struct.unpack('<II',pe.get_data(0x7a2d60-base+8*index,8))
+ text=pe.get_data(ptr-base,100).split(bytes(1),1)[0].decode('cp932') if base<=ptr<0x800000 else None
+ kinds.append({'name':text,'value':value})
+(OUT/'cpd_kind_ids.json').write_text(json.dumps(kinds,indent=2))
