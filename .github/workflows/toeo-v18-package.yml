@@ -1,0 +1,37 @@
+name: TOEO v18 equipment appearance evidence and package
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [.github/workflows/toeo-v18-package.yml, toeo-recovery/v18/build_release_ci.py, toeo-recovery/v18/source_map.json, toeo-recovery/v18/visual_review.json]
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  evidence-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify actual native equipment appearance evidence and exact runtime source
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python -m pip install -q pillow frida unicorn capstone pefile
+          python toeo-recovery/v18/build_release_ci.py
+      - name: Preserve project evidence and reviewed release
+        run: |
+          git config user.name "TOEO Recovery CI"
+          git config user.email "toeo-recovery-ci@users.noreply.github.com"
+          git add toeo-recovery/v18
+          if ! git diff --cached --quiet; then
+            git commit -m "Preserve verified v18 native equipment appearance evidence [skip ci]"
+            git pull --rebase origin toeo-local-world-recovery-20261009
+            git push origin HEAD:toeo-local-world-recovery-20261009
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-v18-release-evidence
+          path: toeo-recovery/v18
+          retention-days: 90
