@@ -50,3 +50,32 @@
  Interceptor.attach(address(0x522260),{onEnter(args){if(++completedSamples<=32)emit({event:'native_battle_pending_request_completed',request_id:args[0].toUInt32()});}});
  emit({event:'combat_probe_ready',mode:'Read-only original enemy and encounter observations'});
 })();
+
+// v20 read-only actor/animation snapshots, exact original callers and returns.
+(function(){
+ const at=va=>Process.mainModule.base.add(va-0x400000),actors=new Map(),models=new Map();
+ function safe(f){try{return f();}catch(e){return {error:String(e)};}}
+ function snapshot(p){
+  const m=p.add(0xc0).readPointer();
+  return {identity:[p.add(0x58).readU32(),p.add(0x5c).readU32()],position:[p.readFloat(),p.add(4).readFloat()],
+   entity_kind:p.add(0x60).readU32(),category:p.add(0x6c).readU32(),controlled:p.add(0x68).readU8(),
+   readiness:p.add(0x84).readU32(),action:p.add(0x88).readU32(),direction:p.add(0x8c).readU32(),
+   dimensions:[p.add(0x140).readU32(),p.add(0x144).readU32()],flags:[p.add(0x148).readU8(),p.add(0x150).readU8(),p.add(0x168).readU8()],
+   model:m.toString(),model_state:m.isNull()?null:{bank:m.readU32(),resource:m.add(4).readPointer().toString(),animation:m.add(0x38).readU32(),direction:m.add(0x3c).readU32(),fallback:m.add(0x44).readU32(),color:m.add(0x9c).readU32(),layers:m.add(0x20).readU32()}};
+ }
+ Interceptor.attach(at(0x529840),{onLeave(ret){
+  if(ret.isNull())return;const p=ptr(ret.toString());actors.set(p.toString(),p);
+  send(safe(()=>({event:'native_battle_render_actor_snapshot',phase:'created',...snapshot(p)})));
+ }});
+ let n=0;
+ setInterval(()=>{if(actors.size && ++n<=120)for(const p of actors.values())send(safe(()=>({event:'native_battle_render_actor_snapshot',phase:'tick',sample:n,...snapshot(p)})));},1000);
+ for(const [va,event] of [[0x518fc0,'native_model_animation_select'],[0x518280,'native_model_layer_select']]){
+  let count=0;Interceptor.attach(at(va),{onEnter(args){
+   this.p=ptr(this.context.ecx.toString());this.args=[args[0].toUInt32(),args[1].toUInt32(),args[2].toUInt32(),args[3].toUInt32()];this.keep=++count<=48;this.caller=this.returnAddress.toString();
+  },onLeave(ret){if(this.keep)send({event,object:this.p.toString(),args:this.args,result:ret.toUInt32()&255,caller:this.caller});}});
+ }
+ for(const [va,event] of [[0x433dd0,'native_battle_main_tick'],[0x433b40,'native_battle_main_draw'],[0x432200,'native_battle_render_job']]){
+  let count=0;Interceptor.attach(at(va),{onEnter(args){const n=++count;if([1,60,300,1800].includes(n))send({event,sample:n,object:this.context.ecx.toString(),args:[args[0].toString(),args[1].toString()]});}});
+ }
+ send({event:'battle_render_probe_ready',mode:'Read-only original actor and animation observation'});
+})();

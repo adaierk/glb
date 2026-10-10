@@ -15,6 +15,9 @@ def dis(va,size):
  return '\n'.join(f'{i.address:08x}  {i.mnemonic:8s} {i.op_str}' for i in cs.disasm(pe.get_data(va-base,size),va))
 ranges={
 'battle_main_draw':(0x433b40,0x290),
+'battle_render_job':(0x432200,0x1540),
+'actor_animation_driver':(0x513b00,0x430),
+'model_layer_drawing':(0x517800,0x16d0),
 'battle_main_tick_complete':(0x433dd0,0xa00),
 'battle_actor_update_and_draw':(0x50fe50,0x1b50),
 'battle_pool_update_and_draw':(0x515870,0xd00),
