@@ -80,7 +80,9 @@ async def main():
   after_hit=await page.evaluate('TOEO.state')
   assert after_hit['tp']==initial_battle['tp']-8
   assert await page.evaluate("TOEO.battleAction('item')")
-  await page.wait_for_function('TOEO.battle && TOEO.battle.phase==="player" && TOEO.state.hp===100 && !TOEO.state.inventory[1]',timeout=10000)
+  after_item=await page.evaluate('TOEO.state')
+  assert after_item['hp']==100 and '1' not in after_item['inventory'],after_item
+  await page.wait_for_function('TOEO.battle && TOEO.battle.phase==="player" && TOEO.state.hp<100',timeout=10000)
   assert await page.evaluate("TOEO.battleAction('attack')")
   await page.wait_for_function('TOEO.battle && TOEO.battle.phase==="player"',timeout=10000)
   assert await page.evaluate("TOEO.battleAction('attack')")
