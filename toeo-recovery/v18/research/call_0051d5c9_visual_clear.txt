@@ -1,0 +1,48 @@
+0051d58d  sti      
+0051d58e  .byte    0xff
+0051d58f  .byte    0xff
+0051d590  jmp      0x51d594
+0051d592  xor      eax, eax
+0051d594  lea      edx, [ebp - 8]
+0051d597  mov      dword ptr [ebp - 4], eax
+0051d59a  push     edx
+0051d59b  lea      eax, [ebp - 0x10]
+0051d59e  push     eax
+0051d59f  mov      ecx, esi
+0051d5a1  mov      dword ptr [ebp - 8], ebx
+0051d5a4  call     0x51d3e0
+0051d5a9  pop      esi
+0051d5aa  mov      al, 1
+0051d5ac  pop      ebx
+0051d5ad  mov      esp, ebp
+0051d5af  pop      ebp
+0051d5b0  ret      8
+0051d5b3  pop      esi
+0051d5b4  xor      al, al
+0051d5b6  pop      ebx
+0051d5b7  mov      esp, ebp
+0051d5b9  pop      ebp
+0051d5ba  ret      8
+0051d5bd  int3     
+0051d5be  int3     
+0051d5bf  int3     
+0051d5c0  push     ebp
+0051d5c1  mov      ebp, esp
+0051d5c3  sub      esp, 0x28
+0051d5c6  mov      ecx, dword ptr [ebp + 0xc]
+0051d5c9  call     0x51d320
+0051d5ce  mov      edx, dword ptr [ebp + 0x10]
+0051d5d1  test     edx, edx
+0051d5d3  je       0x51d5d8
+0051d5d5  mov      byte ptr [edx], 0
+0051d5d8  push     esi
+0051d5d9  mov      esi, dword ptr [ebp + 8]
+0051d5dc  push     edi
+0051d5dd  mov      edi, dword ptr [ebp + 0x14]
+0051d5e0  test     edi, edi
+0051d5e2  je       0x51d5e6
+0051d5e4  mov      dword ptr [edi], esi
+0051d5e6  test     esi, esi
+0051d5e8  .byte    0x0f
+0051d5e9  test     dl, dl
+0051d5eb  .byte    0x00

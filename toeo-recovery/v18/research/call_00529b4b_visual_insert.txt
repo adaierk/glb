@@ -1,0 +1,34 @@
+00529b0f  nop      
+00529b10  mov      ecx, dword ptr [esi - 0x10]
+00529b13  or       ecx, dword ptr [esi - 0xc]
+00529b16  jne      0x529b20
+00529b18  mov      edx, dword ptr [esi - 0x18]
+00529b1b  or       edx, dword ptr [esi - 0x14]
+00529b1e  je       0x529b50
+00529b20  mov      eax, dword ptr [esi]
+00529b22  mov      ecx, dword ptr [esi - 4]
+00529b25  mov      edx, dword ptr [esi - 8]
+00529b28  push     eax
+00529b29  push     ecx
+00529b2a  push     edx
+00529b2b  lea      eax, [esi - 0x18]
+00529b2e  push     eax
+00529b2f  lea      ecx, [ebp - 0x2ec]
+00529b35  call     0x51d0f0
+00529b3a  mov      edx, dword ptr [esi - 0x1c]
+00529b3d  lea      ecx, [ebp - 0x2ec]
+00529b43  push     ecx
+00529b44  push     edx
+00529b45  lea      ecx, [ebp - 0x2cc]
+00529b4b  call     0x51d530
+00529b50  mov      eax, dword ptr [ebp + 0x10]
+00529b53  add      esi, 0x20
+00529b56  dec      eax
+00529b57  mov      dword ptr [ebp + 0x10], eax
+00529b5a  jne      0x529b10
+00529b5c  mov      eax, dword ptr [ebp + 0xc]
+00529b5f  push     eax
+00529b60  lea      ecx, [ebp - 0x2cc]
+00529b66  push     ecx
+00529b67  mov      ecx, edi
+00529b69  call     0x5115a0

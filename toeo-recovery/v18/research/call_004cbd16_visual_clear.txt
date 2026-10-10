@@ -1,0 +1,44 @@
+004cbcda  mov      dword ptr [esi + 8], eax
+004cbcdd  pop      esi
+004cbcde  mov      esp, ebp
+004cbce0  pop      ebp
+004cbce1  ret      
+004cbce2  int3     
+004cbce3  int3     
+004cbce4  int3     
+004cbce5  int3     
+004cbce6  int3     
+004cbce7  int3     
+004cbce8  int3     
+004cbce9  int3     
+004cbcea  int3     
+004cbceb  int3     
+004cbcec  int3     
+004cbced  int3     
+004cbcee  int3     
+004cbcef  int3     
+004cbcf0  push     ebp
+004cbcf1  mov      ebp, esp
+004cbcf3  push     -1
+004cbcf5  push     0x6cf5b8
+004cbcfa  mov      eax, dword ptr fs:[0]
+004cbd00  push     eax
+004cbd01  mov      dword ptr fs:[0], esp
+004cbd08  push     ecx
+004cbd09  push     esi
+004cbd0a  mov      esi, ecx
+004cbd0c  mov      dword ptr [ebp - 0x10], esi
+004cbd0f  mov      dword ptr [ebp - 4], 0
+004cbd16  call     0x51d320
+004cbd1b  mov      eax, dword ptr [esi + 4]
+004cbd1e  mov      ecx, dword ptr [eax]
+004cbd20  push     eax
+004cbd21  push     ecx
+004cbd22  lea      eax, [ebp - 0x10]
+004cbd25  push     eax
+004cbd26  mov      ecx, esi
+004cbd28  mov      dword ptr [ebp - 4], 0xffffffff
+004cbd2f  call     0x4cbad0
+004cbd34  mov      ecx, dword ptr [esi + 4]
+004cbd37  push     ecx
+004cbd38  .byte    0xe8

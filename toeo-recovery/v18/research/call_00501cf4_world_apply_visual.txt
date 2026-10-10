@@ -1,0 +1,31 @@
+00501cb8  mov      ss, word ptr [eax]
+00501cba  add      dword ptr [eax], eax
+00501cbc  add      al, ch
+00501cbe  scasb    al, byte ptr es:[edi]
+00501cbf  inc      ecx
+00501cc0  lock inc dword ptr [eax + eax*8 - 0x7974ad8c]
+00501cc8  adc      al, 1
+00501cca  add      byte ptr [eax], al
+00501ccc  cmp      dword ptr [eax + 0x1ac], edi
+00501cd2  je       0x501d18
+00501cd4  mov      dword ptr [eax + 0x1ac], edi
+00501cda  mov      eax, dword ptr [esi + 0x158]
+00501ce0  test     eax, eax
+00501ce2  je       0x501cf9
+00501ce4  mov      ecx, esi
+00501ce6  call     0x500dd0
+00501ceb  mov      ecx, esi
+00501ced  call     0x501470
+00501cf2  mov      ecx, esi
+00501cf4  call     0x4fef50
+00501cf9  mov      eax, dword ptr [esi + 0x15c]
+00501cff  test     eax, eax
+00501d01  je       0x501d18
+00501d03  mov      ecx, esi
+00501d05  call     0x5004b0
+00501d0a  mov      ecx, esi
+00501d0c  call     0x500340
+00501d11  mov      ecx, esi
+00501d13  .byte    0xe8
+00501d14  pop      eax
+00501d15  sar      edi, cl

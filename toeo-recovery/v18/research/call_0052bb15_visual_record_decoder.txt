@@ -1,0 +1,28 @@
+0052bad9  add      dword ptr [eax], eax
+0052badb  add      byte ptr [ebx + 0x438b2853], cl
+0052bae1  and      al, 0x52
+0052bae3  push     eax
+0052bae4  call     0x40d1f0
+0052bae9  lea      ecx, [ebp - 0x218]
+0052baef  call     0x4db8f0
+0052baf4  cmp      dword ptr [ebx + 0xc], 0x2c
+0052baf8  mov      dword ptr [ebp - 4], 8
+0052baff  jbe      0x52bbc2
+0052bb05  push     edi
+0052bb06  lea      ecx, [ebp + 0xc]
+0052bb09  push     ecx
+0052bb0a  lea      edx, [ebp - 0x218]
+0052bb10  push     edx
+0052bb11  add      ebx, 0x2c
+0052bb14  push     ebx
+0052bb15  call     0x51d5c0
+0052bb1a  add      esp, 0x10
+0052bb1d  test     al, al
+0052bb1f  je       0x52bbc2
+0052bb25  mov      eax, dword ptr [ebp + 0xc]
+0052bb28  push     eax
+0052bb29  lea      ecx, [ebp - 0x218]
+0052bb2f  push     ecx
+0052bb30  mov      ecx, esi
+0052bb32  call     0x502ca0
+0052bb37  .byte    0x8a

@@ -1,0 +1,40 @@
+0051d641  mov      al, 1
+0051d643  pop      esi
+0051d644  mov      esp, ebp
+0051d646  pop      ebp
+0051d647  ret      
+0051d648  mov      ecx, dword ptr [esi + 0xc]
+0051d64b  mov      edx, dword ptr [esi + 0x10]
+0051d64e  mov      eax, dword ptr [esi + 8]
+0051d651  mov      dword ptr [ebp - 0x24], ecx
+0051d654  mov      ecx, dword ptr [esi + 0x18]
+0051d657  mov      dword ptr [ebp - 0x20], edx
+0051d65a  mov      edx, dword ptr [esi + 0x1c]
+0051d65d  mov      dword ptr [ebp - 0x28], eax
+0051d660  mov      eax, dword ptr [esi + 0x14]
+0051d663  mov      dword ptr [ebp - 0x18], ecx
+0051d666  lea      ecx, [ebp - 0x28]
+0051d669  mov      dword ptr [ebp - 0x14], edx
+0051d66c  mov      edx, dword ptr [esi + 4]
+0051d66f  push     ecx
+0051d670  mov      ecx, dword ptr [ebp + 0xc]
+0051d673  mov      dword ptr [ebp - 0x1c], eax
+0051d676  mov      eax, dword ptr [esi + 0x20]
+0051d679  push     edx
+0051d67a  mov      dword ptr [ebp - 0x10], eax
+0051d67d  call     0x51d530
+0051d682  mov      edx, dword ptr [ebp + 0x10]
+0051d685  mov      ecx, dword ptr [ebp + 0x14]
+0051d688  jmp      0x51d69d
+0051d68a  test     bl, bl
+0051d68c  je       0x51d692
+0051d68e  test     edi, edi
+0051d690  jne      0x51d6e6
+0051d692  test     edx, edx
+0051d694  je       0x51d69b
+0051d696  mov      al, byte ptr [esi + 4]
+0051d699  mov      byte ptr [edx], al
+0051d69b  mov      bl, 1
+0051d69d  .byte    0x66
+0051d69e  .byte    0x83
+0051d69f  .byte    0x3e

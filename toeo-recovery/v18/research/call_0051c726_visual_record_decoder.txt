@@ -1,0 +1,33 @@
+0051c6ea  fstp     xword ptr [ebx]
+0051c6ec  je       0x51c75f
+0051c6ef  cmp      word ptr [esi], bx
+0051c6f2  jne      0x51c73e
+0051c6f4  xor      eax, eax
+0051c6f6  jmp      0x51c74f
+0051c6f8  add      esi, 8
+0051c6fb  push     esi
+0051c6fc  lea      ecx, [ebp - 0x54]
+0051c6ff  jmp      0x51c6dd
+0051c701  mov      edx, dword ptr [esi + 4]
+0051c704  add      esi, 8
+0051c707  mov      dword ptr [ebp - 0x38], edx
+0051c70a  push     esi
+0051c70b  lea      ecx, [ebp - 0x34]
+0051c70e  jmp      0x51c6dd
+0051c710  lea      eax, [ebp - 0x3e8]
+0051c716  push     eax
+0051c717  lea      ecx, [ebp - 0x408]
+0051c71d  push     ecx
+0051c71e  lea      edx, [ebp - 0x404]
+0051c724  push     edx
+0051c725  push     esi
+0051c726  call     0x51d5c0
+0051c72b  add      esp, 0x10
+0051c72e  test     al, al
+0051c730  je       0x51cd59
+0051c736  mov      esi, dword ptr [ebp - 0x3e8]
+0051c73c  jmp      0x51c757
+0051c73e  movzx    eax, word ptr [esi + 2]
+0051c742  lea      esi, [esi + eax*4]
+0051c745  mov      ax, word ptr [esi]
+0051c748  .byte    0x66

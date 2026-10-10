@@ -1,0 +1,36 @@
+00502d27  xor      al, al
+00502d29  mov      ecx, dword ptr [ebp - 0xc]
+00502d2c  mov      dword ptr fs:[0], ecx
+00502d33  pop      edi
+00502d34  pop      esi
+00502d35  pop      ebx
+00502d36  mov      esp, ebp
+00502d38  pop      ebp
+00502d39  ret      8
+00502d3c  mov      eax, dword ptr [ebp + 8]
+00502d3f  cmp      eax, ebx
+00502d41  mov      ecx, esi
+00502d43  jne      0x502d5b
+00502d45  call     0x4cbcf0
+00502d4a  push     esi
+00502d4b  call     0x6ba9d0
+00502d50  add      esp, 4
+00502d53  mov      dword ptr [edi + 0x1e0], ebx
+00502d59  jmp      0x502d61
+00502d5b  push     eax
+00502d5c  call     0x51d4a0
+00502d61  mov      ecx, edi
+00502d63  call     0x4fef50
+00502d68  mov      ecx, edi
+00502d6a  call     0x4ff070
+00502d6f  mov      ecx, dword ptr [ebp - 0xc]
+00502d72  pop      edi
+00502d73  pop      esi
+00502d74  mov      al, 1
+00502d76  mov      dword ptr fs:[0], ecx
+00502d7d  pop      ebx
+00502d7e  mov      esp, ebp
+00502d80  pop      ebp
+00502d81  ret      8
+00502d84  int3     
+00502d85  int3     

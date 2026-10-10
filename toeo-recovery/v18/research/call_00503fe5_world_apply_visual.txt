@@ -1,0 +1,30 @@
+00503fa9  add      al, byte ptr [eax]
+00503fab  add      bh, al
+00503fad  inc      ebp
+00503fae  cld      
+00503faf  .byte    0xff
+00503fb0  .byte    0xff
+00503fb1  .byte    0xff
+00503fb2  .byte    0xff
+00503fb3  call     0x4a7f60
+00503fb8  mov      al, byte ptr [esi + 0x14]
+00503fbb  test     al, al
+00503fbd  je       0x504006
+00503fbf  test     dword ptr [ebx + 0xa8], 0x4000000
+00503fc9  mov      byte ptr [ebx + 0x154], 1
+00503fd0  jne      0x503fff
+00503fd2  mov      al, byte ptr [ebx + 0x155]
+00503fd8  test     al, al
+00503fda  jne      0x503fff
+00503fdc  mov      ecx, ebx
+00503fde  call     0x501470
+00503fe3  mov      ecx, ebx
+00503fe5  call     0x4fef50
+00503fea  mov      ecx, ebx
+00503fec  call     0x500340
+00503ff1  mov      ecx, ebx
+00503ff3  call     0x4ff070
+00503ff8  mov      byte ptr [ebx + 0x155], 1
+00503fff  mov      byte ptr [ebx + 0x154], 0
+00504006  .byte    0xff
+00504007  .byte    0x15
