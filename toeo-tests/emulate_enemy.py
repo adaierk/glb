@@ -35,7 +35,7 @@ def run(binary):
     assert f.decoded_names==[ENEMY_NAME] and not f.assertions
     return {'passed':True,'native_projection':f.projected,'native_enemy_extension':f.shop_extension,
             'native_mode':f.native_mode,'native_fields':f.enemy_fields,
-            'provenance':'Explicit local E000 test encounter; official spawn/stat configuration unresolved',
+            'provenance':'Explicit local SLIME field-symbol test encounter; official spawn/stat configuration unresolved',
             'substitutions':['Inherited map/resource/string/OS/renderer construction boundaries',
                              'Native mode and extension ownership boundaries; allocation and field parsing run unchanged'],
             'windows_rendering_proven':False}

@@ -1,4 +1,4 @@
-"""Explicit offline encounter fixture using original CRSD E000 model bank 100.
+"""Explicit offline encounter fixture using original CRSD SLIME field-symbol bank 800.
 Entity, placement and HP are local test values, not official spawn metadata.
 Original 51C1E0 parses 22 actor and 2E enemy extension; no client-state writes.
 """
@@ -7,8 +7,8 @@ from account_packets import message
 from world_map_packets import record
 from character_mutation_packets import encode_name
 ENEMY_IDENTITY=(0x72000001,1)
-ENEMY_NAME='E000 Local Test'
-ENEMY_MODEL_BANK=100
+ENEMY_NAME='SLIME Local Test'
+ENEMY_MODEL_BANK=800
 def enemy_grid(profile):
     x,y=profile.spawn_grid
     grid=(x-2,y)
