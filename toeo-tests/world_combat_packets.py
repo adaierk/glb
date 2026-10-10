@@ -15,7 +15,9 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     struct.pack_into('<hh',b,0x14,*grid)
     struct.pack_into('<I',b,0x18,map_id)
     struct.pack_into('<II',b,0x24,*BATTLE_GROUP)
-    struct.pack_into('<iiii',b,0x2c,*position,0 if controlled else 1,1)
+    # Original 5299BD copies record+34 into actor direction+8C.
+    # Battle ATD assets use horizontal directions 2/6; map directions 0/1 fail animation100.
+    struct.pack_into('<iiii',b,0x2c,*position,2 if controlled else 6,1)
     b[0x3c:0x80]=encode_name(name)
     b[0x80:0x98]=appearance
     struct.pack_into('<IIIII',b,0x98,max_hp,hp,max_tp,tp,0)

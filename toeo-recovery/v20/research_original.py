@@ -25,6 +25,8 @@ ranges={
 'battle_pool_update_and_draw':(0x515870,0xd00),
 'model_animation_and_draw':(0x519140,0x2000),
 'model_resource_ctor':(0x518ed0,0x270),
+'animation_direction_lookup':(0x44d400,0xe00),
+'animation_object_state':(0x461a00,0x1900),
 'battle_abilities_a3_handler':(0x52c940,0x850),
 }
 for name,(va,size) in ranges.items():(OUT/(name+'.txt')).write_text(dis(va,size))
@@ -43,3 +45,6 @@ for sec in pe.sections:
 (OUT/'render_refs.json').write_text(json.dumps(refs,indent=2))
 (OUT/'original_binary.json').write_text(json.dumps({'sha256':hashlib.sha256(data).hexdigest(),'ranges':ranges},indent=2))
 print('V20_ORIGINAL_RENDER_RESEARCH_PASS',len(refs))
+
+subprocess.run(['7z','x','-y','-o'+str(raw),str(pack),'NewComponent1/resource/pc1a.atd','NewComponent1/resource/e000.atd'],check=True,stdout=subprocess.DEVNULL)
+(OUT/'battle_animation_asset_headers.json').write_text(json.dumps([{'file':n,'sha256':hashlib.sha256((raw/'NewComponent1/resource'/n).read_bytes()).hexdigest(),'header_hex':(raw/'NewComponent1/resource'/n).read_bytes()[:512].hex()} for n in ('pc1a.atd','e000.atd')],indent=2))

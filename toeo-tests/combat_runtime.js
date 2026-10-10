@@ -61,7 +61,7 @@
    entity_kind:p.add(0x60).readU32(),category:p.add(0x6c).readU32(),controlled:p.add(0x68).readU8(),
    readiness:p.add(0x84).readU32(),action:p.add(0x88).readU32(),direction:p.add(0x8c).readU32(),
    dimensions:[p.add(0x140).readU32(),p.add(0x144).readU32()],flags:[p.add(0x148).readU8(),p.add(0x150).readU8(),p.add(0x168).readU8()],
-   model:m.toString(),model_state:m.isNull()?null:{bank:m.readU32(),resource:m.add(4).readPointer().toString(),animation:m.add(0x38).readU32(),direction:m.add(0x3c).readU32(),fallback:m.add(0x44).readU32(),color:m.add(0x9c).readU32(),layers:m.add(0x20).readU32()}};
+   model:m.toString(),model_state:m.isNull()?null:{bank:m.readU32(),resource:m.add(4).readPointer().toString(),animation:m.add(0x38).readU32(),direction:m.add(0x3c).readU32(),fallback:m.add(0x44).readU32(),drawable:m.add(0x88).readU8(),animation_clock:m.add(0x74).readU32(),color:m.add(0x9c).readU32(),layers:m.add(0x20).readU32()}};
  }
  Interceptor.attach(at(0x529840),{onLeave(ret){
   if(ret.isNull())return;const p=ptr(ret.toString());actors.set(p.toString(),p);
@@ -77,5 +77,6 @@
  for(const [va,event] of [[0x433dd0,'native_battle_main_tick'],[0x433b40,'native_battle_main_draw'],[0x432200,'native_battle_render_job']]){
   let count=0;Interceptor.attach(at(va),{onEnter(args){const n=++count;if([1,60,300,1800].includes(n))send({event,sample:n,object:this.context.ecx.toString(),args:[args[0].toString(),args[1].toString()]});}});
  }
+ let draws=0;Interceptor.attach(at(0x516750),{onEnter(args){this.model=ptr(this.context.ecx.toString());this.keep=++draws<=16;this.actor=ptr(args[2].toString());},onLeave(ret){if(this.keep)send(safe(()=>({event:'native_battle_body_submitted',model:this.model.toString(),result:ret.toUInt32()&255,drawable:this.model.add(0x88).readU8(),identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()]})));}});
  send({event:'battle_render_probe_ready',mode:'Read-only original actor and animation observation'});
 })();
