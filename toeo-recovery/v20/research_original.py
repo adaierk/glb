@@ -48,3 +48,14 @@ print('V20_ORIGINAL_RENDER_RESEARCH_PASS',len(refs))
 
 subprocess.run(['7z','x','-y','-o'+str(raw),str(pack),'NewComponent1/resource/pc1a.atd','NewComponent1/resource/e000.atd'],check=True,stdout=subprocess.DEVNULL)
 (OUT/'battle_animation_asset_headers.json').write_text(json.dumps([{'file':n,'sha256':hashlib.sha256((raw/'NewComponent1/resource'/n).read_bytes()).hexdigest(),'header_hex':(raw/'NewComponent1/resource'/n).read_bytes()[:512].hex()} for n in ('pc1a.atd','e000.atd')],indent=2))
+
+animation_assets=[]
+for name in ('pc1a.atd','e000.atd'):
+ b=(raw/'NewComponent1/resource'/name).read_bytes();count,start=struct.unpack_from('<II',b,20)
+ rows=[]
+ for n in range(count):
+  words=struct.unpack_from('<7I',b,start+n*28);num,off=words[5:7]
+  assert num<=8 and off+16*num<=len(b)
+  rows.append({'row':n,'words':list(words),'directions':[b[off+16*i+3] for i in range(num)],'direction_entries_hex':[b[off+16*i:off+16*(i+1)].hex() for i in range(num)]})
+ animation_assets.append({'file':name,'sha256':hashlib.sha256(b).hexdigest(),'rows':rows})
+(OUT/'original_battle_animation_directions.json').write_text(json.dumps(animation_assets,indent=2))
