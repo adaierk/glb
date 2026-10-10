@@ -167,3 +167,11 @@ for name,va,size in [
 # Follow original NPC/actor command dispatcher for native action1 vs2.
 (OUT/'npc_menu_action_mask.txt').write_text(dis(0x5b9a90,0x700))
 (OUT/'native_action66.txt').write_text(dis(0x4f7120,0x110))
+
+for name,va,size in [
+ ('battle_background_id',0x44f0f0,0x160),('battle_actor_initialize',0x511dd0,0x1300),
+ ('native_menu_execute',0x5b9110,0xb00),('world_mode_tick',0x43eb50,0x650)
+ ]:(OUT/(name+'.txt')).write_text(dis(va,size))
+(OUT/'native_menu_table.json').write_text(json.dumps([list(struct.unpack('<4I',pe.get_data(0x7b3470-base+16*n,16))) for n in range(16)],indent=2))
+files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
+(OUT/'battle_asset_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(^|/)(battle|b[0-9_])|\.bmd$|\.btt$',line[7:],re.I)],indent=2))
