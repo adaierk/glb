@@ -1,0 +1,86 @@
+{
+  "original_exe_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "cid0_metadata": {
+    "file": "cid0.idt",
+    "bytes": 102116,
+    "sha256": "34749402c8bfa12fe1570238497f6124bdd3593d9795f2b1637cd2a9b67ca53d",
+    "format": "IDTB",
+    "original_unchanged": true,
+    "count": 5097,
+    "encrypted_strings": 5097,
+    "original_sha1_verified": true,
+    "scope": "Model/resource symbolic names; not verified NPC spawn or item template data"
+  },
+  "classification": {
+    "id": 1200,
+    "name": "SLIME"
+  },
+  "classification_to_resource_name": {
+    "name": "SLIME",
+    "resource_name": "SLIME"
+  },
+  "field_resource": {
+    "index": 175,
+    "words": [
+      800,
+      16888,
+      29932,
+      29952,
+      29972,
+      4
+    ],
+    "labels": [
+      null,
+      "SLIME",
+      "resource",
+      "se000.atd",
+      "se000.cpd",
+      null
+    ]
+  },
+  "battle_resource_symbol": {
+    "id": 100,
+    "name": "E000"
+  },
+  "battle_resource": {
+    "index": 19,
+    "words": [
+      100,
+      11152,
+      29932,
+      17052,
+      17072,
+      1
+    ],
+    "labels": [
+      null,
+      "E000",
+      "resource",
+      "e000.atd",
+      "e000.cpd",
+      null
+    ]
+  },
+  "original_animation_directions": [
+    {
+      "file": "pc1a.atd",
+      "sha256": "29ca0ce3e0247d170cacf08d9cf31db1a1c178797eda32878f5db288577b32ca",
+      "serialized_labels": [
+        "L",
+        "R",
+        "D",
+        "U"
+      ]
+    },
+    {
+      "file": "e000.atd",
+      "sha256": "e9c06a2ce49a42bc92d7c3b80222cb82eacc8acfd6250e0e43e3bb178711f2e2",
+      "serialized_labels": [
+        "L",
+        "R"
+      ]
+    }
+  ],
+  "official_classification_to_battle_monster_mapping_verified": false,
+  "fixture_note": "The native battle e000 bitmap is a humanoid monster. Field classification SLIME alone does not prove e000 is a SLIME instance. Explicit test object renamed Original Enemy Test."
+}

@@ -8,6 +8,7 @@ EVIDENCE=META/'evidence'/str(RUN)
 proof=json.loads((EVIDENCE/'artifact.json').read_text())
 result=json.loads((EVIDENCE/'runtime_result.json').read_text())
 assert proof['tested_commit']==TESTED
+assert all(result.get(k) for k in ('battle_player_body_submitted_native','battle_enemy_body_submitted_native','battle_normal_placement_native'))
 assert all(result.get(k) for k in ('map_entered','enemy_created_native','enemy_component_native','enemy_world_model_native','enemy_field_symbol_native','enemy_mouse_pick_native','enemy_target_selected_native'))
 if config.get('encounter_entry'):
  assert all(result.get(k) for k in ('encounter_native_confirmed','battle_player_model_native','battle_enemy_model_native','battle_scene_initialized_native','battle_resource_ack_native'))
@@ -55,6 +56,11 @@ images=[]
 for name,digest in review['images_sha256'].items():
  body=(EVIDENCE/name).read_bytes();assert sha(body)==digest
  images.append({'file':name,'sha256':digest,'alterations':'Exact original desktop crop only'})
+files['evidence/v20/original_enemy_resource_basis.json']=(META/'original_enemy_resource_basis.json').read_bytes()
+protocol=ROOT/'toeo-recovery/v19/verification'/TESTED
+assert json.loads((protocol/'native_battle_record.json').read_text())['passed']
+for name in ('native_battle_record.json','native_enemy.json','unit_checks.txt'):
+ files['evidence/v20/protocol/'+name]=(protocol/name).read_bytes()
 files['evidence/v20/visual_review.json']=(META/'visual_review.json').read_bytes()
 files['evidence/v20/unit_tests.txt']=test.stdout.encode()
 class NoRedirect(urllib.request.HTTPRedirectHandler):
