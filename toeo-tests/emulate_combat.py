@@ -27,7 +27,7 @@ class BattleRecordFixture(NpcFixture):
                 'tp':[self.read32(p+0x58),self.read32(p+0x184)]}
             uc.emu_stop()
         else:super().on_code(uc,va,size,context)
-def run(binary):
+def record_projections(binary):
     rows=[]
     for identity,name,bank,category,position,controlled in [(ENEMY_IDENTITY,ENEMY_NAME,BATTLE_ENEMY_BANK,2,(96,0),False),((1,1),'ArchiveHero',0,1,(0,0),True)]:
         f=BattleRecordFixture(binary);appearance=bytearray(24)
@@ -44,6 +44,32 @@ def run(binary):
         assert list(f.names.values())[-1]==name and not f.assertions
         rows.append(actual)
     return {'passed':True,'projections':rows,'substitutions':['Inherited OS/string/temp-container boundaries','515650 renderer-registration boundary; preceding original name/identity/vitals/appearance parser executed unchanged'],'does_not_prove':['Native Windows battle entry','Attack animations','Combat outcome']}
+
+def run(binary):
+    from emulate_npc_interaction import InteractionFixture
+    from world_npc_packets import parse_npc_request
+    from world_combat_packets import enemy_selection_reply
+    from unicorn.x86_const import UC_X86_REG_ECX
+    class EnemyInteraction(InteractionFixture):
+        def on_code(self,uc,va,size,context):
+            sp=uc.reg_read(UC_X86_REG_ESP)
+            if va in (0x526340,0x49c840,0x508a80):
+                identity=struct.unpack('<II',uc.mem_read(sp+4,8))
+                self.ret(self.player if identity==(1,1) else self.npc if identity==ENEMY_IDENTITY else 0,16 if va==0x526340 else 8)
+            else:super().on_code(uc,va,size,context)
+    f=EnemyInteraction(binary);f.write32(f.player+0x14,RASHUAN.map_id)
+    grid=0x10d9000;f.uc.mem_write(grid,struct.pack('<ii',*enemy_grid(RASHUAN)))
+    f.invoke(0x522bd0,(*ENEMY_IDENTITY,grid,f.world_state+0xa0,0,0,1),this=0x10d8000)
+    request=parse_npc_request(f.sent[-1]);assert request['target']==ENEMY_IDENTITY
+    request['request_id']=123;f.write32(f.world_state+0xa8,1)
+    f.receive(0x52cc40,enemy_selection_reply(request,RASHUAN))
+    action=parse_npc_request(f.sent[-1])
+    assert action['opcode']==0xc8 and action['action']==1 and action['target']==ENEMY_IDENTITY and not f.assertions
+    result=record_projections(binary)
+    result['original_encounter_action_request']=action
+    result['native_encounter_menu_mask']=1
+    return result
+
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('binary');p.add_argument('--out',required=True);a=p.parse_args()
     Path(a.out).write_text(json.dumps(run(a.binary),indent=2));print('ORIGINAL_BATTLE_59_RECORD_PROJECTION_PASS')

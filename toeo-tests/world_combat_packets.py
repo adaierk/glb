@@ -39,3 +39,16 @@ def encounter_notice(identity,name,selector_fields,profile,request_id,background
     struct.pack_into('<I',b,12,44+len(tail))
     struct.pack_into('<IIIII',b,16,*identity,profile.map_id,*BATTLE_GROUP)
     return bytes(b)+tail
+
+def enemy_selection_reply(request,profile):
+    b=bytearray(message(0xc7,bytes(51),request['request_id']))
+    struct.pack_into('<I',b,12,4)
+    struct.pack_into('<IIIIIii',b,16,*request['identity'],profile.map_id,*ENEMY_IDENTITY,*enemy_grid(profile))
+    # Original 7B3470: exact mask1 executes command20001 -> C8 action1.
+    struct.pack_into('<II',b,48,1,0)
+    return bytes(b)
+def enemy_action_reply(request):
+    b=bytearray(message(0xc9,bytes(39),request['request_id']))
+    struct.pack_into('<Ii',b,12,0,0)
+    struct.pack_into('<IIIIII',b,20,*request['identity'],request['map_id'],*ENEMY_IDENTITY,request['action'])
+    return bytes(b)

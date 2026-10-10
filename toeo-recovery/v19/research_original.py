@@ -175,3 +175,7 @@ for name,va,size in [
 (OUT/'native_menu_table.json').write_text(json.dumps([list(struct.unpack('<4I',pe.get_data(0x7b3470-base+16*n,16))) for n in range(16)],indent=2))
 files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
 (OUT/'battle_asset_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(^|/)(battle|b[0-9_])|\.bmd$|\.btt$',line[7:],re.I)],indent=2))
+
+(OUT/'battle_background_loader.txt').write_text(dis(0x45e280,0x1d00))
+(OUT/'battle_background_strings.json').write_text(json.dumps([{'address':hex(i),'bytes':pe.get_data(i-base,100).split(bytes(1),1)[0].decode('cp932','replace')} for i in (0x6e7f94,0x6e7f7c,0x6e96a0,0x6e9690)],indent=2))
+(OUT/'battle_data_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(?i)(bg|btl|bmf|battle|/bmap|/bfield)|\.(bmi|bmt|bmd|bpd|bpi|tmd|tmi)$',line[7:])],indent=2))
