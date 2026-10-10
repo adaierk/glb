@@ -39,6 +39,7 @@ class BattleCommandTests(unittest.TestCase):
         a=parse_attack_request(self.packet())
         b=attack_action_notice(a,(320,0))
         self.assertEqual(len(b),96)
+        self.assertEqual(struct.unpack_from('<ff',b,52),(532,0))
         self.assertEqual(struct.unpack_from('<6I',b,12),(96,7,9,1,1,1))
         self.assertEqual(struct.unpack_from('<HH',b,40),(0x5a,13))
         self.assertEqual(struct.unpack_from('<I',b,64)[0],10004)

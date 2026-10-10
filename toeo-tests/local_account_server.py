@@ -389,13 +389,15 @@ class LocalAccountServer(BootstrapServer):
                     attack=parse_attack_request(payload)
                     if not control or not state.get('local_battle_started'):raise ValueError('No active battle')
                     validate_attack_request(attack,control['character_id'],self.map_id,state['local_battle_group'],state.get('local_battle_target'))
+                    if attack['target']!=(0x72000001,1):raise ValueError('Unsupported local battle actor target')
                 except ValueError as error:
                     self.log('battle_attack_rejected',connection=conn_id,reason=str(error),request_hex=payload.hex());continue
                 self.log('battle_attack_request_native',connection=conn_id,request_hex=payload.hex(),**attack)
                 from world_battle_commands import attack_action_notice
                 answer=attack_action_notice(attack,state['local_battle_position'])
                 self.send_answer(c,answer,state)
-                self.log('battle_attack_action_sent',connection=conn_id,command=attack['command'],target=attack['target'],answer_hex=answer.hex())
+                state['local_battle_position']=struct.unpack_from('<ff',answer,52)
+                self.log('battle_attack_action_sent',connection=conn_id,command=attack['command'],target=attack['target'],position=state['local_battle_position'],answer_hex=answer.hex(),range_basis='Explicit local48-pixel approach distance; official weapon range unresolved')
                 continue
             if op==0x9e and port==11101 and self.combat_preview:
                 control=state.get('world_account_control')

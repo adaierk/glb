@@ -59,7 +59,7 @@
   const m=p.add(0xc0).readPointer();
   return {identity:[p.add(0x58).readU32(),p.add(0x5c).readU32()],position:[p.readFloat(),p.add(4).readFloat()],
    entity_kind:p.add(0x60).readU32(),category:p.add(0x6c).readU32(),controlled:p.add(0x68).readU8(),
-   readiness:p.add(0x84).readU32(),action:p.add(0x88).readU32(),direction:p.add(0x8c).readU32(),
+   readiness:p.add(0x84).readU32(),movement_speed:p.add(0x14c).readFloat(),action:p.add(0x88).readU32(),direction:p.add(0x8c).readU32(),
    dimensions:[p.add(0x140).readU32(),p.add(0x144).readU32()],flags:[p.add(0x148).readU8(),p.add(0x150).readU8(),p.add(0x168).readU8()],
    model:m.toString(),model_state:m.isNull()?null:{bank:m.readU32(),resource:m.add(4).readPointer().toString(),animation:m.add(0x38).readU32(),direction:m.add(0x3c).readU32(),fallback:m.add(0x44).readU32(),drawable:m.add(0x88).readU8(),animation_clock:m.add(0x74).readU32(),color:m.add(0x9c).readU32(),layers:m.add(0x20).readU32()}};
  }
@@ -103,4 +103,13 @@
   this.action=safe(()=>({position:[args[0].readFloat(),args[0].add(4).readFloat()],direction:args[0].add(8).readU32(),command:args[0].add(12).readU32(),target:[args[0].add(24).readU32(),args[0].add(28).readU32()]}));
  },onLeave(ret){if(this.keep)send(safe(()=>({event:'native_battle_actor_action_applied',from_input:this.fromInput,action:this.action,result:ret.toUInt32()&255,identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()]})));}});
  send({event:'battle_action_probe_ready',mode:'Read-only original action record application'});
+})();
+
+(function(){
+ const at=va=>Process.mainModule.base.add(va-0x400000);
+ const safe=f=>{try{return f();}catch(e){return {error:String(e)};}};
+ let count=0;
+ Interceptor.attach(at(0x4086e0),{onEnter(){this.machine=this.context.ecx;this.keep=++count<=48;},
+  onLeave(){if(this.keep)send(safe(()=>({event:'native_battle_command_program',phase:this.machine.add(0x38).readU32(),command:this.machine.add(0x3c).readU32(),program:this.machine.add(0x50).readU32()})));}});
+ send({event:'battle_program_probe_ready',mode:'Read-only original command program transition'});
 })();

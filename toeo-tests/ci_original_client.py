@@ -213,8 +213,18 @@ def main():
                     result['battle_target_selected_native']=any(e.get('event')=='native_battle_target_set' and e.get('target')==[0x72000001,1] for e in events)
                     result['battle_attack_request_native']=any(e.get('event')=='battle_attack_request_native' for e in wire)
                     result['battle_attack_command_native']=any(e.get('event')=='native_battle_attack_command' and e.get('command')==10004 for e in events)
-                    if not all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native')):
-                        failure=failure or 'Actual original battle target and A8 attack request did not pass'
+                    applications=[e for e in events if e.get('event')=='native_battle_actor_action_applied' and e.get('from_input')==0 and e.get('result')==1 and e.get('identity')==[1,1]]
+                    attack_actions=[e for e in applications if e.get('action',{}).get('command')==10004]
+                    battle_player=[e for e in events if e.get('event')=='native_battle_render_actor_snapshot' and e.get('identity')==[1,1]]
+                    player_model=next((e['model'] for e in battle_player if e.get('phase')=='created'),None)
+                    result['battle_movement_applied_native']=any(e.get('action',{}).get('command')==1 for e in applications)
+                    result['battle_movement_changed_position_native']=any(e.get('phase')=='tick' and abs(e.get('position',[220])[0]-220)>10 for e in battle_player)
+                    result['battle_speed_float_native']=bool(battle_player) and all(e.get('movement_speed')==1.0 for e in battle_player)
+                    result['battle_attack_action_applied_native']=bool(attack_actions)
+                    result['battle_attack_program_native']=any(e.get('event')=='native_battle_command_program' and e.get('command')==10004 and e.get('phase')==2 and e.get('program') for e in events)
+                    result['battle_attack_animation_native']=bool(attack_actions) and any(e.get('event')=='native_model_animation_select' and e.get('object')==player_model and e.get('result')==1 and e.get('args',[0])[0]>=100 and e.get('args',[0])[0] not in (100,101,110) and e.get('host_time',0)>=attack_actions[0]['host_time'] for e in events)
+                    if not all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native','battle_movement_applied_native','battle_movement_changed_position_native','battle_speed_float_native','battle_attack_action_applied_native','battle_attack_program_native','battle_attack_animation_native')):
+                        failure=failure or 'Actual original battle movement, target, attack request, program and animation checks did not pass'
             elif args.equipment_check:
                 from equipment_ci_acceptance import verify_equipment
                 equipment_failure=verify_equipment(result,events,server,args,expected_position)

@@ -55,5 +55,7 @@ def parse_battle_move_request(payload,identity,map_id,group):
 
 def attack_action_notice(attack,position):
     direction=2 if position[0]<580 else 6
-    action=action_record(attack['identity'],position,direction,attack['command'],attack['target'])
+    # Explicit offline fixture: enemy580, local approach distance48, not an official range.
+    destination=(532.0 if direction==2 else 628.0,0.0)
+    action=action_record(attack['identity'],destination,direction,attack['command'],attack['target'])
     return actor_action_notice(attack['map_id'],attack['group'],attack['identity'],action)

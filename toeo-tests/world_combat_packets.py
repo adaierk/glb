@@ -17,7 +17,10 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     struct.pack_into('<II',b,0x24,*BATTLE_GROUP)
     # Original 5299BD copies record+34 into actor direction+8C.
     # Battle ATD assets use horizontal directions 2/6; map directions 0/1 fail animation100.
-    struct.pack_into('<iiii',b,0x2c,*position,2 if controlled else 6,1)
+    struct.pack_into('<iii',b,0x2c,*position,2 if controlled else 6)
+    # 5299D2 -> state+23C -> actor+14C -> 406920 reads this as float.
+    # Integer1 becomes a denormal speed and never reaches the action destination.
+    struct.pack_into('<f',b,0x38,1.0)
     b[0x3c:0x80]=encode_name(name)
     b[0x80:0x98]=appearance
     struct.pack_into('<IIIII',b,0x98,max_hp,hp,max_tp,tp,0)
