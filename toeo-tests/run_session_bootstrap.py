@@ -22,6 +22,7 @@ def main():
     p.add_argument('--local-account',action='store_true',help='Use recovered login and persistent character create/list/delete protocol')
     p.add_argument('--local-world','--world-route-probe',dest='world_route_probe',action='store_true',help='Load the recovered local map channel; requires --local-account')
     p.add_argument('--demo-character',action='store_true',help='Create Archive only if the local account has no characters')
+    p.add_argument('--equipment-preview',action='store_true',help='Opt-in offline equipment fixtures; official item masters are unresolved')
     p.add_argument('--shop-preview',action='store_true',help='Preview sourced historical goods on the local diagnostic merchant; original merchant placement and item templates are still pending')
     p.add_argument('--world-profile',choices=('forest','rashuan'),default='forest',help='Original map and sourced merchant profile')
     args=p.parse_args()
@@ -68,6 +69,10 @@ def main():
         if args.demo_character and not server.characters.list(1):
             from character_mutation_packets import create_character_request
             server.characters.create(1,create_character_request('Archive'))
+        if args.equipment_preview:
+            roles=server.characters.list(1)
+            if not roles:raise SystemExit('Equipment preview requires a local character')
+            server.inventory.grant_equipment_preview(1,roles[0]['identity'])
     else:server=BootstrapServer(out)
     events=[];observed_names=set();native_exceptions=[];client_closed=threading.Event()
     captures=[];capture_queue=queue.SimpleQueue();captured_stages=set()

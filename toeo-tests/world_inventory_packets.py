@@ -14,21 +14,24 @@ LOCAL_BAG_CAPACITY=32
 MAX_NATIVE_MONEY=10000000
 
 
-def inventory_records(snapshot):
+def inventory_records(snapshot,receipt=False):
     header=record(0x36,16)
     struct.pack_into('<III',header,4,1,0,snapshot['capacity'])
     result=bytearray(header)
-    for slot,item in enumerate(snapshot['items']):
+    for slot,item in enumerate(snapshot['items']+snapshot.get('equipment',[])):
         identity=item['identity']
         group=record(0x37,44)
-        struct.pack_into('<II',group,4,2,item.get('slot',slot))
+        # 67 decoder supplies only a temporary bag; 4D carries the final location.
+        struct.pack_into('<II',group,4,2 if receipt else item.get('location',2),item.get('slot',slot))
         struct.pack_into('<IIII',group,0x1c,*identity)
         attributes=record(0x38,84)
         struct.pack_into('<IIII',attributes,4,*identity)
-        struct.pack_into('<IIIII',attributes,0x14,item['catalog_index']+1,1,0,0,1)
+        from world_equipment_definitions import equipment_definition
+        definition=equipment_definition(item)
+        struct.pack_into('<IIIII',attributes,0x14,definition['catalog_id'] if definition else item['catalog_index']+1,1,0,4 if definition else 0,(1<<definition['slot']) if definition else 1)
         from world_item_definitions import icon_selector
-        icon_type, icon_offset = icon_selector(item['name'])
-        struct.pack_into('<hhh',attributes,0x28,item['quantity'],LOCAL_STACK_LIMIT,icon_offset)
+        icon_type, icon_offset = (definition['icon_type'],definition['icon_offset']) if definition else icon_selector(item['name'])
+        struct.pack_into('<hhh',attributes,0x28,item['quantity'],1 if definition else LOCAL_STACK_LIMIT,icon_offset)
         struct.pack_into('<IIII',attributes,0x34,icon_type,item['buy_price'],item['sell_price'],0)
         name=('NAME:'+item['name']+';').encode('utf-16le')+b'\0\0'
         properties=record(0x39,(28+len(name)+3)&~3)
@@ -56,17 +59,17 @@ def transaction_reply(sequence,money,status=0,request_id=0xffffffff,snapshot=Non
     # Record 50 location 2 updates the checksum-protected player wallet.
     tail=bytearray()
     if status==0:
-        if snapshot is not None:tail.extend(inventory_records(snapshot))
+        if snapshot is not None:tail.extend(inventory_records(snapshot,receipt=True))
         wallet=record(0x50,12);struct.pack_into('<II',wallet,4,2,money)
         tail.extend(wallet)
         for identity in removed:
             deletion=record(0x4c,28);struct.pack_into('<I',deletion,4,2)
             struct.pack_into('<IIII',deletion,12,*identity);tail.extend(deletion)
         if snapshot is not None:
-            for slot,item in enumerate(snapshot['items']):
+            for slot,item in enumerate(snapshot['items']+snapshot.get('equipment',[])):
                 # 4F9720 decodes the temporary inventory, clones each named
                 # instance into location 2, and refreshes bag AND open shop.
-                update=record(0x4d,44);struct.pack_into('<II',update,4,2,item.get('slot',slot))
+                update=record(0x4d,44);struct.pack_into('<II',update,4,item.get('location',2),item.get('slot',slot))
                 struct.pack_into('<IIII',update,28,*item['identity']);tail.extend(update)
     tail.extend(bytes(4))
     b=bytearray(message(0x67,bytes(27+len(tail)),request_id))

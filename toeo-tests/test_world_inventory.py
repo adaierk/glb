@@ -106,7 +106,7 @@ class InventoryTests(unittest.TestCase):
             server.process_game_bytes(c,11101,9,data405(request(0xdf,2,self.identity,[(*item['identity'],2,3)]),1,1,route=0xffef),state)
             self.assertEqual(struct.unpack_from('<IIII',records(c.answers[0])[0x4c],12),tuple(item['identity']))
             self.assertNotIn(0x4d,records(c.answers[0]))
-            self.assertEqual(server.inventory.load(1,self.identity),{'money':4460,'capacity':32,'items':[]})
+            self.assertEqual(server.inventory.load(1,self.identity),{'money':4460,'capacity':32,'items':[],'equipment':[]})
         finally:server.close()
 
 

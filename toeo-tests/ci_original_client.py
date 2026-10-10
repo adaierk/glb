@@ -16,6 +16,7 @@ def main():
     p.add_argument('--database',help='Reuse a preserved local account database for the reentry check')
     p.add_argument('--reenter-check',action='store_true',help='Observe the restored position without scheduled movement')
     p.add_argument('--use-check',action='store_true',help='Seed this isolated test character at HP40/TP10, then require a real native use and restart')
+    p.add_argument('--equipment-check',action='store_true',help='Real native equip/unequip and restart using explicitly local equipment fixtures')
     p.add_argument('--move-check',action='store_true',help='Require real two-item bag exchange and original client restart restoration')
     p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
     args=p.parse_args()
@@ -32,6 +33,7 @@ def main():
     exe=game/'ToEO_CL_local_ci.exe';shutil.copyfile(original,exe)
     server=LocalAccountServer(out,world_route_probe=True,account_database=args.database,shop_preview=True,world_profile='rashuan')
     if not server.characters.list(1):server.characters.create(1,create_character_request('Archive'))
+    if args.equipment_check and not args.reenter_check:server.inventory.grant_equipment_preview(1,server.characters.list(1)[0]['identity'])
     events=[];shots=[];device=frida.get_local_device();pid=None;session=None;failure=None
     from native_map_geometry import grid_to_point
     expected_position=grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid'])
@@ -138,6 +140,11 @@ def main():
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
                 schedule.update({145:lambda:click(28,84)})
+            if args.equipment_check:
+                for t in tuple(schedule):
+                    if t>=141:schedule.pop(t,None)
+                if args.reenter_check:schedule.update({145:lambda:click(28,84)})
+                else:schedule.update({145:lambda:click(28,84),150:lambda:drag(517,487,658,263),165:lambda:drag(517,487,706,263),180:lambda:drag(658,263,517,487),195:lambda:drag(517,487,658,263),215:lambda:click(28,84),220:lambda:click(360,410,hold=2)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
@@ -185,68 +192,74 @@ def main():
             result['native_inventory_samples']=inventory_samples
             saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
             result['saved_inventory']=saved_inventory
-            if args.move_check:
-                expected_order=[(list(x['identity']),x['quantity'],x['slot']) for x in saved_inventory['items']]
-                # Original initial 34/6B reconstruction appends with argument -1.
-                # Verify the actual native linked list, not the insertion argument.
-                result['bag_order_native']=bool(inventory_samples) and [(x['identity'],x['quantity'],x['slot']) for x in inventory_samples[-1].get('order',[])]==expected_order
-                lemon=next((x for x in saved_inventory['items'] if x['name']=='レモングミ'),None)
-                result['bag_slot1_native']=result['bag_order_native'] and lemon is not None and lemon['slot']==1
-                result['bag_slot1_saved']=len(saved_inventory['items'])==2 and next((x['slot'] for x in saved_inventory['items'] if x['name']=='レモングミ'),None)==1
-                result['bag_move_request_native']=any(e.get('event')=='native_plain_request_before_serialization' and e.get('opcode')==0x54 for e in events)
-                if not result['bag_slot1_native'] or not result['bag_slot1_saved'] or (not args.reenter_check and not result['bag_move_request_native']):
-                    failure=failure or 'Real native bag move and persistent bag order did not pass'
+            if args.equipment_check:
+                from equipment_ci_acceptance import verify_equipment
+                equipment_failure=verify_equipment(result,events,server,args,expected_position)
+                (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+                if equipment_failure:failure=failure or equipment_failure
+            else:
+                if args.move_check:
+                    expected_order=[(list(x['identity']),x['quantity'],x['slot']) for x in saved_inventory['items']]
+                    # Original initial 34/6B reconstruction appends with argument -1.
+                    # Verify the actual native linked list, not the insertion argument.
+                    result['bag_order_native']=bool(inventory_samples) and [(x['identity'],x['quantity'],x['slot']) for x in inventory_samples[-1].get('order',[])]==expected_order
+                    lemon=next((x for x in saved_inventory['items'] if x['name']=='レモングミ'),None)
+                    result['bag_slot1_native']=result['bag_order_native'] and lemon is not None and lemon['slot']==1
+                    result['bag_slot1_saved']=len(saved_inventory['items'])==2 and next((x['slot'] for x in saved_inventory['items'] if x['name']=='レモングミ'),None)==1
+                    result['bag_move_request_native']=any(e.get('event')=='native_plain_request_before_serialization' and e.get('opcode')==0x54 for e in events)
+                    if not result['bag_slot1_native'] or not result['bag_slot1_saved'] or (not args.reenter_check and not result['bag_move_request_native']):
+                        failure=failure or 'Real native bag move and persistent bag order did not pass'
 
-            result['saved_vitals']=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
-            hud_draws=[e for e in events if e.get('event')=='native_hud_graphics_result' and e.get('hresult')=='0x0']
-            result['hp_gauge_draw_succeeded_native']=any('0x5a0605' in e.get('stack',[]) for e in hud_draws)
-            result['tp_gauge_draw_succeeded_native']=any('0x5a0675' in e.get('stack',[]) for e in hud_draws)
-            result['hud_actual_d3d_draw_succeeded_native']=any(e.get('event')=='native_hud_d3d_method_result' and e.get('method')=='DrawPrimitiveUP' and e.get('hresult')=='0x0' for e in events)
-            result['renderer_optional_validation_compat_applied']='legacy_render_validation_compat_applied' in names
-            if not all(result[k] for k in ('hp_gauge_draw_succeeded_native','tp_gauge_draw_succeeded_native','hud_actual_d3d_draw_succeeded_native')):
-                failure=failure or 'Actual original HP/TP primitive drawing did not succeed'
-            vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
-            result['native_vitals_samples']=vital_samples
-            if args.use_check and not args.reenter_check:
-                owned_items={tuple(item['identity']) for item in saved_inventory['items']}
-                # Item-source descriptions also pass through 51D930 and have
-                # quantity1; require the actual owned bag instance in 565210.
-                result['item_used_native']=any(e.get('event')=='native_item_use_builder_result' and e.get('result')==1 for e in events) and any(e.get('event')=='native_inventory_ui_item' and e.get('quantity')==1 and e.get('icon_id')==3811 and tuple(e.get('identity',())) in owned_items for e in events)
-                result['hp_recovered_native']=any(e.get('hp')==40 and e.get('tp')==10 for e in vital_samples) and any(e.get('hp')==100 and e.get('tp')==10 for e in vital_samples)
-                if not result['item_used_native'] or not result['hp_recovered_native']:failure=failure or 'Real native item use / quantity 1 / HP40 to 100 did not pass'
-            result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
-            result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
-            result['buy_money_quantity_native']=any(e.get('money')==(3560 if args.move_check else 3920) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
-            result['sell_money_quantity_native']=any(e.get('money')==(3740 if args.move_check else 4100) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
-            sales=[e for e in events if e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1]
-            result['shop_quantity_refreshed_native']=bool(sales) and any(e.get('event')=='native_shop_row_render' and e.get('name')=='レモングミ' and e.get('mode')==1 and e.get('quantity')==2 and e.get('host_time',0)>sales[-1]['host_time'] for e in events)
-            result['inventory_window_open_native']=any(e.get('event')=='native_inventory_frame_state' and e.get('visible') is True for e in events)
-            if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native','shop_quantity_refreshed_native')):
-                failure=failure or 'Native purchase 3 / sell 1 / inventory / wallet checks did not all pass'
-            if not result['original_lemon_icon_native']:
-                failure=failure or 'Original lemon ICND icon was not supplied to original inventory control'
-            if not result['inventory_window_open_native']:
-                failure=failure or 'Actual original inventory frame did not become visible through the mouse button'
-            if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
-                failure=failure or 'Historical name/price/count were not all observed in original shop controls'
-            shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
-            visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]
-            closes=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is False and visible and e.get('host_time',0)>visible[0]['host_time']]
-            result['shop_closed_native']=bool(closes)
-            result['movement_after_shop_close_native']=bool(closes) and bool(positions) and tuple(positions[-1])==grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid']) and tuple(positions[-1])!=expected_position and any(e.get('event')=='native_move_path_request' and e.get('host_time',0)>closes[0]['host_time'] for e in events)
-            if not args.reenter_check and (not result['map_entered'] or not result['npc_selected_native'] or not result['shop_catalog_parsed_native'] or not result['shop_frame_shown_native']):
-                failure=failure or 'Original map/NPC selection/shop data/open checks did not all pass'
-            if not args.reenter_check and (not result['shop_closed_native'] or not result['movement_after_shop_close_native']):
-                failure=failure or 'Original shop close and subsequent map walking did not both pass'
-            if args.reenter_check:
-                result['position_restored_without_movement']=bool(positions) and all(tuple(x)==expected_position for x in positions)
-                if not result['map_entered'] or not result['position_restored_without_movement']:
-                    failure=failure or 'Original reentry did not continuously render the saved destination'
-                result['inventory_restored_native']=bool(inventory_samples) and all(e.get('money')==expected_inventory['money'] and e.get('items')==len(expected_inventory['items']) for e in inventory_samples) and all(any(e.get('identity')==list(item['identity']) and e.get('quantity')==item['quantity'] and e.get('name')==item['name'] for e in named_items) for item in expected_inventory['items'])
-                result['vitals_restored_native']=bool(vital_samples) and all(all(e.get(k)==v for k,v in expected_vitals.items()) for e in vital_samples)
-                if args.use_check and not result['vitals_restored_native']:failure=failure or 'Saved HP/TP were not restored in original client'
-                if not expected_inventory['items'] or not result['inventory_restored_native']:
-                    failure=failure or 'Original reentry did not restore saved items and funds'
+                result['saved_vitals']=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
+                hud_draws=[e for e in events if e.get('event')=='native_hud_graphics_result' and e.get('hresult')=='0x0']
+                result['hp_gauge_draw_succeeded_native']=any('0x5a0605' in e.get('stack',[]) for e in hud_draws)
+                result['tp_gauge_draw_succeeded_native']=any('0x5a0675' in e.get('stack',[]) for e in hud_draws)
+                result['hud_actual_d3d_draw_succeeded_native']=any(e.get('event')=='native_hud_d3d_method_result' and e.get('method')=='DrawPrimitiveUP' and e.get('hresult')=='0x0' for e in events)
+                result['renderer_optional_validation_compat_applied']='legacy_render_validation_compat_applied' in names
+                if not all(result[k] for k in ('hp_gauge_draw_succeeded_native','tp_gauge_draw_succeeded_native','hud_actual_d3d_draw_succeeded_native')):
+                    failure=failure or 'Actual original HP/TP primitive drawing did not succeed'
+                vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
+                result['native_vitals_samples']=vital_samples
+                if args.use_check and not args.reenter_check:
+                    owned_items={tuple(item['identity']) for item in saved_inventory['items']}
+                    # Item-source descriptions also pass through 51D930 and have
+                    # quantity1; require the actual owned bag instance in 565210.
+                    result['item_used_native']=any(e.get('event')=='native_item_use_builder_result' and e.get('result')==1 for e in events) and any(e.get('event')=='native_inventory_ui_item' and e.get('quantity')==1 and e.get('icon_id')==3811 and tuple(e.get('identity',())) in owned_items for e in events)
+                    result['hp_recovered_native']=any(e.get('hp')==40 and e.get('tp')==10 for e in vital_samples) and any(e.get('hp')==100 and e.get('tp')==10 for e in vital_samples)
+                    if not result['item_used_native'] or not result['hp_recovered_native']:failure=failure or 'Real native item use / quantity 1 / HP40 to 100 did not pass'
+                result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
+                result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
+                result['buy_money_quantity_native']=any(e.get('money')==(3560 if args.move_check else 3920) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
+                result['sell_money_quantity_native']=any(e.get('money')==(3740 if args.move_check else 4100) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
+                sales=[e for e in events if e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1]
+                result['shop_quantity_refreshed_native']=bool(sales) and any(e.get('event')=='native_shop_row_render' and e.get('name')=='レモングミ' and e.get('mode')==1 and e.get('quantity')==2 and e.get('host_time',0)>sales[-1]['host_time'] for e in events)
+                result['inventory_window_open_native']=any(e.get('event')=='native_inventory_frame_state' and e.get('visible') is True for e in events)
+                if not args.reenter_check and not all(result[k] for k in ('buy_request_built_native','sell_request_built_native','buy_money_quantity_native','sell_money_quantity_native','shop_quantity_refreshed_native')):
+                    failure=failure or 'Native purchase 3 / sell 1 / inventory / wallet checks did not all pass'
+                if not result['original_lemon_icon_native']:
+                    failure=failure or 'Original lemon ICND icon was not supplied to original inventory control'
+                if not result['inventory_window_open_native']:
+                    failure=failure or 'Actual original inventory frame did not become visible through the mouse button'
+                if not args.reenter_check and not all(result[k] for k in ('shop_historical_names_native','shop_historical_prices_native','shop_historical_item_count_native','shop_display_price_text_native')):
+                    failure=failure or 'Historical name/price/count were not all observed in original shop controls'
+                shown=[e for e in events if e.get('event')=='native_shop_frame_show' and e.get('result')==1]
+                visible=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is True and shown and e.get('host_time',0)>shown[-1]['host_time']]
+                closes=[e for e in events if e.get('event')=='native_shop_frame_state' and e.get('visible') is False and visible and e.get('host_time',0)>visible[0]['host_time']]
+                result['shop_closed_native']=bool(closes)
+                result['movement_after_shop_close_native']=bool(closes) and bool(positions) and tuple(positions[-1])==grid_to_point(server.positions.load(1,server.characters.list(1)[0]['identity'])['grid']) and tuple(positions[-1])!=expected_position and any(e.get('event')=='native_move_path_request' and e.get('host_time',0)>closes[0]['host_time'] for e in events)
+                if not args.reenter_check and (not result['map_entered'] or not result['npc_selected_native'] or not result['shop_catalog_parsed_native'] or not result['shop_frame_shown_native']):
+                    failure=failure or 'Original map/NPC selection/shop data/open checks did not all pass'
+                if not args.reenter_check and (not result['shop_closed_native'] or not result['movement_after_shop_close_native']):
+                    failure=failure or 'Original shop close and subsequent map walking did not both pass'
+                if args.reenter_check:
+                    result['position_restored_without_movement']=bool(positions) and all(tuple(x)==expected_position for x in positions)
+                    if not result['map_entered'] or not result['position_restored_without_movement']:
+                        failure=failure or 'Original reentry did not continuously render the saved destination'
+                    result['inventory_restored_native']=bool(inventory_samples) and all(e.get('money')==expected_inventory['money'] and e.get('items')==len(expected_inventory['items']) for e in inventory_samples) and all(any(e.get('identity')==list(item['identity']) and e.get('quantity')==item['quantity'] and e.get('name')==item['name'] for e in named_items) for item in expected_inventory['items'])
+                    result['vitals_restored_native']=bool(vital_samples) and all(all(e.get(k)==v for k,v in expected_vitals.items()) for e in vital_samples)
+                    if args.use_check and not result['vitals_restored_native']:failure=failure or 'Saved HP/TP were not restored in original client'
+                    if not expected_inventory['items'] or not result['inventory_restored_native']:
+                        failure=failure or 'Original reentry did not restore saved items and funds'
             (out/'runtime_result.json').write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps(result),flush=True)
             if pid is not None:
                 try:device.kill(pid)

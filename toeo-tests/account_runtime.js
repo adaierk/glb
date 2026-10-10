@@ -428,6 +428,20 @@
     const key=JSON.stringify(state);if(key===previousInventory)return {event:'native_inventory_sample_unchanged'};
     previousInventory=key;return state;
   }));},1000);
+  Interceptor.attach(address(0x4f6ba0),{onEnter(args){emit(safely(()=>({event:'native_item_move_builder_enter',
+    identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),source_location:args[1].toUInt32(),source_slot:args[2].toInt32(),count:args[3].toInt32(),destination_location:args[4].toUInt32(),destination_slot:args[5].toInt32(),destination_identity:[0,4,8,12].map(x=>args[6].add(x).readU32()),context:args[7].toUInt32()})));},onLeave(ret){emit({event:'native_item_move_builder_result',result:ret.toInt32()&255});}});
+  Interceptor.attach(address(0x51ee00),{onEnter(args){this.container=this.context.ecx;this.slot=args[0].toInt32();this.item=args[1];},onLeave(){emit(safely(()=>({event:'native_equipment_insert',container:this.container.toString(),slot:this.slot,identity:this.item.isNull()?null:[0,4,8,12].map(x=>this.item.add(x).readU32()),icon_id:this.item.isNull()?null:this.item.add(0x30).readU32()})));}});
+  let previousEquipment='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
+    const gear=observedPlayer.add(0x1dc).readPointer(),order=[];
+    if(!gear.isNull()){
+      const head=gear.add(4).readPointer();let node=head.readPointer(),steps=0;
+      // Original equipment container is a keyed red-black tree, not a bag list.
+      function visit(n){if(n.equals(head)||n.add(0x15).readU8()||++steps>40)return;visit(n.readPointer());
+        const item=n.add(0x10).readPointer();if(!item.isNull())order.push({slot:n.add(12).readS32(),identity:[0,4,8,12].map(x=>item.add(x).readU32()),icon_id:item.add(0x30).readU32()});visit(n.add(8).readPointer());}
+      visit(head.add(4).readPointer());
+    }
+    const state={event:'native_player_equipment_state',order};const key=JSON.stringify(state);if(key===previousEquipment)return {event:'native_equipment_unchanged'};previousEquipment=key;return state;
+  }));},500);
   Interceptor.attach(address(0x4f6ce0),{onEnter(args){this.controller=this.context.ecx;
     emit(safely(()=>({event:'native_item_use_builder_enter',identity:[0,4,8,12].map(x=>args[0].add(x).readU32()),
       location:args[1].toUInt32(),slot:args[2].toInt32(),count:args[3].toUInt32(),target:[args[4].toUInt32(),args[5].toUInt32()],

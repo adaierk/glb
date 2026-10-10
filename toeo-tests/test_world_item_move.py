@@ -74,7 +74,7 @@ class MoveTests(unittest.TestCase):
             c.answers=[];server.process_game_bytes(c,11101,9,data405(p,1,1,route=0xffef),dict(state,world_map_ready=False));self.assertEqual(c.answers,[])
         finally:server.close()
     def test_legacy_slot_migration_preserves_instances(self):
-        self.accounts.db.execute('DROP INDEX world_inventory_unique_slot')
+        self.accounts.db.execute('DROP INDEX world_inventory_unique_location_slot')
         self.accounts.db.execute('ALTER TABLE world_inventory_items DROP COLUMN slot');self.accounts.db.commit()
         self.accounts.close();self.accounts=AccountStore(self.path);self.store=WorldInventoryStore(self.accounts)
         self.assertEqual(self.store.load(1,self.identity),self.before)

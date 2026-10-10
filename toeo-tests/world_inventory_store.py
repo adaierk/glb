@@ -32,7 +32,10 @@ class WorldInventoryStore:
                     slot=next((x for x in range(LOCAL_BAG_CAPACITY) if x not in used),None)
                     if slot is None:raise TradeRejected('Legacy inventory exceeds local bag capacity')
                     accounts.db.execute('UPDATE world_inventory_items SET slot=? WHERE id=?',(slot,item_id));used.add(slot)
-            accounts.db.execute('CREATE UNIQUE INDEX IF NOT EXISTS world_inventory_unique_slot ON world_inventory_items(character_id,account_id,slot)')
+            if 'location' not in columns:accounts.db.execute('ALTER TABLE world_inventory_items ADD COLUMN location INTEGER NOT NULL DEFAULT 2')
+            if 'definition_key' not in columns:accounts.db.execute('ALTER TABLE world_inventory_items ADD COLUMN definition_key TEXT')
+            accounts.db.execute('DROP INDEX IF EXISTS world_inventory_unique_slot')
+            accounts.db.execute('CREATE UNIQUE INDEX IF NOT EXISTS world_inventory_unique_location_slot ON world_inventory_items(character_id,account_id,location,slot)')
             accounts.db.execute('''CREATE TABLE IF NOT EXISTS world_trade_ledger(
                 id INTEGER PRIMARY KEY AUTOINCREMENT, character_id INTEGER NOT NULL,
                 account_id INTEGER NOT NULL, connection_key TEXT NOT NULL,
@@ -99,12 +102,13 @@ class WorldInventoryStore:
     def _snapshot(self,identity):
         db=self.accounts.db
         money=db.execute('SELECT money FROM world_wallets WHERE character_id=? AND account_id=?',identity).fetchone()[0]
-        rows=db.execute('''SELECT id,source_key,catalog_index,name,buy_price,sell_price,quantity,slot
-            FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY slot''',identity).fetchall()
-        return {'money':money,'capacity':LOCAL_BAG_CAPACITY,'items':[
+        rows=db.execute('''SELECT id,source_key,catalog_index,name,buy_price,sell_price,quantity,slot,location,definition_key
+            FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY location,slot''',identity).fetchall()
+        items=[
             {'identity':(0x71000000+r[0],identity[0],identity[1],0),
              'source_key':r[1],'catalog_index':r[2],'name':r[3],
-             'buy_price':r[4],'sell_price':r[5],'quantity':r[6],'slot':r[7]} for r in rows]}
+             'buy_price':r[4],'sell_price':r[5],'quantity':r[6],'slot':r[7],'location':r[8],'definition_key':r[9]} for r in rows]
+        return {'money':money,'capacity':LOCAL_BAG_CAPACITY,'items':[x for x in items if x['location']==2],'equipment':[x for x in items if x['location']==4]}
 
     def load(self,account_id,identity):
         with self.accounts.lock,self.accounts.db:
@@ -150,6 +154,7 @@ class WorldInventoryStore:
                 for line in request['lines']:
                     item=next((x for x in items if x['identity']==tuple(line['identity'])),None)
                     quantity=line['quantity']
+                    if item is not None and item.get('definition_key'):raise TradeRejected('Equipment fixture is not sold through historical merchants')
                     if item is None or quantity>item['quantity']:raise TradeRejected('Missing item or insufficient quantity')
                     money+=item['sell_price']*quantity
                     if money>MAX_NATIVE_MONEY:raise TradeRejected('Native wallet full')
@@ -167,6 +172,8 @@ class WorldInventoryStore:
 
 
     def move(self,account_id,identity,request,payload,connection_key):
+        if request['source_location']==4 or request['destination_location']==4:
+            return self._move_equipment(account_id,identity,request,payload,connection_key)
         if request['identity']!=identity or request['opcode']!=0x54 or request['source_location']!=2 or request['destination_location']!=2 or request['count']!=-1 or request['context']!=0 or not 0<=request['source_slot']<LOCAL_BAG_CAPACITY or not -1<=request['destination_slot']<LOCAL_BAG_CAPACITY:
             raise TradeRejected('Only complete-stack bag moves are supported')
         digest=hashlib.sha256(payload).hexdigest()
@@ -197,6 +204,57 @@ class WorldInventoryStore:
 
     def _reindex(self,identity,ordered_ids=None):
         db=self.accounts.db
-        ordered_ids=ordered_ids if ordered_ids is not None else [r[0] for r in db.execute('SELECT id FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY slot',identity)]
+        ordered_ids=ordered_ids if ordered_ids is not None else [r[0] for r in db.execute('SELECT id FROM world_inventory_items WHERE character_id=? AND account_id=? AND location=2 ORDER BY slot',identity)]
         for item_id in ordered_ids:db.execute('UPDATE world_inventory_items SET slot=? WHERE id=? AND character_id=? AND account_id=?',(-item_id,item_id,*identity))
         for slot,item_id in enumerate(ordered_ids):db.execute('UPDATE world_inventory_items SET slot=? WHERE id=? AND character_id=? AND account_id=?',(slot,item_id,*identity))
+
+    def grant_equipment_preview(self,account_id,identity):
+        """Opt-in local fixture grant. Does not alter shop stock or official IDs."""
+        from world_equipment_definitions import DEFINITIONS,EQUIPMENT_SOURCE
+        with self.accounts.lock,self.accounts.db:
+            self._ensure(account_id,identity);db=self.accounts.db
+            for index,(key,value) in enumerate(DEFINITIONS.items()):
+                if db.execute('SELECT 1 FROM world_inventory_items WHERE character_id=? AND account_id=? AND definition_key=?',(*identity,key)).fetchone():continue
+                bag=self._snapshot(identity)['items']
+                if len(bag)>=LOCAL_BAG_CAPACITY:raise TradeRejected('Local bag full')
+                db.execute('INSERT INTO world_inventory_items(character_id,account_id,source_key,catalog_index,name,buy_price,sell_price,quantity,slot,location,definition_key) VALUES(?,?,?,?,?,0,0,1,?,2,?)',(*identity,EQUIPMENT_SOURCE,index,value['name'],len(bag),key))
+            return self._snapshot(identity)
+
+    def _move_equipment(self,account_id,identity,request,payload,connection_key):
+        from world_equipment_definitions import equipment_definition
+        if request['identity']!=identity or request['opcode']!=0x54 or request['source_location'] not in (2,4) or request['destination_location'] not in (2,4) or request['source_location']==request['destination_location'] or request['count']!=-1 or request['context']!=0:
+            raise TradeRejected('Unsupported equipment move')
+        digest=hashlib.sha256(payload).hexdigest()
+        with self.accounts.lock,self.accounts.db:
+            self._ensure(account_id,identity);db=self.accounts.db
+            prior=db.execute('SELECT character_id,account_id,request_hash FROM world_trade_ledger WHERE connection_key=? AND sequence=?',(connection_key,request['sequence'])).fetchone()
+            if prior:
+                if prior!=(identity[0],account_id,digest):raise TradeRejected('Conflicting native command sequence')
+                return self._snapshot(identity),True
+            before=self._snapshot(identity);all_items=before['items']+before['equipment']
+            source=next((x for x in all_items if x['identity']==request['item']),None)
+            if source is None or source['location']!=request['source_location'] or (request['source_slot']!=-1 and source['slot']!=request['source_slot']):raise TradeRejected('Missing equipment or stale source slot')
+            definition=equipment_definition(source)
+            if definition is None or source['quantity']!=1:raise TradeRejected('Item is not supported equipment')
+            target_location=request['destination_location'];slot=request['destination_slot']
+            if target_location==4:
+                if slot!=definition['slot']:raise TradeRejected('Equipment body slot does not match')
+            elif not -1<=slot<len(before['items']):raise TradeRejected('Destination outside native packed bag')
+            target=next((x for x in all_items if x['location']==target_location and x['slot']==slot),None)
+            expected=(0,0,0,0) if target is None else target['identity']
+            # Original drag to an occupied equipment cell may send zero target:
+            # require explicit identity for replacement until that UI flow is verified.
+            if request['destination_item']!=expected:raise TradeRejected('Equipment destination changed')
+            if target is not None:raise TradeRejected('Equipment replacement is not verified yet')
+            if target_location==2 and len(before['items'])>=LOCAL_BAG_CAPACITY:raise TradeRejected('Local bag full')
+            item_id=source['identity'][0]-0x71000000
+            db.execute('UPDATE world_inventory_items SET location=?,slot=? WHERE id=? AND character_id=? AND account_id=?',(target_location,slot if target_location==4 else -item_id,item_id,*identity))
+            ordered=[x['identity'][0]-0x71000000 for x in before['items'] if x['identity']!=source['identity']]
+            if target_location==2:ordered.insert(len(ordered) if slot==-1 else slot,item_id)
+            self._reindex(identity,ordered)
+            result=self._snapshot(identity)
+            bonus=sum(equipment_definition(x)['max_hp_bonus'] for x in result['equipment'])
+            maximum=100+bonus
+            db.execute('UPDATE world_vitals SET max_hp=?,hp=MIN(hp,?) WHERE character_id=? AND account_id=?',(maximum,maximum,*identity))
+            db.execute('INSERT INTO world_trade_ledger(character_id,account_id,connection_key,sequence,request_hash,opcode,snapshot) VALUES(?,?,?,?,?,?,?)',(*identity,connection_key,request['sequence'],digest,0x54,json.dumps(result,ensure_ascii=False)))
+            return result,False

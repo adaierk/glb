@@ -19,16 +19,19 @@ def parse_item_source_request(payload):
 def item_source_reply(request,stock):
     tail=bytearray()
     for catalog_id in request['catalog_ids']:
-        if not 1<=catalog_id<=len(stock):raise ValueError('Unknown local item-source ID')
-        item=stock[catalog_id-1];kind,offset=icon_selector(item['name'])
+        from world_equipment_definitions import DEFINITIONS
+        definition=next((x for x in DEFINITIONS.values() if x['catalog_id']==catalog_id),None)
+        if definition is None and not 1<=catalog_id<=len(stock):raise ValueError('Unknown local item-source ID')
+        item={'name':definition['name'],'price_gald':0} if definition else stock[catalog_id-1]
+        kind,offset=(definition['icon_type'],definition['icon_offset']) if definition else icon_selector(item['name'])
         create=record(0x3e,36);struct.pack_into('<I',create,4,catalog_id);tail.extend(create)
         attributes=record(0x38,84)
-        struct.pack_into('<IIIII',attributes,0x14,catalog_id,1,0,0,1)
-        struct.pack_into('<hhh',attributes,0x28,1,LOCAL_STACK_LIMIT,offset)
+        struct.pack_into('<IIIII',attributes,0x14,catalog_id,1,0,4 if definition else 0,(1<<definition['slot']) if definition else 1)
+        struct.pack_into('<hhh',attributes,0x28,1,1 if definition else LOCAL_STACK_LIMIT,offset)
         struct.pack_into('<IIII',attributes,0x34,kind,item['price_gald'],item['price_gald']//2,0)
         tail.extend(attributes)
         hp,tp=RECOVERY.get(item['name'],(0,0))
-        description=(f'HP {hp} / TP {tp}' if (hp or tp) else 'Local effect not restored')
+        description=(f'Offline equipment test; max HP +{definition["max_hp_bonus"]}; official stats unresolved' if definition else (f'HP {hp} / TP {tp}' if (hp or tp) else 'Local effect not restored'))
         for rec,text in ((0x39,'NAME:'+item['name']+';'),(0x3f,description)):
             raw=text.encode('utf-16le')+b'\0\0';r=record(rec,(28+len(raw)+3)&~3)
             struct.pack_into('<I',r,0x14,catalog_id);r[28:28+len(raw)]=raw;tail.extend(r)

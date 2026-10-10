@@ -393,7 +393,9 @@ class LocalAccountServer(BootstrapServer):
                     status=-1;reason=str(error);inventory=self.inventory.load(control['account_id'],move['identity'])
                 answer=transaction_reply(move['sequence'],inventory['money'],status,request_id=move['request_id'],snapshot=inventory if status==0 else None)
                 self.send_answer(c,answer,state)
-                if status==0:self.send_answer(c,inventory_notice(move['identity'],self.map_id,inventory),state)
+                if status==0:
+                    self.send_answer(c,inventory_notice(move['identity'],self.map_id,inventory),state)
+                    if 4 in (move['source_location'],move['destination_location']):self.send_answer(c,vitals_notice(move['identity'],self.map_id,self.inventory.load_vitals(control['account_id'],move['identity'])),state)
                 self.log('item_move_rejected' if status else 'item_move_committed',connection=conn_id,**move,status=status,reason=reason,replayed=replayed,snapshot=inventory,request_hex=payload.hex(),answer_hex=answer.hex())
                 continue
             if op==0x55 and port==11101:
