@@ -8,10 +8,11 @@
   if(enemy===null||enemy.isNull())return null;
   const model=enemy.add(0x158).readPointer(),extension=enemy.add(0x64).readPointer();
   return {identity:[enemy.add(0x68).readU32(),enemy.add(0x6c).readU32()],
+   flags:enemy.add(0xa8).readU32(),load_requested:enemy.add(0x154).readU8(),load_done:enemy.add(0x155).readU8(),
    category:enemy.add(0x70).readU32(),position:[enemy.add(12).readFloat(),enemy.add(16).readFloat()],
    world_model:model.toString(),battle_model:enemy.add(0x15c).readPointer().toString(),
    appearance:Array.from(new Uint8Array(enemy.add(0x110).readPointer().readByteArray(24))),
-   extension:extension.isNull()?null:{vtable:extension.readPointer().toString(),kind:extension.add(8).readU32()},
+   extension:extension.isNull()?null:{vtable:extension.readPointer().toString(),kind:extension.add(8).readU32(),pick_range:extension.add(0x10).readU32(),symbol:extension.add(0x14).readU32(),symbol_scale:extension.add(0x18).readFloat()},
    hp:enemy.add(0x114).readPointer().add(8).readU32()};
  }
  Interceptor.attach(address(0x51c1e0),{onEnter(args){this.keep=args[1].toUInt32()===0x72000001;},
@@ -38,5 +39,11 @@
   Interceptor.attach(address(va),{onEnter(args){this.actor=this.context.ecx;this.keep=++n<=16;},
    onLeave(ret){if(this.keep)emit(safely(()=>({event,result:ret.toInt32()&255,identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()],model:this.actor.add(0xc0).readPointer().toString(),collision_model:this.actor.add(0xc4).readPointer().toString(),resource_bank:this.actor.add(0x16c).readU32()})));}});
  }
+
+ let symbolSamples=0;
+ Interceptor.attach(address(0x501080),{onEnter(args){
+  this.keep=safely(()=>this.context.ecx.add(0x68).readU32())===0x72000001;
+  this.resource=args[1].toUInt32();this.actor=this.context.ecx;
+ },onLeave(ret){if(this.keep && ++symbolSamples<=32)emit({event:'native_enemy_symbol_created',resource:this.resource,result:ret.toString()});}});
  emit({event:'combat_probe_ready',mode:'Read-only original enemy and encounter observations'});
 })();
