@@ -46,7 +46,10 @@ ranges={
 'battle_actor_update':(0x512330,0x650),
 'battle_action_serialize':(0x406af0,0xc0),
 'battle_attack_builders':(0x522fd0,0xc0),
-'battle_action_create':(0x529e50,0x6c0)
+'battle_action_create':(0x529e50,0x6c0),
+'battle_action_state':(0x4068b0,0x2a0),
+'battle_action_state_base':(0x407670,0x12d0),
+'battle_action_character_script':(0x50e690,0x770)
 }
 for name,(va,size) in ranges.items():(OUT/(name+'.txt')).write_text(dis(va,size))
 targets={0x515710:'pool_tick',0x515870:'pool_walk',0x519140:'model_orientation',0x518ed0:'model_ctor'}
@@ -88,3 +91,9 @@ for code in range(0x49,0xe6):
  target=struct.unpack('<I',pe.get_data(0x528e50-base+index*4,4))[0]
  mapping[hex(code)]={'index':index,'handler':hex(target)}
 (OUT/'actor_delta_record_dispatch.json').write_text(json.dumps(mapping,indent=2))
+
+table=[]
+for index,va in enumerate(struct.unpack('<6I',pe.get_data(0x6eec04-base,24))):
+ table.append({'index':index,'function':hex(va)})
+ if 0x400000<=va<0x6bc000:(OUT/('battle_state_virtual_'+str(index)+'.txt')).write_text(dis(va,0x950))
+(OUT/'battle_state_virtuals.json').write_text(json.dumps(table,indent=2))
