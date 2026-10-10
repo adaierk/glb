@@ -434,6 +434,34 @@
     const key=JSON.stringify(state);if(key===previousVitals)return {event:'native_vitals_unchanged'};
     previousVitals=key;return state;
   }));},500);
+  // v16 HUD investigation: bounded, read-only observations of original callbacks.
+  const hudFrames=new Map();let activeHud=null,hudLookups=0,hudDrawReturns=0;
+  Interceptor.attach(address(0x538870),{onEnter(){
+    activeHud=this.context.ecx;const key=activeHud.toString(),now=Date.now();
+    if(now-(hudFrames.get(key)||0)>3000){hudFrames.set(key,now);emit(safely(()=>({
+      event:'native_hud_frame',frame:key,identity:[activeHud.add(0x368).readU32(),activeHud.add(0x36c).readU32()],
+      flags:activeHud.add(0x20).readU32(),mode:activeHud.add(0x494).readU8()})));}
+  },onLeave(){activeHud=null;}});
+  Interceptor.attach(address(0x538918),{onEnter(){
+    if(++hudLookups%90!==1)return;
+    const actor=this.context.eax;emit(safely(()=>({event:'native_hud_actor_lookup',
+      frame:this.context.edi.toString(),actor:actor.toString(),
+      identity:actor.isNull()?null:[actor.add(0x68).readU32(),actor.add(0x6c).readU32()],
+      vitals:actor.isNull()?null:(()=>{const p=actor.add(0x114).readPointer();return {
+        hp:p.add(8).readU32(),tp:p.add(12).readU32(),max_hp:p.add(0xa8).readU32(),max_tp:p.add(0xac).readU32(),
+        smooth_hp:actor.add(0x298).readU32(),smooth_tp:actor.add(0x29c).readU32()};})()})));
+  }});
+  for(const [va,phase] of [[0x5389f8,'hp_gauge_return'],[0x538a9b,'tp_gauge_return'],[0x538ab8,'number_font_resource'],[0x538b42,'number_width_return']]){
+    let count=0;Interceptor.attach(address(va),{onEnter(){if(++count%90!==1)return;
+      emit(safely(()=>({event:'native_hud_draw_phase',phase,frame:this.context.edi.toString(),
+        eax:this.context.eax.toString(),font:phase==='number_font_resource' && !this.context.eax.isNull()?{
+          object:this.context.eax.toString(),vtable:this.context.eax.readPointer().toString()}:null})));}});
+  }
+  Interceptor.attach(address(0x623497),{onEnter(){
+    if(activeHud===null || ++hudDrawReturns>30)return;
+    emit({event:'native_hud_graphics_result',frame:activeHud.toString(),hresult:this.context.eax.toString(),
+      stack:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString())});
+  }});
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();
