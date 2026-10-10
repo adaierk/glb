@@ -22,6 +22,7 @@ def main():
     p.add_argument('--local-account',action='store_true',help='Use recovered login and persistent character create/list/delete protocol')
     p.add_argument('--local-world','--world-route-probe',dest='world_route_probe',action='store_true',help='Load the recovered local map channel; requires --local-account')
     p.add_argument('--demo-character',action='store_true',help='Create Archive only if the local account has no characters')
+    p.add_argument('--combat-preview',action='store_true',help='Opt-in local SLIME encounter prototype; original stats and full combat pending')
     p.add_argument('--equipment-preview',action='store_true',help='Opt-in offline equipment fixtures; official item masters are unresolved')
     p.add_argument('--shop-preview',action='store_true',help='Preview sourced historical goods on the local diagnostic merchant; original merchant placement and item templates are still pending')
     p.add_argument('--world-profile',choices=('forest','rashuan'),default='forest',help='Original map and sourced merchant profile')
@@ -30,6 +31,7 @@ def main():
     if args.demo_character and not args.local_account:p.error('--demo-character requires --local-account')
     if args.shop_preview and not args.world_route_probe:p.error('--shop-preview requires --local-world')
     if args.world_profile!='forest' and not args.world_route_probe:p.error('--world-profile requires --local-world')
+    if args.combat_preview and not args.world_route_probe:p.error('--combat-preview requires --local-world')
     if args.duration<0:p.error('--duration cannot be negative')
     if os.name!='nt':raise SystemExit('The graphical client runner requires Windows.')
     import frida
@@ -65,7 +67,7 @@ def main():
     shutil.copyfile(binary,exe)
     if args.local_account:
         from local_account_server import LocalAccountServer
-        server=LocalAccountServer(out,world_route_probe=args.world_route_probe,shop_preview=args.shop_preview,world_profile=profile)
+        server=LocalAccountServer(out,world_route_probe=args.world_route_probe,shop_preview=args.shop_preview,world_profile=profile,combat_preview=args.combat_preview)
         if args.demo_character and not server.characters.list(1):
             from character_mutation_packets import create_character_request
             server.characters.create(1,create_character_request('Archive'))
@@ -109,6 +111,7 @@ def main():
                 source+='\n'+Path(__file__).with_name('account_runtime.js').read_text(encoding='utf-8')
                 source+='\n'+Path(__file__).with_name('offline_socket_compat.js').read_text(encoding='utf-8')
                 source+='\n'+Path(__file__).with_name('offline_graphics_compat.js').read_text(encoding='utf-8')
+            if args.combat_preview:source+='\n'+Path(__file__).with_name('combat_runtime.js').read_text(encoding='utf-8')
             script=session.create_script(source)
             script.on('message',on_message);script.load()
             ready_deadline=time.monotonic()+5

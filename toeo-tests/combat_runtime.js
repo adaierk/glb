@@ -33,5 +33,10 @@
    if(this.keep)emit({event,object:this.object,args:this.args});
   },onLeave(ret){if(this.keep)emit({event:event+'_returned',object:this.object,result:ret.toUInt32(),args:this.args});}});
  }
+ for(const [va,event] of [[0x5109a0,'native_battle_actor_model_load'],[0x50fcf0,'native_battle_actor_collision_load']]){
+  let n=0;
+  Interceptor.attach(address(va),{onEnter(args){this.actor=this.context.ecx;this.keep=++n<=16;},
+   onLeave(ret){if(this.keep)emit(safely(()=>({event,result:ret.toInt32()&255,identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()],model:this.actor.add(0xc0).readPointer().toString(),collision_model:this.actor.add(0xc4).readPointer().toString(),resource_bank:this.actor.add(0x16c).readU32()})));}});
+ }
  emit({event:'combat_probe_ready',mode:'Read-only original enemy and encounter observations'});
 })();

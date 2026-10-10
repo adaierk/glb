@@ -6,7 +6,8 @@ from character_mutation_packets import encode_name
 from world_enemy_packets import ENEMY_IDENTITY,ENEMY_NAME,enemy_grid
 BATTLE_GROUP=(0x73000001,1)
 BATTLE_ENEMY_BANK=1200
-def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False):
+BATTLE_ENEMY_RESOURCE_BANK=100
+def battle_actor_record(identity,name,appearance,category,position,grid,map_id,hp=100,max_hp=100,tp=0,max_tp=0,controlled=False,battle_model_bank=0):
     if len(appearance)!=24:raise ValueError('Original battle appearance requires 24 bytes')
     b=record(0x59,0x158)
     struct.pack_into('<II',b,4,*identity)
@@ -20,6 +21,8 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     struct.pack_into('<IIIII',b,0x98,max_hp,hp,max_tp,tp,0)
     b[0xc0:0xc5]=bytes((1,1,1,0,1))
     struct.pack_into('<HHH',b,0xc6,1,1,2)
+    # Original 529840 -> state+24C -> actor+16C; 5109A0 uses the CRSD bank directly.
+    struct.pack_into('<I',b,0xcc,battle_model_bank)
     return bytes(b)
 def battle_group_record(profile,background_id):
     b=record(0x58,0x2c)
@@ -33,7 +36,7 @@ def encounter_notice(identity,name,selector_fields,profile,request_id,background
     appearance=bytearray(24);struct.pack_into('<I',appearance,8,BATTLE_ENEMY_BANK)
     tail=battle_group_record(profile,background_id)
     tail+=battle_actor_record(identity,name,player_appearance,1,(-96,0),profile.spawn_grid,profile.map_id,tp=30,max_tp=30,controlled=True)
-    tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(96,0),enemy_grid(profile),profile.map_id)
+    tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(96,0),enemy_grid(profile),profile.map_id,battle_model_bank=BATTLE_ENEMY_RESOURCE_BANK)
     tail+=bytes(4)
     b=bytearray(message(0x9d,bytes(35+len(tail)),request_id)[:44])
     struct.pack_into('<I',b,12,44+len(tail))
