@@ -1,0 +1,45 @@
+name: TOEO v18 native clothing protocol verification
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [.github/workflows/toeo-v18-verify.yml, toeo-recovery/v18/staging/**]
+permissions:
+  actions: read
+  contents: write
+jobs:
+  native-visual-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37899580886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-original-client-preserved
+          path: ${{ runner.temp }}/TOEO_ORIGINAL
+      - name: Execute original x86 and local ownership checks
+        env:
+          PYTHONPATH: toeo-recovery/v18/staging:toeo-tests:toeo-recovery/v13/source_support
+        run: |
+          python -m pip install -q unicorn pefile capstone
+          mkdir -p toeo-recovery/v18/verification
+          7z x -y "-o$RUNNER_TEMP/TOEO_V18_VERIFY" "$RUNNER_TEMP/TOEO_ORIGINAL/client_pack.7z" DefaultComponent/ToEO_CL.dat >/dev/null
+          python -m unittest discover -s toeo-recovery/v18/staging -p 'test_world_equipment.py' -v 2>&1 | tee toeo-recovery/v18/verification/unit_checks.txt
+          python toeo-recovery/v18/staging/emulate_equipment_visual.py "$RUNNER_TEMP/TOEO_V18_VERIFY/DefaultComponent/ToEO_CL.dat" --out toeo-recovery/v18/verification/native_visual.json
+      - name: Preserve verification evidence
+        if: always()
+        run: |
+          git config user.name "TOEO Recovery CI"
+          git config user.email "toeo-recovery-ci@users.noreply.github.com"
+          git add toeo-recovery/v18/verification
+          if ! git diff --cached --quiet; then
+            git commit -m "Record v18 native clothing verification [skip ci]"
+            git push origin HEAD:toeo-local-world-recovery-20261009
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-v18-native-visual-verification
+          path: toeo-recovery/v18/verification
+          retention-days: 90
