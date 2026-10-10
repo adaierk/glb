@@ -10,9 +10,9 @@
       1,
       1,
       0,
-      0,
+      500,
       10000,
-      2
+      4
     ],
     "2": [
       1895825410,
@@ -27,16 +27,16 @@
   "native_world_layers": [
     {
       "model": 17747968,
-      "layer": 2,
+      "layer": 4,
       "resource": 10000,
-      "palette": 0,
+      "source_bank": 500,
       "refresh": 1
     },
     {
       "model": 17747968,
       "layer": 1,
       "resource": 4000,
-      "palette": 0,
+      "source_bank": 0,
       "refresh": 1
     }
   ],
@@ -64,9 +64,9 @@
     0
   ],
   "native_preview_weapon": [
-    2,
+    4,
     10000,
-    0
+    500
   ],
   "native_initial_34_visual_restore": true,
   "native_6c_equip_unequip_reequip": true,
