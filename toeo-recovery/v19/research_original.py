@@ -237,3 +237,6 @@ for sec in pe.sections:
    if ins.mnemonic=='mov' and ins.op_str.startswith('byte ptr ['):
     (OUT/f'actor_load_flag_{ins.address:x}.txt').write_text(dis(max(base+sec.VirtualAddress,ins.address-0x120),0x270))
 (OUT/'actor_load_flag_references.json').write_text(json.dumps(refs154,indent=2))
+
+for name,va,size in [('battle_actor_activate',0x50f7f0,0xd0),('battle_actor_reset_abilities',0x511030,0x170),('battle_actor_frame',0x512410,0x650),('battle_actor_sprite_draw',0x510ba0,0x420)]:
+ (OUT/(name+'.txt')).write_text(dis(va,size))
