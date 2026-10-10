@@ -72,6 +72,8 @@ def world_initialization_reply(identity,name,selector_fields,request_id,map_id=L
     if inventory is not None:
         from world_inventory_packets import inventory_records
         records+=inventory_records(inventory)
+        from world_equipment_visual_packets import equipment_visual_records
+        records+=equipment_visual_records(inventory)
     records+=bytes(4)
     size=len(b)+len(records)
     b[:9]=message(0x34,bytes(size-9),request_id)[:9]

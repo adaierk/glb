@@ -38,6 +38,11 @@ def inventory_records(snapshot,receipt=False):
         struct.pack_into('<IIII',properties,4,*identity)
         properties[28:28+len(name)]=name
         result.extend(group);result.extend(attributes);result.extend(properties)
+        if definition and definition.get('visual_resource'):
+            visual=record(0x3a,28)
+            struct.pack_into('<IIII',visual,4,*identity)
+            struct.pack_into('<I',visual,0x18,definition['visual_resource'])
+            result.extend(visual)
         result.extend(record(0x3c,4))
     result.extend(record(0x3d,4))
     return bytes(result)

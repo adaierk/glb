@@ -144,7 +144,7 @@ def main():
                 for t in tuple(schedule):
                     if t>=141:schedule.pop(t,None)
                 if args.reenter_check:schedule.update({145:lambda:click(28,84)})
-                else:schedule.update({145:lambda:click(28,84),150:lambda:drag(517,487,658,263),165:lambda:drag(517,487,706,263),180:lambda:drag(658,263,517,487),195:lambda:drag(517,487,658,263),215:lambda:click(28,84),220:lambda:click(360,410,hold=2)})
+                else:schedule.update({145:lambda:click(28,84),150:lambda:drag(517,487,658,263),165:lambda:drag(517,487,706,263),180:lambda:drag(658,263,517,487),195:lambda:drag(517,487,658,263),210:lambda:drag(706,263,517,487),225:lambda:drag(517,487,706,263),245:lambda:click(28,84),250:lambda:click(360,410,hold=2)})
             for t in range(args.duration):
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)

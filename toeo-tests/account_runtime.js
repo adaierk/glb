@@ -545,6 +545,34 @@
     if(this.hud===null || ++hudDrawReturns>60)return;
     emit({event:'native_hud_graphics_result',frame:this.hud.toString(),hresult:ret.toString(),draw_args:this.drawArgs,stack:this.trace});
   }});
+
+  // v18: observe the original model's populated layer tree after network refresh.
+  function nativeModelLayers(model){
+    const layers=[];if(model===null || model.isNull())return layers;
+    const head=model.add(0xa8).readPointer();if(head.isNull())return layers;let steps=0;
+    function visit(n){if(n.equals(head)||n.add(0x15).readU8()||++steps>32)return;visit(n.readPointer());
+      const part=n.add(0x10).readPointer();if(!part.isNull())layers.push({layer:n.add(12).readS32(),
+        palette:part.readU32(),resource:part.add(4).readU32(),native_component:part.add(12).readPointer().toString(),
+        render_node:part.add(16).readPointer().toString(),enabled:part.add(20).readU8()});visit(n.add(8).readPointer());}
+    visit(head.add(4).readPointer());return layers;
+  }
+  Interceptor.attach(address(0x518280),{onEnter(args){this.model=this.context.ecx;
+    this.request={layer:args[0].toInt32(),resource:args[1].toUInt32(),palette:args[2].toUInt32()};
+    this.own=safely(()=>observedPlayer!==null && this.model.equals(observedPlayer.add(0x158).readPointer()));},
+    onLeave(){if(this.own)emit(safely(()=>({event:'native_world_model_layer_applied',...this.request,model:this.model.toString(),
+      actual:nativeModelLayers(this.model).find(x=>x.layer===this.request.layer)||null})));}});
+  let previousVisual='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
+    const model=observedPlayer.add(0x158).readPointer(),visual=observedPlayer.add(0x1e0).readPointer(),components=[];
+    if(!visual.isNull()){
+      const head=visual.add(4).readPointer();let steps=0;
+      function visit(n){if(n.equals(head)||n.add(0x15).readU8()||++steps>32)return;visit(n.readPointer());
+        const p=n.add(0x10).readPointer();if(!p.isNull())components.push({slot:n.add(12).readS32(),identity:[0,4,8,12].map(x=>p.add(x).readU32()),palette:p.add(16).readU32(),resource:p.add(20).readU32(),layer:p.add(24).readU32()});visit(n.add(8).readPointer());}
+      visit(head.add(4).readPointer());
+    }
+    const state={event:'native_player_visual_state',components,layers:nativeModelLayers(model)};
+    const key=JSON.stringify(state);if(key===previousVisual)return {event:'native_visual_unchanged'};previousVisual=key;return state;
+  }));},500);
+
   emit({event:'runtime_account_probe_ready',
     note:'Observes original account/character mutation and route paths; never writes game state'});
 })();

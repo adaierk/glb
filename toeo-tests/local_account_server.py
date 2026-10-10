@@ -31,6 +31,7 @@ from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_n
 from world_position_store import WorldPositionStore,walkable_grid
 from world_inventory_store import WorldInventoryStore,TradeRejected
 from world_inventory_packets import parse_trade_request,parse_shop_close_request,parse_item_move_request,transaction_reply,inventory_notice
+from world_equipment_visual_packets import equipment_visual_notice
 from world_item_use_packets import parse_item_use_request,vitals_notice
 from world_item_source_packets import parse_item_source_request,item_source_reply
 from native_map_geometry import grid_to_point
@@ -395,7 +396,9 @@ class LocalAccountServer(BootstrapServer):
                 self.send_answer(c,answer,state)
                 if status==0:
                     self.send_answer(c,inventory_notice(move['identity'],self.map_id,inventory),state)
-                    if 4 in (move['source_location'],move['destination_location']):self.send_answer(c,vitals_notice(move['identity'],self.map_id,self.inventory.load_vitals(control['account_id'],move['identity'])),state)
+                    if 4 in (move['source_location'],move['destination_location']):
+                        self.send_answer(c,equipment_visual_notice(move['identity'],self.map_id,inventory),state)
+                        self.send_answer(c,vitals_notice(move['identity'],self.map_id,self.inventory.load_vitals(control['account_id'],move['identity'])),state)
                 self.log('item_move_rejected' if status else 'item_move_committed',connection=conn_id,**move,status=status,reason=reason,replayed=replayed,snapshot=inventory,request_hex=payload.hex(),answer_hex=answer.hex())
                 continue
             if op==0x55 and port==11101:

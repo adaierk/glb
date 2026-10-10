@@ -85,7 +85,7 @@ class EquipmentTests(unittest.TestCase):
             c=Capture();state={'world_account_control':{'account_id':1,'character_id':self.identity},'world_map_ready':True,'trade_connection_key':'wire'}
             server.process_game_bytes(c,11101,1,data405(p,1,1,route=0xffef),state)
             replies=c.answers
-            self.assertEqual([struct.unpack_from('<H',x,1)[0] for x in replies],[0x67,0x6b,0xb2]);self.assertEqual(struct.unpack_from('<h',replies[0],20)[0],0)
+            self.assertEqual([struct.unpack_from('<H',x,1)[0] for x in replies],[0x67,0x6b,0x6c,0xb2]);self.assertEqual(struct.unpack_from('<h',replies[0],20)[0],0)
             self.assertEqual(server.inventory.load(1,self.identity)['equipment'][0]['slot'],2)
             c=Capture();server.process_game_bytes(c,11101,2,data405(p,1,1,route=0xffef),{})
             self.assertEqual(c.answers,[])
