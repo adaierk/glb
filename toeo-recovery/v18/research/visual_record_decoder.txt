@@ -1,0 +1,135 @@
+0051d5c0  push     ebp
+0051d5c1  mov      ebp, esp
+0051d5c3  sub      esp, 0x28
+0051d5c6  mov      ecx, dword ptr [ebp + 0xc]
+0051d5c9  call     0x51d320
+0051d5ce  mov      edx, dword ptr [ebp + 0x10]
+0051d5d1  test     edx, edx
+0051d5d3  je       0x51d5d8
+0051d5d5  mov      byte ptr [edx], 0
+0051d5d8  push     esi
+0051d5d9  mov      esi, dword ptr [ebp + 8]
+0051d5dc  push     edi
+0051d5dd  mov      edi, dword ptr [ebp + 0x14]
+0051d5e0  test     edi, edi
+0051d5e2  je       0x51d5e6
+0051d5e4  mov      dword ptr [edi], esi
+0051d5e6  test     esi, esi
+0051d5e8  je       0x51d6c0
+0051d5ee  mov      ax, word ptr [esi]
+0051d5f1  test     ax, ax
+0051d5f4  je       0x51d6c0
+0051d5fa  cmp      ax, 0x43
+0051d5fe  je       0x51d608
+0051d600  pop      edi
+0051d601  xor      al, al
+0051d603  pop      esi
+0051d604  mov      esp, ebp
+0051d606  pop      ebp
+0051d607  ret      
+0051d608  push     ebx
+0051d609  xor      bl, bl
+0051d60b  xor      ecx, ecx
+0051d60d  lea      ecx, [ecx]
+0051d610  inc      ecx
+0051d611  cmp      ecx, 0xf4240
+0051d617  mov      dword ptr [ebp + 0x14], ecx
+0051d61a  jge      0x51d6c8
+0051d620  movzx    eax, word ptr [esi]
+0051d623  sub      eax, 0x43
+0051d626  je       0x51d68a
+0051d628  dec      eax
+0051d629  je       0x51d648
+0051d62b  dec      eax
+0051d62c  jne      0x51d69d
+0051d62e  test     edi, edi
+0051d630  je       0x51d6bf
+0051d636  mov      ecx, esi
+0051d638  call     0x434680
+0051d63d  pop      ebx
+0051d63e  mov      dword ptr [edi], eax
+0051d640  pop      edi
+0051d641  mov      al, 1
+0051d643  pop      esi
+0051d644  mov      esp, ebp
+0051d646  pop      ebp
+0051d647  ret      
+0051d648  mov      ecx, dword ptr [esi + 0xc]
+0051d64b  mov      edx, dword ptr [esi + 0x10]
+0051d64e  mov      eax, dword ptr [esi + 8]
+0051d651  mov      dword ptr [ebp - 0x24], ecx
+0051d654  mov      ecx, dword ptr [esi + 0x18]
+0051d657  mov      dword ptr [ebp - 0x20], edx
+0051d65a  mov      edx, dword ptr [esi + 0x1c]
+0051d65d  mov      dword ptr [ebp - 0x28], eax
+0051d660  mov      eax, dword ptr [esi + 0x14]
+0051d663  mov      dword ptr [ebp - 0x18], ecx
+0051d666  lea      ecx, [ebp - 0x28]
+0051d669  mov      dword ptr [ebp - 0x14], edx
+0051d66c  mov      edx, dword ptr [esi + 4]
+0051d66f  push     ecx
+0051d670  mov      ecx, dword ptr [ebp + 0xc]
+0051d673  mov      dword ptr [ebp - 0x1c], eax
+0051d676  mov      eax, dword ptr [esi + 0x20]
+0051d679  push     edx
+0051d67a  mov      dword ptr [ebp - 0x10], eax
+0051d67d  call     0x51d530
+0051d682  mov      edx, dword ptr [ebp + 0x10]
+0051d685  mov      ecx, dword ptr [ebp + 0x14]
+0051d688  jmp      0x51d69d
+0051d68a  test     bl, bl
+0051d68c  je       0x51d692
+0051d68e  test     edi, edi
+0051d690  jne      0x51d6e6
+0051d692  test     edx, edx
+0051d694  je       0x51d69b
+0051d696  mov      al, byte ptr [esi + 4]
+0051d699  mov      byte ptr [edx], al
+0051d69b  mov      bl, 1
+0051d69d  cmp      word ptr [esi], 0
+0051d6a1  je       0x51d6b5
+0051d6a3  movzx    eax, word ptr [esi + 2]
+0051d6a7  cmp      word ptr [esi + eax*4], 0
+0051d6ac  lea      esi, [esi + eax*4]
+0051d6af  jne      0x51d610
+0051d6b5  test     edi, edi
+0051d6b7  je       0x51d6bf
+0051d6b9  mov      dword ptr [edi], 0
+0051d6bf  pop      ebx
+0051d6c0  pop      edi
+0051d6c1  mov      al, 1
+0051d6c3  pop      esi
+0051d6c4  mov      esp, ebp
+0051d6c6  pop      ebp
+0051d6c7  ret      
+0051d6c8  mov      ecx, 0xa0
+0051d6cd  mov      dword ptr [ebp - 4], ecx
+0051d6d0  push     0x72a570
+0051d6d5  lea      ecx, [ebp - 8]
+0051d6d8  mov      eax, 0x6eecf4
+0051d6dd  push     ecx
+0051d6de  mov      dword ptr [ebp - 8], eax
+0051d6e1  call     0x6baa28
+0051d6e6  pop      ebx
+0051d6e7  mov      dword ptr [edi], esi
+0051d6e9  pop      edi
+0051d6ea  mov      al, 1
+0051d6ec  pop      esi
+0051d6ed  mov      esp, ebp
+0051d6ef  pop      ebp
+0051d6f0  ret      
+0051d6f1  int3     
+0051d6f2  int3     
+0051d6f3  int3     
+0051d6f4  int3     
+0051d6f5  int3     
+0051d6f6  int3     
+0051d6f7  int3     
+0051d6f8  int3     
+0051d6f9  int3     
+0051d6fa  int3     
+0051d6fb  int3     
+0051d6fc  int3     
+0051d6fd  int3     
+0051d6fe  int3     
+0051d6ff  int3     
