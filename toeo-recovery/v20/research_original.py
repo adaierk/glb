@@ -18,6 +18,8 @@ ranges={
 'battle_render_job':(0x432200,0x1540),
 'actor_animation_driver':(0x513b00,0x430),
 'model_layer_drawing':(0x517800,0x16d0),
+'battle_model_submit':(0x516000,0x1800),
+'battle_actor_complete_tick':(0x513000,0x1600),
 'battle_main_tick_complete':(0x433dd0,0xa00),
 'battle_actor_update_and_draw':(0x50fe50,0x1b50),
 'battle_pool_update_and_draw':(0x515870,0xd00),
