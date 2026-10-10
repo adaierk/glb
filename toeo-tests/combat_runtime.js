@@ -89,7 +89,18 @@
  Interceptor.attach(at(0x5146a0),{onEnter(){this.pool=this.context.ecx;},onLeave(){send(safe(()=>({event:'native_battle_pool_started',active:this.pool.add(0x14).readU32()})));}});
  Interceptor.attach(at(0x50f500),{onEnter(args){this.p=this.context.ecx;this.target=[args[0].toUInt32(),args[1].toUInt32()];},onLeave(){send(safe(()=>({event:'native_battle_target_set',requested_target:this.target,...snap(this.p)})));}});
  let inputs=0;Interceptor.attach(at(0x512ff0),{onEnter(args){if(++inputs<=12)send(safe(()=>({event:'native_battle_input_tick',sample:inputs,...snap(args[0])})));}});
- let picks=0;Interceptor.attach(at(0x515900),{onEnter(args){this.out=args[0];this.point=safe(()=>[args[1].readFloat(),args[1].add(4).readFloat()]);},onLeave(ret){if((ret.toUInt32()&255)||++picks<=12)send(safe(()=>({event:'native_battle_mouse_pick',result:ret.toUInt32()&255,point:this.point,count:this.out.add(8).readU32()})));}});
+ let picks=0,lastPick='';Interceptor.attach(at(0x515900),{onEnter(args){this.out=args[0];this.point=safe(()=>[args[1].readFloat(),args[1].add(4).readFloat()]);},onLeave(ret){const result=ret.toUInt32()&255,key=JSON.stringify([result,this.point]);if(++picks<=12||(key!==lastPick&&picks<30000)){lastPick=key;send(safe(()=>({event:'native_battle_mouse_pick',result,point:this.point,count:this.out.add(8).readU32()})));}}});
  Interceptor.attach(at(0x522fd0),{onEnter(args){send({event:'native_battle_attack_command',command:args[0].toUInt32()});}});
  send({event:'battle_input_probe_ready',mode:'Read-only native battle target, pool and attack observations'});
+})();
+
+(function(){
+ const at=va=>Process.mainModule.base.add(va-0x400000);
+ function safe(f){try{return f();}catch(e){return {error:String(e)};}}
+ let count=0;
+ Interceptor.attach(at(0x510090),{onEnter(args){
+  this.keep=++count<=64;this.actor=this.context.ecx;this.fromInput=args[1].toUInt32()&255;
+  this.action=safe(()=>({position:[args[0].readFloat(),args[0].add(4).readFloat()],direction:args[0].add(8).readU32(),command:args[0].add(12).readU32(),target:[args[0].add(24).readU32(),args[0].add(28).readU32()]}));
+ },onLeave(ret){if(this.keep)send(safe(()=>({event:'native_battle_actor_action_applied',from_input:this.fromInput,action:this.action,result:ret.toUInt32()&255,identity:[this.actor.add(0x58).readU32(),this.actor.add(0x5c).readU32()]})));}});
+ send({event:'battle_action_probe_ready',mode:'Read-only original action record application'});
 })();

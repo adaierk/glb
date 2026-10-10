@@ -153,7 +153,7 @@ def main():
                     if t>=141:schedule.pop(t,None)
                 schedule.update({145:lambda:click(344,341),148:lambda:click(344,350),
                                  151:lambda:click(344,350,right=True),154:lambda:double_click(344,350),
-                                 170:lambda:click(738,355),174:lambda:click(738,355),
+                                 170:lambda:click(738,355),174:lambda:(click(738,355,hold=.08),shot(174)),
                                  180:lambda:double_click(738,355),185:lambda:click(720,380),
                                  190:lambda:click(720,380)})
             for t in range(args.duration):

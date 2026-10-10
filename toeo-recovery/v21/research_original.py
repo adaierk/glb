@@ -48,6 +48,7 @@ ranges={
 'battle_attack_builders':(0x522fd0,0xc0),
 'battle_action_create':(0x529e50,0x6c0),
 'battle_action_state':(0x4068b0,0x2a0),
+'battle_action_queue_dispatch':(0x406ca0,0x480),
 'battle_action_state_base':(0x407670,0x12d0),
 'battle_action_character_script':(0x50e690,0x770)
 }

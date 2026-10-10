@@ -321,6 +321,7 @@ class LocalAccountServer(BootstrapServer):
                             vitals=self.inventory.load_vitals(control['account_id'],role['identity']),
                             equipment=self.inventory.load(control['account_id'],role['identity']).get('equipment',[]))
                         state['local_battle_group']=BATTLE_GROUP
+                        state['local_battle_position']=(220.0,0.0)
                         state['local_encounter_notice_id']=notice_id
                         self.send_answer(c,notice,state)
                         self.log('local_encounter_notice_sent',connection=conn_id,group=BATTLE_GROUP,background_id=15,
@@ -368,6 +369,19 @@ class LocalAccountServer(BootstrapServer):
                     state['local_battle_started']=True
                     self.log('battle_start_notice_sent',connection=conn_id,answer_hex=notice.hex())
                 continue
+            if op==0xa7 and port==11101 and self.combat_preview:
+                from world_battle_commands import parse_battle_move_request,actor_action_notice
+                control=state.get('world_account_control')
+                try:
+                    if not control or not state.get('local_battle_started'):raise ValueError('No active battle')
+                    move=parse_battle_move_request(payload,control['character_id'],self.map_id,state['local_battle_group'])
+                except ValueError as error:
+                    self.log('battle_move_rejected',connection=conn_id,reason=str(error));continue
+                answer=actor_action_notice(self.map_id,state['local_battle_group'],move['identity'],move['action'])
+                self.send_answer(c,answer,state)
+                state['local_battle_position']=move['position']
+                self.log('battle_move_answer',connection=conn_id,identity=move['identity'],position=move['position'],request_hex=payload.hex(),answer_hex=answer.hex())
+                continue
             if op==0xa8 and port==11101 and self.combat_preview:
                 from world_battle_commands import parse_attack_request,validate_attack_request
                 control=state.get('world_account_control')
@@ -378,6 +392,10 @@ class LocalAccountServer(BootstrapServer):
                 except ValueError as error:
                     self.log('battle_attack_rejected',connection=conn_id,reason=str(error),request_hex=payload.hex());continue
                 self.log('battle_attack_request_native',connection=conn_id,request_hex=payload.hex(),**attack)
+                from world_battle_commands import attack_action_notice
+                answer=attack_action_notice(attack,state['local_battle_position'])
+                self.send_answer(c,answer,state)
+                self.log('battle_attack_action_sent',connection=conn_id,command=attack['command'],target=attack['target'],answer_hex=answer.hex())
                 continue
             if op==0x9e and port==11101 and self.combat_preview:
                 control=state.get('world_account_control')
