@@ -29,7 +29,7 @@ counts={}
 for e in events:counts[e.get('event','?')]=counts.get(e.get('event','?'),0)+1
 (OUT/'event_counts.json').write_text(json.dumps(counts,indent=2))
 (OUT/'native_events.json').write_text(json.dumps(kept,indent=2))
-screens=[n for n in z.namelist() if re.fullmatch(r'first/original_desktop_\d+s.png',n) and int(re.search(r'_(\d+)s',n).group(1))>=140]
+screens=[n for n in z.namelist() if (re.fullmatch(r'first/original_desktop_\d+s.png',n) and int(re.search(r'_(\d+)s',n).group(1))>=140) or re.fullmatch(r'first/original_battle_attack_\d+.png',n)]
 for n in screens:
  im=Image.open(io.BytesIO(z.read(n)));assert im.size[0]>=808 and im.size[1]>=632
  im.crop((8,32,808,632)).save(OUT/Path(n).name)
