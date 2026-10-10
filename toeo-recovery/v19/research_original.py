@@ -125,3 +125,34 @@ for sec in pe.sections:
     if 0x9c<=op<=0xad:(OUT/(f'builder_{op:x}_{last:x}.txt')).write_text(dis(last,0x900))
 (OUT/'combat_refs_more.json').write_text(json.dumps(code_refs,indent=2))
 (OUT/'combat_builders.json').write_text(json.dumps(builders,indent=2))
+
+for name,va,size in [
+ ('world_action_request',0x4f9540,0x720),('battle_group_validate',0x49bc70,0xe00),
+ ('battle_state_constructor',0x50f980,0x800),('battle_actor_construct',0x515650,0x900),
+ ('battle_world_task',0x43e900,0x1800),('original_crs_banks',0x4d9e00,0xd00)
+ ]:(OUT/(name+'.txt')).write_text(dis(va,size))
+targets4={0x4f9540:'world_action_request',0x522fd0:'battle_a8',0x5231b0:'battle_9f',0x49bad0:'battle_group_activate'}
+refs4=[]
+for sec in pe.sections:
+ if not sec.Characteristics&0x20000000:continue
+ body=sec.get_data();start=base+sec.VirtualAddress
+ for m in re.finditer(b'\xe8',body):
+  at=m.start()
+  if at+5>len(body):continue
+  dest=(start+at+5+struct.unpack_from('<i',body,at+1)[0])&0xffffffff
+  if dest in targets4:
+   ref=start+at;refs4.append({'address':hex(ref),'target':hex(dest),'kind':targets4[dest]})
+   left=max(0,at-0x130)
+   (OUT/f'combat_ref_{ref:x}.txt').write_text(dis(start+left,0x280))
+(OUT/'combat_refs4.json').write_text(json.dumps(refs4,indent=2))
+sys.path.insert(0,str(ROOT/'toeo-tests'))
+from decode_client_tables import decrypt_blocks
+def cpd_decode(name):
+ b=(raw/'NewComponent1/resource'/name).read_bytes()
+ count,offset,rows,start=struct.unpack_from('<IIII',b,12);plain=bytearray(b);strings={}
+ for n in range(count):
+  size=u=struct.unpack_from('<I',b,offset)[0];offset+=4
+  value=decrypt_blocks(b[offset:offset+size],b'cpd text');plain[offset:offset+size]=value
+  strings[offset]=value.split(bytes(1),1)[0].decode('cp932');offset+=size
+ return {'file':name,'sha256':hashlib.sha256(b).hexdigest(),'rows':[{'words':list(struct.unpack_from('<14I',plain,start+n*56)),'labels':[strings.get(v) for v in struct.unpack_from('<14I',plain,start+n*56)]} for n in range(rows)]}
+(OUT/'original_enemy_cpd.json').write_text(json.dumps([cpd_decode('e000.cpd'),cpd_decode('e001.cpd')],indent=2))
