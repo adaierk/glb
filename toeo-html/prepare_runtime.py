@@ -8,7 +8,7 @@ from decode_client_tables import decrypt_blocks
 R=Path('toeo-html/research');RAW=Path(os.environ['RUNNER_TEMP'])/'TOEO_HTML_RAW'
 subprocess.run(['7z','x','-y','-o'+str(RAW),str(Path(os.environ['RUNNER_TEMP'])/'TOEO_ORIGINAL/client_pack.7z'),
 'DefaultComponent/ToEO_CL.dat','NewComponent1/resource/M_body_a_m_00.bnd','NewComponent1/resource/M_head_m_00.bnd',
-'NewComponent1/resource/pc1a_amd.pkd','NewComponent1/resource/nn001.bnd'],check=True,stdout=subprocess.DEVNULL)
+'NewComponent1/resource/pc1a_amd.pkd','NewComponent1/resource/pc1_clt.pkd','NewComponent1/resource/nn001.bnd'],check=True,stdout=subprocess.DEVNULL)
 binary=(RAW/'DefaultComponent/ToEO_CL.dat').read_bytes()
 keys=sorted(set(re.findall(rb'[a-zA-Z][a-zA-Z0-9 _.-]{2,30}text',binary)))
 (R/'original_text_keys.json').write_text(json.dumps([k.decode() for k in keys],indent=2))
@@ -38,14 +38,14 @@ for key in keys:
   if b'm_body' in plain and b'.amd' in plain:decoded=plain;break
  except Exception:pass
 if decoded:
- n,start=struct.unpack_from('<II',pk,24);rows=[]
+ n,start=struct.unpack_from('<II',pk,28);rows=[]
  for j in range(n):
   nameptr,off,size=struct.unpack_from('<III',pk,start+j*32)
   name=bytes(decoded[nameptr:]).split(b'\\0',1)[0].decode('cp932',errors='replace')
   # Split by zero byte without source string escaping.
   name=bytes(decoded[nameptr:]).split(bytes(1),1)[0].decode('cp932',errors='replace')
   rows.append({'name':name,'offset':off,'size':size})
-  if name in ('m_body00.amd','m_head00.amd','m_head01.amd'):
+  if name in ('m_body.amd','m_head00.amd','m_head01.amd'):
    (R/(name+'.b64')).write_text(base64.b64encode(pk[off:off+size]).decode())
  (R/'pc1a_amd_index.json').write_text(json.dumps({'key':key.decode(),'rows':rows},indent=2))
 # Preserve native layers as compact data for the complete 14400 x 10240 map.
@@ -98,3 +98,18 @@ for place in sorted(placements,key=lambda p:p['y']):
   for k,row in enumerate(part['cells']):
    draw_tile(scene,row[0],(place['x']+k%part['w']-part['ox'])*64-sx,(place['y']+k//part['w']-part['oy'])*32-sy,row[2])
 scene.save(R/'native_map_scene.png')
+scene.crop((624,436,1424,1036)).save(R/'native_map_viewport.png')
+
+# Read original color lookup package without guessing its key.
+pk=(RAW/'NewComponent1/resource/pc1_clt.pkd').read_bytes();count,pos=struct.unpack_from('<II',pk,12)
+plain=bytearray(pk);off=pos
+for j in range(count):
+ size=struct.unpack_from('<I',pk,off)[0];off+=4
+ plain[off:off+size]=decrypt_blocks(pk[off:off+size],b'pkd text');off+=size
+n,start=struct.unpack_from('<II',pk,28);colors=[]
+wanted={'skin_00.clt','hair_00.clt','eye_00.clt','head_m_00.clt','body_a_m_A_00.clt','clothes_a_m_A_00.clt','gloves_a_m_A_00.clt','shoes_a_m_A_00.clt'}
+for j in range(n):
+ nameptr,off,size=struct.unpack_from('<III',pk,start+j*32)
+ name=bytes(plain[nameptr:]).split(bytes(1),1)[0].decode('cp932')
+ if name in wanted:colors.append({'name':name,'data_b64':base64.b64encode(pk[off:off+size]).decode(),'header_hex':pk[off:off+min(size,300)].hex()})
+(R/'original_color_lookups.json').write_text(json.dumps(colors,indent=2))
