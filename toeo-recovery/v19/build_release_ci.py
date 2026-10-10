@@ -8,7 +8,7 @@ EVIDENCE=META/'evidence'/str(RUN)
 proof=json.loads((EVIDENCE/'artifact.json').read_text())
 result=json.loads((EVIDENCE/'runtime_result.json').read_text())
 assert proof['tested_commit']==TESTED
-assert all(result.get(k) for k in ('map_entered','enemy_created_native','enemy_component_native','enemy_field_symbol_native','enemy_mouse_pick_native','enemy_target_selected_native'))
+assert all(result.get(k) for k in ('map_entered','enemy_created_native','enemy_component_native','enemy_world_model_native','enemy_field_symbol_native','enemy_mouse_pick_native','enemy_target_selected_native'))
 review=json.loads((META/'visual_review.json').read_text())
 assert review['approved'] and review['run']==RUN and review['artifact_sha256']==proof['sha256']
 def sha(b):return hashlib.sha256(b).hexdigest()
@@ -40,6 +40,7 @@ files['Run_TOEO_Equipment_Test.cmd']=cmd.replace('\r\n','\n').replace('\n','\r\n
 files['requirements_native.txt']=b'frida\npillow\n'
 files['README_CN.txt']=(META/'README_CN.txt').read_bytes()
 files['NEXT_RECOVERY_V19.txt']=(META/'NEXT_RECOVERY_V19.txt').read_bytes()
+files['TOEO_RESTORATION_CURRENT_STATE.txt']=(META/'TOEO_RESTORATION_CURRENT_STATE.txt').read_bytes()
 for name in ('artifact.json','runtime_result.json','event_counts.json','native_events.json','server.jsonl'):
  files['evidence/v19/'+name]=(EVIDENCE/name).read_bytes()
 images=[]
@@ -55,7 +56,7 @@ files['evidence/v19/source_consistency.json']=json.dumps(consistency,indent=2).e
 metadata={'version':'v19','tested_commit':TESTED,'windows_run_id':RUN,'windows_artifact':proof['artifact'],
  'windows_artifact_sha256':proof['sha256'],'source_files_verified':len(rows),'local_checks_passed':unit_count,
  'native_map_enemy_verified':True,'native_encounter_entry':config.get('encounter_entry',False),
- 'complete_combat':False,'complete_gameplay':False,'original_exe_changed':False,
+ 'complete_combat':False,'complete_gameplay':False,'original_exe_changed':False,'original_exe_sha256':'635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55',
  'original_assets_included':False,'user_database_included':False,'enemy_provenance':'Explicit local SLIME test; official spawn/stat configuration unresolved',
  'limitations':config['limitations'],'images':images,
  'files_sha256':{n:sha(b) for n,b in sorted(files.items())}}
