@@ -351,6 +351,16 @@ class LocalAccountServer(BootstrapServer):
                                  'world_profile':self.profile.key,'merchant_grid':self.shop_grid,'native_templates_and_icons_verified':False} if self.shop_preview else {}))
                 else:self.log('npc_request_rejected',connection=conn_id,reason='Unsupported or unselected NPC action')
                 continue
+            if op==0x9f and port==11101 and self.combat_preview:
+                control=state.get('world_account_control')
+                expected=(*control['character_id'],self.map_id,*state['local_battle_group']) if control and state.get('local_battle_group') else None
+                if len(payload)!=32 or expected is None or not state.get('local_encounter_ack') or struct.unpack_from('<5I',payload,12)!=expected:
+                    self.log('battle_resource_request_rejected',connection=conn_id,request_hex=payload.hex());continue
+                # Original52C8E7 A0 handler completes only the native pending request522260.
+                answer=message(0xa0,bytes(3)+struct.pack('<5I',*expected),req)
+                self.send_answer(c,answer,state)
+                self.log('battle_resource_reply_sent',connection=conn_id,request_id=req,request_hex=payload.hex(),answer_hex=answer.hex())
+                continue
             if op==0x9e and port==11101 and self.combat_preview:
                 control=state.get('world_account_control')
                 expected=(*control['character_id'],self.map_id,*state['local_battle_group']) if control and state.get('local_battle_group') else None

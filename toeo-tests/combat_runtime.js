@@ -3,7 +3,7 @@
 (function(){
  const emit=x=>send(x),address=va=>Process.mainModule.base.add(va-0x400000);
  function safely(f){try{return f();}catch(e){return {error:String(e)};}}
- let enemy=null,previous='',samples=0,enemyLoad=0;
+ let enemy=null,previous='',samples=0,battleSamples=0,enemyLoad=0;
  function enemyState(){
   if(enemy===null||enemy.isNull())return null;
   const model=enemy.add(0x158).readPointer(),extension=enemy.add(0x64).readPointer();
@@ -23,7 +23,7 @@
    onLeave(ret){if(this.keep){enemy=this.actor;}if(this.keep && ++samples<=32)emit({event,result:ret.toInt32()&255,args:this.args,state:safely(enemyState)});}});
  }
  for(const [va,event] of [[0x49d2f0,'native_battle_group_created'],[0x529840,'native_battle_actor_created'],[0x430e50,'native_battle_init'],[0x431920,'native_battle_init_tick'],[0x5231b0,'native_battle_request_9f'],[0x522fd0,'native_battle_request_a8']]){
-  Interceptor.attach(address(va),{onEnter(args){this.keep=++samples<=150;this.args=[args[0].toString(),args[1].toString(),args[2].toString()];if(this.keep)emit({event,object:this.context.ecx.toString(),args:this.args});},
+  Interceptor.attach(address(va),{onEnter(args){this.keep=++battleSamples<=150;this.args=[args[0].toString(),args[1].toString(),args[2].toString()];if(this.keep)emit({event,object:this.context.ecx.toString(),args:this.args});},
    onLeave(ret){if(this.keep)emit({event:event+'_returned',result:ret.toString()});}});
  }
 
@@ -45,5 +45,8 @@
   this.keep=safely(()=>this.context.ecx.add(0x68).readU32())===0x72000001;
   this.resource=args[1].toUInt32();this.actor=this.context.ecx;
  },onLeave(ret){if(this.keep && ++symbolSamples<=32)emit({event:'native_enemy_symbol_created',resource:this.resource,result:ret.toString()});}});
+
+ let completedSamples=0;
+ Interceptor.attach(address(0x522260),{onEnter(args){if(++completedSamples<=32)emit({event:'native_battle_pending_request_completed',request_id:args[0].toUInt32()});}});
  emit({event:'combat_probe_ready',mode:'Read-only original enemy and encounter observations'});
 })();
