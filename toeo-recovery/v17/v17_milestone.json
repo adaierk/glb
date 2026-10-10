@@ -1,0 +1,57 @@
+{
+  "version": "v17",
+  "passed": true,
+  "visual_reviewed": false,
+  "tested_commit": "8b3e32dbf74b9796e16408b8999b133ebf73cfd6",
+  "windows_run_id": 38017513763,
+  "artifact_id": 11657535463,
+  "artifact_sha256": "2aa2cd5bbc42fad762b9f8260a2256a5c7547ae95ab825e6515d541ffe779775",
+  "original_exe_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "native_equipment_transitions": [
+    [],
+    [
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "native_move_counts": [
+    1,
+    1,
+    -1,
+    1
+  ],
+  "native_equip_unequip_reequip_verified": true,
+  "same_instances_restored_after_restart": true,
+  "native_icon_ids": {
+    "weapon": 1,
+    "body": 857
+  },
+  "native_hp": 100,
+  "native_max_hp": 110,
+  "native_tp": 30,
+  "local_checks_passed": 61,
+  "source_files_verified": 116,
+  "equipment_fixture_provenance": "Explicit Local Test Sword / Local Test Body, provisional local maxHP+10; official item masters unresolved",
+  "appearance_restored": false,
+  "native_exceptions": {
+    "first": 19,
+    "reentered": 17
+  },
+  "limitations": [
+    "Official gear stats, job/level rules and starter gear unresolved",
+    "Equipment world/battle appearance pending",
+    "Occupied gear replacement and full combat pending",
+    "Complete maps/NPCs/main and side quests/level progression pending",
+    "Other caught original native exceptions remain"
+  ]
+}
