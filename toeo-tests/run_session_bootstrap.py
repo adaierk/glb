@@ -99,6 +99,7 @@ def main():
             if args.local_account:
                 source+='\n'+Path(__file__).with_name('account_runtime.js').read_text(encoding='utf-8')
                 source+='\n'+Path(__file__).with_name('offline_socket_compat.js').read_text(encoding='utf-8')
+                source+='\n'+Path(__file__).with_name('offline_graphics_compat.js').read_text(encoding='utf-8')
             script=session.create_script(source)
             script.on('message',on_message);script.load()
             ready_deadline=time.monotonic()+5

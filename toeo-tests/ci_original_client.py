@@ -93,7 +93,7 @@ def main():
             print('PHASE original_attach pid='+str(pid),flush=True);session=device.attach(pid)
             session.on('detached',lambda reason,crash: receive({'type':'send','payload':{'event':'detached','reason':reason,'crash':str(crash)}},None))
             source='\n'.join(Path(__file__).with_name(n).read_text(encoding='utf-8') for n in
-                             ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js'))
+                             ('bootstrap_runtime.js','account_runtime.js','offline_socket_compat.js','offline_graphics_compat.js'))
             if args.pump:source+='\n'+Path(__file__).with_name('native_gui_pump.js').read_text(encoding='utf-8')
             if args.resource_probe:source+='\n'+Path(__file__).with_name('resource_probe.js').read_text(encoding='utf-8')
             print('PHASE native_hooks_load',flush=True)

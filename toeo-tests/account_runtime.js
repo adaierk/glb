@@ -470,10 +470,24 @@
         eax:this.context.eax.toString(),font:phase==='number_font_resource' && !this.context.eax.isNull()?{
           object:this.context.eax.toString(),vtable:this.context.eax.readPointer().toString()}:null})));}});
   }
+  const graphicsMethods=new Set();let hudApiReturns=0;
   Interceptor.attach(address(0x623410),{onEnter(args){
+    const device=args[0];
+    if(!device.isNull())for(const [offset,name] of [[0x0c,'TestCooperativeLevel'],[0x118,'ValidateDevice'],[0x14c,'DrawPrimitiveUP']]){
+      const method=device.readPointer().add(offset).readPointer(),key=name+method;
+      if(graphicsMethods.has(key))continue;graphicsMethods.add(key);
+      Interceptor.attach(method,{onEnter(apiArgs){
+        this.hud=activeHud;this.caller=this.returnAddress.toString();
+        this.drawArgs=name==='DrawPrimitiveUP'?[1,2,3,4].map(i=>apiArgs[i].toString()):null;
+      },onLeave(ret){
+        if(this.hud===null || ++hudApiReturns>100)return;
+        emit({event:'native_hud_d3d_method_result',method:name,caller:this.caller,
+          frame:this.hud.toString(),hresult:ret.toString(),draw_args:this.drawArgs});
+      }});
+    }
     this.hud=activeHud;this.drawArgs=[1,2,3,4,5].map(i=>args[i].toString());this.trace=this.hud===null?[]:Thread.backtrace(this.context,Backtracer.ACCURATE).slice(0,8).map(x=>x.toString());
   },onLeave(ret){
-    if(this.hud===null || ++hudDrawReturns>30)return;
+    if(this.hud===null || ++hudDrawReturns>60)return;
     emit({event:'native_hud_graphics_result',frame:this.hud.toString(),hresult:ret.toString(),draw_args:this.drawArgs,stack:this.trace});
   }});
   emit({event:'runtime_account_probe_ready',
