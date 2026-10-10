@@ -552,12 +552,12 @@
     const head=model.add(0xa8).readPointer();if(head.isNull())return layers;let steps=0;
     function visit(n){if(n.equals(head)||n.add(0x15).readU8()||++steps>32)return;visit(n.readPointer());
       const part=n.add(0x10).readPointer();if(!part.isNull())layers.push({layer:n.add(12).readS32(),
-        palette:part.readU32(),resource:part.add(4).readU32(),native_component:part.add(12).readPointer().toString(),
-        render_node:part.add(16).readPointer().toString(),enabled:part.add(20).readU8()});visit(n.add(8).readPointer());}
+        source_bank:part.readU32(),resource:part.add(4).readU32(),native_component:part.add(12).readPointer().toString(),
+        descriptor:safely(()=>{const row=part.add(12).readPointer();if(row.isNull())return null;return {symbol:row.add(0x10).readPointer().readUtf8String(),map_amd:row.add(0x28).readPointer().readUtf8String(),map_bnd:row.add(0x2c).readPointer().readUtf8String(),battle_amd:row.add(0x30).readPointer().readUtf8String(),battle_bnd:row.add(0x34).readPointer().readUtf8String()};}),render_node:part.add(16).readPointer().toString(),enabled:part.add(20).readU8()});visit(n.add(8).readPointer());}
     visit(head.add(4).readPointer());return layers;
   }
   Interceptor.attach(address(0x518280),{onEnter(args){this.model=this.context.ecx;
-    this.request={layer:args[0].toInt32(),resource:args[1].toUInt32(),palette:args[2].toUInt32()};
+    this.request={layer:args[0].toInt32(),resource:args[1].toUInt32(),source_bank:args[2].toUInt32()};
     this.own=safely(()=>observedPlayer!==null && this.model.equals(observedPlayer.add(0x158).readPointer()));},
     onLeave(){if(this.own)emit(safely(()=>({event:'native_world_model_layer_applied',...this.request,model:this.model.toString(),
       actual:nativeModelLayers(this.model).find(x=>x.layer===this.request.layer)||null})));}});
@@ -566,7 +566,7 @@
     if(!visual.isNull()){
       const head=visual.add(4).readPointer();let steps=0;
       function visit(n){if(n.equals(head)||n.add(0x15).readU8()||++steps>32)return;visit(n.readPointer());
-        const p=n.add(0x10).readPointer();if(!p.isNull())components.push({slot:n.add(12).readS32(),identity:[0,4,8,12].map(x=>p.add(x).readU32()),palette:p.add(16).readU32(),resource:p.add(20).readU32(),layer:p.add(24).readU32()});visit(n.add(8).readPointer());}
+        const p=n.add(0x10).readPointer();if(!p.isNull())components.push({slot:n.add(12).readS32(),identity:[0,4,8,12].map(x=>p.add(x).readU32()),source_bank:p.add(16).readU32(),resource:p.add(20).readU32(),layer:p.add(24).readU32()});visit(n.add(8).readPointer());}
       visit(head.add(4).readPointer());
     }
     const state={event:'native_player_visual_state',components,layers:nativeModelLayers(model)};

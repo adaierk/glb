@@ -18,12 +18,17 @@ def verify_equipment(result,events,server,args,expected_position):
     
     visual_samples=[e for e in events if e.get('event')=='native_player_visual_state']
     result['native_visual_samples']=visual_samples
-    expected_components=[{'slot':x['slot'],'identity':list(x['identity']),'resource':10000 if x['slot']==1 else 4000,'layer':2 if x['slot']==1 else 1,'palette':0} for x in saved['equipment']]
+    expected_components=[{'slot':x['slot'],'identity':list(x['identity']),'resource':10000 if x['slot']==1 else 4000,'layer':4 if x['slot']==1 else 1,'source_bank':500 if x['slot']==1 else 0} for x in saved['equipment']]
     result['visual_components_match_database_native']=bool(visual_samples) and visual_samples[-1]['components']==expected_components
     def loaded(e,layer,resource):
         return any(x['layer']==layer and x['resource']==resource and x.get('native_component') not in (None,'0x0') for x in e.get('layers',[]))
     result['body_visual_resource_loaded_native']=bool(visual_samples) and loaded(visual_samples[-1],1,4000)
-    result['weapon_visual_resource_loaded_native']=bool(visual_samples) and loaded(visual_samples[-1],2,10000)
+    result['weapon_visual_resource_loaded_native']=bool(visual_samples) and loaded(visual_samples[-1],4,10000)
+    weapon_layers=[x for x in visual_samples[-1].get('layers',[]) if x['layer']==4 and x['resource']==10000] if visual_samples else []
+    descriptor=weapon_layers[-1].get('descriptor') if weapon_layers else None
+    result['native_weapon_descriptor']=descriptor
+    result['weapon_map_hidden_by_original_asset']=bool(descriptor) and descriptor['symbol']=='ID_SWORD_000' and descriptor['map_amd']=='' and descriptor['map_bnd']=='' and descriptor['battle_amd']=='b_sword.amd' and descriptor['battle_bnd']=='b_sword_000.bnd'
+    if not result['weapon_map_hidden_by_original_asset']:return 'Original sword descriptor map/battle sprite fields were not observed'
     result['appearance_restored']=all(result[k] for k in ('visual_components_match_database_native','body_visual_resource_loaded_native','weapon_visual_resource_loaded_native'))
     if not result['appearance_restored']:return 'Original world model clothing resources or component identities did not match saved equipment'
     if not args.reenter_check:

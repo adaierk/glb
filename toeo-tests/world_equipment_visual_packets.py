@@ -12,7 +12,7 @@ def equipment_visual_records(snapshot):
         if definition is None or not definition.get('visual_resource'):continue
         r=record(0x44,36)
         struct.pack_into('<I',r,4,definition['slot'])
-        struct.pack_into('<IIIIIII',r,8,*item['identity'],definition.get('visual_palette',0),definition['visual_resource'],definition['visual_layer'])
+        struct.pack_into('<IIIIIII',r,8,*item['identity'],definition.get('visual_source_bank',0),definition['visual_resource'],definition['visual_layer'])
         tail.extend(r)
     tail.extend(record(0x45,4))
     return bytes(tail)
