@@ -1,0 +1,41 @@
+name: TOEO v19 original combat protocol research
+on:
+  push:
+    branches: [toeo-local-world-recovery-20261009]
+    paths: [.github/workflows/toeo-v19-research.yml, toeo-recovery/v19/research_original.py]
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  original-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37899580886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-original-client-preserved
+          path: ${{ runner.temp }}/TOEO_ORIGINAL
+      - name: Read unmodified original binary and asset layout
+        run: |
+          python -m pip install -q pefile capstone
+          python toeo-recovery/v19/research_original.py
+      - name: Preserve bounded research on recovery branch
+        run: |
+          git config user.name "TOEO Recovery CI"
+          git config user.email "toeo-recovery-ci@users.noreply.github.com"
+          git add toeo-recovery/v19/research
+          if ! git diff --cached --quiet; then
+            git commit -m "Record original v19 equipment appearance research [skip ci]"
+            git pull --rebase origin toeo-local-world-recovery-20261009
+            git push origin HEAD:toeo-local-world-recovery-20261009
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-v19-original-research
+          path: toeo-recovery/v19/research
+          retention-days: 90
