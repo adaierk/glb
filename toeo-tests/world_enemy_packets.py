@@ -1,4 +1,4 @@
-"""Explicit offline encounter fixture using original CRSD SLIME field-symbol bank 800.
+"""Explicit offline encounter fixture using original CID0 SLIME model ID1200 (CRSD field bank800).
 Entity, placement and HP are local test values, not official spawn metadata.
 Original 51C1E0 parses 22 actor and 2E enemy extension; no client-state writes.
 """
@@ -8,7 +8,7 @@ from world_map_packets import record
 from character_mutation_packets import encode_name
 ENEMY_IDENTITY=(0x72000001,1)
 ENEMY_NAME='SLIME Local Test'
-ENEMY_MODEL_BANK=800
+ENEMY_MODEL_BANK=1200
 def enemy_grid(profile):
     x,y=profile.spawn_grid
     grid=(x-2,y)
@@ -23,7 +23,7 @@ def enemy_actor_records(profile):
     b[0x23]=0xff
     b[0x24:0x28]=bytes((1,0,0,1))
     b[0x30:0x74]=encode_name(ENEMY_NAME)
-    # Non-humanoid appearance+8 selects CRSD via 501574 -> 4D9B90.
+    # Non-humanoid appearance+8 uses CID0 ID -> CTY2RS -> CRSD via 501574 -> 4D9B90.
     struct.pack_into('<I',b,0x7c,ENEMY_MODEL_BANK)
     struct.pack_into('<IIII',b,0x8c,100,100,0,0)
     ext=record(0x2e,0x34)

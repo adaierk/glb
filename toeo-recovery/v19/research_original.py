@@ -187,3 +187,5 @@ files=subprocess.check_output(['7z','l','-slt',str(pack)],text=True)
 (OUT/'model_table_filenames.json').write_text(json.dumps([{'address':hex(i),'text':pe.get_data(i-base,120).split(bytes(1),1)[0].decode('cp932','replace')} for i in (0x6ecec8,0x6eceb4,0x6ecea0,0x6ece8c,0x6ece78)],indent=2))
 (OUT/'nntable_loader.txt').write_text(dis(0x41b480,0x780))
 (OUT/'nntable_paths.json').write_text(json.dumps([line[7:] for line in files.splitlines() if line.startswith('Path = ') and re.search(r'(?i)(nnt|\.nnt|\.nn)',line[7:])],indent=2))
+
+(OUT/'model_id_map_constructor.txt').write_text(dis(0x41b050,0x3a0))
