@@ -156,3 +156,14 @@ def cpd_decode(name):
   strings[offset]=value.split(bytes(1),1)[0].decode('cp932');offset+=size
  return {'file':name,'sha256':hashlib.sha256(b).hexdigest(),'rows':[{'words':list(struct.unpack_from('<14I',plain,start+n*56)),'labels':[strings.get(v) for v in struct.unpack_from('<14I',plain,start+n*56)]} for n in range(rows)]}
 (OUT/'original_enemy_cpd.json').write_text(json.dumps([cpd_decode('e000.cpd'),cpd_decode('e001.cpd')],indent=2))
+
+subprocess.run(['7z','x','-y','-o'+str(raw),str(pack),'NewComponent1/resource/se000.cpd','NewComponent1/resource/se000.atd'],check=True,stdout=subprocess.DEVNULL)
+(OUT/'original_symbol_enemy_cpd.json').write_text(json.dumps(cpd_decode('se000.cpd'),indent=2))
+for name,va,size in [
+ ('battle_group_pool_init',0x514360,0x900),('battle_background_setup',0x44f2a0,0xb00),
+ ('battle_native_entry_tick',0x433dd0,0x850),('native_selection_click',0x505200,0x730),
+ ('battle_arena_init',0x49d100,0x1f0),('battle_group_resource',0x49bad0,0x1b0)
+ ]:(OUT/(name+'.txt')).write_text(dis(va,size))
+# Follow original NPC/actor command dispatcher for native action1 vs2.
+(OUT/'npc_menu_action_mask.txt').write_text(dis(0x5b9a90,0x700))
+(OUT/'native_action66.txt').write_text(dis(0x4f7120,0x110))
