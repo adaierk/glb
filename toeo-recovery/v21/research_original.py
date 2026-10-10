@@ -36,7 +36,12 @@ ranges={
 'battle_position_action':(0x510090,0x170),
 'battle_action_classify':(0x48d860,0x100),
 'battle_results_main':(0x433dd0,0xa00),
-'battle_start_input_gate':(0x512ff0,0x100)
+'battle_start_input_gate':(0x512ff0,0x100),
+'battle_target_native':(0x50f500,0x170),
+'field_target_native':(0x4feb90,0xa0),
+'action_actor_reference':(0x4916d0,0x390),
+'action_classify_full':(0x48d860,0x450),
+'command_script_factory':(0x4707a0,0x790)
 }
 for name,(va,size) in ranges.items():(OUT/(name+'.txt')).write_text(dis(va,size))
 targets={0x515710:'pool_tick',0x515870:'pool_walk',0x519140:'model_orientation',0x518ed0:'model_ctor'}
