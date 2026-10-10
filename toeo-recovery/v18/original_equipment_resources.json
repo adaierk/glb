@@ -1,0 +1,73 @@
+{
+  "original_exe_sha256": "635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55",
+  "crs_sha256": "a2afd15e5112711535b3af6bfe9de984c0f41d6cae1bcad6b9a28ce32d151ddf",
+  "weapon_bank": {
+    "index": 172,
+    "words": [
+      500,
+      17016,
+      29932,
+      11096,
+      29912,
+      1
+    ],
+    "labels": [
+      null,
+      "WEAPON",
+      "resource",
+      "",
+      "pc_weapon.cpd",
+      null
+    ]
+  },
+  "original_sword_descriptor": {
+    "index": 0,
+    "words": [
+      0,
+      0,
+      0,
+      38992,
+      30340,
+      54308,
+      42800,
+      42772,
+      45068,
+      0,
+      28728,
+      28728,
+      39752,
+      39772
+    ],
+    "labels": [
+      null,
+      null,
+      null,
+      "WEAPON",
+      "ID_SWORD_000",
+      "剣001",
+      "pc_weapon_clt.pkd",
+      "pc_weapon_amd.pkd",
+      "sword_000_A.cl2",
+      null,
+      "",
+      "",
+      "b_sword.amd",
+      "b_sword_000.bnd"
+    ]
+  },
+  "local_mapping": {
+    "sword": {
+      "resource": 10000,
+      "layer": 4,
+      "source_bank": 500
+    },
+    "body": {
+      "resource": 4000,
+      "layer": 1,
+      "source_bank": 0
+    }
+  },
+  "world_sword_asset_absent": true,
+  "official_item_master_recovered": false,
+  "battle_animation_verified": false
+}
