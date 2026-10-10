@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "runtime": "Chromium file://, offline single HTML",
+  "external_requests": [],
+  "browser_errors": [],
+  "checks": [
+    "complete native map data loads",
+    "native grid conversion",
+    "blocked terrain rejected",
+    "mouse path planner and movement",
+    "save survives reload",
+    "UI purchase and sale",
+    "insufficient funds rejected atomically",
+    "invalid and fractional quantities rejected atomically",
+    "inventory preserved after rejection",
+    "invalid saves rejected",
+    "full-map camera inspection",
+    "mobile viewport fits"
+  ],
+  "initial": {
+    "schema": 1,
+    "map": "1120108",
+    "grid": [
+      139,
+      313
+    ],
+    "name": "Archive",
+    "gald": 2000,
+    "hp": 100,
+    "tp": 30,
+    "inventory": {}
+  },
+  "final": {
+    "schema": 1,
+    "map": "1120108",
+    "grid": [
+      143,
+      313
+    ],
+    "name": "Archive",
+    "gald": 1460,
+    "hp": 100,
+    "tp": 30,
+    "inventory": {
+      "1": 1
+    }
+  },
+  "textures_ready": 49,
+  "limitations": [
+    "Character palette recoloring, walk animation, map transitions, official battle and plot are pending"
+  ]
+}
