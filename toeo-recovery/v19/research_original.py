@@ -205,3 +205,6 @@ for sec in pe.sections:
    refs_model.append(hex(start+at))
    (OUT/f'model_call_{start+at:x}.txt').write_text(dis(start+max(0,at-0x100),0x220))
 (OUT/'world_model_calls.json').write_text(json.dumps(refs_model,indent=2))
+
+(OUT/'world_actor_initialize_actual.txt').write_text(dis(0x5036e0,0xa10))
+(OUT/'world_actor_state_defaults.txt').write_text(dis(0x4ff5f0,0x570))
