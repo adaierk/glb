@@ -1,0 +1,26 @@
+{
+  "approved": true,
+  "reviewed_at": "2026-10-10T03:48:10.784Z",
+  "reviewed_by": "Codex visual inspection",
+  "windows_run_id": 38021208178,
+  "artifact_sha256": "3d7011690f6514c7036631a24e464521c3a712b971bdd841140660883f836db6",
+  "images_sha256": {
+    "TOEO_Rashuan_Equipment_20261010_v18.png": "236be68ebced4e905769bf75782e6a44d897024566a48805098e74a5638dabf5",
+    "TOEO_Rashuan_Unequip_20261010_v18.png": "8a46dd9d1f6640510328e80abb9293648a00afb506e98e27f43fbdb9849fb014",
+    "TOEO_Rashuan_Reequip_20261010_v18.png": "7c5b1257cb03129390c141b9117375b73dc75ac30c4a4ebe2b2f989202d6d6e8",
+    "TOEO_Rashuan_Equipment_Restored_20261010_v18.png": "1bd2a4a68461db5b6057d119d29d7fa158ae2aa86a9937b9cb0ccafac7ef1e08",
+    "TOEO_Rashuan_Map_20261010_v18.png": "8b7caf035416aeaac41ee089542c638b74df7c5efdfdeece274e0e4e5cd96360"
+  },
+  "observations": [
+    "Original map avatar and inventory preview wear orange original body clothing and brown boots",
+    "Body removal returns original bare body and maxHP100; rewear returns body clothing and maxHP110",
+    "Second original-client login restores the same sword/body icons, clothing, maxHP110 and stored position",
+    "Clean map screenshot shows the original Rashuan riverside/bridge and clothed avatar after actual movement",
+    "Ordinary sword is intentionally absent in standing map/preview: native descriptor map sprite fields are empty; battle animation is not claimed"
+  ],
+  "image_alterations": "Desktop crop only, no game-pixel edits",
+  "limitations": [
+    "Official item-to-appearance mapping and attack/battle systems pending",
+    "Original caught D3D exceptions remain; logged exception samples are not the total count"
+  ]
+}
