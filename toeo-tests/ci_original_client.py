@@ -3,6 +3,7 @@
 UI input uses actual mouse/keyboard controls. Captures are the Windows desktop;
 native observations and screenshots are preserved without inferred map success.
 """
+import threading
 import argparse,ctypes,faulthandler,hashlib,json,os,shutil,time,traceback
 from pathlib import Path
 from local_account_server import LocalAccountServer
@@ -86,9 +87,23 @@ def main():
         if quantity<target:click(441,186,hold=.15)
         elif quantity>target:click(441,202,hold=.15)
     with (out/'runtime.jsonl').open('w',encoding='utf-8',buffering=1) as log:
+        attack_captures=[]
+        def capture_attack(number):
+            # Wait for the original renderer to draw the observed animation114.
+            # This captures the real desktop; it does not alter game state.
+            time.sleep(.10)
+            path=out/f'original_battle_attack_{number:03d}.png'
+            try:
+                ImageGrab.grab().save(path)
+                shots.append({'file':path.name,'host_time':time.time(),'scope':'actual Windows desktop during original animation114'})
+            except Exception as error:
+                events.append({'event':'attack_capture_error','detail':str(error),'host_time':time.time()})
         def receive(m,data):
             row=m.get('payload',m) if m.get('type')=='send' else {'event':'frida_error','detail':m}
             row['host_time']=time.time();events.append(row);log.write(json.dumps(row,ensure_ascii=False,default=str)+'\n')
+            if args.combat_check and row.get('event')=='native_model_animation_select' and row.get('result')==1 and row.get('args',[0])[0]==114 and len(attack_captures)<3:
+                attack_captures.append(row['host_time'])
+                threading.Thread(target=capture_attack,args=(len(attack_captures),),daemon=True).start()
             if row.get('event','').endswith('_NATIVE') or row.get('event') in ('native_exception','frida_error'):
                 print(json.dumps(row,ensure_ascii=False),flush=True)
         def shot(t):
@@ -221,7 +236,7 @@ def main():
                     result['battle_movement_changed_position_native']=any(e.get('phase')=='tick' and abs(e.get('position',[220])[0]-220)>10 for e in battle_player)
                     result['battle_speed_float_native']=bool(battle_player) and all(e.get('movement_speed')==1.0 for e in battle_player)
                     result['battle_attack_action_applied_native']=bool(attack_actions)
-                    result['battle_attack_program_native']=any(e.get('event')=='native_battle_command_program' and e.get('command')==10004 and e.get('phase')==2 and e.get('program') for e in events)
+                    result['battle_attack_program_native']=any(e.get('event')=='native_battle_command_program' and e.get('command')==10004 and e.get('phase')==2 for e in events)
                     result['battle_attack_animation_native']=bool(attack_actions) and any(e.get('event')=='native_model_animation_select' and e.get('object')==player_model and e.get('result')==1 and e.get('args',[0])[0]>=100 and e.get('args',[0])[0] not in (100,101,110) and e.get('host_time',0)>=attack_actions[0]['host_time'] for e in events)
                     if not all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native','battle_movement_applied_native','battle_movement_changed_position_native','battle_speed_float_native','battle_attack_action_applied_native','battle_attack_program_native','battle_attack_animation_native')):
                         failure=failure or 'Actual original battle movement, target, attack request, program and animation checks did not pass'

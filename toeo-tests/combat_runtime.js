@@ -109,7 +109,8 @@
  const at=va=>Process.mainModule.base.add(va-0x400000);
  const safe=f=>{try{return f();}catch(e){return {error:String(e)};}};
  let count=0;
+ // State+50 is the loaded resource parameter, not a presence pointer; zero is valid.
  Interceptor.attach(at(0x4086e0),{onEnter(){this.machine=this.context.ecx;this.keep=++count<=48;},
-  onLeave(){if(this.keep)send(safe(()=>({event:'native_battle_command_program',phase:this.machine.add(0x38).readU32(),command:this.machine.add(0x3c).readU32(),program:this.machine.add(0x50).readU32()})));}});
+  onLeave(){if(this.keep)send(safe(()=>({event:'native_battle_command_program',phase:this.machine.add(0x38).readU32(),command:this.machine.add(0x3c).readU32(),resource_parameter:this.machine.add(0x50).readU32()})));}});
  send({event:'battle_program_probe_ready',mode:'Read-only original command program transition'});
 })();
