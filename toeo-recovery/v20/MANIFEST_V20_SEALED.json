@@ -1,0 +1,44 @@
+{
+  "version": "v20",
+  "sha256": "109b78d2c4df0ea4e985dfcf43f0fe749de0d26ada356ff6a52ce667a45032a1",
+  "bytes": 354453,
+  "entries": 148,
+  "crc_check": "PASS",
+  "source_consistency": "PASS",
+  "tested_commit": "53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9",
+  "windows_run_id": 38029546220,
+  "windows_artifact_sha256": "b2d38fc7bf5c5fe3ceaca9972d99ba2cf7b90cfacd73c6a655827f7647c251c2",
+  "source_files_verified": 124,
+  "local_checks_passed": 61,
+  "complete_combat": false,
+  "images": [
+    {
+      "file": "original_desktop_140s.png",
+      "sha256": "fe6dc560417e7ef79d1098db43943c58c0ce31c4a51b3e76fae3e1846ca2d0d3",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_170s.png",
+      "sha256": "bd3fd42e4f1c432eada45f0ef377d83a7b490e6e52e91edd303cbbb01f6b93d5",
+      "alterations": "Exact original desktop crop only"
+    },
+    {
+      "file": "original_desktop_208s.png",
+      "sha256": "39cd8a92cee6f73816c73f9d57ea92364cba7eb2e123d9dbc55735910020af6f",
+      "alterations": "Exact original desktop crop only"
+    }
+  ],
+  "limitations": [
+    "Only original native encounter and battle sprite display are restored; A1/A3 control/ability initialization, attack, damage, AI, outcomes and return to map are pending.",
+    "Local test entity uses field classification1200/se000 and battle E000/bank100; official monster instance/resource mapping and spawn/stats are unverified.",
+    "Original native run still reports caught C++/D3D exceptions; engine exception-free behavior is not claimed.",
+    "Formal battle picking dimensions, all maps/NPCs and main/side quests remain incomplete."
+  ],
+  "screenshots_archive": {
+    "file": "TOEO_Screenshots_20261010_v20.zip",
+    "sha256": "61878e020e452f1c473757eecf84dcc035ce917553d3718b77ea00a39c128c3b",
+    "bytes": 803515,
+    "entries": 5,
+    "crc_check": "PASS"
+  }
+}

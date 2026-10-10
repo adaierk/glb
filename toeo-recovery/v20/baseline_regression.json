@@ -1,0 +1,2790 @@
+{
+  "run": 38029546328,
+  "tested_commit": "53b7656a6a0e3ea2fcff8a6c3ab89115caecd7f9",
+  "artifact": 11661786930,
+  "sha256": "7d1ef5c1a95d49c25ee9af3d53368b4e443641eeee44d82d6f62082b8a2a1bcd",
+  "passed": true,
+  "first": {
+    "native_session_created": true,
+    "account_authenticated": true,
+    "game_prelogin_accepted": true,
+    "character_list_accepted": true,
+    "character_selection_accepted": true,
+    "world_admission_accepted": true,
+    "world_controller_completed": true,
+    "map_entered": true,
+    "playable": null,
+    "observed_positions": [
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4480,
+        5024
+      ],
+      [
+        4398.19921875,
+        5064.900390625
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ]
+    ],
+    "expected_reentry_position": null,
+    "native_exceptions": [
+      {
+        "event": "native_exception",
+        "count": 1,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f990",
+          "ebx": "0x0",
+          "ecx": "0x2",
+          "edx": "0x0",
+          "esi": "0x19fe8c",
+          "edi": "0x759bd600",
+          "ebp": "0x19f9ec",
+          "esp": "0x19f990",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0x40010006",
+          "0x772b2154",
+          "0x7738cc20",
+          "0x40479e",
+          "0x405e19",
+          "0x6baf8b",
+          "0x759b5d49",
+          "0x77a6d7eb",
+          "0x77a6d771"
+        ],
+        "host_time": 1791612195.8025522
+      },
+      {
+        "event": "native_exception",
+        "count": 2,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x466fa78",
+          "ebx": "0x19930520",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x466fbf8",
+          "edi": "0x72a0cb98",
+          "ebp": "0x466fad4",
+          "esp": "0x466fa78",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x763348d9",
+          "0x729ea0f5",
+          "0x729ea51e",
+          "0x729ea3b5",
+          "0x729ed8eb",
+          "0x729f0a1c",
+          "0x7631e9eb",
+          "0x759b5d49",
+          "0x77a6d7eb",
+          "0x77a6d771",
+          "0x755cac36"
+        ],
+        "host_time": 1791612197.5141983
+      },
+      {
+        "event": "native_exception",
+        "count": 3,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f538",
+          "ebx": "0x19f604",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19f594",
+          "esp": "0x19f538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612343.905557
+      },
+      {
+        "event": "native_exception",
+        "count": 4,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612343.9095576
+      },
+      {
+        "event": "native_exception",
+        "count": 5,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612343.9135582
+      },
+      {
+        "event": "native_exception",
+        "count": 6,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f538",
+          "ebx": "0x19f604",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19f594",
+          "esp": "0x19f538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612343.9185548
+      },
+      {
+        "event": "native_exception",
+        "count": 7,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612343.9225576
+      },
+      {
+        "event": "native_exception",
+        "count": 8,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612343.9265566
+      },
+      {
+        "event": "native_exception",
+        "count": 16,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e538",
+          "ebx": "0x19f4a4",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x5419ee",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5c7fc3"
+        ],
+        "host_time": 1791612343.9315553
+      },
+      {
+        "event": "native_exception",
+        "count": 32,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541b63",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612344.0155592
+      },
+      {
+        "event": "native_exception",
+        "count": 64,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541acb",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612344.1641164
+      },
+      {
+        "event": "native_exception",
+        "count": 128,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19ce28",
+          "ebx": "0x19ec84",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541849",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5d48d0",
+          "0x5eba08"
+        ],
+        "host_time": 1791612344.3691185
+      },
+      {
+        "event": "native_exception",
+        "count": 256,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612344.8846617
+      },
+      {
+        "event": "native_exception",
+        "count": 512,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612345.7915983
+      },
+      {
+        "event": "native_exception",
+        "count": 1024,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e538",
+          "ebx": "0x19f4a4",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x5419ee",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5c7fc3"
+        ],
+        "host_time": 1791612347.628203
+      },
+      {
+        "event": "native_exception",
+        "count": 2048,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541b63",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612351.266016
+      },
+      {
+        "event": "native_exception",
+        "count": 4096,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541acb",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612358.5262527
+      },
+      {
+        "event": "native_exception",
+        "count": 8192,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19ce28",
+          "ebx": "0x19ec84",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541849",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5d48d0",
+          "0x5eba08"
+        ],
+        "host_time": 1791612375.3610437
+      },
+      {
+        "event": "native_exception",
+        "count": 16384,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74ed3468",
+          "0x74e48fbb",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612410.7726777
+      },
+      {
+        "event": "native_exception",
+        "count": 32768,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x74f0b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74e49078",
+          "0x74eef762",
+          "0x74edb9c1",
+          "0x74ecdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612484.43621
+      }
+    ],
+    "npc_selected_native": false,
+    "shop_catalog_parsed_native": false,
+    "shop_frame_shown_native": false,
+    "shop_historical_names_native": false,
+    "shop_historical_prices_native": false,
+    "shop_historical_item_count_native": false,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "historical_placement_basis": "Original minimap visually matches Wiki named map; Wiki XY reproduced by native actor grid conversion",
+    "shop_display_price_text_native": false,
+    "visible_prices_verified": null,
+    "official_item_master_ids_verified": false,
+    "original_lemon_icon_native": false,
+    "icon_name_association_basis": "Visual match against unchanged original ICND sprites",
+    "native_inventory_samples": [
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 2,
+        "capacity": 32,
+        "order": [
+          {
+            "slot": 0,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "quantity": 1,
+            "icon_id": 1
+          },
+          {
+            "slot": 1,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "quantity": 1,
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612343.8715556
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 1,
+        "capacity": 32,
+        "order": [
+          {
+            "slot": 0,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "quantity": 1,
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612370.8897266
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 0,
+        "capacity": 32,
+        "order": [],
+        "host_time": 1791612388.9081297
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 1,
+        "capacity": 32,
+        "order": [
+          {
+            "slot": 0,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "quantity": 1,
+            "icon_id": 1
+          }
+        ],
+        "host_time": 1791612405.9205365
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 0,
+        "capacity": 32,
+        "order": [],
+        "host_time": 1791612423.9344308
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 1,
+        "capacity": 32,
+        "order": [
+          {
+            "slot": 0,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "quantity": 1,
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612440.9506266
+      },
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 0,
+        "capacity": 32,
+        "order": [],
+        "host_time": 1791612458.9685392
+      }
+    ],
+    "saved_inventory": {
+      "money": 5000,
+      "capacity": 32,
+      "items": [],
+      "equipment": [
+        {
+          "identity": [
+            1895825409,
+            1,
+            1,
+            0
+          ],
+          "source_key": "offline-equipment-fixture-v18",
+          "catalog_index": 0,
+          "name": "Local Test Sword",
+          "buy_price": 0,
+          "sell_price": 0,
+          "quantity": 1,
+          "slot": 1,
+          "location": 4,
+          "definition_key": "test-sword"
+        },
+        {
+          "identity": [
+            1895825410,
+            1,
+            1,
+            0
+          ],
+          "source_key": "offline-equipment-fixture-v18",
+          "catalog_index": 1,
+          "name": "Local Test Body",
+          "buy_price": 0,
+          "sell_price": 0,
+          "quantity": 1,
+          "slot": 2,
+          "location": 4,
+          "definition_key": "test-body"
+        }
+      ]
+    },
+    "saved_vitals": {
+      "hp": 100,
+      "tp": 30,
+      "max_hp": 110,
+      "max_tp": 30
+    },
+    "native_equipment_samples": [
+      {
+        "event": "native_player_equipment_state",
+        "order": [],
+        "host_time": 1791612343.9925594
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          }
+        ],
+        "host_time": 1791612371.0257232
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612388.5525668
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612406.0805657
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612423.6052854
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          }
+        ],
+        "host_time": 1791612441.1712277
+      },
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612458.6685505
+      }
+    ],
+    "equipment_matches_database_native": true,
+    "equipment_fixture_provenance": "Explicit offline Local Test Sword/Body, not official item masters or historical shop stock",
+    "equip_request_native": true,
+    "unequip_request_native": true,
+    "native_vitals_samples": [
+      {
+        "event": "native_player_vitals_state",
+        "hp": 100,
+        "tp": 30,
+        "max_hp": 100,
+        "max_tp": 30,
+        "host_time": 1791612343.9945576
+      },
+      {
+        "event": "native_player_vitals_state",
+        "hp": 100,
+        "tp": 30,
+        "max_hp": 110,
+        "max_tp": 30,
+        "host_time": 1791612388.5525668
+      },
+      {
+        "event": "native_player_vitals_state",
+        "hp": 100,
+        "tp": 30,
+        "max_hp": 100,
+        "max_tp": 30,
+        "host_time": 1791612441.1712277
+      },
+      {
+        "event": "native_player_vitals_state",
+        "hp": 100,
+        "tp": 30,
+        "max_hp": 110,
+        "max_tp": 30,
+        "host_time": 1791612458.6685505
+      }
+    ],
+    "equipment_hp_bonus_native": true,
+    "hp_gauge_draw_succeeded_native": true,
+    "native_visual_samples": [
+      {
+        "event": "native_player_visual_state",
+        "components": [],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 200,
+            "native_component": "0xae2c0e4",
+            "descriptor": {
+              "symbol": "ID_BODY",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_11.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_11.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612343.9945576
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 200,
+            "native_component": "0xae2c0e4",
+            "descriptor": {
+              "symbol": "ID_BODY",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_11.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_11.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc18c1ac",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0x119bfc50",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612371.0267339
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 0,
+            "resource": 4000,
+            "layer": 1
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 4000,
+            "native_component": "0xae2cc0c",
+            "descriptor": {
+              "symbol": "ID_BODY_A000",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_00.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_00.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc18c1ac",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0x119bfc50",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612388.5535674
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 0,
+            "resource": 4000,
+            "layer": 1
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 4000,
+            "native_component": "0xae2cc0c",
+            "descriptor": {
+              "symbol": "ID_BODY_A000",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_00.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_00.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612406.0820808
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 0,
+            "resource": 4000,
+            "layer": 1
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 4000,
+            "native_component": "0xae2cc0c",
+            "descriptor": {
+              "symbol": "ID_BODY_A000",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_00.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_00.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc18c1ac",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0x119bfc50",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612423.6082792
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 200,
+            "native_component": "0xae2c0e4",
+            "descriptor": {
+              "symbol": "ID_BODY",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_11.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_11.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc18c1ac",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0x119bfc50",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612441.1712277
+      },
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 0,
+            "resource": 4000,
+            "layer": 1
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 4000,
+            "native_component": "0xae2cc0c",
+            "descriptor": {
+              "symbol": "ID_BODY_A000",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_00.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_00.bnd"
+            },
+            "render_node": "0xce32980",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc18c1ac",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0x119bfc50",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2b514",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xce359e0",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612458.669539
+      }
+    ],
+    "visual_components_match_database_native": true,
+    "body_visual_resource_loaded_native": true,
+    "weapon_visual_resource_loaded_native": true,
+    "native_weapon_descriptor": {
+      "symbol": "ID_SWORD_000",
+      "map_amd": "",
+      "map_bnd": "",
+      "battle_amd": "b_sword.amd",
+      "battle_bnd": "b_sword_000.bnd"
+    },
+    "weapon_map_hidden_by_original_asset": true,
+    "appearance_restored": true,
+    "native_visual_equip_unequip_reequip_transitions": true,
+    "body_unequip_fallback_native": true,
+    "native_equip_unequip_reequip_transitions": true
+  },
+  "reentered": {
+    "native_session_created": true,
+    "account_authenticated": true,
+    "game_prelogin_accepted": true,
+    "character_list_accepted": true,
+    "character_selection_accepted": true,
+    "world_admission_accepted": true,
+    "world_controller_completed": true,
+    "map_entered": true,
+    "playable": null,
+    "observed_positions": [
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ],
+      [
+        4224,
+        5152
+      ]
+    ],
+    "expected_reentry_position": [
+      4224.0,
+      5152.0
+    ],
+    "native_exceptions": [
+      {
+        "event": "native_exception",
+        "count": 1,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f990",
+          "ebx": "0x0",
+          "ecx": "0x2",
+          "edx": "0x0",
+          "esi": "0x19fe8c",
+          "edi": "0x759bd600",
+          "ebp": "0x19f9ec",
+          "esp": "0x19f990",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0x40010006",
+          "0x772b2154",
+          "0x7738cc20",
+          "0x40479e",
+          "0x405e19",
+          "0x6baf8b",
+          "0x759b5d49",
+          "0x77a6d7eb",
+          "0x77a6d771"
+        ],
+        "host_time": 1791612503.8928707
+      },
+      {
+        "event": "native_exception",
+        "count": 2,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x464fa78",
+          "ebx": "0x19930520",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x464fbf8",
+          "edi": "0x72a0cb98",
+          "ebp": "0x464fad4",
+          "esp": "0x464fa78",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x763348d9",
+          "0x729ea0f5",
+          "0x729ea51e",
+          "0x729ea3b5",
+          "0x729ed8eb",
+          "0x729f0a1c",
+          "0x7631e9eb",
+          "0x759b5d49",
+          "0x77a6d7eb",
+          "0x77a6d771",
+          "0x755cac36"
+        ],
+        "host_time": 1791612505.0095737
+      },
+      {
+        "event": "native_exception",
+        "count": 3,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f538",
+          "ebx": "0x19f604",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19f594",
+          "esp": "0x19f538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612651.654265
+      },
+      {
+        "event": "native_exception",
+        "count": 4,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612651.6592693
+      },
+      {
+        "event": "native_exception",
+        "count": 5,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612651.6632652
+      },
+      {
+        "event": "native_exception",
+        "count": 6,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19f538",
+          "ebx": "0x19f604",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19f594",
+          "esp": "0x19f538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612651.6672664
+      },
+      {
+        "event": "native_exception",
+        "count": 7,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612651.6712658
+      },
+      {
+        "event": "native_exception",
+        "count": 8,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612651.6762686
+      },
+      {
+        "event": "native_exception",
+        "count": 16,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e538",
+          "ebx": "0x19f4a4",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x5419ee",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5c7fc3"
+        ],
+        "host_time": 1791612651.6812654
+      },
+      {
+        "event": "native_exception",
+        "count": 32,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541b63",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612651.765269
+      },
+      {
+        "event": "native_exception",
+        "count": 64,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541acb",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612651.9192827
+      },
+      {
+        "event": "native_exception",
+        "count": 128,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19ce28",
+          "ebx": "0x19ec84",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19ce84",
+          "esp": "0x19ce28",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541849",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5d48d0",
+          "0x5eba08"
+        ],
+        "host_time": 1791612652.1402903
+      },
+      {
+        "event": "native_exception",
+        "count": 256,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a56",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612652.6950474
+      },
+      {
+        "event": "native_exception",
+        "count": 512,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541a95",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612653.6678894
+      },
+      {
+        "event": "native_exception",
+        "count": 1024,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e538",
+          "ebx": "0x19f4a4",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e594",
+          "esp": "0x19e538",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x5419ee",
+          "0x543bea",
+          "0x5c525b",
+          "0x5c4587",
+          "0x5c7fc3"
+        ],
+        "host_time": 1791612655.6340747
+      },
+      {
+        "event": "native_exception",
+        "count": 2048,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19d7e8",
+          "ebx": "0x19f644",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19d844",
+          "esp": "0x19d7e8",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x74549078",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541b63",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2",
+          "0x402919"
+        ],
+        "host_time": 1791612659.6807127
+      },
+      {
+        "event": "native_exception",
+        "count": 4096,
+        "type": "system",
+        "address": "0x772b2154",
+        "registers": {
+          "eax": "0x19e690",
+          "ebx": "0x19f5fc",
+          "ecx": "0x3",
+          "edx": "0x0",
+          "esi": "0x757a3f34",
+          "edi": "0x7460b4d8",
+          "ebp": "0x19e6ec",
+          "esp": "0x19e690",
+          "eip": "0x772b2154"
+        },
+        "memory": null,
+        "stack": [
+          "0xe06d7363",
+          "0x772b2154",
+          "0x757db34d",
+          "0x745d3468",
+          "0x74548fbb",
+          "0x745ef762",
+          "0x745db9c1",
+          "0x745cdae8",
+          "0x623497",
+          "0x5e6c90",
+          "0x5e87a1",
+          "0x541acb",
+          "0x5eba08",
+          "0x5eca81",
+          "0x4453c8",
+          "0x430de2"
+        ],
+        "host_time": 1791612667.8244274
+      }
+    ],
+    "npc_selected_native": false,
+    "shop_catalog_parsed_native": false,
+    "shop_frame_shown_native": false,
+    "shop_historical_names_native": false,
+    "shop_historical_prices_native": false,
+    "shop_historical_item_count_native": false,
+    "historical_merchant_position_native": true,
+    "historical_map_id_native": true,
+    "historical_placement_basis": "Original minimap visually matches Wiki named map; Wiki XY reproduced by native actor grid conversion",
+    "shop_display_price_text_native": false,
+    "visible_prices_verified": null,
+    "official_item_master_ids_verified": false,
+    "original_lemon_icon_native": false,
+    "icon_name_association_basis": "Visual match against unchanged original ICND sprites",
+    "native_inventory_samples": [
+      {
+        "event": "native_player_inventory_state",
+        "money": 5000,
+        "items": 0,
+        "capacity": 32,
+        "order": [],
+        "host_time": 1791612651.934295
+      }
+    ],
+    "saved_inventory": {
+      "money": 5000,
+      "capacity": 32,
+      "items": [],
+      "equipment": [
+        {
+          "identity": [
+            1895825409,
+            1,
+            1,
+            0
+          ],
+          "source_key": "offline-equipment-fixture-v18",
+          "catalog_index": 0,
+          "name": "Local Test Sword",
+          "buy_price": 0,
+          "sell_price": 0,
+          "quantity": 1,
+          "slot": 1,
+          "location": 4,
+          "definition_key": "test-sword"
+        },
+        {
+          "identity": [
+            1895825410,
+            1,
+            1,
+            0
+          ],
+          "source_key": "offline-equipment-fixture-v18",
+          "catalog_index": 1,
+          "name": "Local Test Body",
+          "buy_price": 0,
+          "sell_price": 0,
+          "quantity": 1,
+          "slot": 2,
+          "location": 4,
+          "definition_key": "test-body"
+        }
+      ]
+    },
+    "saved_vitals": {
+      "hp": 100,
+      "tp": 30,
+      "max_hp": 110,
+      "max_tp": 30
+    },
+    "native_equipment_samples": [
+      {
+        "event": "native_player_equipment_state",
+        "order": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 1
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "icon_id": 857
+          }
+        ],
+        "host_time": 1791612651.5699515
+      }
+    ],
+    "equipment_matches_database_native": true,
+    "equipment_fixture_provenance": "Explicit offline Local Test Sword/Body, not official item masters or historical shop stock",
+    "equip_request_native": false,
+    "unequip_request_native": false,
+    "native_vitals_samples": [
+      {
+        "event": "native_player_vitals_state",
+        "hp": 100,
+        "tp": 30,
+        "max_hp": 110,
+        "max_tp": 30,
+        "host_time": 1791612651.5699515
+      }
+    ],
+    "equipment_hp_bonus_native": true,
+    "hp_gauge_draw_succeeded_native": true,
+    "native_visual_samples": [
+      {
+        "event": "native_player_visual_state",
+        "components": [
+          {
+            "slot": 1,
+            "identity": [
+              1895825409,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 500,
+            "resource": 10000,
+            "layer": 4
+          },
+          {
+            "slot": 2,
+            "identity": [
+              1895825410,
+              1,
+              1,
+              0
+            ],
+            "source_bank": 0,
+            "resource": 4000,
+            "layer": 1
+          }
+        ],
+        "layers": [
+          {
+            "layer": 1,
+            "source_bank": 0,
+            "resource": 4000,
+            "native_component": "0xae30c2c",
+            "descriptor": {
+              "symbol": "ID_BODY_A000",
+              "map_amd": "m_body.amd",
+              "map_bnd": "M_body_a_m_00.bnd",
+              "battle_amd": "b_body.amd",
+              "battle_bnd": "B_body_a_m_00.bnd"
+            },
+            "render_node": "0xcde8138",
+            "enabled": 1
+          },
+          {
+            "layer": 4,
+            "source_bank": 500,
+            "resource": 10000,
+            "native_component": "0xc144364",
+            "descriptor": {
+              "symbol": "ID_SWORD_000",
+              "map_amd": "",
+              "map_bnd": "",
+              "battle_amd": "b_sword.amd",
+              "battle_bnd": "b_sword_000.bnd"
+            },
+            "render_node": "0xcde7d30",
+            "enabled": 1
+          },
+          {
+            "layer": 5,
+            "source_bank": 0,
+            "resource": 10,
+            "native_component": "0xae2f534",
+            "descriptor": {
+              "symbol": "ID_FACE0_1",
+              "map_amd": "m_head00.amd",
+              "map_bnd": "M_head_m_00.bnd",
+              "battle_amd": "b_head00.amd",
+              "battle_bnd": "B_head_a_m_00.bnd"
+            },
+            "render_node": "0xcde6908",
+            "enabled": 1
+          }
+        ],
+        "host_time": 1791612651.5699515
+      }
+    ],
+    "visual_components_match_database_native": true,
+    "body_visual_resource_loaded_native": true,
+    "weapon_visual_resource_loaded_native": true,
+    "native_weapon_descriptor": {
+      "symbol": "ID_SWORD_000",
+      "map_amd": "",
+      "map_bnd": "",
+      "battle_amd": "b_sword.amd",
+      "battle_bnd": "b_sword_000.bnd"
+    },
+    "weapon_map_hidden_by_original_asset": true,
+    "appearance_restored": true,
+    "position_restored_without_movement": true
+  }
+}
