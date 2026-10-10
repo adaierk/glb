@@ -32,6 +32,16 @@
     "A9": {
       "consumer": "0x49c510",
       "meaning": "Positional effect/script references; payload coordinates are floats"
+    },
+    "record59_speed": {
+      "field": "0x38",
+      "parser": "0x5299d2",
+      "state_offset": "0x23c",
+      "actor_offset": "0x14c",
+      "native_float_consumer": "0x406920",
+      "old_bits": "0x00000001",
+      "correct_local_bits": "0x3f800000",
+      "meaning": "Float1.0 movement speed; old integer1 was a denormal float"
     }
   },
   "pending": [
@@ -41,5 +51,14 @@
     "Results/rewards",
     "Return to map and persistent battle vitals"
   ],
-  "observation_boundary": "Read-only battle probes; no writes, forced calls or forced returns."
+  "observation_boundary": "Read-only battle probes; no writes, forced calls or forced returns.",
+  "local_fixture_rules": {
+    "movement_speed": 1,
+    "enemy_position": [
+      580,
+      0
+    ],
+    "attack_approach_distance": 48,
+    "official_weapon_range_recovered": false
+  }
 }

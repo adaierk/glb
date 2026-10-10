@@ -13,6 +13,9 @@ v20 战斗朝向 2/6、正常透明度、玩家和 E000 精灵显示。
 确认 AA 为战斗组启动通知，恢复原生战斗鼠标选敌。
 4E/4F 带当前战斗组；A8 普通攻击命令 10004 到达服务端。
 A7/B2/5A 战场移动和动作记录回传已补入服务端。
+59+38 -> state+23C -> actor+14C -> 406920 按浮点数读取。
+此前整数1误读为非规格化浮点数，造成走路动画播放但坐标不变。
+修正为本地速度1.0；攻击接近距离48像素为明确的本地测试规则。
 实机通过范围及证据见 RELEASE_METADATA.json 和 evidence/v21。
 
 纠错：
@@ -31,7 +34,7 @@ A9 引用的是位置坐标，不是攻击者/目标编号。
 启动及升级：
 Run_TOEO_Rashuan.cmd：地图/商店。
 Run_TOEO_Equipment_Test.cmd：装备测试。
-Run_TOEO_Encounter_Test.cmd：本輪原生战斗链路。
+Run_TOEO_Encounter_Test.cmd：本轮原生战斗链路。
 账号 archive001 / local123；保留已有 local_world_userdata。
 不附带原游戏资源或玩家数据库；不能覆盖玩家存档。
 原始 EXE SHA256：

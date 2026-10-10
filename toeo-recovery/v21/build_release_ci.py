@@ -7,7 +7,7 @@ RUN=config['run'];TESTED=config['tested_commit']
 EVIDENCE=META/'evidence'/str(RUN)
 proof=json.loads((EVIDENCE/'artifact.json').read_text())
 result=json.loads((EVIDENCE/'runtime_result.json').read_text())
-assert all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native'))
+assert all(result.get(k) for k in ('battle_pool_started_native','battle_target_selected_native','battle_attack_request_native','battle_attack_command_native','battle_movement_changed_position_native','battle_speed_float_native','battle_attack_program_native','battle_attack_animation_native'))
 assert proof['tested_commit']==TESTED
 assert all(result.get(k) for k in ('battle_player_body_submitted_native','battle_enemy_body_submitted_native','battle_normal_placement_native'))
 assert all(result.get(k) for k in ('map_entered','enemy_created_native','enemy_component_native','enemy_world_model_native','enemy_field_symbol_native','enemy_mouse_pick_native','enemy_target_selected_native'))
@@ -20,9 +20,11 @@ attacks=[e for e in applied if e.get('action',{}).get('command')==10004]
 assert movement and attacks,'Original B2/5A movement and attack records were not applied'
 models={e['identity'][0]:e['model'] for e in events if e.get('event')=='native_battle_render_actor_snapshot' and e.get('phase')=='created'}
 assert 1 in models and 0x72000001 in models
-attack_animations=[e for e in events if e.get('event')=='native_model_animation_select' and e.get('object')==models[1] and e.get('result')==1 and e.get('args',[0])[0] not in (100,101,110) and e.get('host_time',0)>=attacks[0]['host_time']]
+attack_animations=[e for e in events if e.get('event')=='native_model_animation_select' and e.get('object')==models[1] and e.get('result')==1 and e.get('args',[0])[0]>=100 and e.get('args',[0])[0] not in (100,101,110) and e.get('host_time',0)>=attacks[0]['host_time']]
 assert attack_animations,'Original attack animation was not selected successfully'
 action_proof={'passed':True,'tested_commit':TESTED,'run':RUN,'movement_records':movement,'attack_records':attacks,'attack_animations':attack_animations}
+action_proof['position_changes']=[e for e in events if e.get('event')=='native_battle_render_actor_snapshot' and e.get('identity')==[1,1] and e.get('phase')=='tick' and abs(e.get('position',[220])[0]-220)>10]
+assert action_proof['position_changes']
 (META/'action_verification.json').write_text(json.dumps(action_proof,indent=2))
 for identity,model in models.items():
  assert any(e.get('event')=='native_model_animation_select' and e.get('object')==model and e.get('result')==1 and e.get('args',[0])[0]==100 for e in events)
