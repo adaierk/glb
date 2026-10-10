@@ -183,14 +183,25 @@ def main():
             saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
             result['saved_inventory']=saved_inventory
             if args.move_check:
-                owned={tuple(x['identity']) for x in saved_inventory['items']}
-                result['bag_slot1_native']=any(e.get('event')=='native_inventory_ui_item' and e.get('slot')==1 and e.get('quantity')==1 and tuple(e.get('identity',())) in owned for e in events)
+                expected_order=[(list(x['identity']),x['quantity'],x['slot']) for x in saved_inventory['items']]
+                # Original initial 34/6B reconstruction appends with argument -1.
+                # Verify the actual native linked list, not the insertion argument.
+                result['bag_order_native']=bool(inventory_samples) and [(x['identity'],x['quantity'],x['slot']) for x in inventory_samples[-1].get('order',[])]==expected_order
+                lemon=next((x for x in saved_inventory['items'] if x['name']=='レモングミ'),None)
+                result['bag_slot1_native']=result['bag_order_native'] and lemon is not None and lemon['slot']==1
                 result['bag_slot1_saved']=len(saved_inventory['items'])==2 and next((x['slot'] for x in saved_inventory['items'] if x['name']=='レモングミ'),None)==1
                 result['bag_move_request_native']=any(e.get('event')=='native_plain_request_before_serialization' and e.get('opcode')==0x54 for e in events)
                 if not result['bag_slot1_native'] or not result['bag_slot1_saved'] or (not args.reenter_check and not result['bag_move_request_native']):
                     failure=failure or 'Real native bag move and persistent bag order did not pass'
 
             result['saved_vitals']=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
+            hud_draws=[e for e in events if e.get('event')=='native_hud_graphics_result' and e.get('hresult')=='0x0']
+            result['hp_gauge_draw_succeeded_native']=any('0x5a0605' in e.get('stack',[]) for e in hud_draws)
+            result['tp_gauge_draw_succeeded_native']=any('0x5a0675' in e.get('stack',[]) for e in hud_draws)
+            result['hud_actual_d3d_draw_succeeded_native']=any(e.get('event')=='native_hud_d3d_method_result' and e.get('method')=='DrawPrimitiveUP' and e.get('hresult')=='0x0' for e in events)
+            result['renderer_optional_validation_compat_applied']='legacy_render_validation_compat_applied' in names
+            if not all(result[k] for k in ('hp_gauge_draw_succeeded_native','tp_gauge_draw_succeeded_native','hud_actual_d3d_draw_succeeded_native')):
+                failure=failure or 'Actual original HP/TP primitive drawing did not succeed'
             vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
             result['native_vitals_samples']=vital_samples
             if args.use_check and not args.reenter_check:

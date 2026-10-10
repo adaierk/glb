@@ -414,8 +414,17 @@
     icon_id:args[2].toUInt32(),quantity:args[3].toInt32(),flags:args[4].toUInt32()})));}});
   let previousInventory='';setInterval(()=>{if(observedPlayer!==null)emit(safely(()=>{
     const wallet=observedPlayer.add(0x1d4).readPointer(),bag=observedPlayer.add(0x1d8).readPointer();
+    const order=[];
+    if(!bag.isNull()){
+      const count=bag.add(8).readU32(),head=bag.add(4).readPointer();let node=head.readPointer();
+      for(let slot=0;slot<Math.min(count,32) && !node.equals(head);slot++,node=node.readPointer()){
+        const item=node.add(8).readPointer();
+        order.push({slot,identity:[0,4,8,12].map(x=>item.add(x).readU32()),
+          quantity:item.add(0x24).readS16(),icon_id:item.add(0x30).readU32()});
+      }
+    }
     const state={event:'native_player_inventory_state',money:wallet.isNull()?null:wallet.readU32(),
-      items:bag.isNull()?null:bag.add(8).readU32(),capacity:bag.isNull()?null:bag.add(12).readU32()};
+      items:bag.isNull()?null:bag.add(8).readU32(),capacity:bag.isNull()?null:bag.add(12).readU32(),order};
     const key=JSON.stringify(state);if(key===previousInventory)return {event:'native_inventory_sample_unchanged'};
     previousInventory=key;return state;
   }));},1000);
