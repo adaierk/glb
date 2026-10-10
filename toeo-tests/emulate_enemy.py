@@ -17,7 +17,7 @@ class EnemyFixture(NpcFixture):
             self.ret(0,8)
         elif va==0x4fe510:
             p=self.read32(sp+4)
-            self.enemy_fields={'level':self.read32(p+0xc),'battle_group':self.read32(p+0x14),'style':self.read32(p+0x2c)}
+            self.enemy_fields={'level':self.read32(p+0xc),'pick_range':self.read32(p+0x10),'symbol':self.read32(p+0x14),'symbol_scale':float(__import__('struct').unpack('<f',uc.mem_read(p+0x18,4))[0]),'style':self.read32(p+0x2c)}
             super().on_code(uc,va,size,context)
         else:super().on_code(uc,va,size,context)
 def run(binary):
@@ -31,7 +31,7 @@ def run(binary):
     assert bytes.fromhex(f.projected['appearance_hex'])[8:12]==ENEMY_MODEL_BANK.to_bytes(4,'little')
     assert f.shop_extension=={'vtable':'0x6eebe4','actor':f.actor,'kind':1}
     assert f.native_mode=={'index':2,'vtable':'0x6eecb8'}
-    assert f.enemy_fields=={'level':0xffffffff,'battle_group':0,'style':2}
+    assert f.enemy_fields=={'level':0xffffffff,'pick_range':2,'symbol':1,'symbol_scale':1.0,'style':2}
     assert f.decoded_names==[ENEMY_NAME] and not f.assertions
     return {'passed':True,'native_projection':f.projected,'native_enemy_extension':f.shop_extension,
             'native_mode':f.native_mode,'native_fields':f.enemy_fields,
