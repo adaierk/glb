@@ -1,0 +1,18 @@
+{
+  "approved": true,
+  "artifact_sha256": "2aa2cd5bbc42fad762b9f8260a2256a5c7547ae95ab825e6515d541ffe779775",
+  "images_sha256": {
+    "TOEO_Rashuan_Equipment_20261010_v17.png": "1e3dc721762f5abbdf99296d197770d45cb59a425940b20f4aa9e7e5ddd4ab2e",
+    "TOEO_Rashuan_Unequip_20261010_v17.png": "522ffdff6736f6d8f9604ece65f19b7e8037c5756d2df815bd001a1f0c116a1b",
+    "TOEO_Rashuan_Equipment_Restored_20261010_v17.png": "571a3ee52b35f9cede9fcbf34b75b044e4b9c542781fdfebbde0da9f8b9df860",
+    "TOEO_Rashuan_Map_20261010_v17.png": "c34b81e0a038505fcc68c9c62824925859ad0408ee4481bff0e13453bbfe0f15"
+  },
+  "observed": [
+    "Real sword and body icons in original gear controls; max HP 110",
+    "Sword absent from weapon control and present in first bag cell after unequip",
+    "Same weapon/body controls and max HP 110 restored at second login",
+    "Original Rashuan river mouth map and character visible after movement"
+  ],
+  "appearance_restored": false,
+  "reviewer": "Codex visual inspection of exact crop pixels from native run 38017513763"
+}
