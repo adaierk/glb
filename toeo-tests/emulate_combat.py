@@ -22,7 +22,7 @@ class BattleRecordFixture(NpcFixture):
                 'entity_kind':self.read32(p+8),'battle_model_bank':self.read32(p+0x24c),'category':self.read32(p+0x244),'map_id':self.read32(p+0x220),
                 'group':[self.read32(p+0x228),self.read32(p+0x22c)],
                 'position':[self.read32(p+0x230),self.read32(p+0x234)],
-                'direction':self.read32(p+0x238),
+                'direction':self.read32(p+0x238),'inactive':uc.mem_read(p+0x14,1)[0],
                 'appearance_hex':bytes(uc.mem_read(p+0x34,24)).hex(),
                 'hp':[self.read32(p+0x54),self.read32(p+0xf4)],
                 'tp':[self.read32(p+0x58),self.read32(p+0xf8)]}
@@ -44,7 +44,7 @@ def record_projections(binary):
         assert actual['map_id']==RASHUAN.map_id and actual['group']==list(BATTLE_GROUP)
         assert actual['position']==list(position) and actual['appearance_hex']==appearance.hex()
         assert actual['controlled']==int(controlled) and actual['hp']==[100,100] and actual['tp']==[30,30]
-        assert actual['direction']==(2 if controlled else 6)
+        assert actual['direction']==(2 if controlled else 6) and actual['inactive']==0
         assert actual['battle_model_bank']==(0 if controlled else BATTLE_ENEMY_RESOURCE_BANK)
         assert list(f.names.values())[-1]==name and not f.assertions
         rows.append(actual)

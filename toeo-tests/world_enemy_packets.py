@@ -7,7 +7,7 @@ from account_packets import message
 from world_map_packets import record
 from character_mutation_packets import encode_name
 ENEMY_IDENTITY=(0x72000001,1)
-ENEMY_NAME='SLIME Local Test'
+ENEMY_NAME='Original Enemy Test'
 ENEMY_MODEL_BANK=1200
 def enemy_grid(profile):
     x,y=profile.spawn_grid

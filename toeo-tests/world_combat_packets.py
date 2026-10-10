@@ -23,7 +23,8 @@ def battle_actor_record(identity,name,appearance,category,position,grid,map_id,h
     struct.pack_into('<IIIII',b,0x98,max_hp,hp,max_tp,tp,0)
     # Original529919 copies B4 -> state+8 -> actor+60; model/body and battle routines branch on kind1/2.
     struct.pack_into('<I',b,0xb4,category)
-    b[0xc0:0xc5]=bytes((1,1,1,0,1))
+    # C2 -> actor+168 disables normal updates and sets model alpha to 0x80; live fixtures use 0.
+    b[0xc0:0xc5]=bytes((1,1,0,0,1))
     struct.pack_into('<HHH',b,0xc6,1,1,2)
     # Original 529840 -> state+24C -> actor+16C; 5109A0 uses the CRSD bank directly.
     struct.pack_into('<I',b,0xcc,battle_model_bank)
@@ -49,8 +50,8 @@ def encounter_notice(identity,name,selector_fields,profile,request_id,background
     player_appearance=selector_fields[0x30:0x48]
     appearance=bytearray(24);struct.pack_into('<I',appearance,8,BATTLE_ENEMY_BANK)
     tail=battle_group_record(profile,background_id)
-    tail+=battle_actor_record(identity,name,player_appearance,1,(-96,0),profile.spawn_grid,profile.map_id,**vitals,controlled=True,equipment=equipment)
-    tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(96,0),enemy_grid(profile),profile.map_id,battle_model_bank=BATTLE_ENEMY_RESOURCE_BANK)
+    tail+=battle_actor_record(identity,name,player_appearance,1,(220,0),profile.spawn_grid,profile.map_id,**vitals,controlled=True,equipment=equipment)
+    tail+=battle_actor_record(ENEMY_IDENTITY,ENEMY_NAME,bytes(appearance),2,(580,0),enemy_grid(profile),profile.map_id,battle_model_bank=BATTLE_ENEMY_RESOURCE_BANK)
     tail+=bytes(4)
     b=bytearray(message(0x9d,bytes(35+len(tail)),request_id)[:44])
     struct.pack_into('<I',b,12,44+len(tail))
