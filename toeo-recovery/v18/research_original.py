@@ -11,6 +11,10 @@ binary=raw/'DefaultComponent/ToEO_CL.dat';data=binary.read_bytes()
 assert hashlib.sha256(data).hexdigest()=='635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 pe=pefile.PE(data=data);base=pe.OPTIONAL_HEADER.ImageBase;cs=Cs(CS_ARCH_X86,CS_MODE_32);cs.skipdata=True
 ranges={
+ 'weapon_resource_setup':(0x4d8000,0x190),
+ 'component_resource_lookup':(0x42bbf0,0x100),
+ 'world_network_dispatch_head':(0x529f00,0x1c0),
+
  'world_model_selection':(0x501300,0x650),
  'model_layer_loader':(0x518ed0,0x900),
  'inventory_definition_records':(0x51f030,0x900),
@@ -120,3 +124,19 @@ for section in pe.sections:
   if pos<0:break
   table_refs.append({'address':hex(start+pos),'words_before_after':[hex(v) for v in struct.unpack('<'+'I'*17,body[pos-32:pos+36])]});pos+=1
 (OUT/'visual_dispatch_table_refs.json').write_text(json.dumps(table_refs,indent=2))
+
+cpd_records=[]
+for name in ('pc1a_m.cpd','pc1a_l.cpd','pc_weapon.cpd','pc_hat.cpd'):
+ body=(resources/name).read_bytes()
+ cpd_records.append({'file':name,'start':body[:512].hex(),'id10000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',10000)),body)],'id4000_offsets':[m.start() for m in re.finditer(re.escape(struct.pack('<I',4000)),body)],'strings':[x.group().decode() for x in re.finditer(rb'[\\x20-\\x7e]{5,}',body)][:60]})
+(OUT/'weapon_cpd_references.json').write_text(json.dumps(cpd_records,indent=2))
+# String references to the independent weapon descriptor.
+needle=b'pc_weapon';pos=data.find(needle)
+if pos>=0:
+ va=base+pe.get_rva_from_offset(pos);refs=[]
+ for section in pe.sections:
+  body=section.get_data();start=base+section.VirtualAddress
+  for m in re.finditer(re.escape(struct.pack('<I',va)),body):
+   left=max(0,m.start()-70);at=start+left
+   refs.append({'address':hex(start+m.start()),'instructions':[f'{i.address:08x} {i.mnemonic} {i.op_str}' for i in cs.disasm(body[left:m.start()+120],at)]})
+ (OUT/'weapon_descriptor_refs.json').write_text(json.dumps({'string_address':hex(va),'refs':refs},indent=2))
