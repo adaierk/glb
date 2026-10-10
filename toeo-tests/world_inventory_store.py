@@ -222,7 +222,7 @@ class WorldInventoryStore:
 
     def _move_equipment(self,account_id,identity,request,payload,connection_key):
         from world_equipment_definitions import equipment_definition
-        if request['identity']!=identity or request['opcode']!=0x54 or request['source_location'] not in (2,4) or request['destination_location'] not in (2,4) or request['source_location']==request['destination_location'] or request['count']!=-1 or request['context']!=0:
+        if request['identity']!=identity or request['opcode']!=0x54 or request['source_location'] not in (2,4) or request['destination_location'] not in (2,4) or request['source_location']==request['destination_location'] or request['count'] not in (-1,1) or request['context']!=0:
             raise TradeRejected('Unsupported equipment move')
         digest=hashlib.sha256(payload).hexdigest()
         with self.accounts.lock,self.accounts.db:
