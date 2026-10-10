@@ -1,0 +1,514 @@
+005b52d0  mov      eax, dword ptr [ecx + 0x24]
+005b52d3  ret      
+005b52d4  int3     
+005b52d5  int3     
+005b52d6  int3     
+005b52d7  int3     
+005b52d8  int3     
+005b52d9  int3     
+005b52da  int3     
+005b52db  int3     
+005b52dc  int3     
+005b52dd  int3     
+005b52de  int3     
+005b52df  int3     
+005b52e0  mov      eax, dword ptr [ecx + 0x34]
+005b52e3  ret      
+005b52e4  int3     
+005b52e5  int3     
+005b52e6  int3     
+005b52e7  int3     
+005b52e8  int3     
+005b52e9  int3     
+005b52ea  int3     
+005b52eb  int3     
+005b52ec  int3     
+005b52ed  int3     
+005b52ee  int3     
+005b52ef  int3     
+005b52f0  mov      eax, dword ptr [ecx + 0x38]
+005b52f3  ret      
+005b52f4  int3     
+005b52f5  int3     
+005b52f6  int3     
+005b52f7  int3     
+005b52f8  int3     
+005b52f9  int3     
+005b52fa  int3     
+005b52fb  int3     
+005b52fc  int3     
+005b52fd  int3     
+005b52fe  int3     
+005b52ff  int3     
+005b5300  mov      eax, dword ptr [ecx + 0x44]
+005b5303  ret      
+005b5304  int3     
+005b5305  int3     
+005b5306  int3     
+005b5307  int3     
+005b5308  int3     
+005b5309  int3     
+005b530a  int3     
+005b530b  int3     
+005b530c  int3     
+005b530d  int3     
+005b530e  int3     
+005b530f  int3     
+005b5310  mov      eax, dword ptr [ecx + 0x40]
+005b5313  ret      
+005b5314  int3     
+005b5315  int3     
+005b5316  int3     
+005b5317  int3     
+005b5318  int3     
+005b5319  int3     
+005b531a  int3     
+005b531b  int3     
+005b531c  int3     
+005b531d  int3     
+005b531e  int3     
+005b531f  int3     
+005b5320  mov      eax, dword ptr [ecx + 0x74]
+005b5323  ret      
+005b5324  int3     
+005b5325  int3     
+005b5326  int3     
+005b5327  int3     
+005b5328  int3     
+005b5329  int3     
+005b532a  int3     
+005b532b  int3     
+005b532c  int3     
+005b532d  int3     
+005b532e  int3     
+005b532f  int3     
+005b5330  mov      eax, dword ptr [ecx + 0x48]
+005b5333  ret      
+005b5334  int3     
+005b5335  int3     
+005b5336  int3     
+005b5337  int3     
+005b5338  int3     
+005b5339  int3     
+005b533a  int3     
+005b533b  int3     
+005b533c  int3     
+005b533d  int3     
+005b533e  int3     
+005b533f  int3     
+005b5340  mov      eax, dword ptr [ecx + 0xc0]
+005b5346  ret      
+005b5347  int3     
+005b5348  int3     
+005b5349  int3     
+005b534a  int3     
+005b534b  int3     
+005b534c  int3     
+005b534d  int3     
+005b534e  int3     
+005b534f  int3     
+005b5350  mov      eax, dword ptr [ecx + 0x60]
+005b5353  ret      
+005b5354  int3     
+005b5355  int3     
+005b5356  int3     
+005b5357  int3     
+005b5358  int3     
+005b5359  int3     
+005b535a  int3     
+005b535b  int3     
+005b535c  int3     
+005b535d  int3     
+005b535e  int3     
+005b535f  int3     
+005b5360  mov      eax, dword ptr [ecx + 0x64]
+005b5363  ret      
+005b5364  int3     
+005b5365  int3     
+005b5366  int3     
+005b5367  int3     
+005b5368  int3     
+005b5369  int3     
+005b536a  int3     
+005b536b  int3     
+005b536c  int3     
+005b536d  int3     
+005b536e  int3     
+005b536f  int3     
+005b5370  mov      eax, dword ptr [ecx + 0x68]
+005b5373  ret      
+005b5374  int3     
+005b5375  int3     
+005b5376  int3     
+005b5377  int3     
+005b5378  int3     
+005b5379  int3     
+005b537a  int3     
+005b537b  int3     
+005b537c  int3     
+005b537d  int3     
+005b537e  int3     
+005b537f  int3     
+005b5380  mov      eax, dword ptr [ecx + 0x78]
+005b5383  ret      
+005b5384  int3     
+005b5385  int3     
+005b5386  int3     
+005b5387  int3     
+005b5388  int3     
+005b5389  int3     
+005b538a  int3     
+005b538b  int3     
+005b538c  int3     
+005b538d  int3     
+005b538e  int3     
+005b538f  int3     
+005b5390  mov      eax, dword ptr [ecx + 0x7c]
+005b5393  ret      
+005b5394  int3     
+005b5395  int3     
+005b5396  int3     
+005b5397  int3     
+005b5398  int3     
+005b5399  int3     
+005b539a  int3     
+005b539b  int3     
+005b539c  int3     
+005b539d  int3     
+005b539e  int3     
+005b539f  int3     
+005b53a0  mov      eax, dword ptr [ecx + 0xe4]
+005b53a6  ret      
+005b53a7  int3     
+005b53a8  int3     
+005b53a9  int3     
+005b53aa  int3     
+005b53ab  int3     
+005b53ac  int3     
+005b53ad  int3     
+005b53ae  int3     
+005b53af  int3     
+005b53b0  mov      eax, dword ptr [ecx + 0x9c]
+005b53b6  ret      
+005b53b7  int3     
+005b53b8  int3     
+005b53b9  int3     
+005b53ba  int3     
+005b53bb  int3     
+005b53bc  int3     
+005b53bd  int3     
+005b53be  int3     
+005b53bf  int3     
+005b53c0  mov      eax, dword ptr [ecx + 0xa4]
+005b53c6  ret      
+005b53c7  int3     
+005b53c8  int3     
+005b53c9  int3     
+005b53ca  int3     
+005b53cb  int3     
+005b53cc  int3     
+005b53cd  int3     
+005b53ce  int3     
+005b53cf  int3     
+005b53d0  mov      eax, dword ptr [ecx + 0xe0]
+005b53d6  ret      
+005b53d7  int3     
+005b53d8  int3     
+005b53d9  int3     
+005b53da  int3     
+005b53db  int3     
+005b53dc  int3     
+005b53dd  int3     
+005b53de  int3     
+005b53df  int3     
+005b53e0  mov      eax, dword ptr [ecx + 0xa8]
+005b53e6  ret      
+005b53e7  int3     
+005b53e8  int3     
+005b53e9  int3     
+005b53ea  int3     
+005b53eb  int3     
+005b53ec  int3     
+005b53ed  int3     
+005b53ee  int3     
+005b53ef  int3     
+005b53f0  mov      eax, dword ptr [ecx + 0xf0]
+005b53f6  ret      
+005b53f7  int3     
+005b53f8  int3     
+005b53f9  int3     
+005b53fa  int3     
+005b53fb  int3     
+005b53fc  int3     
+005b53fd  int3     
+005b53fe  int3     
+005b53ff  int3     
+005b5400  mov      eax, dword ptr [ecx + 0xf4]
+005b5406  ret      
+005b5407  int3     
+005b5408  int3     
+005b5409  int3     
+005b540a  int3     
+005b540b  int3     
+005b540c  int3     
+005b540d  int3     
+005b540e  int3     
+005b540f  int3     
+005b5410  mov      eax, dword ptr [ecx + 0xa0]
+005b5416  ret      
+005b5417  int3     
+005b5418  int3     
+005b5419  int3     
+005b541a  int3     
+005b541b  int3     
+005b541c  int3     
+005b541d  int3     
+005b541e  int3     
+005b541f  int3     
+005b5420  mov      eax, dword ptr [ecx + 0x2c]
+005b5423  ret      
+005b5424  int3     
+005b5425  int3     
+005b5426  int3     
+005b5427  int3     
+005b5428  int3     
+005b5429  int3     
+005b542a  int3     
+005b542b  int3     
+005b542c  int3     
+005b542d  int3     
+005b542e  int3     
+005b542f  int3     
+005b5430  mov      eax, dword ptr [ecx + 0xcc]
+005b5436  ret      
+005b5437  int3     
+005b5438  int3     
+005b5439  int3     
+005b543a  int3     
+005b543b  int3     
+005b543c  int3     
+005b543d  int3     
+005b543e  int3     
+005b543f  int3     
+005b5440  mov      eax, dword ptr [ecx + 0xec]
+005b5446  ret      
+005b5447  int3     
+005b5448  int3     
+005b5449  int3     
+005b544a  int3     
+005b544b  int3     
+005b544c  int3     
+005b544d  int3     
+005b544e  int3     
+005b544f  int3     
+005b5450  mov      eax, dword ptr [ecx + 0xb0]
+005b5456  ret      
+005b5457  int3     
+005b5458  int3     
+005b5459  int3     
+005b545a  int3     
+005b545b  int3     
+005b545c  int3     
+005b545d  int3     
+005b545e  int3     
+005b545f  int3     
+005b5460  mov      eax, dword ptr [ecx + 0xc4]
+005b5466  ret      
+005b5467  int3     
+005b5468  int3     
+005b5469  int3     
+005b546a  int3     
+005b546b  int3     
+005b546c  int3     
+005b546d  int3     
+005b546e  int3     
+005b546f  int3     
+005b5470  mov      eax, dword ptr [ecx + 0xc8]
+005b5476  ret      
+005b5477  int3     
+005b5478  int3     
+005b5479  int3     
+005b547a  int3     
+005b547b  int3     
+005b547c  int3     
+005b547d  int3     
+005b547e  int3     
+005b547f  int3     
+005b5480  mov      eax, dword ptr [ecx + 0xb4]
+005b5486  ret      
+005b5487  int3     
+005b5488  int3     
+005b5489  int3     
+005b548a  int3     
+005b548b  int3     
+005b548c  int3     
+005b548d  int3     
+005b548e  int3     
+005b548f  int3     
+005b5490  mov      eax, dword ptr [ecx + 0xb8]
+005b5496  ret      
+005b5497  int3     
+005b5498  int3     
+005b5499  int3     
+005b549a  int3     
+005b549b  int3     
+005b549c  int3     
+005b549d  int3     
+005b549e  int3     
+005b549f  int3     
+005b54a0  mov      eax, dword ptr [ecx + 0xbc]
+005b54a6  ret      
+005b54a7  int3     
+005b54a8  int3     
+005b54a9  int3     
+005b54aa  int3     
+005b54ab  int3     
+005b54ac  int3     
+005b54ad  int3     
+005b54ae  int3     
+005b54af  int3     
+005b54b0  mov      eax, dword ptr [ecx + 0x130]
+005b54b6  ret      
+005b54b7  int3     
+005b54b8  int3     
+005b54b9  int3     
+005b54ba  int3     
+005b54bb  int3     
+005b54bc  int3     
+005b54bd  int3     
+005b54be  int3     
+005b54bf  int3     
+005b54c0  mov      eax, dword ptr [ecx + 0x134]
+005b54c6  ret      
+005b54c7  int3     
+005b54c8  int3     
+005b54c9  int3     
+005b54ca  int3     
+005b54cb  int3     
+005b54cc  int3     
+005b54cd  int3     
+005b54ce  int3     
+005b54cf  int3     
+005b54d0  mov      eax, dword ptr [ecx + 0x138]
+005b54d6  ret      
+005b54d7  int3     
+005b54d8  int3     
+005b54d9  int3     
+005b54da  int3     
+005b54db  int3     
+005b54dc  int3     
+005b54dd  int3     
+005b54de  int3     
+005b54df  int3     
+005b54e0  push     ebp
+005b54e1  mov      ebp, esp
+005b54e3  push     esi
+005b54e4  mov      esi, ecx
+005b54e6  mov      al, byte ptr [esi + 0x150]
+005b54ec  test     al, al
+005b54ee  je       0x5b5515
+005b54f0  push     ebx
+005b54f1  mov      bl, byte ptr [ebp + 8]
+005b54f4  test     bl, bl
+005b54f6  jne      0x5b5509
+005b54f8  mov      ecx, dword ptr [esi + 0x14c]
+005b54fe  test     ecx, ecx
+005b5500  je       0x5b5509
+005b5502  push     0
+005b5504  call     0x5bfeb0
+005b5509  mov      byte ptr [esi + 0x150], bl
+005b550f  pop      ebx
+005b5510  pop      esi
+005b5511  pop      ebp
+005b5512  ret      4
+005b5515  mov      al, byte ptr [ebp + 8]
+005b5518  mov      byte ptr [esi + 0x150], al
+005b551e  pop      esi
+005b551f  pop      ebp
+005b5520  ret      4
+005b5523  int3     
+005b5524  int3     
+005b5525  int3     
+005b5526  int3     
+005b5527  int3     
+005b5528  int3     
+005b5529  int3     
+005b552a  int3     
+005b552b  int3     
+005b552c  int3     
+005b552d  int3     
+005b552e  int3     
+005b552f  int3     
+005b5530  push     ebp
+005b5531  mov      ebp, esp
+005b5533  push     esi
+005b5534  push     edi
+005b5535  mov      edi, dword ptr [ebp + 0x18]
+005b5538  test     edi, edi
+005b553a  mov      esi, ecx
+005b553c  je       0x5b557e
+005b553e  mov      eax, dword ptr [esi + 0xf0]
+005b5544  test     eax, eax
+005b5546  je       0x5b557e
+005b5548  mov      al, byte ptr [esi + 0x150]
+005b554e  test     al, al
+005b5550  je       0x5b5562
+005b5552  mov      ecx, dword ptr [esi + 0x14c]
+005b5558  test     ecx, ecx
+005b555a  je       0x5b5562
+005b555c  push     edi
+005b555d  call     0x5bfde0
+005b5562  mov      eax, dword ptr [ebp + 0x14]
+005b5565  mov      ecx, dword ptr [ebp + 0x10]
+005b5568  mov      edx, dword ptr [ebp + 0xc]
+005b556b  push     eax
+005b556c  mov      eax, dword ptr [ebp + 8]
+005b556f  push     edi
+005b5570  push     ecx
+005b5571  mov      ecx, dword ptr [esi + 0xf0]
+005b5577  push     edx
+005b5578  push     eax
+005b5579  call     0x534100
+005b557e  pop      edi
+005b557f  pop      esi
+005b5580  pop      ebp
+005b5581  ret      0x14
+005b5584  int3     
+005b5585  int3     
+005b5586  int3     
+005b5587  int3     
+005b5588  int3     
+005b5589  int3     
+005b558a  int3     
+005b558b  int3     
+005b558c  int3     
+005b558d  int3     
+005b558e  int3     
+005b558f  int3     
+005b5590  push     ebp
+005b5591  mov      ebp, esp
+005b5593  push     esi
+005b5594  push     edi
+005b5595  mov      edi, dword ptr [ebp + 8]
+005b5598  mov      esi, ecx
+005b559a  mov      ecx, dword ptr [esi + 0xf0]
+005b55a0  push     edi
+005b55a1  call     0x532ff0
+005b55a6  test     al, al
+005b55a8  je       0x5b55b6
+005b55aa  mov      ecx, dword ptr [esi + 0xf0]
+005b55b0  push     edi
+005b55b1  call     0x532c20
+005b55b6  pop      edi
+005b55b7  pop      esi
+005b55b8  pop      ebp
+005b55b9  ret      4
+005b55bc  int3     
+005b55bd  int3     
+005b55be  int3     
+005b55bf  int3     
+005b55c0  mov      ecx, dword ptr [ecx + 0xf0]
+005b55c6  call     0x532e20
+005b55cb  test     eax, eax
+005b55cd  je       0x5b55d6
+005b55cf  .byte    0x8b
