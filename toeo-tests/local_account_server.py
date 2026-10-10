@@ -30,7 +30,7 @@ from world_npc_packets import (shop_actor_notice,SHOP_IDENTITY,SHOP_GRID,parse_n
                                npc_selection_reply,npc_action_reply,shop_open_notice)
 from world_position_store import WorldPositionStore,walkable_grid
 from world_inventory_store import WorldInventoryStore,TradeRejected
-from world_inventory_packets import parse_trade_request,parse_shop_close_request,transaction_reply,inventory_notice
+from world_inventory_packets import parse_trade_request,parse_shop_close_request,parse_item_move_request,transaction_reply,inventory_notice
 from world_item_use_packets import parse_item_use_request,vitals_notice
 from world_item_source_packets import parse_item_source_request,item_source_reply
 from native_map_geometry import grid_to_point
@@ -378,6 +378,23 @@ class LocalAccountServer(BootstrapServer):
                     self.log('item_source_rejected',connection=conn_id,reason=str(error));continue
                 self.send_answer(c,answer,state)
                 self.log('item_source_sent',connection=conn_id,**source_request,compressed=parsed['compressed'],answer_hex=answer.hex())
+                continue
+            if op==0x54 and port==11101:
+                control=state.get('world_account_control')
+                try:move=parse_item_move_request(payload)
+                except ValueError as error:
+                    self.log('item_move_malformed',connection=conn_id,reason=str(error));continue
+                if not control or not state.get('world_map_ready') or move['identity']!=tuple(control['character_id']) or move['map_id']!=self.map_id:
+                    self.log('item_move_unauthorized',connection=conn_id);continue
+                state.setdefault('trade_connection_key',secrets.token_hex(16))
+                status=0;reason=None;replayed=False
+                try:inventory,replayed=self.inventory.move(control['account_id'],move['identity'],move,payload,state['trade_connection_key'])
+                except TradeRejected as error:
+                    status=-1;reason=str(error);inventory=self.inventory.load(control['account_id'],move['identity'])
+                answer=transaction_reply(move['sequence'],inventory['money'],status,request_id=move['request_id'],snapshot=inventory if status==0 else None)
+                self.send_answer(c,answer,state)
+                if status==0:self.send_answer(c,inventory_notice(move['identity'],self.map_id,inventory),state)
+                self.log('item_move_rejected' if status else 'item_move_committed',connection=conn_id,**move,status=status,reason=reason,replayed=replayed,snapshot=inventory,request_hex=payload.hex(),answer_hex=answer.hex())
                 continue
             if op==0x55 and port==11101:
                 control=state.get('world_account_control')

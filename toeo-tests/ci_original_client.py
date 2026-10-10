@@ -16,6 +16,7 @@ def main():
     p.add_argument('--database',help='Reuse a preserved local account database for the reentry check')
     p.add_argument('--reenter-check',action='store_true',help='Observe the restored position without scheduled movement')
     p.add_argument('--use-check',action='store_true',help='Seed this isolated test character at HP40/TP10, then require a real native use and restart')
+    p.add_argument('--move-check',action='store_true',help='Require real two-item bag exchange and original client restart restoration')
     p.add_argument('--resource-probe',action='store_true',help='Read-only resource discovery; not a gameplay acceptance run')
     args=p.parse_args()
     if os.name!='nt':raise SystemExit('Windows original-client verification required')
@@ -127,6 +128,7 @@ def main():
                       205:lambda:double_click(517,487),
                       210:lambda:click(28,84),215:lambda:click(360,410,hold=2.0),
                       225:lambda:click(480,380,hold=2.0),235:lambda:click(400,350,True)}
+            if args.move_check:schedule.update({158:lambda:double_click(107,229),207:lambda:drag(517,487,555,487)})
             if args.reenter_check:
                 # The client recreates its tutorial confirmation on each launch.
                 # Retain that real UI flow; only omit movement in this run.
@@ -137,7 +139,7 @@ def main():
                 time.sleep(1)
                 entered=any(e.get('event')=='native_map_draw_context' for e in events)
                 if t in schedule and not (t in (125,130,135) and entered):schedule[t]()
-                if t%10==0 or t in (101,107,121,126,136,142,146,147,149,151,156,161,171,175,181,191,196):shot(t);print('PHASE screenshot '+str(t),flush=True)
+                if t%10==0 or t in (101,107,121,126,136,142,146,147,149,151,156,161,171,175,181,191,196,208):shot(t);print('PHASE screenshot '+str(t),flush=True)
         except Exception:
             failure=traceback.format_exc()
             (out/'python_error.txt').write_text(failure,encoding='utf-8');traceback.print_exc()
@@ -180,6 +182,14 @@ def main():
             result['native_inventory_samples']=inventory_samples
             saved_inventory=server.inventory.load(1,server.characters.list(1)[0]['identity'])
             result['saved_inventory']=saved_inventory
+            if args.move_check:
+                owned={tuple(x['identity']) for x in saved_inventory['items']}
+                result['bag_slot1_native']=any(e.get('event')=='native_inventory_ui_item' and e.get('slot')==1 and e.get('quantity')==1 and tuple(e.get('identity',())) in owned for e in events)
+                result['bag_slot1_saved']=len(saved_inventory['items'])==2 and next((x['slot'] for x in saved_inventory['items'] if x['name']=='レモングミ'),None)==1
+                result['bag_move_request_native']=any(e.get('event')=='native_plain_request_before_serialization' and e.get('opcode')==0x54 for e in events)
+                if not result['bag_slot1_native'] or not result['bag_slot1_saved'] or (not args.reenter_check and not result['bag_move_request_native']):
+                    failure=failure or 'Real native bag move and persistent bag order did not pass'
+
             result['saved_vitals']=server.inventory.load_vitals(1,server.characters.list(1)[0]['identity'])
             vital_samples=[e for e in events if e.get('event')=='native_player_vitals_state']
             result['native_vitals_samples']=vital_samples
@@ -192,8 +202,8 @@ def main():
                 if not result['item_used_native'] or not result['hp_recovered_native']:failure=failure or 'Real native item use / quantity 1 / HP40 to 100 did not pass'
             result['buy_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='buy' and e.get('result')==1 for e in events)
             result['sell_request_built_native']=any(e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1 for e in events)
-            result['buy_money_quantity_native']=any(e.get('money')==3920 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
-            result['sell_money_quantity_native']=any(e.get('money')==4100 and e.get('items')==1 for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
+            result['buy_money_quantity_native']=any(e.get('money')==(3560 if args.move_check else 3920) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==3 and e.get('name')=='レモングミ' for e in named_items)
+            result['sell_money_quantity_native']=any(e.get('money')==(3740 if args.move_check else 4100) and e.get('items')==(2 if args.move_check else 1) for e in inventory_samples) and any(e.get('quantity')==2 and e.get('name')=='レモングミ' for e in named_items)
             sales=[e for e in events if e.get('event')=='native_trade_builder_result' and e.get('kind')=='sell' and e.get('result')==1]
             result['shop_quantity_refreshed_native']=bool(sales) and any(e.get('event')=='native_shop_row_render' and e.get('name')=='レモングミ' and e.get('mode')==1 and e.get('quantity')==2 and e.get('host_time',0)>sales[-1]['host_time'] for e in events)
             result['inventory_window_open_native']=any(e.get('event')=='native_inventory_frame_state' and e.get('visible') is True for e in events)

@@ -21,7 +21,7 @@ def inventory_records(snapshot):
     for slot,item in enumerate(snapshot['items']):
         identity=item['identity']
         group=record(0x37,44)
-        struct.pack_into('<II',group,4,2,slot)
+        struct.pack_into('<II',group,4,2,item.get('slot',slot))
         struct.pack_into('<IIII',group,0x1c,*identity)
         attributes=record(0x38,84)
         struct.pack_into('<IIII',attributes,4,*identity)
@@ -66,7 +66,7 @@ def transaction_reply(sequence,money,status=0,request_id=0xffffffff,snapshot=Non
             for slot,item in enumerate(snapshot['items']):
                 # 4F9720 decodes the temporary inventory, clones each named
                 # instance into location 2, and refreshes bag AND open shop.
-                update=record(0x4d,44);struct.pack_into('<II',update,4,2,slot)
+                update=record(0x4d,44);struct.pack_into('<II',update,4,2,item.get('slot',slot))
                 struct.pack_into('<IIII',update,28,*item['identity']);tail.extend(update)
     tail.extend(bytes(4))
     b=bytearray(message(0x67,bytes(27+len(tail)),request_id))
@@ -109,3 +109,20 @@ def parse_shop_close_request(payload):
     if op!=0xe0 or size!=36 or not req or not sequence:raise ValueError('Invalid shop close header')
     return {'opcode':op,'request_id':req,'sequence':sequence,'identity':(first,second),
             'map_id':map_id,'merchant':(npc1,npc2)}
+
+
+def parse_item_move_request(payload):
+    # Original 4F6BA0 builds 54; 565AE9 uses source/destination location2
+    # for bag drag/drop, count -1 for the complete stack and context0.
+    if len(payload)!=84:raise ValueError('Invalid native item-move length')
+    op,size,req=struct.unpack_from('<HHI',payload,1)
+    seq,map_id,first,second=struct.unpack_from('<IIII',payload,12)
+    item=struct.unpack_from('<IIII',payload,28)
+    source_location,source_slot,count,destination_location,destination_slot=struct.unpack_from('<IiiIi',payload,44)
+    destination_item=struct.unpack_from('<IIII',payload,64)
+    context=struct.unpack_from('<I',payload,80)[0]
+    if op!=0x54 or size!=84 or not req or not seq:raise ValueError('Invalid native item-move header')
+    return {'opcode':op,'request_id':req,'sequence':seq,'map_id':map_id,'identity':(first,second),
+            'item':item,'source_location':source_location,'source_slot':source_slot,'count':count,
+            'destination_location':destination_location,'destination_slot':destination_slot,
+            'destination_item':destination_item,'context':context}

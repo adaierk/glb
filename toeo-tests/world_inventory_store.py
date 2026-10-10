@@ -22,6 +22,17 @@ class WorldInventoryStore:
                 buy_price INTEGER NOT NULL, sell_price INTEGER NOT NULL,
                 quantity INTEGER NOT NULL CHECK(quantity BETWEEN 1 AND 20),
                 UNIQUE(character_id,account_id,source_key,catalog_index))''')
+            columns={r[1] for r in accounts.db.execute('PRAGMA table_info(world_inventory_items)')}
+            if 'slot' not in columns:
+                accounts.db.execute('ALTER TABLE world_inventory_items ADD COLUMN slot INTEGER')
+            for char,account in accounts.db.execute('SELECT DISTINCT character_id,account_id FROM world_inventory_items'):
+                used={r[0] for r in accounts.db.execute('SELECT slot FROM world_inventory_items WHERE character_id=? AND account_id=? AND slot IS NOT NULL',(char,account))}
+                missing=accounts.db.execute('SELECT id FROM world_inventory_items WHERE character_id=? AND account_id=? AND slot IS NULL ORDER BY id',(char,account)).fetchall()
+                for (item_id,) in missing:
+                    slot=next((x for x in range(LOCAL_BAG_CAPACITY) if x not in used),None)
+                    if slot is None:raise TradeRejected('Legacy inventory exceeds local bag capacity')
+                    accounts.db.execute('UPDATE world_inventory_items SET slot=? WHERE id=?',(slot,item_id));used.add(slot)
+            accounts.db.execute('CREATE UNIQUE INDEX IF NOT EXISTS world_inventory_unique_slot ON world_inventory_items(character_id,account_id,slot)')
             accounts.db.execute('''CREATE TABLE IF NOT EXISTS world_trade_ledger(
                 id INTEGER PRIMARY KEY AUTOINCREMENT, character_id INTEGER NOT NULL,
                 account_id INTEGER NOT NULL, connection_key TEXT NOT NULL,
@@ -67,7 +78,7 @@ class WorldInventoryStore:
             before=self._snapshot(identity);vitals=self._vitals(identity)
             item=next((x for x in before['items'] if tuple(x['identity'])==request['item']),None)
             if item is None:raise TradeRejected('Missing or foreign item instance')
-            if request['slot']>=0 and (request['slot']>=len(before['items']) or before['items'][request['slot']]['identity']!=item['identity']):
+            if request['slot']>=0 and request['slot']!=item['slot']:
                 raise TradeRejected('Inventory slot does not match item instance')
             effect=RECOVERY.get(item['name'])
             if effect is None:raise TradeRejected('This item effect has not been implemented')
@@ -75,7 +86,9 @@ class WorldInventoryStore:
             hp=min(vitals['max_hp'],vitals['hp']+effect[0]);tp=min(vitals['max_tp'],vitals['tp']+effect[1])
             if (hp,tp)==(vitals['hp'],vitals['tp']):raise TradeRejected('HP and TP do not need this recovery item')
             item_id=item['identity'][0]-0x71000000
-            if item['quantity']==1:db.execute('DELETE FROM world_inventory_items WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
+            if item['quantity']==1:
+                db.execute('DELETE FROM world_inventory_items WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
+                self._reindex(identity)
             else:db.execute('UPDATE world_inventory_items SET quantity=quantity-1 WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
             db.execute('UPDATE world_vitals SET hp=?,tp=? WHERE character_id=? AND account_id=?',(hp,tp,*identity))
             snapshot=self._snapshot(identity);vitals=self._vitals(identity)
@@ -86,12 +99,12 @@ class WorldInventoryStore:
     def _snapshot(self,identity):
         db=self.accounts.db
         money=db.execute('SELECT money FROM world_wallets WHERE character_id=? AND account_id=?',identity).fetchone()[0]
-        rows=db.execute('''SELECT id,source_key,catalog_index,name,buy_price,sell_price,quantity
-            FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY id''',identity).fetchall()
+        rows=db.execute('''SELECT id,source_key,catalog_index,name,buy_price,sell_price,quantity,slot
+            FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY slot''',identity).fetchall()
         return {'money':money,'capacity':LOCAL_BAG_CAPACITY,'items':[
             {'identity':(0x71000000+r[0],identity[0],identity[1],0),
              'source_key':r[1],'catalog_index':r[2],'name':r[3],
-             'buy_price':r[4],'sell_price':r[5],'quantity':r[6]} for r in rows]}
+             'buy_price':r[4],'sell_price':r[5],'quantity':r[6],'slot':r[7]} for r in rows]}
 
     def load(self,account_id,identity):
         with self.accounts.lock,self.accounts.db:
@@ -124,10 +137,11 @@ class WorldInventoryStore:
                     cost=item['price_gald']*quantity
                     if cost>money:raise TradeRejected('Insufficient funds')
                     money-=cost
-                    db.execute('''INSERT INTO world_inventory_items(character_id,account_id,source_key,catalog_index,name,buy_price,sell_price,quantity)
-                        VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(character_id,account_id,source_key,catalog_index)
+                    slot=old['slot'] if old else next(x for x in range(LOCAL_BAG_CAPACITY) if x not in {v['slot'] for v in items})
+                    db.execute('''INSERT INTO world_inventory_items(character_id,account_id,source_key,catalog_index,name,buy_price,sell_price,quantity,slot)
+                        VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(character_id,account_id,source_key,catalog_index)
                         DO UPDATE SET quantity=quantity+excluded.quantity''',
-                        (*identity,source['key'],index,item['name'],item['price_gald'],item['price_gald']//2,quantity))
+                        (*identity,source['key'],index,item['name'],item['price_gald'],item['price_gald']//2,quantity,slot))
                     # Count distinct new stacks as the batch proceeds.
                     items=self._snapshot(identity)['items']
             else:
@@ -142,6 +156,7 @@ class WorldInventoryStore:
                     item_id=item['identity'][0]-0x71000000
                     if quantity==item['quantity']:
                         db.execute('DELETE FROM world_inventory_items WHERE id=? AND character_id=? AND account_id=?',(item_id,*identity))
+                        self._reindex(identity)
                     else:
                         db.execute('UPDATE world_inventory_items SET quantity=quantity-? WHERE id=? AND character_id=? AND account_id=?',(quantity,item_id,*identity))
             db.execute('UPDATE world_wallets SET money=? WHERE character_id=? AND account_id=?',(money,*identity))
@@ -149,3 +164,39 @@ class WorldInventoryStore:
             db.execute('''INSERT INTO world_trade_ledger(character_id,account_id,connection_key,sequence,request_hash,opcode,snapshot)
                 VALUES(?,?,?,?,?,?,?)''',(*identity,connection_key,request['sequence'],digest,request['opcode'],json.dumps(result,ensure_ascii=False)))
             return result,False
+
+
+    def move(self,account_id,identity,request,payload,connection_key):
+        if request['identity']!=identity or request['opcode']!=0x54 or request['source_location']!=2 or request['destination_location']!=2 or request['count']!=-1 or request['context']!=0 or not 0<=request['source_slot']<LOCAL_BAG_CAPACITY or not -1<=request['destination_slot']<LOCAL_BAG_CAPACITY:
+            raise TradeRejected('Only complete-stack bag moves are supported')
+        digest=hashlib.sha256(payload).hexdigest()
+        with self.accounts.lock,self.accounts.db:
+            self._ensure(account_id,identity);db=self.accounts.db
+            prior=db.execute('SELECT character_id,account_id,request_hash FROM world_trade_ledger WHERE connection_key=? AND sequence=?',(connection_key,request['sequence'])).fetchone()
+            if prior:
+                if prior!=(identity[0],account_id,digest):raise TradeRejected('Conflicting native command sequence')
+                return self._snapshot(identity),True
+            before=self._snapshot(identity)
+            source=next((x for x in before['items'] if x['identity']==request['item']),None)
+            destination=next((x for x in before['items'] if x['slot']==request['destination_slot']),None)
+            if request['destination_slot']>=len(before['items']):raise TradeRejected('Destination outside native packed bag')
+            if source is None or source['slot']!=request['source_slot']:raise TradeRejected('Missing item or stale source slot')
+            expected=(0,0,0,0) if destination is None else destination['identity']
+            if expected!=request['destination_item']:raise TradeRejected('Destination changed or foreign item')
+            ordered=[x['identity'][0]-0x71000000 for x in before['items']]
+            source_index=source['slot']
+            if destination is not None:
+                target_index=destination['slot']
+                ordered[source_index],ordered[target_index]=ordered[target_index],ordered[source_index]
+            else:ordered.append(ordered.pop(source_index))
+            self._reindex(identity,ordered)
+            result=self._snapshot(identity)
+            db.execute('INSERT INTO world_trade_ledger(character_id,account_id,connection_key,sequence,request_hash,opcode,snapshot) VALUES(?,?,?,?,?,?,?)',(*identity,connection_key,request['sequence'],digest,0x54,json.dumps(result,ensure_ascii=False)))
+            return result,False
+
+
+    def _reindex(self,identity,ordered_ids=None):
+        db=self.accounts.db
+        ordered_ids=ordered_ids if ordered_ids is not None else [r[0] for r in db.execute('SELECT id FROM world_inventory_items WHERE character_id=? AND account_id=? ORDER BY slot',identity)]
+        for item_id in ordered_ids:db.execute('UPDATE world_inventory_items SET slot=? WHERE id=? AND character_id=? AND account_id=?',(-item_id,item_id,*identity))
+        for slot,item_id in enumerate(ordered_ids):db.execute('UPDATE world_inventory_items SET slot=? WHERE id=? AND character_id=? AND account_id=?',(slot,item_id,*identity))
