@@ -33,7 +33,7 @@ jobs:
           & "${env:ProgramFiles}\7-Zip\7z.exe" x -y "-o$base/raw" "$base/client_pack.7z" | Out-Null
           if($LASTEXITCODE -ne 0){throw 'Client extraction failed'}
           Invoke-WebRequest 'https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip' -OutFile "$base/python.zip"
-          & python -m pip download --only-binary=:all: --platform win_amd64 --python-version 3.11 --implementation cp --abi cp311 --dest "$base/wheels" 'frida==17.24.3' 'pillow==11.3.0'
+          & python -m pip download --only-binary=:all: --platform win_amd64 --python-version 3.11 --implementation cp --abi cp311 --dest "$base/wheels" 'frida==17.23.3' 'pillow==11.3.0'
           if($LASTEXITCODE -ne 0){throw 'Runtime download failed'}
           & python packaging/build_full_package.py --v21 toeo-recovery/v21/TOEO_Local_World_Recovery_20261010_v21.zip --original-raw "$base/raw" --python "$base/python.zip" --wheels "$base/wheels" --out "$base/full/TOEO_v21_Full"
           if($LASTEXITCODE -ne 0){throw 'Build failed'}
