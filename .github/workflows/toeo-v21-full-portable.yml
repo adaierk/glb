@@ -10,7 +10,11 @@ permissions:
 jobs:
   full-portable:
     runs-on: windows-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [combat, equipment]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -29,7 +33,7 @@ jobs:
           & "${env:ProgramFiles}\7-Zip\7z.exe" x -y "-o$base/raw" "$base/client_pack.7z" | Out-Null
           if($LASTEXITCODE -ne 0){throw 'Client extraction failed'}
           Invoke-WebRequest 'https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip' -OutFile "$base/python.zip"
-          & python -m pip download --only-binary=:all: --platform win_amd64 --python-version 3.11 --implementation cp --abi cp311 --dest "$base/wheels" 'frida==17.2.17' 'pillow==11.3.0'
+          & python -m pip download --only-binary=:all: --platform win_amd64 --python-version 3.11 --implementation cp --abi cp311 --dest "$base/wheels" 'frida==17.24.3' 'pillow==11.3.0'
           if($LASTEXITCODE -ne 0){throw 'Runtime download failed'}
           & python packaging/build_full_package.py --v21 toeo-recovery/v21/TOEO_Local_World_Recovery_20261010_v21.zip --original-raw "$base/raw" --python "$base/python.zip" --wheels "$base/wheels" --out "$base/full/TOEO_v21_Full"
           if($LASTEXITCODE -ne 0){throw 'Build failed'}
@@ -40,6 +44,7 @@ jobs:
           & "$full/runtime/python/python.exe" -m unittest discover -s toeo-tests 2>&1 | Tee-Object "$base/report/portable_unit_tests.txt"
           if($LASTEXITCODE -ne 0){throw 'Bundled interpreter server regression failed'}
       - name: Native battle with the bundled interpreter and packaged source
+        if: matrix.mode == 'combat'
         shell: pwsh
         run: |
           $ErrorActionPreference='Stop'
@@ -50,6 +55,7 @@ jobs:
           & "$full/runtime/python/python.exe" -u toeo-tests/ci_original_client.py "$full/original_game" "$base/report/combat" --duration 210 --combat-check --battle-command-check 2>&1 | Tee-Object "$base/report/combat_driver.txt"
           if($LASTEXITCODE -ne 0){throw 'Native portable combat failed'}
       - name: Native equipment and saved map reentry
+        if: matrix.mode == 'equipment'
         shell: pwsh
         run: |
           $ErrorActionPreference='Stop'
@@ -64,6 +70,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: toeo-v21-full-portable-acceptance
+          name: toeo-v21-full-portable-${{ matrix.mode }}
           path: ${{ runner.temp }}/TOEO_INPUT/report
           retention-days: 90
