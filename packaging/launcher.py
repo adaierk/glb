@@ -6,6 +6,9 @@ import json
 import os
 from pathlib import Path
 import socket
+import subprocess
+import tempfile
+import shutil
 import sys
 import traceback
 
@@ -14,9 +17,53 @@ sys.path.insert(0, str(ROOT / 'toeo-tests'))
 ORIGINAL_SHA = '635ac4fd8ccd95f4700def5ad791a6feaf555d38f7dc4f64a38850ccca321d55'
 
 
+def ensure_original_client():
+    game = ROOT / 'original_game'
+    if game.is_dir():
+        return
+    archive = ROOT / 'assets' / 'client_pack.7z'
+    tool = ROOT / 'runtime' / '7zip' / '7z.exe'
+    if not archive.is_file() or not tool.is_file():
+        raise RuntimeError('Original client resources are missing. Extract the entire ZIP first.')
+    manifest = json.loads((ROOT / 'PACKAGE_MANIFEST.json').read_text(encoding='utf-8'))
+    digest = hashlib.sha256()
+    with archive.open('rb') as f:
+        for block in iter(lambda: f.read(1024*1024), b''):
+            digest.update(block)
+    if digest.hexdigest() != manifest['packed_client_sha256']:
+        raise RuntimeError('The bundled original client archive is incomplete or corrupt.')
+    print('首次启动：正在自动展开完整原客户端资源，请稍候。', flush=True)
+    with tempfile.TemporaryDirectory(prefix='toeo_unpack_', dir=ROOT) as temp:
+        base = Path(temp)
+        raw = base / 'raw'
+        result = subprocess.run([str(tool), 'x', '-y', '-o'+str(raw), str(archive)],
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                creationflags=0x08000000)
+        if result.returncode:
+            raise RuntimeError('Bundled client extraction failed: ' + str(result.returncode))
+        staged = base / 'game'
+        staged.mkdir()
+        for component in ['NewComponent1', 'DefaultComponent']:
+            folder = raw / component
+            if folder.is_dir():
+                for child in folder.iterdir():
+                    shutil.move(str(child), str(staged / child.name))
+        (staged / 'data').mkdir(exist_ok=True)
+        for name in ['resource', 'map', 'ui', 'help']:
+            if (staged/name).is_dir():
+                shutil.move(str(staged/name), str(staged/'data'/name))
+        for name in ['log', 'userdata']:
+            (staged/name).mkdir(exist_ok=True)
+        from prepare_original_client import validate
+        validate(staged)
+        os.replace(staged, game)
+    print('完整原客户端资源已就绪。', flush=True)
+
+
 def check():
     if os.name != 'nt' or sys.maxsize <= 2**32:
         raise RuntimeError('This package requires 64-bit Windows 10 or Windows 11.')
+    ensure_original_client()
     import frida
     from PIL import Image, ImageGrab
     import sqlite3
@@ -42,8 +89,8 @@ def main():
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
         sys.stderr.reconfigure(encoding='utf-8', errors='replace')
-    info = check()
     if a.check:
+        info = check()
         print(json.dumps(info, ensure_ascii=False, indent=2), flush=True)
         return
     # A kernel-owned lock is automatically released even after an interrupted run.
@@ -58,6 +105,7 @@ def main():
         k.CloseHandle(handle)
         raise RuntimeError('TOEO is already running. Close the first game and launcher before starting again.')
     try:
+        check()
         for port in [11100, 11101, 45000, 45001, 45002]:
             with socket.socket() as s:
                 if s.connect_ex(('127.0.0.1', port)) == 0:

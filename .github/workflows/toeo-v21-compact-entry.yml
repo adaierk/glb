@@ -1,0 +1,54 @@
+name: TOEO v21 compact full package first launch
+on:
+  push:
+    branches: [toeo-v21-full-portable-20261025]
+    paths: [packaging/**, .github/workflows/toeo-v21-compact-entry.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compact-entry:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 37899580886
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: toeo-original-client-preserved
+          path: ${{ runner.temp }}/TOEO_COMPACT
+      - name: Assemble packed resources and prove first launch extraction
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $env:PYTHONIOENCODING='utf-8'
+          $base=Join-Path $env:RUNNER_TEMP 'TOEO_COMPACT'
+          New-Item -ItemType Directory -Force "$base/raw","$base/wheels","$base/full","$base/payload/7zip" | Out-Null
+          $seven=Join-Path $env:ProgramFiles '7-Zip'
+          Copy-Item "$seven/7z.exe","$seven/7z.dll","$seven/License.txt" "$base/payload/7zip"
+          & "$seven/7z.exe" x -y "-o$base/raw" "$base/client_pack.7z" | Out-Null
+          if($LASTEXITCODE -ne 0){throw 'Preserved client extraction failed'}
+          Invoke-WebRequest 'https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip' -OutFile "$base/python.zip"
+          & python -m pip download --only-binary=:all: --platform win_amd64 --python-version 3.11 --implementation cp --abi cp311 --dest "$base/wheels" 'frida==17.23.3' 'pillow==11.3.0'
+          if($LASTEXITCODE -ne 0){throw 'Runtime dependencies failed'}
+          & python packaging/build_full_package.py --v21 toeo-recovery/v21/TOEO_Local_World_Recovery_20261010_v21.zip --original-raw "$base/raw" --client-archive "$base/client_pack.7z" --sevenzip "$base/payload/7zip" --python "$base/python.zip" --wheels "$base/wheels" --out "$base/full/TOEO_v21_Full"
+          if($LASTEXITCODE -ne 0){throw 'Compact assembly failed'}
+          $full="$base/full/TOEO_v21_Full"
+          if(Test-Path "$full/original_game"){throw 'First launch test must begin without extracted client'}
+          Copy-Item "$full/PACKAGE_MANIFEST.json" "$base/payload/PACKAGE_MANIFEST.json"
+          Set-Location $full
+          & cmd /c 'Start_TOEO.cmd --check' 2>&1 | Tee-Object "$base/payload/first_launch.txt"
+          if($LASTEXITCODE -ne 0){throw 'Bundled first extraction/entry check failed'}
+          & cmd /c 'Start_TOEO.cmd --check' 2>&1 | Tee-Object "$base/payload/second_launch.txt"
+          if($LASTEXITCODE -ne 0){throw 'Second launch readiness failed'}
+          & "$full/runtime/python/python.exe" -c "from legacy_graphics_assets import prepare_render_client; prepare_render_client('original_game','compact_graphics_check','graphics_check.json')"
+          if($LASTEXITCODE -ne 0){throw 'Extracted graphics compatibility failed'}
+          Copy-Item 'graphics_check.json' "$base/payload/graphics_check.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toeo-v21-compact-entry-proof
+          path: ${{ runner.temp }}/TOEO_COMPACT/payload
+          retention-days: 90

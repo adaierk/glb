@@ -1,7 +1,7 @@
 name: TOEO v21 full portable Windows acceptance
 on:
   push:
-    branches: [toeo-v21-full-portable-20261025]
+    branches: [toeo-v21-regression-manual-only]
     paths: [packaging/**, .github/workflows/toeo-v21-full-portable.yml]
   workflow_dispatch:
 permissions:

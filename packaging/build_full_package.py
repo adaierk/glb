@@ -28,6 +28,8 @@ def main():
     p.add_argument('--original-raw', required=True)
     p.add_argument('--python', required=True)
     p.add_argument('--wheels', required=True)
+    p.add_argument('--client-archive')
+    p.add_argument('--sevenzip')
     p.add_argument('--out', required=True)
     a = p.parse_args()
     out = Path(a.out).resolve()
@@ -86,12 +88,12 @@ def main():
 
 【启动】
 1. 把整个 ZIP 解压到一个可写文件夹，例如 D:\\Games\\TOEO_v21。
-2. 双击 Start_TOEO.cmd。首次启动会生成图像兼容缓存。
+2. 双击 Start_TOEO.cmd。首次启动自动展开完整客户端并生成图像兼容缓存。
 3. 原版窗口出现后，按开始、同意、选择服务器和登录的原版流程进入。
    账号：archive001    密码：local123
 4. 选择 Archive 角色进入拉修安地图。请保留黑色启动窗口。
 
-已内置原客户端全部资源、截至 v21 的累计修复、Python、Frida 和 Pillow。
+已内置原客户端全部资源、截至 v21 的累计修复、Python、Frida、Pillow 和解压程序。
 不需要安装 Python、7-Zip，不需要运行 pip，不需要另找旧版补丁或客户端。
 启动过程不下载资源、不改系统区域设置、不要求管理员权限。
 双击的是启动脚本，请不要直接运行 original_game 内的历史联网启动器。
@@ -133,6 +135,15 @@ local_world_userdata 文件夹复制到本整合包的同名位置。不要覆�
                 'changes_from_v21': ['Bundled original resources and portable runtime',
                     'Portable start entry points', 'Desktop capture disabled for normal play'],
                 'complete_game': False}
+    if a.client_archive:
+        if not a.sevenzip: raise ValueError('Bundled 7-Zip path required')
+        archive = Path(a.client_archive)
+        (out/'assets').mkdir()
+        shutil.copy2(archive, out/'assets/client_pack.7z')
+        shutil.copytree(a.sevenzip, out/'runtime/7zip')
+        shutil.rmtree(game)
+        manifest['packed_client_sha256'] = sha(archive)
+        manifest['client_storage'] = 'Bundled archive; automatic local extraction on first launch'
     (out/'PACKAGE_MANIFEST.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
     forbidden = list(out.rglob('*.sqlite')) + list(out.rglob('*.pyc'))
     if forbidden: raise ValueError('User database or bytecode in clean package: '+str(forbidden))
