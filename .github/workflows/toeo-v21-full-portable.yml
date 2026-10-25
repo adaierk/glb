@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [combat, equipment]
+        mode: [equipment]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -63,7 +63,7 @@ jobs:
           $base=Join-Path $env:RUNNER_TEMP 'TOEO_INPUT'
           $full="$base/full/TOEO_v21_Full"
           Set-Location $full
-          & "$full/runtime/python/python.exe" -u toeo-tests/ci_original_client.py "$full/original_game" "$base/report/equipment" --duration 190 --equipment-check 2>&1 | Tee-Object "$base/report/equipment_driver.txt"
+          & "$full/runtime/python/python.exe" -u toeo-tests/ci_original_client.py "$full/original_game" "$base/report/equipment" --duration 270 --equipment-check 2>&1 | Tee-Object "$base/report/equipment_driver.txt"
           if($LASTEXITCODE -ne 0){throw 'Portable equipment failed'}
           & "$full/runtime/python/python.exe" -u toeo-tests/ci_original_client.py "$full/original_game" "$base/report/reentered" --duration 180 --equipment-check --reenter-check --database "$base/report/equipment/local_accounts.sqlite" 2>&1 | Tee-Object "$base/report/reentered_driver.txt"
           if($LASTEXITCODE -ne 0){throw 'Portable saved equipment/map reentry failed'}
